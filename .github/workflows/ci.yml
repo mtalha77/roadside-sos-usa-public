@@ -69,33 +69,41 @@ jobs:
     name: db
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # rsos-dev is shared by every pull request: apply migrations one run at a time.
+    concurrency:
+      group: supabase-rsos-dev
+      cancel-in-progress: false
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD_DEV }}
+      SUPABASE_PROJECT_ID: ${{ vars.SUPABASE_PROJECT_ID_DEV }}
+      APP_DOMAIN: ${{ vars.APP_DOMAIN }}
+      VERCEL_TEAM_SLUG: ${{ vars.VERCEL_TEAM_SLUG }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Look for migrations
-        id: migrations
+      - name: Check secrets are available
+        id: guard
         run: |
-          if compgen -G "supabase/migrations/*.sql" > /dev/null; then
-            echo "present=true" >> "$GITHUB_OUTPUT"
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ] || [ -z "$SUPABASE_DB_PASSWORD" ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Database check skipped::Secrets are not available to this run (fork or Dependabot pull request)."
           else
-            echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "::notice title=Database check skipped::No SQL files in supabase/migrations yet (they arrive in RSOS-004)."
+            echo "run=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Install Supabase CLI
-        if: steps.migrations.outputs.present == 'true'
+        if: steps.guard.outputs.run == 'true'
         uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13 # v3.2.0
         with:
           version: 3.1.0
-      - name: Apply migrations and seed to a fresh local database
-        if: steps.migrations.outputs.present == 'true'
-        run: |
-          supabase db start
-          supabase db reset
-      - name: Lint the database schema
-        if: steps.migrations.outputs.present == 'true'
-        run: supabase db lint --fail-on error
-      - name: Run database tests (RLS and pgTAP)
-        if: steps.migrations.outputs.present == 'true' && hashFiles('supabase/tests/**') != ''
-        run: supabase test db
-      - name: Stop database
-        if: always() && steps.migrations.outputs.present == 'true'
-        run: supabase stop --no-backup
+      - name: Link rsos-dev
+        if: steps.guard.outputs.run == 'true'
+        run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+      - name: Apply migrations to rsos-dev
+        if: steps.guard.outputs.run == 'true'
+        run: supabase db push --remote --yes
+      - name: Run database tests on rsos-dev
+        if: steps.guard.outputs.run == 'true'
+        run: supabase test db --remote
+      - name: Set Auth URLs on rsos-dev
+        if: steps.guard.outputs.run == 'true'
+        run: scripts/supabase-auth-urls.sh dev "$SUPABASE_PROJECT_ID"

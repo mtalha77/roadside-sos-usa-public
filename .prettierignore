@@ -7,3 +7,6 @@ storybook-static/
 playwright-report/
 test-results/
 supabase/.temp/
+
+# generated
+packages/db/src/database.types.ts

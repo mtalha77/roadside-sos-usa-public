@@ -1,0 +1,41 @@
+name: Database deploy
+
+# Applies migrations after a merge: staging branch -> rsos-staging, main -> rsos-prod.
+# Pull requests are applied to rsos-dev by the `db` job in ci.yml.
+on:
+  push:
+    branches: [staging, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: db-deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: deploy (${{ github.ref_name == 'main' && 'rsos-prod' || 'rsos-staging' }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TARGET: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ github.ref_name == 'main' && secrets.SUPABASE_DB_PASSWORD_PROD || secrets.SUPABASE_DB_PASSWORD_STAGING }}
+      SUPABASE_PROJECT_ID: ${{ github.ref_name == 'main' && vars.SUPABASE_PROJECT_ID_PROD || vars.SUPABASE_PROJECT_ID_STAGING }}
+      APP_DOMAIN: ${{ vars.APP_DOMAIN }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13 # v3.2.0
+        with:
+          version: 3.1.0
+      - name: Link project
+        run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+      - name: Apply migrations
+        run: supabase db push --remote --yes
+      - name: Run database tests
+        run: supabase test db --remote
+      - name: Set Auth URLs
+        run: scripts/supabase-auth-urls.sh "$TARGET" "$SUPABASE_PROJECT_ID"

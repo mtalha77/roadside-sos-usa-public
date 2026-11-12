@@ -46,6 +46,21 @@ Validate with Zod (`packages/core` schemas) wherever data enters or leaves trust
 - Default deny. Policies are scoped by role (driver, provider, admin) and by market.
 - Every new table gets RLS tests (pgTAP in `supabase/tests/` or integration tests) proving allowed and denied access for each role.
 
+### 4a. Schema changes only through migrations (cloud only)
+
+- **Every schema change is a SQL file in `supabase/migrations/`**, created with `pnpm exec supabase migration new <name>` and merged through a pull request. **Never edit tables, policies, functions, buckets or extensions in the Supabase dashboard** of any project; the next migration run would drift from it.
+- There is no local database (no Docker). Three Supabase cloud projects in us-east-1 stay identical through migrations:
+
+  | Project        | Receives migrations from                  | Used by                      |
+  | -------------- | ----------------------------------------- | ---------------------------- |
+  | `rsos-dev`     | every pull request (`db` job in `ci.yml`) | Vercel previews, local `dev` |
+  | `rsos-staging` | merge to `staging` (`db-deploy.yml`)      | staging hosts                |
+  | `rsos-prod`    | merge to `main` (`db-deploy.yml`)         | production hosts             |
+
+- Project IDs are GitHub Actions variables `SUPABASE_PROJECT_ID_{DEV,STAGING,PROD}`; database passwords are secrets `SUPABASE_DB_PASSWORD_{DEV,STAGING,PROD}`; `SUPABASE_ACCESS_TOKEN` is the CI token. Auth site and redirect URLs are set by `scripts/supabase-auth-urls.sh` from the `APP_DOMAIN` variable.
+- Tests for the database live in `supabase/tests/*.test.sql` (pgTAP) and run against the target project after each migration run.
+- After a migration that changes the `public` schema, run `pnpm --filter @rsos/db gen:types` (generates from `rsos-dev`) and commit `packages/db/src/database.types.ts`.
+
 ### 5. Never expose the Supabase service role key to the browser
 
 - `SUPABASE_SERVICE_ROLE_KEY` is server-only. Never prefix it with `NEXT_PUBLIC_`, log it, or send it to the client.
@@ -84,8 +99,9 @@ packages/
   emails/      React Email templates
   i18n/        next-intl message catalogs (en.json, es.json; keys must match)
 supabase/
-  config.toml  Local stack config
-  migrations/  SQL migrations (RLS in the same migration as the table)
+  config.toml  CLI config (no local stack is run)
+  migrations/  SQL migrations (RLS in the same migration as the table); CI applies them
+  tests/       pgTAP database tests, run against the cloud project after migrations
   seed.sql     Local test data
   functions/   Edge Functions
 docs/          Product docs and backlog
@@ -97,21 +113,21 @@ Workspace packages are imported as `@rsos/<name>` and ship TypeScript source (no
 
 Run from the repository root.
 
-| Command                            | What it does                                                              |
-| ---------------------------------- | ------------------------------------------------------------------------- |
-| `pnpm install`                     | Install everything                                                        |
-| `pnpm dev`                         | Run all three apps (3000, 3001, 3002)                                     |
-| `pnpm --filter @rsos/web dev`      | Run one app                                                               |
-| `pnpm build`                       | Production build of every app                                             |
-| `pnpm lint`                        | ESLint everywhere                                                         |
-| `pnpm typecheck`                   | TypeScript everywhere                                                     |
-| `pnpm test`                        | Unit tests (Vitest) everywhere                                            |
-| `pnpm test:e2e`                    | Playwright (first run: `pnpm --filter @rsos/web exec playwright install`) |
-| `pnpm storybook`                   | Storybook for `packages/ui` on port 6006                                  |
-| `pnpm email:dev`                   | React Email preview on port 3003                                          |
-| `pnpm format`                      | Prettier                                                                  |
-| `pnpm exec supabase start`         | Local Supabase (needs Docker Desktop)                                     |
-| `pnpm --filter @rsos/db gen:types` | Regenerate database types after a migration                               |
+| Command                                   | What it does                                                              |
+| ----------------------------------------- | ------------------------------------------------------------------------- |
+| `pnpm install`                            | Install everything                                                        |
+| `pnpm dev`                                | Run all three apps (3000, 3001, 3002)                                     |
+| `pnpm --filter @rsos/web dev`             | Run one app                                                               |
+| `pnpm build`                              | Production build of every app                                             |
+| `pnpm lint`                               | ESLint everywhere                                                         |
+| `pnpm typecheck`                          | TypeScript everywhere                                                     |
+| `pnpm test`                               | Unit tests (Vitest) everywhere                                            |
+| `pnpm test:e2e`                           | Playwright (first run: `pnpm --filter @rsos/web exec playwright install`) |
+| `pnpm storybook`                          | Storybook for `packages/ui` on port 6006                                  |
+| `pnpm email:dev`                          | React Email preview on port 3003                                          |
+| `pnpm format`                             | Prettier                                                                  |
+| `pnpm exec supabase migration new <name>` | New migration file (CI applies it to rsos-dev; no local database)         |
+| `pnpm --filter @rsos/db gen:types`        | Regenerate database types from rsos-dev after a migration                 |
 
 ## Git workflow
 
