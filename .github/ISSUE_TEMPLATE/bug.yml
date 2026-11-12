@@ -1,0 +1,53 @@
+name: Bug
+description: Something is broken or behaves differently than expected.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: app
+    attributes:
+      label: Where
+      options:
+        [Public website (web), Provider portal (provider), Admin dashboard (admin), Emails, Other]
+    validations:
+      required: true
+  - type: input
+    id: market
+    attributes:
+      label: Market
+      description: Which market (metro area) it happened in, if any.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: Include screenshots or error messages. Remove any personal data, keys or tokens first.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device, browser and theme
+      placeholder: iPhone 15, Safari, dark mode
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options: [Blocker (drivers or providers cannot use it), Major, Minor, Cosmetic]
+    validations:
+      required: true

@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, staging]
+  push:
+    branches: [main, staging]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
+
+# Job names are the required status checks on main and staging. Renaming a job means
+# updating branch protection too (see CLAUDE.md, "Git workflow").
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm lint
+      - run: pnpm format:check
+
+  typecheck:
+    name: typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm typecheck
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm test
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # full history so Turborepo can work out which apps changed
+      - uses: ./.github/actions/setup
+      - name: Build affected apps (pull requests) or everything (pushes)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm turbo run build --affected
+          else
+            pnpm build
+          fi
+
+  db:
+    name: db
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Look for migrations
+        id: migrations
+        run: |
+          if compgen -G "supabase/migrations/*.sql" > /dev/null; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Database check skipped::No SQL files in supabase/migrations yet (they arrive in RSOS-004)."
+          fi
+      - name: Install Supabase CLI
+        if: steps.migrations.outputs.present == 'true'
+        uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13 # v3.2.0
+        with:
+          version: 3.1.0
+      - name: Apply migrations and seed to a fresh local database
+        if: steps.migrations.outputs.present == 'true'
+        run: |
+          supabase db start
+          supabase db reset
+      - name: Lint the database schema
+        if: steps.migrations.outputs.present == 'true'
+        run: supabase db lint --fail-on error
+      - name: Run database tests (RLS and pgTAP)
+        if: steps.migrations.outputs.present == 'true' && hashFiles('supabase/tests/**') != ''
+        run: supabase test db
+      - name: Stop database
+        if: always() && steps.migrations.outputs.present == 'true'
+        run: supabase stop --no-backup

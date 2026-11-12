@@ -1,0 +1,47 @@
+name: Ticket
+description: A unit of planned work (RSOS-<id>).
+title: "RSOS-<id>: "
+labels: ["ticket"]
+body:
+  - type: input
+    id: ticket-id
+    attributes:
+      label: Ticket ID
+      placeholder: RSOS-004
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options: [web, provider, admin, ui, db, core, emails, i18n, infra]
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What this ticket delivers and why.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is included, and what is explicitly out of scope.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Numbered, testable statements.
+      placeholder: |
+        1.
+        2.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes, dependencies and secrets needed
+      description: Name any secret by its variable name only. Never paste a value.

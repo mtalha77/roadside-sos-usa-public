@@ -1,0 +1,34 @@
+version: 2
+updates:
+  # pnpm workspace (Dependabot's "npm" ecosystem reads pnpm-lock.yaml).
+  - package-ecosystem: npm
+    directory: /
+    target-branch: staging
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Etc/UTC
+    # Keep exact pins: bump the pinned version instead of adding ^ or ~.
+    versioning-strategy: increase
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: staging
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Etc/UTC
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns: ["*"]
