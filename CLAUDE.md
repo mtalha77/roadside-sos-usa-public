@@ -123,7 +123,7 @@ Run from the repository root.
 
 ### Branches, pull requests and CI
 
-- Repository: `github.com/mtalha77/roadside-sos-usa` (private).
+- Repository: `github.com/mtalha77/roadside-sos-usa-public` (public, so GitHub Free can enforce branch protection, secret scanning and push protection). Never commit secrets: anyone can read this repo.
 - **`staging`** is the integration branch: open every ticket PR from `rsos-<id>-<slug>` into `staging`.
 - **`main`** is production: release by opening a PR from `staging` into `main`.
 - Both branches are protected: no direct pushes (owner included), no force pushes, no deletion, a pull request is required (0 approvals, so a solo developer can merge their own PR), conversations must be resolved, and the branch must be up to date.
