@@ -1,0 +1,25 @@
+{
+  "common": {
+    "toggleTheme": "Cambiar entre modo claro y oscuro",
+    "comingSoon": "Próximamente",
+    "skipToContent": "Saltar al contenido principal"
+  },
+  "web": {
+    "label": "Sitio web público",
+    "headline": "¿Varado en el camino? Recibe ayuda rápido.",
+    "body": "Comparte tu ubicación y el problema, recibe cotizaciones con precio y hora de llegada de proveedores verificados cercanos y elige el que prefieras.",
+    "cta": "Pedir ayuda ahora"
+  },
+  "provider": {
+    "label": "Portal de proveedores",
+    "headline": "Recibe trabajos de asistencia vial cerca de ti.",
+    "body": "Ve solicitudes en tu zona, envía una cotización con tu precio y hora de llegada, y cobra directamente al conductor.",
+    "cta": "Hazte proveedor"
+  },
+  "admin": {
+    "label": "Panel de administración",
+    "headline": "Administra todos los mercados desde un solo lugar.",
+    "body": "Lanza mercados, verifica proveedores y gestiona precios, tarifas y planes.",
+    "cta": "Iniciar sesión"
+  }
+}

@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Exact versions only: every dependency is pinned.
+savePrefix: ""
+
+# Packages allowed to run install scripts (native binaries). Review before adding more.
+allowBuilds:
+  "@parcel/watcher": true
+  "@swc/core": true
+  esbuild: true
+  sharp: true
+  supabase: true

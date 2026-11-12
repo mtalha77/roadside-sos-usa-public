@@ -1,0 +1,3 @@
+-- Local development seed data. Runs after migrations on `supabase db reset`.
+-- Test data only: never put real customer, provider or payment data here.
+-- Markets are data, not code: add test markets here once the markets table exists.

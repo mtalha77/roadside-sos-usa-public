@@ -1,0 +1,22 @@
+{
+  "name": "@rsos/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./messages/*.json": "./messages/*.json"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@rsos/config": "workspace:*",
+    "@types/node": "26.6.6",
+    "eslint": "10.14.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

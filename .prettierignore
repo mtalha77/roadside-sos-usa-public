@@ -1,0 +1,9 @@
+pnpm-lock.yaml
+.next/
+.turbo/
+dist/
+coverage/
+storybook-static/
+playwright-report/
+test-results/
+supabase/.temp/

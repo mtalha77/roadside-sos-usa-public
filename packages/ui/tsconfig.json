@@ -1,0 +1,4 @@
+{
+  "extends": "@rsos/config/tsconfig/library.json",
+  "include": ["src", "test", ".storybook", "vitest.config.ts"]
+}

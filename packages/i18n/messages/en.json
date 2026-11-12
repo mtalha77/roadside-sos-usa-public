@@ -1,0 +1,25 @@
+{
+  "common": {
+    "toggleTheme": "Switch between light and dark mode",
+    "comingSoon": "Coming soon",
+    "skipToContent": "Skip to main content"
+  },
+  "web": {
+    "label": "Public website",
+    "headline": "Stuck on the road? Get help fast.",
+    "body": "Share your location and problem, get quotes with price and arrival time from verified providers nearby, and pick the one you want.",
+    "cta": "Get help now"
+  },
+  "provider": {
+    "label": "Provider portal",
+    "headline": "Get roadside jobs near you.",
+    "body": "See requests in your area, send a quote with your price and arrival time, and get paid directly by the driver.",
+    "cta": "Become a provider"
+  },
+  "admin": {
+    "label": "Admin dashboard",
+    "headline": "Run every market from one place.",
+    "body": "Launch markets, verify providers, and manage pricing, fees and plans.",
+    "cta": "Sign in"
+  }
+}

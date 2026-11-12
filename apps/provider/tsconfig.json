@@ -1,0 +1,16 @@
+{
+  "extends": "@rsos/config/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": [
+    "next-env.d.ts",
+    "src",
+    "test",
+    "*.ts",
+    "*.mjs",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}

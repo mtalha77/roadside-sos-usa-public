@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@rsos/config/tailwind/theme.css";
+
+/* Scan shared UI components for class names. */
+@source "../../../../packages/ui/src";
