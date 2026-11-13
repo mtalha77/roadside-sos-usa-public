@@ -217,7 +217,7 @@ test.describe("content pages", () => {
     expect(faq?.mainEntity?.length).toBeGreaterThanOrEqual(10);
     for (const q of faq!.mainEntity!) expect(q.name && q.acceptedAnswer.text).toBeTruthy();
     await page.getByRole("searchbox", { name: "Search questions" }).fill("membership");
-    await expect(page.locator("details:visible")).toHaveCount(1);
+    await expect(page.locator("main details:visible")).toHaveCount(1);
     await page.getByRole("searchbox", { name: "Search questions" }).fill("zzzz");
     await expect(page.getByText('No questions match "zzzz".')).toBeVisible();
     await expectNoA11yViolations(page);
