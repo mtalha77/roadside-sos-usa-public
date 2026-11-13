@@ -7,8 +7,11 @@ import type { Metadata, Viewport } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
-import { ConsentManager, type ConsentLabels } from "@/components/site/consent-manager";
-import { CONSENT_HEAD_SCRIPT } from "@/lib/consent";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { cookies } from "next/headers";
+import { ConsentBanner } from "@/components/site/consent-banner";
+import { CONSENT_COOKIE, CONSENT_HEAD_SCRIPT, parseConsent } from "@/lib/consent";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,28 +28,12 @@ export const viewport: Viewport = {
   ],
 };
 
-const CONSENT_KEYS = [
-  "title",
-  "body",
-  "necessary",
-  "necessaryHint",
-  "analytics",
-  "analyticsHint",
-  "ads",
-  "adsHint",
-  "gpc",
-  "acceptAll",
-  "rejectAll",
-  "save",
-  "manage",
-  "policy",
-  "saved",
-] as const;
-
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = await getLocale();
   const nonce = (await headers()).get("x-nonce") ?? undefined;
-  const tc = await getTranslations("consent");
+  const consent = parseConsent((await cookies()).get(CONSENT_COOKIE)?.value);
+  // Analytics only after analytics consent, and only in production (no preview or staging noise).
+  const analytics = getSiteEnv() === "production" && consent?.a === true;
   return (
     <html lang={locale} className={GeistSans.variable} suppressHydrationWarning>
       <head>
@@ -55,11 +42,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body>
         <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
-        {/* Analytics load only after consent, and only in production (no preview or staging noise). */}
-        <ConsentManager
-          analyticsTags={getSiteEnv() === "production"}
-          labels={Object.fromEntries(CONSENT_KEYS.map((k) => [k, tc(k)])) as ConsentLabels}
-        />
+        <ConsentBanner />
+        {analytics ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
     </html>
   );

@@ -1,10 +1,10 @@
-import { Button } from "@rsos/ui/button";
 import { inputClass } from "@rsos/ui/input";
 import { getTranslations } from "next-intl/server";
-import { chooseMarketAction } from "@/lib/actions";
+import { headers } from "next/headers";
 import { cityLabel, type SiteMarket } from "@/lib/market";
+import { ui } from "@/lib/ui-classes";
 
-/** Lets the visitor change their area; works without JavaScript (plain form post). */
+/** Lets the visitor change their area; a plain form post (no JavaScript). */
 export async function MarketPicker({
   markets,
   current,
@@ -12,9 +12,10 @@ export async function MarketPicker({
   markets: SiteMarket[];
   current: SiteMarket | null;
 }) {
-  const t = await getTranslations("site.market");
+  const [t, h] = await Promise.all([getTranslations("site.market"), headers()]);
   return (
-    <form action={chooseMarketAction} className="flex flex-wrap items-end gap-3">
+    <form method="post" action="/api/market" className="flex flex-wrap items-end gap-3">
+      <input type="hidden" name="return" value={h.get("x-pathname") ?? "/"} />
       <div className="flex min-w-56 flex-1 flex-col gap-2">
         <label htmlFor="market-select" className="text-sm font-medium">
           {current ? t("change") : t("choose")}
@@ -36,9 +37,9 @@ export async function MarketPicker({
           ))}
         </select>
       </div>
-      <Button type="submit" variant="outline">
+      <button type="submit" className={ui.button.outline}>
         {t("save")}
-      </Button>
+      </button>
     </form>
   );
 }

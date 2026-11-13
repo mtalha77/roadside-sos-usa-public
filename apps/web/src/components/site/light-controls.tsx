@@ -1,55 +1,39 @@
 "use client";
 
-/**
- * Tiny client controls for the public website. The shared `Button` and `Switch` pull in class
- * merging, cva and Radix, which costs every visitor ~20 KB of JavaScript (RSOS-033 budget). These
- * keep the same look (design tokens, 48px targets, focus ring) with plain elements.
- */
-import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import type { ComponentProps } from "react";
+import { ui } from "@/lib/ui-classes";
 
-const base =
-  "inline-flex min-h-touch shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-5 font-semibold whitespace-nowrap transition-colors duration-150 ease-standard disabled:pointer-events-none disabled:opacity-50";
-
-export const lightButton = {
-  outline: `${base} border border-input bg-surface text-foreground hover:bg-accent hover:text-accent-foreground`,
-  ghost: `${base} text-foreground hover:bg-accent hover:text-accent-foreground`,
-};
-
-export function LightButton({
-  variant = "outline",
-  className = "",
-  ...props
-}: ComponentProps<"button"> & { variant?: keyof typeof lightButton }) {
-  return <button type="button" className={`${lightButton[variant]} ${className}`} {...props} />;
-}
-
-/** On/off switch (native checkbox with role="switch": keyboard, labels and forms work as usual). */
-export function LightSwitch({ className = "", ...props }: Omit<ComponentProps<"input">, "type">) {
-  return (
-    <input
-      type="checkbox"
-      role="switch"
-      className={`relative h-8 w-14 shrink-0 cursor-pointer appearance-none rounded-full bg-input transition-colors duration-200 ease-standard before:absolute before:top-0.5 before:left-0.5 before:size-7 before:rounded-full before:bg-surface before:shadow-md before:transition-transform before:duration-200 checked:bg-success checked:before:translate-x-6 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
-      {...props}
-    />
-  );
-}
-
-/** Light and dark mode switch; icons swap with CSS so server and client markup match. */
+/**
+ * Light and dark mode switch for the public website: plain button and inline icons, so it adds
+ * almost no JavaScript (RSOS-033). Icons swap with CSS, so server and client markup match.
+ */
 export function LightThemeToggle({ label }: { label: string }) {
   const { resolvedTheme, setTheme } = useTheme();
+  const icon = {
+    width: 20,
+    height: 20,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+  } as const;
   return (
     <button
       type="button"
       aria-label={label}
       title={label}
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className={`${lightButton.ghost} min-w-touch px-0 [&_svg]:size-5`}
+      className={`${ui.button.ghost} min-w-touch px-0`}
     >
-      <Sun aria-hidden="true" className="hidden dark:block" />
-      <Moon aria-hidden="true" className="block dark:hidden" />
+      <svg {...icon} aria-hidden="true" className="hidden dark:block">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+      </svg>
+      <svg {...icon} aria-hidden="true" className="block dark:hidden">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+      </svg>
     </button>
   );
 }

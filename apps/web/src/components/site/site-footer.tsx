@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { cityLabel, formatPhone, marketPath, type SiteMarket } from "@/lib/market";
 import type { SiteService } from "@/lib/site-data";
-import { PrivacyChoicesButton } from "./consent-manager";
 import { serviceName } from "./service-label";
 
 /** Footer: cities, services, company, legal and provider links, and the visitor's market number. */
@@ -95,7 +94,12 @@ export async function SiteFooter({
         ) : null}
         <p className="max-w-3xl">{t("footer.tagline")}</p>
         <p>
-          <PrivacyChoicesButton label={t("footer.privacyChoices")} />
+          <Link
+            className="inline-flex min-h-touch items-center underline-offset-4 hover:underline sm:min-h-0 sm:py-1"
+            href="/privacy-choices"
+          >
+            {t("footer.privacyChoices")}
+          </Link>
         </p>
         <p>{t("footer.rights", { year: new Date().getFullYear(), brand: brand.name })}</p>
       </div>
