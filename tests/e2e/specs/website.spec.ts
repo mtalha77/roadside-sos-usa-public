@@ -251,3 +251,38 @@ test.describe("content pages", () => {
     await expect(page.getByText("Thanks. We got your message")).toBeVisible();
   });
 });
+
+// RSOS-026: For providers and the application form.
+test.describe("for providers", () => {
+  test.skip(!web, "No website URL");
+
+  test("fees come from the database and the application is stored", async ({ page }) => {
+    await page.goto(url("/for-providers"));
+    await expect(page.getByRole("heading", { name: "Fee per picked request" })).toBeVisible();
+    await expect(page.locator("main table").first()).toContainText("$");
+    await expectNoA11yViolations(page);
+    await page.getByRole("link", { name: "Apply to join" }).first().click();
+    await page.getByRole("textbox", { name: /Company name/ }).fill("E2E Test Towing");
+    await page.getByRole("textbox", { name: /Your name/ }).fill("E2E Tester");
+    await page.getByRole("textbox", { name: /Mobile phone/ }).fill("(713) 555-0188");
+    await page.getByRole("textbox", { name: /Email/ }).fill("apply-e2e@example.test");
+    await page
+      .getByRole("group", { name: /Cities you serve/ })
+      .getByRole("checkbox")
+      .first()
+      .check();
+    await page
+      .getByRole("group", { name: /Services you offer/ })
+      .getByRole("checkbox")
+      .first()
+      .check();
+    await page.getByRole("spinbutton", { name: /Number of trucks/ }).fill("2");
+    await page.getByRole("textbox", { name: /Insurance carrier/ }).fill("E2E Mutual");
+    await expect(page.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
+      timeout: 20_000,
+    });
+    await expectNoA11yViolations(page);
+    await page.getByRole("button", { name: "Send application" }).click();
+    await expect(page.getByText("We got your application")).toBeVisible();
+  });
+});

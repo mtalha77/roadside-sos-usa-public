@@ -654,5 +654,85 @@
         ]
       ]
     }
+  },
+  "forProviders": {
+    "title": "Get roadside jobs from drivers near you",
+    "intro": "Join verified local providers who get paid jobs from stranded drivers. You set your prices, you choose the jobs, and you only pay when a driver picks you.",
+    "apply": "Apply to join",
+    "how": {
+      "title": "How jobs arrive",
+      "steps": [
+        [
+          "A driver near you asks for help",
+          "You get the request with the problem, the vehicle and the location."
+        ],
+        [
+          "You send a quote",
+          "Your price and how soon you can arrive. Quote what you want, when you want."
+        ],
+        [
+          "The driver picks a quote",
+          "If they pick you, you get their details and head out. They pay you directly."
+        ]
+      ]
+    },
+    "money": {
+      "title": "How the money works",
+      "yourPrices": "You set your own prices for every job.",
+      "direct": "Drivers pay you directly. We never touch the job payment.",
+      "fee": "We charge a flat fee only when a driver picks you, from a prepaid wallet you top up.",
+      "noMonthly": "No monthly fee to join."
+    },
+    "fees": {
+      "title": "Fee per picked request",
+      "intro": "The flat fee depends on the city and the service. Current fees:",
+      "service": "Service",
+      "fee": "Fee",
+      "none": "Fees are not set for this city yet."
+    },
+    "plans": {
+      "title": "Optional plans",
+      "pro": "Pro",
+      "proBody": "{discount} off every fee, plus tools for busy shops.",
+      "featured": "Featured",
+      "featuredBody": "Placement at the top of quotes and city pages, per city.",
+      "price": "{range} a month",
+      "priceIn": "{range} a month in {city}",
+      "note": "Plans are optional. Exact prices per city are confirmed before launch."
+    },
+    "requirements": {
+      "title": "Requirements",
+      "insurance": "Commercial auto and liability insurance, with proof.",
+      "license": "In Texas, a TDLR tow operator license for towing (we check it).",
+      "vehicle": "A vehicle and equipment for the services you offer.",
+      "phone": "A mobile phone to receive requests and send quotes."
+    },
+    "form": {
+      "title": "Apply to join",
+      "intro": "Tell us about your business. We review every application and reply within two business days.",
+      "company": "Company name",
+      "contact": "Your name",
+      "phone": "Mobile phone",
+      "email": "Email",
+      "markets": "Cities you serve",
+      "services": "Services you offer",
+      "trucks": "Number of trucks",
+      "insurance": "Insurance carrier",
+      "license": "License number (TDLR in Texas)",
+      "referral": "How did you hear about us? (optional)",
+      "smsConsent": "Text me about my application. Message frequency varies. Message and data rates may apply. Reply STOP to opt out, HELP for help.",
+      "smsTerms": "SMS terms",
+      "submit": "Send application",
+      "sent": "Thanks. We got your application and sent you a confirmation.",
+      "verify": "Security check",
+      "errors": {
+        "required": "Check the highlighted fields: company, name, a US mobile number, email, at least one city and one service.",
+        "turnstile": "The security check didn't pass. Please try again.",
+        "limit": "Too many applications from this connection. Please try again later.",
+        "generic": "Something went wrong. Please try again."
+      },
+      "checkField": "Check this field."
+    },
+    "smsConfirmation": "{brand}: we got your application for {company}. We'll be in touch within 2 business days. Reply STOP to opt out."
   }
 }

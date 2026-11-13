@@ -654,5 +654,82 @@
         ]
       ]
     }
+  },
+  "forProviders": {
+    "title": "Recibe trabajos de asistencia de conductores cercanos",
+    "intro": "Únete a proveedores locales verificados que reciben trabajos pagados de conductores varados. Tú fijas tus precios, eliges los trabajos y solo pagas cuando un conductor te elige.",
+    "apply": "Solicitar unirse",
+    "how": {
+      "title": "Cómo llegan los trabajos",
+      "steps": [
+        [
+          "Un conductor cercano pide ayuda",
+          "Recibes la solicitud con el problema, el vehículo y la ubicación."
+        ],
+        [
+          "Envías una cotización",
+          "Tu precio y cuándo puedes llegar. Cotiza lo que quieras, cuando quieras."
+        ],
+        ["El conductor elige", "Si te elige, recibes sus datos y sales. Te paga directamente."]
+      ]
+    },
+    "money": {
+      "title": "Cómo funciona el dinero",
+      "yourPrices": "Tú fijas tus precios para cada trabajo.",
+      "direct": "Los conductores te pagan directamente. Nunca tocamos el pago del trabajo.",
+      "fee": "Cobramos una tarifa fija solo cuando un conductor te elige, de un saldo prepagado que recargas.",
+      "noMonthly": "Unirse no tiene costo mensual."
+    },
+    "fees": {
+      "title": "Tarifa por solicitud elegida",
+      "intro": "La tarifa fija depende de la ciudad y del servicio. Tarifas actuales:",
+      "service": "Servicio",
+      "fee": "Tarifa",
+      "none": "Todavía no hay tarifas para esta ciudad."
+    },
+    "plans": {
+      "title": "Planes opcionales",
+      "pro": "Pro",
+      "proBody": "{discount} de descuento en cada tarifa, más herramientas para talleres con mucho trabajo.",
+      "featured": "Destacado",
+      "featuredBody": "Aparece primero en las cotizaciones y en las páginas de la ciudad, por ciudad.",
+      "price": "{range} al mes",
+      "priceIn": "{range} al mes en {city}",
+      "note": "Los planes son opcionales. Los precios exactos por ciudad se confirman antes del lanzamiento."
+    },
+    "requirements": {
+      "title": "Requisitos",
+      "insurance": "Seguro comercial de auto y de responsabilidad civil, con comprobante.",
+      "license": "En Texas, licencia de operador de grúa de TDLR para remolques (la revisamos).",
+      "vehicle": "Vehículo y equipo para los servicios que ofreces.",
+      "phone": "Un celular para recibir solicitudes y enviar cotizaciones."
+    },
+    "form": {
+      "title": "Solicitar unirse",
+      "intro": "Cuéntanos sobre tu empresa. Revisamos cada solicitud y respondemos en dos días hábiles.",
+      "company": "Nombre de la empresa",
+      "contact": "Tu nombre",
+      "phone": "Celular",
+      "email": "Correo electrónico",
+      "markets": "Ciudades donde trabajas",
+      "services": "Servicios que ofreces",
+      "trucks": "Número de grúas o vehículos",
+      "insurance": "Aseguradora",
+      "license": "Número de licencia (TDLR en Texas)",
+      "referral": "¿Cómo supiste de nosotros? (opcional)",
+      "smsConsent": "Envíenme mensajes de texto sobre mi solicitud. La frecuencia varía. Pueden aplicar tarifas de mensajes y datos. Responde STOP para cancelar, HELP para ayuda.",
+      "smsTerms": "Términos de SMS",
+      "submit": "Enviar solicitud",
+      "sent": "Gracias. Recibimos tu solicitud y te enviamos una confirmación.",
+      "verify": "Verificación de seguridad",
+      "errors": {
+        "required": "Revisa los campos marcados: empresa, nombre, un celular de EE. UU., correo, al menos una ciudad y un servicio.",
+        "turnstile": "La verificación de seguridad no pasó. Inténtalo de nuevo.",
+        "limit": "Demasiadas solicitudes desde esta conexión. Inténtalo más tarde.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      },
+      "checkField": "Revisa este campo."
+    },
+    "smsConfirmation": "{brand}: recibimos tu solicitud para {company}. Te contactaremos en 2 días hábiles. Responde STOP para cancelar."
   }
 }
