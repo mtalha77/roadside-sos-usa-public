@@ -71,6 +71,6 @@ export function formatPhone(e164: string): string {
   return m ? `(${m[1]}) ${m[2]}-${m[3]}` : e164;
 }
 
-/** "Houston, TX". */
+/** City label for menus and headings, e.g. "Houston, TX" (name and state from the market row). */
 export const cityLabel = (m: Pick<SiteMarket, "name" | "state_code">) =>
   `${m.name}, ${m.state_code}`;
