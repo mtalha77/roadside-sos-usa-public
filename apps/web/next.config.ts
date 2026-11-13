@@ -1,3 +1,4 @@
+import { securityHeaders } from "@rsos/config/security";
 import { isIndexable, validateAppEnv } from "@rsos/config/site";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
@@ -14,9 +15,10 @@ const nextConfig: NextConfig = {
   // Workspace packages ship TypeScript source; Next compiles them.
   transpilePackages: ["@rsos/config", "@rsos/core", "@rsos/db", "@rsos/i18n", "@rsos/ui"],
   async headers() {
+    const headers = securityHeaders(APP);
     // Staging, previews, the provider portal and the admin dashboard are never indexed.
-    if (isIndexable(APP)) return [];
-    return [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
+    if (!isIndexable(APP)) headers.push({ key: "X-Robots-Tag", value: "noindex, nofollow" });
+    return [{ source: "/:path*", headers }];
   },
 };
 

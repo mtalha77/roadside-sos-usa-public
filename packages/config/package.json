@@ -15,7 +15,8 @@
     "./site": "./src/site.ts",
     "./logo": "./src/logo.ts",
     "./metadata": "./src/metadata.ts",
-    "./brand-guard": "./src/brand-guard.ts"
+    "./brand-guard": "./src/brand-guard.ts",
+    "./security": "./src/security.ts"
   },
   "scripts": {
     "lint": "eslint .",

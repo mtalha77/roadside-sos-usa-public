@@ -108,7 +108,28 @@ Acceptance criteria:
 | 1   | Changing the name in config and the domain variables updates every page title and footer | PASS: `packages/config/test/rename.test.ts` changes the domain variable and checks every URL, email and metadata title; titles and footer read only from `brand` |
 | 2   | The CI check catches a hardcoded brand string (prove with a test)                        | PASS: `packages/config/test/brand-guard.test.ts`                                                                                                                 |
 
+## RSOS-009: Security baseline
+
+- Headers on every route of all three apps (`next.config` `headers()` for `/:path*`): HSTS (2 years, preload), Referrer-Policy, Permissions-Policy (geolocation only on the public website), X-Frame-Options DENY, X-Content-Type-Options, COOP.
+- Per-request nonce CSP in `src/proxy.ts` (Next 16 proxy) allowing only Google Maps, Stripe, Twilio, PostHog, Google Tag Manager, Cloudflare Turnstile, Sentry, Supabase and Vercel; `frame-ancestors 'none'`, `object-src 'none'`. The nonce is passed to next-themes.
+- Env validated with Zod at build (`next.config`) and at server start (`instrumentation.ts`).
+- Service role key: server-only module plus `packages/db/test/service-role.test.ts` (fails if a client component imports it, if it gets a `NEXT_PUBLIC_` prefix, or if any other file reads it).
+- `@rsos/core/security`: `verifyTurnstile` (fails closed when keys are missing) and `checkRateLimits` per IP and per phone (Upstash REST when configured, in-memory fallback otherwise) with `rateLimitResponse` returning 429.
+- Admin session cookies Secure, HttpOnly, SameSite=Lax (`strictCookieOptions`).
+- CI dependency audit: `pnpm audit --prod --audit-level high`. Dev-only tools are excluded: `@react-email/preview-server` bundles an old Next.js with known advisories but never ships to users.
+- `SECURITY.md` (reporting, secret locations, rotation); GitHub private vulnerability reporting turned on.
+
+Acceptance criteria:
+
+| #   | Criterion                                                         | Result                                                                                                                                 |
+| --- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Headers present on every route of all three apps (automated test) | PASS: `apps/*/test/security.test.ts` checks the `/:path*` header rule and the CSP on `/`, `/api/health`, nested pages and `robots.txt` |
+| 2   | A form submit without a valid Turnstile token is rejected         | PASS: `packages/core/test/security.test.ts` (missing, invalid, not configured, Cloudflare down)                                        |
+| 3   | Requests over the rate limit receive 429                          | PASS: same test file, mocked store, 429 with `Retry-After`                                                                             |
+
 ## BLOCKERS
 
 1. **DNS for the apex domain (RSOS-005).** At your DNS host for fixallcontractors.com (nameservers `ns1-4.stackdns.com`): delete the `@` A record `185.151.30.209` and the `@` AAAA record `2a07:7800::209`, then add `@` A `216.150.1.1` and `@` A `216.150.16.1`. Vercel issues the certificate automatically within minutes.
 2. **Turn on Web Analytics and Speed Insights for `rsos-web` (RSOS-005).** Vercel dashboard, project `rsos-web`, Analytics tab, Enable; then Speed Insights tab, Enable. The code is already installed; data starts after the next deployment.
+3. **Cloudflare Turnstile keys (RSOS-009).** Create a Turnstile widget at dash.cloudflare.com → Turnstile → Add widget (hostnames: the apex, staging, pro, staging-pro, admin, staging-admin). Add `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (plain) and `TURNSTILE_SECRET_KEY` (sensitive) to the three Vercel projects, all environments. Until then, Turnstile-protected forms reject every submit (fail closed).
+4. **Upstash Redis (RSOS-009).** Create a Redis database at console.upstash.com (region us-east-1), copy the REST URL and token, and add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (sensitive) to the three Vercel projects. Until then, rate limits use a per-instance in-memory fallback.
