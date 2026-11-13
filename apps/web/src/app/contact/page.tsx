@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ContactForm } from "@/components/site/contact-form";
 import { PageHero } from "@/components/site/page-hero";
 import { SitePage } from "@/components/site/site-page";
-import { TOPICS } from "@/lib/contact-action";
+import { TOPICS } from "@/lib/contact-topics";
 import { cityLabel } from "@/lib/market";
 import { getMarkets } from "@/lib/site-data";
 import { getVisitorMarket } from "@/lib/visitor";

@@ -12,11 +12,10 @@ import {
 import { type Locale, LOCALE_COOKIE, resolveLocale } from "@rsos/i18n";
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { TOPICS } from "./contact-topics";
 import { guardForm } from "./forms";
 
 export type ContactState = { ok?: boolean; error?: "required" | "turnstile" | "limit" | "generic" };
-
-export const TOPICS = ["general", "job", "provider", "privacy", "other"] as const;
 
 const ContactSchema = z.object({
   name: z.string().trim().min(1).max(120),
