@@ -112,6 +112,20 @@ Acceptance criteria:
 | 2   | CountdownRing keeps correct time with the tab in the background        | PASS: test jumps the clock 95 s with no timer ticks (throttled background tab), then the tab becomes visible: the ring shows 1:25 immediately                                                             |
 | 3   | MapView works with a key and degrades cleanly without one              | PARTIAL: without a key the placeholder renders and passes axe (tested); with a key the loader is called with the key and the map is created (mocked test). A live check needs a Google Maps key (BLOCKER) |
 
+## RSOS-014: Icons and illustrations
+
+- `Icon` (`@rsos/ui/icons`): one component for Lucide and our own icons; sizes sm to xl; decorative icons hidden from screen readers, meaningful ones labelled.
+- Original icon set on Lucide's grid (24 px, 2 px round stroke, no fill, `currentColor`): services flat tire, won't start, locked out, out of gas, basic tow, winch out (keys match `services.icon_key`), vehicles car, SUV, pickup, motorcycle, van, RV or trailer.
+- Original line illustrations (`@rsos/ui/illustrations`, 160x120, token colours only): share location, compare quotes, track arrival, no requests, waiting, not in your area, offline.
+- Storybook: Foundations → Icons and illustrations; service tiles now use the original icons.
+
+Acceptance criteria:
+
+| #   | Criterion                                                     | Result                                                                                                                                                            |
+| --- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | All icons share stroke width and grid and work in both themes | PASS: `test/icons.test.tsx` checks every icon's viewBox, stroke width, caps, joins, no fill, `currentColor`, no fixed colours; stories pass axe in light and dark |
+| 2   | No third-party illustration packs or stock images in the repo | PASS: test fails on any raster image in git or any known illustration or stock pack in the lockfile; all artwork is original SVG                                  |
+
 ## BLOCKERS
 
 ### Permissions

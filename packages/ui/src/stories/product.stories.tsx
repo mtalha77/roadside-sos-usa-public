@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BatteryLow, Disc3, Fuel, KeyRound, Mountain, Truck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BigToggle } from "../components/big-toggle";
 import { Button } from "../components/button";
 import { CountdownRing } from "../components/countdown-ring";
 import { EtaChip } from "../components/eta-chip";
+import { Icon, serviceIcons } from "../components/icon";
 import { UpdatedAgo } from "../components/live-dot";
 import { PriceTag } from "../components/price-tag";
 import { ProviderCard } from "../components/provider-card";
@@ -19,12 +19,42 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const services = [
-  { slug: "flat-tire", label: "Flat tire", hint: "Spare change or plug", icon: <Disc3 /> },
-  { slug: "wont-start", label: "Won't start", hint: "Jump start", icon: <BatteryLow /> },
-  { slug: "locked-out", label: "Locked out", hint: "Keys inside", icon: <KeyRound /> },
-  { slug: "out-of-gas", label: "Out of gas", hint: "Fuel delivery", icon: <Fuel /> },
-  { slug: "tow", label: "Basic tow", hint: "To a shop or home", icon: <Truck /> },
-  { slug: "winch-out", label: "Winch out", hint: "Stuck in mud or a ditch", icon: <Mountain /> },
+  {
+    slug: "flat-tire",
+    label: "Flat tire",
+    hint: "Spare change or plug",
+    icon: <Icon icon={serviceIcons["flat-tire"]} size="xl" />,
+  },
+  {
+    slug: "wont-start",
+    label: "Won't start",
+    hint: "Jump start",
+    icon: <Icon icon={serviceIcons["wont-start"]} size="xl" />,
+  },
+  {
+    slug: "locked-out",
+    label: "Locked out",
+    hint: "Keys inside",
+    icon: <Icon icon={serviceIcons["locked-out"]} size="xl" />,
+  },
+  {
+    slug: "out-of-gas",
+    label: "Out of gas",
+    hint: "Fuel delivery",
+    icon: <Icon icon={serviceIcons["out-of-gas"]} size="xl" />,
+  },
+  {
+    slug: "tow",
+    label: "Basic tow",
+    hint: "To a shop or home",
+    icon: <Icon icon={serviceIcons.tow} size="xl" />,
+  },
+  {
+    slug: "winch-out",
+    label: "Winch out",
+    hint: "Stuck in mud or a ditch",
+    icon: <Icon icon={serviceIcons["winch-out"]} size="xl" />,
+  },
 ];
 
 export const ServiceTiles: Story = {
