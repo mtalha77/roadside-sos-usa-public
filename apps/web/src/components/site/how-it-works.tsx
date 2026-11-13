@@ -20,8 +20,8 @@ export async function HowItWorks({ examplePriceCents }: { examplePriceCents: num
       <h2 id="how-title" className="text-3xl font-semibold">
         {t("how.title")}
       </h2>
-      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <ol className="flex flex-col gap-5">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <ol className="flex min-w-0 flex-col gap-5">
           {steps.map((s) => (
             <li key={s.n} className="flex gap-4">
               <span
@@ -37,7 +37,7 @@ export async function HowItWorks({ examplePriceCents }: { examplePriceCents: num
             </li>
           ))}
         </ol>
-        <div className="flex flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-4">
           {examplePriceCents !== null ? (
             <figure className="flex flex-col gap-2" aria-label={t("how.exampleLabel")}>
               <QuoteCard

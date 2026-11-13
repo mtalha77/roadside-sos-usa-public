@@ -67,6 +67,8 @@ test.describe("website structure", () => {
       page.getByRole("button", { name: "Use this area" }).click(),
     ]);
     await expect(page.getByRole("combobox", { name: "Change area" })).toHaveValue(value!);
+    // WebKit reports link prefetches cancelled by a navigation as errors: let them finish first.
+    await page.waitForLoadState("networkidle");
     await page.goto(url("/get-help"));
     await expect(page.locator(`[data-market='${value}']`)).toBeVisible();
   });
