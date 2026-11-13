@@ -1,13 +1,16 @@
 import { buildCsp, createNonce } from "@rsos/config/security";
-import { type AccessDecision, adminAccess } from "@rsos/db/claims";
+import { type AccessDecision, adminAccess, withSessionState } from "@rsos/db/claims";
 import { strictCookieOptions } from "@rsos/db/cookies";
-import { getSessionClaims, isAuthCookie } from "@rsos/db/session";
+import { getSessionState, isAuthCookie } from "@rsos/db/session";
 import { type NextRequest, NextResponse } from "next/server";
 
 /** Pages anyone may open. Everything else needs staff with the authenticator second step (aal2). */
 const PUBLIC = [
   /^\/sign-in(\/|$)/,
   /^\/no-access$/,
+  /^\/forgot-password$/,
+  /^\/reset-password$/,
+  /^\/auth\/callback$/,
   /^\/api\/health$/,
   /^\/robots\.txt$/,
   /^\/(icon|apple-icon|logo\.svg)/,
@@ -18,6 +21,7 @@ const REDIRECT: Record<Exclude<AccessDecision, "ok">, string> = {
   expired: "/sign-in?expired=1",
   "second-step": "/sign-in/verify",
   forbidden: "/no-access",
+  revoked: "/sign-in?signedOut=1",
 };
 
 /**
@@ -35,7 +39,7 @@ export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   if (!PUBLIC.some((re) => re.test(path))) {
-    const claims = await getSessionClaims(
+    const state = await getSessionState(
       {
         getAll: () => request.cookies.getAll(),
         setAll: (cookies) => {
@@ -47,12 +51,15 @@ export async function proxy(request: NextRequest) {
       },
       strictCookieOptions,
     );
-    const decision = adminAccess(claims);
+    const decision = withSessionState(adminAccess(state.claims), state, {
+      requireSecondStep: false,
+    });
     if (decision !== "ok") {
       const target = new URL(REDIRECT[decision], request.url);
-      if (decision === "sign-in") target.searchParams.set("next", path);
+      if (decision === "sign-in" || decision === "second-step")
+        target.searchParams.set("next", path);
       response = NextResponse.redirect(target);
-      if (decision === "expired") {
+      if (decision === "expired" || decision === "revoked") {
         for (const c of request.cookies.getAll())
           if (isAuthCookie(c.name)) response.cookies.delete(c.name);
       }

@@ -23,9 +23,11 @@ insert into t_code select public.issue_email_code();
 select matches((select code from t_code), '^[0-9]{6}$', 'issues a 6-digit code');
 select is(public.verify_email_code('000000x'), 'invalid', 'wrong code 1');
 select is(public.verify_email_code('111111x'), 'invalid', 'wrong code 2');
+-- Asking for a new code does not reset the count of wrong codes.
+delete from t_code; insert into t_code select public.issue_email_code();
 select is(public.verify_email_code('222222x'), 'invalid', 'wrong code 3');
 select is(public.verify_email_code('333333x'), 'invalid', 'wrong code 4');
-select is(public.verify_email_code('444444x'), 'locked', 'the fifth wrong code locks the account');
+select is(public.verify_email_code('444444x'), 'locked', 'the fifth wrong code locks the account, even across new codes');
 select is(public.verify_email_code((select code from t_code)), 'locked', 'even the right code is refused while locked');
 select throws_ok($$ select public.issue_email_code() $$, 'P0001', null, 'no new code while locked');
 reset role;

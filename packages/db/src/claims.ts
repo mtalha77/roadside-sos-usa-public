@@ -40,7 +40,7 @@ export function sessionStartedAt(claims: AppClaims): number | null {
 export const ADMIN_SESSION_SECONDS = 12 * 60 * 60;
 export const PROVIDER_SESSION_SECONDS = 30 * 24 * 60 * 60;
 
-export type AccessDecision = "ok" | "sign-in" | "second-step" | "expired" | "forbidden";
+export type AccessDecision = "ok" | "sign-in" | "second-step" | "expired" | "forbidden" | "revoked";
 
 /** Admin dashboard: staff only, authenticator app (aal2) required, sessions last 12 hours. */
 export function adminAccess(
@@ -71,4 +71,21 @@ export function providerAccess(
 export function staffCanAccessMarket(claims: AppClaims, marketId: string): boolean {
   if (claims.app_role !== "staff" || claims.aal !== "aal2") return false;
   return !claims.staff_markets || claims.staff_markets.includes(marketId);
+}
+
+/**
+ * Combines the claim-based decision with the server-side session state (RSOS-093): a session signed
+ * out from another device is "revoked" on its next request; providers must pass the second step
+ * (emailed code, SMS, authenticator, trusted device or recovery code) before using the portal.
+ */
+export function withSessionState(
+  decision: AccessDecision,
+  state: { claims: AppClaims | null; active: boolean; secondStepPassed: boolean },
+  opts: { requireSecondStep: boolean },
+): AccessDecision {
+  if (decision !== "ok") return decision;
+  if (!state.active) return "revoked";
+  if (opts.requireSecondStep && !state.secondStepPassed && state.claims?.aal !== "aal2")
+    return "second-step";
+  return "ok";
 }

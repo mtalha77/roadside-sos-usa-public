@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function VerifyPage() {
   const t = await getTranslations("auth.admin");
+  const ta = await getTranslations("account");
   const supabase = await getServerSupabase();
   const { data } = await supabase.auth.getUser();
   if (!data.user) redirect("/sign-in");
@@ -16,6 +17,7 @@ export default async function VerifyPage() {
   return totp ? (
     <AuthShell title={t("verifyTitle")} subtitle={t("verifyBody")}>
       <VerifyExisting factorId={totp.id} />
+      <p className="text-sm text-muted-foreground">{ta("lostSecondStepAdmin")}</p>
     </AuthShell>
   ) : (
     <AuthShell title={t("enrollTitle")} subtitle={t("enrollBody")}>

@@ -17,6 +17,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_requests: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          provider_id: string | null
+          reason: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          provider_id?: string | null
+          reason?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          provider_id?: string | null
+          reason?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_requests_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attributions: {
         Row: {
           call_id: string | null
@@ -226,6 +264,33 @@ export type Database = {
           },
         ]
       }
+      email_second_step_codes: {
+        Row: {
+          attempts: number
+          code_hash: string
+          created_at: string
+          expires_at: string
+          locked_until: string | null
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          code_hash: string
+          created_at?: string
+          expires_at: string
+          locked_until?: string | null
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          code_hash?: string
+          created_at?: string
+          expires_at?: string
+          locked_until?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       market_phone_numbers: {
         Row: {
           created_at: string
@@ -420,6 +485,147 @@ export type Database = {
           status?: Database["public"]["Enums"]["application_status"]
           truck_count?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      provider_billing_events: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          id: number
+          kind: string
+          provider_id: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          id?: never
+          kind: string
+          provider_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          id?: never
+          kind?: string
+          provider_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_billing_events_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_members: {
+        Row: {
+          created_at: string
+          provider_id: string
+          role: Database["public"]["Enums"]["provider_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          provider_id: string
+          role: Database["public"]["Enums"]["provider_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          provider_id?: string
+          role?: Database["public"]["Enums"]["provider_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_members_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_wallets: {
+        Row: {
+          balance_cents: number
+          provider_id: string
+          updated_at: string
+        }
+        Insert: {
+          balance_cents?: number
+          provider_id: string
+          updated_at?: string
+        }
+        Update: {
+          balance_cents?: number
+          provider_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_wallets_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: true
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      providers: {
+        Row: {
+          created_at: string
+          id: string
+          market_ids: string[]
+          name: string
+          status: Database["public"]["Enums"]["provider_status"]
+          status_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          market_ids?: string[]
+          name: string
+          status?: Database["public"]["Enums"]["provider_status"]
+          status_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          market_ids?: string[]
+          name?: string
+          status?: Database["public"]["Enums"]["provider_status"]
+          status_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      recovery_codes: {
+        Row: {
+          code_hash: string
+          created_at: string
+          id: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          code_hash: string
+          created_at?: string
+          id?: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          code_hash?: string
+          created_at?: string
+          id?: string
+          used_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -664,6 +870,102 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_members: {
+        Row: {
+          created_at: string
+          display_name: string
+          is_active: boolean
+          market_ids: string[] | null
+          role: Database["public"]["Enums"]["staff_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          is_active?: boolean
+          market_ids?: string[] | null
+          role: Database["public"]["Enums"]["staff_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          is_active?: boolean
+          market_ids?: string[] | null
+          role?: Database["public"]["Enums"]["staff_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trusted_devices: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          token_hash: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          token_hash: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          token_hash?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_security_settings: {
+        Row: {
+          second_step_method: Database["public"]["Enums"]["second_step_method"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          second_step_method?: Database["public"]["Enums"]["second_step_method"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          second_step_method?: Database["public"]["Enums"]["second_step_method"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      verified_sessions: {
+        Row: {
+          method: string
+          session_id: string
+          user_id: string
+          verified_at: string
+        }
+        Insert: {
+          method: string
+          session_id: string
+          user_id: string
+          verified_at?: string
+        }
+        Update: {
+          method?: string
+          session_id?: string
+          user_id?: string
+          verified_at?: string
+        }
+        Relationships: []
+      }
       waitlist: {
         Row: {
           city: string | null
@@ -742,6 +1044,9 @@ export type Database = {
           status_token: string
         }[]
       }
+      custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      forget_trusted_device: { Args: { p_id: string }; Returns: undefined }
+      generate_recovery_codes: { Args: never; Returns: string[] }
       generate_short_code: { Args: never; Returns: string }
       get_market_services: {
         Args: { p_market_slug: string }
@@ -779,6 +1084,15 @@ export type Database = {
           submitted_at: string
         }[]
       }
+      issue_email_code: { Args: never; Returns: string }
+      jwt_provider_role: {
+        Args: { p_provider_id: string }
+        Returns: Database["public"]["Enums"]["provider_role"]
+      }
+      jwt_staff_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["staff_role"]
+      }
       list_public_markets: {
         Args: never
         Returns: {
@@ -795,6 +1109,11 @@ export type Database = {
           time_zone: string
         }[]
       }
+      log_security_event: {
+        Args: { p_action: string; p_data?: Json; p_ip?: string }
+        Returns: undefined
+      }
+      mark_session_verified: { Args: { p_method: string }; Returns: undefined }
       market_for_point: {
         Args: { p_lat: number; p_lng: number }
         Returns: {
@@ -807,6 +1126,61 @@ export type Database = {
           time_zone: string
         }[]
       }
+      my_provider_status: {
+        Args: never
+        Returns: {
+          name: string
+          provider_id: string
+          role: Database["public"]["Enums"]["provider_role"]
+          status: Database["public"]["Enums"]["provider_status"]
+          status_reason: string
+        }[]
+      }
+      my_security_events: {
+        Args: { p_limit?: number }
+        Returns: {
+          action: string
+          created_at: string
+          data: Json
+          ip: string
+        }[]
+      }
+      my_sessions: {
+        Args: never
+        Returns: {
+          created_at: string
+          id: string
+          ip: string
+          is_current: boolean
+          refreshed_at: string
+          user_agent: string
+        }[]
+      }
+      request_account_closure: { Args: { p_reason: string }; Returns: string }
+      revoke_my_session: { Args: { p_session_id: string }; Returns: boolean }
+      session_status: {
+        Args: never
+        Returns: {
+          active: boolean
+          second_step_passed: boolean
+        }[]
+      }
+      set_second_step_method: {
+        Args: { p_method: Database["public"]["Enums"]["second_step_method"] }
+        Returns: undefined
+      }
+      sha256_hex: { Args: { p: string }; Returns: string }
+      staff_can_access_market: {
+        Args: { p_market_id: string }
+        Returns: boolean
+      }
+      trust_this_device: {
+        Args: { p_token: string; p_user_agent: string }
+        Returns: undefined
+      }
+      use_recovery_code: { Args: { p_code: string }; Returns: boolean }
+      use_trusted_device: { Args: { p_token: string }; Returns: boolean }
+      verify_email_code: { Args: { p_code: string }; Returns: string }
     }
     Enums: {
       actor_type: "system" | "driver" | "provider" | "staff"
@@ -826,6 +1200,14 @@ export type Database = {
         | "microsoft"
         | "organic"
         | "provider_line"
+      provider_role: "owner" | "manager" | "operator"
+      provider_status:
+        | "applied"
+        | "onboarding"
+        | "active"
+        | "paused"
+        | "suspended"
+        | "closed"
       request_channel: "web" | "phone" | "landing_page"
       request_status:
         | "draft"
@@ -838,6 +1220,15 @@ export type Database = {
         | "completed"
         | "cancelled"
         | "expired"
+      second_step_method: "email" | "sms" | "totp"
+      staff_role:
+        | "super_admin"
+        | "ops_manager"
+        | "dispatcher"
+        | "support"
+        | "finance"
+        | "marketing"
+        | "read_only"
       vehicle_type: "car" | "suv" | "pickup" | "motorcycle" | "van" | "rv"
     }
     CompositeTypes: {
@@ -985,6 +1376,15 @@ export const Constants = {
         "organic",
         "provider_line",
       ],
+      provider_role: ["owner", "manager", "operator"],
+      provider_status: [
+        "applied",
+        "onboarding",
+        "active",
+        "paused",
+        "suspended",
+        "closed",
+      ],
       request_channel: ["web", "phone", "landing_page"],
       request_status: [
         "draft",
@@ -997,6 +1397,16 @@ export const Constants = {
         "completed",
         "cancelled",
         "expired",
+      ],
+      second_step_method: ["email", "sms", "totp"],
+      staff_role: [
+        "super_admin",
+        "ops_manager",
+        "dispatcher",
+        "support",
+        "finance",
+        "marketing",
+        "read_only",
       ],
       vehicle_type: ["car", "suv", "pickup", "motorcycle", "van", "rv"],
     },
