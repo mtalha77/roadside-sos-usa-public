@@ -53,12 +53,24 @@ export const Contrast: Story = {
           {contrastPairs.map(({ fg, bg, min }) => (
             <tr key={`${fg}-${bg}`} className="border-b">
               <td className="py-2">
-                <span
-                  className="rounded px-2 py-1"
-                  style={{ color: `var(--${fg})`, background: `var(--${bg})` }}
-                >
-                  {fg} on {bg}
-                </span>
+                {min >= 4.5 ? (
+                  <span
+                    className="rounded px-2 py-1"
+                    style={{ color: `var(--${fg})`, background: `var(--${bg})` }}
+                  >
+                    {fg} on {bg}
+                  </span>
+                ) : (
+                  // Non-text pairs (input borders, focus rings): a border swatch, labelled in normal text.
+                  <span className="inline-flex items-center gap-2">
+                    <span
+                      aria-hidden="true"
+                      className="inline-block size-6 rounded border-2"
+                      style={{ borderColor: `var(--${fg})`, background: `var(--${bg})` }}
+                    />
+                    {fg} on {bg} (non-text)
+                  </span>
+                )}
               </td>
               <td>{min}:1</td>
               <td>{contrastRatio(themes.light[fg]!, themes.light[bg]!).toFixed(2)}:1</td>

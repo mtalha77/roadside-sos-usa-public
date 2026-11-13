@@ -76,6 +76,25 @@ Acceptance criteria:
 | 2   | Switching theme changes every surface with no hardcoded colours | PASS: every colour is a CSS variable; `packages/ui/test/no-hardcoded-colors.test.ts` blocks literals and palette classes; e2e runs light and dark |
 | 3   | Storybook shows the full token set                              | Pending (this PR's Storybook build)                                                                                                               |
 
+## RSOS-012: Core component library
+
+Components in `packages/ui/src/components` (shadcn/ui patterns on Radix, restyled to the tokens; import as `@rsos/ui/<name>`):
+
+- Actions and inputs: Button (variants, sizes, loading, icon), IconButton (label required), Field + Label (wired help and error text), Input, Textarea, Select, Combobox (cmdk), Checkbox, RadioCards, Switch, Slider, PhoneInput (US format, emits E.164), OTPInput (6 digits, paste, `one-time-code` autofill), CurrencyInput (whole cents), DatePicker (react-day-picker), FileUpload (drag and drop, keyboard, camera capture, type and size validation).
+- Layout and feedback: Card, Sheet (vaul bottom sheet, swipe down), Dialog, Drawer (side panel), Tabs, Accordion, Tooltip, Popover, DropdownMenu, Toast (sonner), Alert, Badge, Avatar, Skeleton, EmptyState, Stepper, Progress, Divider.
+- Data: DataTable (TanStack Table: sorting, global search, column visibility, pagination, row selection, sticky header, `useSavedViews`, virtual mode), StatCard, KeyValue, Timeline; CommandPalette (Cmd/Ctrl+K).
+- Stories for every component and state in `packages/ui/src/stories`; unit tests (`test/behaviour.test.tsx`, `test/a11y.test.tsx` with axe-core).
+- New CI step in `storybook`: builds Storybook, then Playwright in real Chromium (mobile and desktop) runs axe and a console-error check on **every story in light and dark**, plus Sheet swipe-down, Dialog/Sheet focus trap and Escape, Drawer Escape and 10,000-row scrolling (`tests/e2e/storybook`).
+- TanStack Table is held at 8.21.3: version 9 (August 2026) is a full API rewrite; upgrade later on purpose.
+
+Acceptance criteria:
+
+| #   | Criterion                                                                    | Result                                                                                                                                                                                                                   |
+| --- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | All listed components exist with stories and pass axe checks                 | PASS: 24 stories, 106 browser checks (each story x light/dark x mobile/desktop + behaviour) with zero serious or critical axe issues and zero console errors; jsdom axe tests for all components including open overlays |
+| 2   | Sheets and dialogs trap focus and close with Escape and swipe down on mobile | PASS: browser tests: Tab stays inside Sheet and Dialog, Escape closes and returns focus to the trigger, a downward swipe closes the Sheet                                                                                |
+| 3   | DataTable scrolls 10,000 rows smoothly                                       | PASS: virtual mode keeps under 80 rows in the page, reaches row 10,000, 95th-percentile frame under 50 ms while sweeping the whole list in CI                                                                            |
+
 ## BLOCKERS
 
 ### Permissions
