@@ -1,4 +1,5 @@
 {
   "extends": "@rsos/config/tsconfig/library.json",
+  "compilerOptions": { "types": ["node", "google.maps"] },
   "include": ["src", "test", ".storybook", "vitest.config.ts"]
 }
