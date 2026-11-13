@@ -1,4 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
+import { legalDocuments } from "@rsos/config/legal";
 import { expect, test as base, type Page } from "@playwright/test";
 
 export type AppName = "web" | "provider" | "admin";
@@ -13,7 +14,29 @@ export const appUrls: Record<AppName, string | undefined> = {
  * `test` with an automatic console guard: any console error or uncaught page error fails
  * the test. Third-party noise must be fixed at the source, not filtered here.
  */
-export const test = base.extend<{ consoleErrors: string[] }>({
+export const test = base.extend<{
+  consoleErrors: string[];
+  presetConsent: boolean;
+  consentCookie: void;
+}>({
+  /** Set false in a test to see the cookie banner (RSOS-028 consent tests). */
+  presetConsent: [true, { option: true }],
+  // Most tests start with cookie choices already made (all rejected) so the banner does not cover
+  // the page; the consent tests turn this off.
+  consentCookie: [
+    async ({ context, presetConsent }, use) => {
+      if (presetConsent && appUrls.web) {
+        const value = encodeURIComponent(
+          JSON.stringify({ v: legalDocuments.cookies.version, a: false, d: false, gpc: false }),
+        );
+        await context.addCookies([
+          { name: "rsos_consent", value, url: new URL(appUrls.web).origin },
+        ]);
+      }
+      await use();
+    },
+    { auto: true },
+  ],
   consoleErrors: [
     async ({ page }, use) => {
       const errors: string[] = [];

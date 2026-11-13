@@ -35,7 +35,7 @@ select * from public.create_request(jsonb_build_object(
   'service_slug', 'rls-test-flat-tire', 'driver_name', 'Test Driver', 'driver_phone', '+12105550123',
   'pickup', jsonb_build_object('lat', 29.41, 'lng', -98.49, 'address', '1 Test Street'),
   'attribution', jsonb_build_object('utm_source', 'google', 'gclid', 'test-gclid'),
-  'consents', jsonb_build_array(jsonb_build_object('type', 'sms_transactional', 'granted', true, 'policy_version', '2026-11-13')),
+  'consents', jsonb_build_array(jsonb_build_object('type', 'sms_transactional', 'granted', true, 'policy_version', '2026-11-13-draft')),
   'consent_ip', '203.0.113.7', 'user_agent', 'pgTAP'
 ));
 select matches((select short_code from t_req), '^R-[23456789A-HJ-NP-Z]{4}$', 'request gets a short code like R-7KQ2');
@@ -43,7 +43,7 @@ select ok(length((select status_token from t_req)) >= 32, 'request gets a long s
 select is((select platform_fee_cents from public.requests where id = (select request_id from t_req)), 2250, 'request stores the fee in effect');
 select is((select count(*)::int from public.attributions where request_id = (select request_id from t_req)), 1, 'attribution saved in the same transaction');
 select is((select count(*)::int from public.consents where request_id = (select request_id from t_req)), 1, 'consent saved with its policy version');
-select is((select policy_version from public.consents where request_id = (select request_id from t_req)), '2026-11-13', 'consent links to the policy version');
+select is((select policy_version from public.consents where request_id = (select request_id from t_req)), '2026-11-13-draft', 'consent links to the policy version');
 select is((select event_type from public.request_events where request_id = (select request_id from t_req)), 'created', 'first event recorded');
 
 insert into public.market_services (market_id, service_id, enabled, price_min_cents, price_max_cents, platform_fee_cents, effective_from)

@@ -286,3 +286,84 @@ test.describe("for providers", () => {
     await expect(page.getByText("We got your application")).toBeVisible();
   });
 });
+
+// RSOS-028: legal pages and consent.
+test.describe("legal pages and consent", () => {
+  test.skip(!web, "No website URL");
+
+  test("every legal page is a versioned draft", async ({ page }) => {
+    for (const doc of [
+      "driver-terms",
+      "provider-terms",
+      "privacy",
+      "sms-terms",
+      "call-recording",
+      "cookies",
+      "accessibility",
+    ]) {
+      await page.goto(url(`/legal/${doc}`));
+      await expect(page.getByText("Draft for attorney review")).toBeVisible();
+      await expect(page.locator("article[data-policy-version]")).toHaveAttribute(
+        "data-policy-version",
+        /^\d{4}-\d{2}-\d{2}/,
+      );
+    }
+    await expectNoA11yViolations(page);
+  });
+
+  test.describe("before any choice", () => {
+    test.use({ presetConsent: false });
+
+    // Google, Meta, Microsoft ad and analytics hosts, and Vercel Analytics.
+    const TAGS =
+      /googletagmanager|google-analytics|doubleclick|googleadservices|facebook\.net|connect\.facebook|bat\.bing|_vercel\/(insights|speed-insights)/;
+
+    test("AC1: no analytics or ad tag fires before consent; Consent Mode starts denied", async ({
+      page,
+    }) => {
+      const tagRequests: string[] = [];
+      page.on("request", (r) => {
+        if (TAGS.test(r.url())) tagRequests.push(r.url());
+      });
+      await page.goto(url("/"));
+      await expect(page.getByRole("dialog", { name: "Your privacy choices" })).toBeVisible();
+      const defaults = await page.evaluate(() =>
+        (window as unknown as { dataLayer: unknown[][] }).dataLayer
+          .map((a) => Array.from(a as ArrayLike<unknown>))
+          .find((a) => a[0] === "consent" && a[1] === "default"),
+      );
+      expect(defaults?.[2]).toMatchObject({
+        ad_storage: "denied",
+        analytics_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+      });
+      await page.waitForLoadState("networkidle");
+      expect(tagRequests).toEqual([]);
+      await expectNoA11yViolations(page);
+    });
+
+    test("choices update Consent Mode; Global Privacy Control keeps ads off", async ({ page }) => {
+      await page.addInitScript(() =>
+        Object.defineProperty(navigator, "globalPrivacyControl", { value: true }),
+      );
+      await page.goto(url("/"));
+      await page.getByRole("button", { name: "Accept all" }).click();
+      await expect(page.getByRole("dialog", { name: "Your privacy choices" })).toBeHidden();
+      const update = await page.evaluate(() =>
+        (window as unknown as { dataLayer: unknown[][] }).dataLayer
+          .map((a) => Array.from(a as ArrayLike<unknown>))
+          .filter((a) => a[0] === "consent" && a[1] === "update")
+          .at(-1),
+      );
+      expect(update?.[2]).toMatchObject({
+        analytics_storage: "granted",
+        ad_storage: "denied",
+        ad_personalization: "denied",
+      });
+      // The footer link reopens the choices.
+      await page.getByRole("button", { name: "Your privacy choices" }).click();
+      await expect(page.getByRole("switch", { name: "Advertising" })).toBeDisabled();
+    });
+  });
+});
