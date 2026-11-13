@@ -17,6 +17,7 @@
     "@rsos/db": "workspace:*",
     "@rsos/i18n": "workspace:*",
     "@rsos/ui": "workspace:*",
+    "geist": "1.9.2",
     "next": "16.4.6",
     "next-intl": "4.14.10",
     "react": "19.3.1",

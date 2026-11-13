@@ -24,7 +24,7 @@ export function wordmarkSvg(name: string = brand.name, accent: string = brand.co
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} 56" width="${width}" height="56" role="img" aria-label="${safeName}">`,
     `<rect x="0" y="4" width="48" height="48" rx="12" fill="${accent}"/>`,
-    `<text x="24" y="36" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#ffffff">${initials}</text>`,
+    `<text x="24" y="36" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="${brand.colorForeground}">${initials}</text>`,
     `<text x="60" y="37" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="currentColor">${safeName}</text>`,
     `</svg>`,
   ].join("");

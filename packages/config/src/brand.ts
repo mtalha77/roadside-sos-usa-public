@@ -5,6 +5,8 @@
  * `node scripts/check-brand.ts` fails CI if you do.
  * Phone numbers and cities are NOT brand config: they belong to a market in the database.
  */
+import { iconColors } from "./theme-colors";
+
 const DEFAULT_DOMAIN = "fixallcontractors.com";
 
 const domain = (process.env.NEXT_PUBLIC_APP_DOMAIN || DEFAULT_DOMAIN).trim().toLowerCase();
@@ -44,8 +46,9 @@ export const brand = {
     icon: "/icon",
     appleIcon: "/apple-icon",
   },
-  /** Signal colour used for the generated icon and wordmark accent (safety orange). */
-  color: "#c2410c",
+  /** Signal colour (safety amber, from the design tokens) for the generated icon and wordmark. */
+  color: iconColors.background,
+  colorForeground: iconColors.foreground,
 } as const;
 
 export type Brand = typeof brand;

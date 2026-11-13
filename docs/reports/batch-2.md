@@ -50,6 +50,7 @@ Acceptance criteria:
 
 - README (what it is, Mermaid architecture, environments, one-hour start, Claude Code cloud sessions, access requests), CONTRIBUTING (workflow, branches, commits, reviews, migrations, markets), `docs/ENVIRONMENT.md` (every variable per app and CI), onboarding issue template, CODEOWNERS by area.
 - Decision records: `docs/decisions/0000-template.md`, 0001 stack, 0002 cloud only, 0003 multi-market, 0004 payments model.
+- Fixes found by the gates on #110: backlog scripts derived the repository name instead of hardcoding it (brand check); an affected build with no apps is not a warning.
 - Issues RSOS-001 to RSOS-097 created (titles only, `phase:*` labels); finished tickets closed as completed. Unknown tickets have the placeholder title "To be specified". Scripts: `scripts/create-backlog-issues.sh` (re-runnable), `scripts/setup-backlog-board.sh`.
 
 Acceptance criteria:
@@ -58,6 +59,22 @@ Acceptance criteria:
 | --- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
 | 1   | A fresh reader can follow the README to open a PR with a passing preview | PASS: the README steps match the workflow used for every PR in this run (branch, checks, PR, previews)                         |
 | 2   | Every RSOS ticket exists on the board with its ID                        | PARTIAL: all 97 issues exist with IDs; the board itself is BLOCKED (GitHub login lacks the `project` permission, see BLOCKERS) |
+
+## RSOS-011: Design tokens, typography and motion
+
+- `packages/config/src/tokens.ts` is the source of truth: ink neutral scale, safety-amber signal (primary action and urgency only), status colours (success, warning, critical, info with subtle and strong variants), surfaces, borders, focus ring; type scale (body 17px mobile, 16px desktop; display sizes), 8-point radius and elevation, motion (150/200/250 ms; standard, emphasized, exit easing; reduced-motion fallback).
+- `tailwind/theme.css` is generated (`tokens:build`); CI `tokens:check` fails if any colour pair misses WCAG 2.2 AA in either theme or the CSS is stale.
+- Geist Sans and Mono self-hosted through the `geist` package (`next/font`); tabular numbers for money and time.
+- Browser theme colours, app icons and the wordmark take their colours from the tokens; a UI test fails on raw colour values or Tailwind palette classes in apps and `packages/ui`.
+- Storybook → Foundations → Design tokens (colours, contrast table, type, space, radius, elevation, motion); `DESIGN.md` explains the signal colour.
+
+Acceptance criteria:
+
+| #   | Criterion                                                       | Result                                                                                                                                            |
+| --- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | All colour pairs meet WCAG 2.2 AA in both themes (script in CI) | PASS: `tokens:check` in the lint job and `packages/config/test/tokens.test.ts` (the check caught light `warning` at 4.38:1 and it was fixed)      |
+| 2   | Switching theme changes every surface with no hardcoded colours | PASS: every colour is a CSS variable; `packages/ui/test/no-hardcoded-colors.test.ts` blocks literals and palette classes; e2e runs light and dark |
+| 3   | Storybook shows the full token set                              | Pending (this PR's Storybook build)                                                                                                               |
 
 ## BLOCKERS
 

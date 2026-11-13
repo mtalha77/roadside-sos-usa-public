@@ -29,6 +29,8 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm lint
       - run: pnpm format:check
+      - name: Design tokens meet WCAG 2.2 AA and theme.css is up to date
+        run: pnpm --filter @rsos/config tokens:check
       - name: No hardcoded brand name or domain
         run: node scripts/check-brand.ts
       - name: Dependency audit (production dependencies, high and critical)
