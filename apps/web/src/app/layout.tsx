@@ -1,4 +1,5 @@
 import { buildMetadata } from "@rsos/config/metadata";
+import { getSiteEnv } from "@rsos/config/site";
 import { ThemeProvider } from "@rsos/ui/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -32,8 +33,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <NextIntlClientProvider>
           <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
         </NextIntlClientProvider>
-        <Analytics />
-        <SpeedInsights />
+        {/* Production only: previews and staging must not pollute analytics or log 404s. */}
+        {getSiteEnv() === "production" && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   );
