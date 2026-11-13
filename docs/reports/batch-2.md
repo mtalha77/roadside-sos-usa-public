@@ -25,7 +25,7 @@
 | RSOS-019                       | Done        | [#121](https://github.com/mtalha77/roadside-sos-usa-public/pull/121) |
 | RSOS-020                       | Done        | [#122](https://github.com/mtalha77/roadside-sos-usa-public/pull/122) |
 | RSOS-024                       | Done        | [#123](https://github.com/mtalha77/roadside-sos-usa-public/pull/123) |
-| RSOS-025                       | Not started |                                                                      |
+| RSOS-025                       | Done        | [#124](https://github.com/mtalha77/roadside-sos-usa-public/pull/124) |
 | RSOS-027                       | Not started |                                                                      |
 | RSOS-026                       | Not started |                                                                      |
 | RSOS-028                       | Not started |                                                                      |
@@ -282,6 +282,22 @@ Acceptance criteria:
 | 1   | The three test markets have live, indexable pages on staging with unique copy | PASS: pgTAP checks three different intros with areas, highways and FAQs; e2e opens every city page and checks a different headline and intro, a canonical URL and no accessibility issues. "Indexable" means the page is crawlable with a canonical and structured data; staging itself stays noindex by rule |
 | 2   | Structured data validates                                                     | PASS: e2e parses every JSON-LD block on each city page and finds Service, BreadcrumbList and FAQPage with their required fields (schema.org shapes). Google's Rich Results Test needs a public URL, so run it on production after launch (noted for RSOS-032)                                                 |
 
+## RSOS-025: Service pages and city plus service pages
+
+- Migration `20261113080000_service_pages.sql`: `service_pages` (summary, what it covers and does not, what to expect, typical time on site, safety tips, FAQ) and `market_service_notes` (one short local paragraph per market and service), both with RLS (staff read; super admin, ops manager and marketing edit) and read by visitors only through `get_service_page` and `get_market_service_note`. Content written for all 6 services and 18 market and service pairs. pgTAP `009_service_pages.test.sql` (8). Prices are never stored with the copy: they always come from `market_services`.
+- Service page (`/services/[service]`): summary, typical price range across our cities, Get help now (service preselected), links to the service in every city, details, safety tips, FAQ, Service and FAQPage data.
+- City plus service page: local note, local price (with "plus fuel" or "plus per-mile charge"), Get help now with market and service preselected, Call, details, links to the other services in that city, the city page and the service page; Service data with the local price range.
+- Winch out is switched off in every market by the RSOS-017 seed data. Its pages exist (6 and 18 as required) and say "Not available in {city} yet"; their button starts a tow request for that market instead. Turning winch out on in admin (a new `market_services` row) makes it bookable with no code change.
+- Internal links: city → city plus service (prices list), service → each city plus service, city plus service → city, service and the other services in that city; breadcrumbs everywhere.
+- Also fixed in the e2e fixtures: WebKit reports a Next.js link prefetch cancelled by a navigation as an "access control" page error; only that exact pattern (`_rsc=` URLs) is ignored, every other browser error still fails the run.
+
+Acceptance criteria:
+
+| #   | Criterion                                                                                       | Result                                                                                                                                                                        |
+| --- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | 6 service pages and 18 city plus service pages exist for the 3 test markets with unique content | PASS: e2e requests all 6 service pages and opens all 18 city plus service pages, checking 18 different local notes; pgTAP checks 18 unique notes and a page for every service |
+| 2   | Every page starts the flow with the right market and service selected                           | PASS: e2e checks the Get help link on all 18 pages carries that market and service (winch out: that market and a tow, see above)                                              |
+
 ## BLOCKERS
 
 ### Permissions
@@ -300,6 +316,10 @@ Acceptance criteria:
 4. **Resend for email (RSOS-093).** Create a Resend account, add and verify your sending domain (Resend shows the DNS records to add). Create an API key with "Sending access". Add to the `rsos-provider` and `rsos-admin` Vercel projects (staging and production): `RESEND_API_KEY` (the key) and `EMAIL_FROM` (for example `Security <security@YOUR-DOMAIN>`). Until then staging and production record security emails as not sent, and previews show the code on screen. Supabase's own emails (reset links, email change) use Supabase's default sender until you also set SMTP in each Supabase project (Authentication → Emails → SMTP, using Resend's SMTP details).
 
 5. **Phone numbers per market (RSOS-019).** In Twilio, buy one local number per market (San Antonio, Las Vegas, Houston) for the website. Then add each one as data (not a migration) in the Supabase SQL editor for `rsos-staging` (and production at launch): `insert into public.market_phone_numbers (market_id, phone_number, purpose) select id, '+1XXXXXXXXXX', 'website' from public.markets where slug = 'houston';` Until then the website shows no call buttons (it never shows a made-up number). Tracking numbers for ads use purpose `google_ads`, `meta` or `microsoft`.
+
+### Decisions
+
+6. **Winch out (RSOS-025).** It is switched off in every market (seed data). Decide whether to offer it at launch; if yes, enable it per market in admin with its price range and fee. Its pages already exist and switch from "not available yet" to bookable automatically.
 
 ## Notes for the next developer
 

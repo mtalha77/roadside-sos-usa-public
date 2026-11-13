@@ -334,6 +334,27 @@
     },
     "cityService": {
       "title": "{service} in {city}"
+    },
+    "service": {
+      "typicalPrice": "Typical price",
+      "typicalPriceRange": "{range} in our cities",
+      "localPrice": "Typical price in {city}",
+      "typicalTime": "Typical time on site",
+      "minutes": "{min} to {max} minutes once the provider arrives",
+      "covers": "What it covers",
+      "notCovered": "Not included",
+      "expect": "What to expect",
+      "safety": "Safety tips",
+      "faq": "Questions about {service}",
+      "inCities": "{service} by city",
+      "notOffered": "Not available in {city} yet",
+      "notOfferedBody": "We're adding this service city by city. If you need help now, request a tow and describe the problem.",
+      "requestTow": "Request a tow instead",
+      "otherServices": "Other services in {city}",
+      "allCityServices": "Roadside assistance in {city}",
+      "description": "{service}: what it covers, what to expect, typical prices and how to get quotes from verified local providers.",
+      "cityDescription": "{service} in {city}, {state}: typical local prices and quotes with arrival times from verified providers nearby.",
+      "priceNote": "Providers set their own prices and quote the full price before you choose."
     }
   },
   "home": {
