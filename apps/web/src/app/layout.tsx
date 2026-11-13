@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
+import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import "./globals.css";
 
@@ -24,11 +25,12 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = await getLocale();
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang={locale} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
