@@ -61,7 +61,20 @@ jobs:
         with:
           fetch-depth: 0 # full history so Turborepo can work out which apps changed
       - uses: ./.github/actions/setup
+      - name: Restore Next.js build cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: apps/*/.next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/**/*.ts', 'apps/**/*.tsx', 'packages/**/*.ts', 'packages/**/*.tsx', 'packages/**/*.css') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            nextjs-${{ runner.os }}-
+      - name: Ensure cache folders exist (first run has no restored cache)
+        run: mkdir -p apps/web/.next/cache apps/provider/.next/cache apps/admin/.next/cache
       - name: Build affected apps (pull requests) or everything (pushes)
+        env:
+          # Lets turbo --affected compare against the PR base instead of guessing.
+          TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha }}
         run: |
           set -o pipefail
           if [ "${{ github.event_name }}" = "pull_request" ]; then
