@@ -151,3 +151,49 @@ test.describe("city pages", () => {
     await expectNoHorizontalScroll(page);
   });
 });
+
+// RSOS-025: service pages and city plus service pages.
+test.describe("service pages", () => {
+  test.skip(!web, "No website URL");
+
+  test("6 service pages and 18 city plus service pages, each starting the flow with market and service", async ({
+    page,
+    request,
+  }) => {
+    const services = ["flat-tire", "wont-start", "locked-out", "out-of-gas", "tow", "winch-out"];
+    await page.goto(url("/"));
+    const cities = await page
+      .getByRole("contentinfo")
+      .getByRole("navigation", { name: "Cities" })
+      .getByRole("link")
+      .evaluateAll((as) => as.map((a) => a.getAttribute("href")!));
+    expect(cities.length).toBeGreaterThanOrEqual(3);
+    for (const s of services)
+      expect((await request.get(url(`/services/${s}`))).status(), s).toBe(200);
+    const notes = new Set<string>();
+    for (const c of cities.slice(0, 3)) {
+      for (const s of services) {
+        await page.goto(url(`${c}/${s}`));
+        notes.add((await page.locator("main h1 + p").textContent()) ?? "");
+        const start = page.locator("main [data-flow-service]");
+        const market = c.split("/").pop()!;
+        await expect(start).toHaveAttribute("data-flow-market", market);
+        // Winch out is not offered yet (seed data): the page says so and starts a tow instead.
+        await expect(start).toHaveAttribute("data-flow-service", s === "winch-out" ? "tow" : s);
+      }
+    }
+    expect(notes.size).toBe(18);
+  });
+
+  test("service and city plus service pages are accessible", async ({ page }) => {
+    await page.goto(url("/services/tow"));
+    await expectNoA11yViolations(page);
+    await expectNoHorizontalScroll(page);
+    await page
+      .getByRole("link", { name: /^Tow in / })
+      .first()
+      .click();
+    await expectNoA11yViolations(page);
+    await expectNoHorizontalScroll(page);
+  });
+});

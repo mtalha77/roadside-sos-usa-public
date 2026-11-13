@@ -334,6 +334,27 @@
     },
     "cityService": {
       "title": "{service} en {city}"
+    },
+    "service": {
+      "typicalPrice": "Precio típico",
+      "typicalPriceRange": "{range} en nuestras ciudades",
+      "localPrice": "Precio típico en {city}",
+      "typicalTime": "Tiempo típico en el lugar",
+      "minutes": "De {min} a {max} minutos desde que llega el proveedor",
+      "covers": "Qué incluye",
+      "notCovered": "No incluye",
+      "expect": "Qué esperar",
+      "safety": "Consejos de seguridad",
+      "faq": "Preguntas sobre {service}",
+      "inCities": "{service} por ciudad",
+      "notOffered": "Todavía no disponible en {city}",
+      "notOfferedBody": "Estamos agregando este servicio ciudad por ciudad. Si necesitas ayuda ahora, pide una grúa y describe el problema.",
+      "requestTow": "Pedir una grúa",
+      "otherServices": "Otros servicios en {city}",
+      "allCityServices": "Asistencia en carretera en {city}",
+      "description": "{service}: qué incluye, qué esperar, precios típicos y cómo recibir cotizaciones de proveedores locales verificados.",
+      "cityDescription": "{service} en {city}, {state}: precios locales típicos y cotizaciones con hora de llegada de proveedores verificados cercanos.",
+      "priceNote": "Los proveedores fijan sus precios y cotizan el precio total antes de que elijas."
     }
   },
   "home": {

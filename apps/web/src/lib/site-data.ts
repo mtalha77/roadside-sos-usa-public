@@ -118,3 +118,45 @@ export const getMarketPage = unstable_cache(
   ["get_market_page"],
   { revalidate: REVALIDATE, tags: [SITE_TAG] },
 );
+
+export const ServicePageSchema = z.object({
+  summary: z.string(),
+  covers: z.array(z.string()),
+  not_covered: z.array(z.string()),
+  what_to_expect: z.array(z.string()),
+  onsite_minutes_min: z.number().nullable(),
+  onsite_minutes_max: z.number().nullable(),
+  safety_tips: z.array(z.string()),
+  faqs: z.array(z.object({ q: z.string(), a: z.string() })),
+});
+export type ServicePage = z.infer<typeof ServicePageSchema>;
+
+export const getServicePage = unstable_cache(
+  async (slug: string, locale: string): Promise<ServicePage | null> =>
+    (
+      await rpc(ServicePageSchema, "get_service_page", { p_service_slug: slug, p_locale: locale })
+    )[0] ?? null,
+  ["get_service_page"],
+  { revalidate: REVALIDATE, tags: [SITE_TAG] },
+);
+
+export const getMarketServiceNote = unstable_cache(
+  async (market: string, service: string, locale: string): Promise<string | null> => {
+    const supabase = createPublicSupabase();
+    if (!supabase) return null;
+    const { data, error } = await (
+      supabase.rpc as (f: string, a?: object) => PromiseLike<{ data: unknown; error: unknown }>
+    )("get_market_service_note", {
+      p_market_slug: market,
+      p_service_slug: service,
+      p_locale: locale,
+    });
+    if (error) throw new Error("Supabase get_market_service_note failed");
+    return z
+      .string()
+      .nullable()
+      .parse(data ?? null);
+  },
+  ["get_market_service_note"],
+  { revalidate: REVALIDATE, tags: [SITE_TAG] },
+);
