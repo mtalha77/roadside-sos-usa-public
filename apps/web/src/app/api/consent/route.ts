@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
   const res = NextResponse.redirect(back, 303);
   const secure = request.nextUrl.protocol === "https:";
   // Readable by the head script, which applies it to Consent Mode before any tag could load.
-  res.cookies.set(CONSENT_COOKIE, encodeURIComponent(JSON.stringify(value)), {
+  // Next encodes cookie values once; the head script and the server decode once.
+  res.cookies.set(CONSENT_COOKIE, JSON.stringify(value), {
     path: "/",
     maxAge: CONSENT_MAX_AGE,
     sameSite: "lax",

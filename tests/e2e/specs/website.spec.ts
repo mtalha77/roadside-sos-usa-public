@@ -29,7 +29,10 @@ test.describe("website structure", () => {
 
   test("a service tile opens get-help with that service selected", async ({ page }) => {
     await page.goto(url("/"));
-    const tile = page.getByRole("main").getByRole("link", { name: /Flat tire/ });
+    const tile = page
+      .getByRole("main")
+      .getByRole("link", { name: /Flat tire/ })
+      .first();
     await tile.click();
     await expect(page).toHaveURL(/\/get-help\?service=flat-tire/);
     await expect(page.locator("[data-service='flat-tire']")).toBeVisible();

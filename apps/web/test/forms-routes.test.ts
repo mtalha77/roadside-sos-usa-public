@@ -32,7 +32,7 @@ describe("plain form routes (RSOS-028, RSOS-033)", () => {
     const res = await consent.POST(post("/api/consent", { choice: "accept", return: "/faq" }));
     expect(res.status).toBe(303);
     expect(res.headers.get("location")).toBe("https://site.test/faq");
-    expect(JSON.parse(decodeURIComponent(cookie(res, "rsos_consent")))).toMatchObject({
+    expect(JSON.parse(cookie(res, "rsos_consent"))).toMatchObject({
       a: true,
       d: true,
       gpc: false,
@@ -51,7 +51,7 @@ describe("plain form routes (RSOS-028, RSOS-033)", () => {
       post("/api/consent", { choice: "accept", return: "//evil.test/x" }, { "sec-gpc": "1" }),
     );
     expect(res.headers.get("location")).toBe("https://site.test/");
-    expect(JSON.parse(decodeURIComponent(cookie(res, "rsos_consent")))).toMatchObject({
+    expect(JSON.parse(cookie(res, "rsos_consent"))).toMatchObject({
       a: true,
       d: false,
       gpc: true,
@@ -62,7 +62,7 @@ describe("plain form routes (RSOS-028, RSOS-033)", () => {
     const res = await consent.POST(
       post("/api/consent", { choice: "save", analytics: "on", return: "/" }),
     );
-    expect(JSON.parse(decodeURIComponent(cookie(res, "rsos_consent")))).toMatchObject({
+    expect(JSON.parse(cookie(res, "rsos_consent"))).toMatchObject({
       a: true,
       d: false,
     });
