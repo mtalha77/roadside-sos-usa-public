@@ -517,6 +517,9 @@ importers:
       '@rsos/config':
         specifier: workspace:*
         version: link:../config
+      '@rsos/i18n':
+        specifier: workspace:*
+        version: link:../i18n
     devDependencies:
       '@react-email/preview-server':
         specifier: 5.2.10

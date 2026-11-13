@@ -21,5 +21,13 @@
     "headline": "Run every market from one place.",
     "body": "Launch markets, verify providers, and manage pricing, fees and plans.",
     "cta": "Sign in"
+  },
+  "emails": {
+    "welcome": {
+      "preview": "Welcome to {brand}",
+      "heading": "Welcome to {brand}, {name}",
+      "tagline": "Roadside help, fast.",
+      "questions": "Questions? Email"
+    }
   }
 }

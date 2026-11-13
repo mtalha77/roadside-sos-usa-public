@@ -126,6 +126,21 @@ Acceptance criteria:
 | 1   | All icons share stroke width and grid and work in both themes | PASS: `test/icons.test.tsx` checks every icon's viewBox, stroke width, caps, joins, no fill, `currentColor`, no fixed colours; stories pass axe in light and dark |
 | 2   | No third-party illustration packs or stock images in the repo | PASS: test fails on any raster image in git or any known illustration or stock pack in the lockfile; all artwork is original SVG                                  |
 
+## RSOS-015: Accessibility and language foundation
+
+- next-intl in all three apps with English and Spanish catalogs (same keys, checked by a test); the locale comes from the `NEXT_LOCALE` cookie (default English). Emails render from the message files too (`fill()` for placeholders).
+- `@rsos/i18n` formatting: currency, price ranges, numbers, date and time, relative time, all by locale and the **market's time zone** (tests cover Chicago, Phoenix without DST, Los Angeles, New York).
+- Lint rule (`packages/config/eslint/next.mjs`, `noHardcodedText`): `react/jsx-no-literals` plus literal `aria-label`/`placeholder`/`alt`/`title` checks in app and component code; stories and tests exempt; proven by `packages/config/test/no-hardcoded-text.test.ts`.
+- CLAUDE.md rule 7: accessibility checklist (labels, focus order, contrast, live regions, 48px targets, text, verification).
+- Playwright `specs/i18n.spec.ts`: every app in Spanish on mobile Safari, mobile Chrome and desktop: `lang="es"`, heading visible, no sideways scroll, axe clean.
+
+Acceptance criteria:
+
+| #   | Criterion                                           | Result                                                                                                                                        |
+| --- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | No hardcoded user-facing strings (lint enforces it) | PASS: rule active in all apps and `packages/ui` components; the email and phone placeholder strings it found were moved to messages and props |
+| 2   | Spanish scaffold renders without layout breaks      | Pending (this PR's e2e run on the previews)                                                                                                   |
+
 ## BLOCKERS
 
 ### Permissions

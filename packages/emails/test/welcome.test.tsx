@@ -10,3 +10,11 @@ describe("WelcomeEmail", () => {
     expect(html).toContain("Alex");
   });
 });
+
+describe("WelcomeEmail in Spanish", () => {
+  it("renders from the Spanish message file", async () => {
+    const html = await render(<WelcomeEmail firstName="Ana" locale="es" />);
+    expect(html).toContain("Bienvenido");
+    expect(html).toContain('lang="es"');
+  });
+});
