@@ -194,7 +194,7 @@ jobs:
         run: pnpm --filter @rsos/e2e exec playwright install --with-deps chromium webkit
       - name: Wait for Vercel previews
         id: previews
-        run: scripts/ci/wait-for-previews.sh "${{ github.event.pull_request.head.sha }}"
+        run: scripts/ci/wait-for-previews.sh "${{ github.event.pull_request.head.sha }}" "${{ github.head_ref }}"
       - name: Playwright (mobile Safari, mobile Chrome, desktop Chrome) with axe and console checks
         env:
           E2E_WEB_URL: ${{ steps.previews.outputs.web_url }}
@@ -233,7 +233,7 @@ jobs:
         run: pnpm --filter @rsos/e2e exec playwright install --with-deps chromium
       - name: Wait for Vercel previews
         id: previews
-        run: scripts/ci/wait-for-previews.sh "${{ github.event.pull_request.head.sha }}"
+        run: scripts/ci/wait-for-previews.sh "${{ github.event.pull_request.head.sha }}" "${{ github.head_ref }}"
       - name: Lighthouse budgets (mobile LCP < 2 s, CLS < 0.05, accessibility >= 0.9)
         env:
           LIGHTHOUSE_URLS: ${{ steps.previews.outputs.web_url }}
