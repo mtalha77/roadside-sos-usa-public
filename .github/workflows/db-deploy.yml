@@ -36,6 +36,6 @@ jobs:
       - name: Apply migrations
         run: supabase db push --remote --yes
       - name: Run database tests
-        run: supabase test db --remote
+        run: supabase test db --remote --yes
       - name: Set Auth URLs
         run: scripts/supabase-auth-urls.sh "$TARGET" "$SUPABASE_PROJECT_ID"

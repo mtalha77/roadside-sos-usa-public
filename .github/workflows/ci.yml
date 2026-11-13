@@ -103,7 +103,7 @@ jobs:
         run: supabase db push --remote --yes
       - name: Run database tests on rsos-dev
         if: steps.guard.outputs.run == 'true'
-        run: supabase test db --remote
+        run: supabase test db --remote --yes
       - name: Set Auth URLs on rsos-dev
         if: steps.guard.outputs.run == 'true'
         run: scripts/supabase-auth-urls.sh dev "$SUPABASE_PROJECT_ID"
