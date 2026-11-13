@@ -63,7 +63,7 @@ select throws_ok($$ select * from public.create_request('{"service_slug":"rls-te
 -- 5. Status page by token: safe fields only.
 select is((select status::text from public.get_request_by_token((select status_token from t_req))), 'submitted', 'token returns the request status');
 select is_empty($$ select * from public.get_request_by_token('not-a-real-token-but-long-enough') $$, 'wrong token returns nothing');
-select unlike(pg_get_function_result('public.get_request_by_token(text)'::regprocedure), '%phone%', 'token result exposes no phone');
+select unalike(pg_get_function_result('public.get_request_by_token(text)'::regprocedure), '%phone%', 'token result exposes no phone');
 
 -- 6. Anonymous users cannot read or write any table directly (AC2).
 grant usage on schema public to anon; -- (already granted by Supabase; explicit for clarity)
