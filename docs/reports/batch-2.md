@@ -141,6 +141,24 @@ Acceptance criteria:
 | 1   | No hardcoded user-facing strings (lint enforces it) | PASS: rule active in all apps and `packages/ui` components; the email and phone placeholder strings it found were moved to messages and props |
 | 2   | Spanish scaffold renders without layout breaks      | Pending (this PR's e2e run on the previews)                                                                                                   |
 
+## RSOS-016: Core database schema v1
+
+Migration `supabase/migrations/20261113020000_core_schema_v1.sql`:
+
+- Tables (RLS on all, anonymous access revoked, future tables default to no anonymous grants): `markets` (PostGIS centre and boundary, status draft/test/active/paused, coverage hours, support phone, SEO title and intro), `market_phone_numbers` (purpose website/google_ads/meta/microsoft/organic/provider_line, Twilio SID), `services` (icon key, needs destination, allowed vehicle types, sort order), `market_services` (enabled, price range, platform fee, `effective_from`; append-only), `requests` (short code `R-XXXX`, secret status token, market, service, fee row and fee snapshot, status, channel, driver name and E.164 phone with verified flag, pickup and destination points and addresses, landmark note, vehicle, situation flags, notes, dispatcher, timestamps per status), `request_events`, `attributions` (UTM, gclid, gbraid, wbraid, fbclid, msclkid, landing page, referrer, device, hashed IP, call ID), `consents` (phone, type, granted, policy version, IP, user agent, source), `provider_applications`, `contact_messages`, `waitlist`, `audit_log`. History tables are append-only (trigger).
+- View `current_market_services` (row in effect now per market and service).
+- Functions (the only anonymous entry points): `market_for_point`, `list_public_markets`, `get_market_services`, `create_request` (request + attribution + consents + first event in one transaction, validated), `get_request_by_token` (safe fields only).
+- Types regenerated from `rsos-dev` into `packages/db`.
+- pgTAP `supabase/tests/003_core_schema.test.sql` (30 assertions).
+
+Acceptance criteria:
+
+| #   | Criterion                                                                   | Result                                                                                                                                           |
+| --- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | A point inside each seeded market returns that market; outside returns none | PASS (with test fixtures; the real seeded markets are re-checked in RSOS-017)                                                                    |
+| 2   | Anonymous users cannot read or write any table directly                     | PASS: as `anon`, select/insert on tables and the fee view fail with 42501; only the public functions work; RLS enabled on every table (asserted) |
+| 3   | Changing a fee creates a new dated row; old requests keep their fee         | PASS: new row becomes current, old row kept, the request keeps 22.50; UPDATE and DELETE on fee rows are refused                                  |
+
 ## BLOCKERS
 
 ### Permissions
