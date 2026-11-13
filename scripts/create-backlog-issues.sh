@@ -3,7 +3,7 @@
 # Known tickets come from scripts/backlog-tickets.tsv; the rest get a placeholder title until specified.
 # Finished tickets are closed as completed. Safe to re-run (skips existing titles).
 set -euo pipefail
-repo="${1:-mtalha77/roadside-sos-usa-public}"
+repo="${1:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
 here="$(cd "$(dirname "$0")" && pwd)"
 for l in foundations design-system data-auth website unscheduled; do
   gh label create "phase:$l" -R "$repo" --color c5def5 --description "Backlog phase: $l" --force >/dev/null

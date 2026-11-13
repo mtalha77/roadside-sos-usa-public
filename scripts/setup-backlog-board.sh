@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+# Usage: scripts/setup-backlog-board.sh [owner/repo]  (defaults to the current repository)
 # Creates the "RSOS Backlog" GitHub Project with Backlog, In progress, In review and Done columns,
 # adds every RSOS issue and sets closed ones to Done. Needs: gh auth refresh -s project
 set -euo pipefail
-owner="${1:-mtalha77}"; repo="${2:-mtalha77/roadside-sos-usa-public}"
+repo="${1:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"; owner="${repo%%/*}"
 num=$(gh project list --owner "$owner" --format json --jq '.projects[] | select(.title=="RSOS Backlog") | .number' | head -1)
 if [ -z "$num" ]; then num=$(gh project create --owner "$owner" --title "RSOS Backlog" --format json --jq .number); fi
 pid=$(gh project view "$num" --owner "$owner" --format json --jq .id)
