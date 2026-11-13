@@ -47,6 +47,24 @@
       "notYou": "Si no fuiste tú, cambia tu contraseña ahora y escribe a {support}.",
       "codeSubject": "Tu código de acceso de {brand}",
       "codeBody": "Tu código de acceso es {code}. Vence en 10 minutos. No lo compartas con nadie, ni siquiera con nuestro personal."
+    },
+    "teamNotice": {
+      "subject": {
+        "contact": "Nuevo mensaje de contacto ({brand})",
+        "provider_application": "Nueva solicitud de proveedor ({brand})"
+      }
+    },
+    "formConfirmation": {
+      "subject": {
+        "contact": "Recibimos tu mensaje",
+        "provider_application": "Recibimos tu solicitud"
+      },
+      "greeting": "Hola {name}:",
+      "body": {
+        "contact": "Gracias por escribirnos. Alguien de nuestro equipo te responderá por correo, normalmente en un día hábil. Si necesitas asistencia ahora, usa el sitio web o llama al número de tu zona.",
+        "provider_application": "Gracias por tu solicitud. Revisamos cada solicitud y te contactaremos en dos días hábiles sobre los siguientes pasos: comprobante de seguro y, donde se requiera, tu licencia."
+      },
+      "signoff": "El equipo de {brand}"
     }
   },
   "auth": {
@@ -456,6 +474,185 @@
       "quoted": "Cotizada",
       "accepted": "Elegido",
       "en_route": "En camino"
+    }
+  },
+  "pages": {
+    "how": {
+      "title": "Cómo funciona",
+      "intro": "Los conductores reciben cotizaciones de proveedores cercanos y eligen una. Los proveedores reciben trabajos pagados y fijan sus precios.",
+      "drivers": "Para conductores",
+      "providers": "Para proveedores",
+      "driverSteps": [
+        [
+          "Cuéntanos qué pasó",
+          "Elige el problema (llanta, batería, llaves adentro, combustible o grúa) y comparte tu ubicación. No necesitas cuenta."
+        ],
+        [
+          "Recibe cotizaciones en minutos",
+          "Proveedores verificados cerca de ti envían el precio total y su hora de llegada, normalmente en unos 3 minutos."
+        ],
+        [
+          "Elige y sigue tu ayuda",
+          "Elige la cotización que quieras y sigue al proveedor en camino. Le pagas directamente al terminar."
+        ]
+      ],
+      "providerSteps": [
+        [
+          "Recibe solicitudes cercanas",
+          "Cuando un conductor cerca de ti necesita un servicio que ofreces, recibes la solicitud con la ubicación y los detalles."
+        ],
+        [
+          "Envía tu cotización",
+          "Fija tu precio y tu hora de llegada. Cotiza los trabajos que quieras."
+        ],
+        [
+          "Te eligen y haces el trabajo",
+          "Si el conductor te elige, recibes sus datos y haces el trabajo. El conductor te paga directamente; cobramos una tarifa fija de tu saldo prepagado."
+        ]
+      ],
+      "payTitle": "Quién le paga a quién",
+      "payBody": "Los conductores les pagan directamente a los proveedores por el trabajo. Los proveedores nos pagan una tarifa fija por cada solicitud en la que los eligen, de un saldo prepagado. Nunca manejamos el pago del trabajo.",
+      "cta": "Pedir ayuda ahora",
+      "providerCta": "Conoce cómo unirte"
+    },
+    "faqPage": {
+      "title": "Preguntas frecuentes",
+      "intro": "Respuestas sobre cómo pedir ayuda, precios, seguridad y cómo unirte como proveedor.",
+      "search": "Buscar preguntas",
+      "noResults": "Ninguna pregunta coincide con \"{query}\".",
+      "groups": {
+        "drivers": "Pedir ayuda",
+        "prices": "Precios y pago",
+        "safety": "Seguridad",
+        "providers": "Para proveedores"
+      },
+      "items": {
+        "drivers": [
+          [
+            "¿Con qué me pueden ayudar?",
+            "Llantas ponchadas, baterías descargadas, llaves adentro, falta de combustible y grúa. Algunas ciudades agregan más servicios con el tiempo."
+          ],
+          [
+            "¿Necesito cuenta o membresía?",
+            "No. Pides ayuda cuando la necesitas, sin registro ni membresía."
+          ],
+          [
+            "¿Qué tan rápido llega la ayuda?",
+            "Cada cotización muestra la hora de llegada del proveedor, así puedes elegir la más rápida."
+          ],
+          [
+            "¿En qué ciudades están?",
+            "Abrimos ciudad por ciudad. El menú de ciudades arriba muestra todas las ciudades donde estamos hoy."
+          ]
+        ],
+        "prices": [
+          [
+            "¿Cuánto costará?",
+            "Los proveedores cotizan el precio total antes de que elijas. Las páginas de cada ciudad muestran rangos típicos de precios."
+          ],
+          [
+            "¿Cómo pago?",
+            "Le pagas directamente al proveedor al terminar, con los métodos que acepte. Nunca te cobramos por el trabajo."
+          ],
+          [
+            "¿Hay cargos ocultos?",
+            "La cotización es el precio del servicio. Algunos servicios suman un extra claro, como el combustible o la distancia de remolque, y la cotización lo indica."
+          ]
+        ],
+        "safety": [
+          [
+            "¿Qué hago mientras espero?",
+            "Sal del camino si puedes hacerlo con seguridad, enciende las intermitentes y, en autopista, quédate en el vehículo con el cinturón puesto. Si estás en peligro, llama al 911."
+          ],
+          [
+            "¿Cómo revisan a los proveedores?",
+            "Revisamos el seguro y, donde se requiere, las licencias (por ejemplo, la licencia de grúa de TDLR en Texas) antes de que un proveedor pueda cotizar."
+          ],
+          [
+            "¿Puedo ver quién viene?",
+            "Sí. Ves el nombre de la empresa y puedes seguir su llegada cuando lo eliges."
+          ]
+        ],
+        "providers": [
+          [
+            "¿Cómo me uno?",
+            "Solicita en la página Para proveedores. Revisamos tu seguro y licencia, y luego puedes empezar a cotizar."
+          ],
+          [
+            "¿Cuánto les cuesta a los proveedores?",
+            "Una tarifa fija por cada solicitud en la que el conductor te elige, pagada de un saldo prepagado. Los planes opcionales dan descuentos y mejor visibilidad."
+          ],
+          ["¿Yo fijo mis precios?", "Sí. Cotizas cada trabajo a tu precio."]
+        ]
+      }
+    },
+    "about": {
+      "title": "Quiénes somos",
+      "intro": "Conectamos a conductores varados con proveedores independientes de asistencia cercanos, rápido y con precios claros.",
+      "mission": "Por qué existimos",
+      "missionBody": "Quedarse varado es estresante. Llamar a varios lugares para una grúa o un paso de corriente toma tiempo, y los precios suelen ser una sorpresa. Dejamos que los proveedores cercanos compitan con un precio claro y una hora de llegada, para que elijas con confianza.",
+      "how": "Cómo trabajamos",
+      "howBody": "Somos un mercado, no una empresa de grúas. Proveedores independientes y asegurados hacen el trabajo y fijan sus precios. Los conductores les pagan directamente. Los proveedores nos pagan una pequeña tarifa fija cuando un conductor los elige.",
+      "cities": "Abrimos ciudad por ciudad para que cada conductor reciba ayuda local y rápida.",
+      "contact": "¿Preguntas? Contáctanos."
+    },
+    "contact": {
+      "title": "Contáctanos",
+      "intro": "¿Preguntas, comentarios o un problema con un trabajo? Envíanos un mensaje y te responderemos por correo.",
+      "urgent": "¿Necesitas asistencia ahora? No esperes una respuesta.",
+      "getHelp": "Pedir ayuda ahora",
+      "name": "Tu nombre",
+      "email": "Correo electrónico",
+      "phone": "Teléfono (opcional)",
+      "topic": "Tema",
+      "topics": {
+        "general": "Pregunta general",
+        "job": "Un trabajo o un proveedor",
+        "provider": "Unirme como proveedor",
+        "privacy": "Solicitud de privacidad",
+        "other": "Otra cosa"
+      },
+      "message": "Mensaje",
+      "market": "Tu ciudad (opcional)",
+      "send": "Enviar mensaje",
+      "sent": "Gracias. Recibimos tu mensaje y te responderemos por correo.",
+      "verify": "Verificación de seguridad",
+      "errors": {
+        "required": "Escribe tu nombre, un correo válido y tu mensaje.",
+        "turnstile": "La verificación de seguridad no pasó. Inténtalo de nuevo.",
+        "limit": "Demasiados mensajes. Inténtalo más tarde.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      }
+    },
+    "safetyPage": {
+      "title": "Consejos de seguridad",
+      "intro": "Qué hacer cuando tu vehículo se descompone. Si alguien está herido o en peligro, llama primero al 911.",
+      "sections": [
+        [
+          "Ponte en un lugar seguro",
+          "Si el vehículo todavía avanza, toma la siguiente salida o oríllate lo más posible, lejos de curvas y pendientes. Enciende las intermitentes."
+        ],
+        [
+          "En autopista",
+          "Quédate en el vehículo con el cinturón puesto, salvo que sea más seguro salir. Si sales, hazlo por el lado contrario al tráfico y quédate detrás de una barrera si la hay."
+        ],
+        [
+          "De noche",
+          "Deja encendidas las intermitentes y la luz interior para que otros conductores y tu proveedor te vean. Comparte tu ubicación con alguien de confianza."
+        ],
+        [
+          "Con calor",
+          "Lleva agua, quédate a la sombra o en el auto con aire acondicionado si es seguro, y atiende las señales de golpe de calor."
+        ],
+        [
+          "En inundaciones",
+          "Nunca entres a una calle inundada. Da la vuelta. Si el agua sube alrededor de tu vehículo, sal a un lugar alto y llama al 911."
+        ],
+        [
+          "Cuando llega la ayuda",
+          "Verifica que el nombre del proveedor coincida con el que elegiste. Acuerden el precio antes de empezar. Págale directamente al proveedor."
+        ]
+      ]
     }
   }
 }

@@ -26,7 +26,7 @@
 | RSOS-020                       | Done        | [#122](https://github.com/mtalha77/roadside-sos-usa-public/pull/122) |
 | RSOS-024                       | Done        | [#123](https://github.com/mtalha77/roadside-sos-usa-public/pull/123) |
 | RSOS-025                       | Done        | [#124](https://github.com/mtalha77/roadside-sos-usa-public/pull/124) |
-| RSOS-027                       | Not started |                                                                      |
+| RSOS-027                       | Done        | [#125](https://github.com/mtalha77/roadside-sos-usa-public/pull/125) |
 | RSOS-026                       | Not started |                                                                      |
 | RSOS-028                       | Not started |                                                                      |
 | RSOS-032                       | Not started |                                                                      |
@@ -298,6 +298,20 @@ Acceptance criteria:
 | 1   | 6 service pages and 18 city plus service pages exist for the 3 test markets with unique content | PASS: e2e requests all 6 service pages and opens all 18 city plus service pages, checking 18 different local notes; pgTAP checks 18 unique notes and a page for every service |
 | 2   | Every page starts the flow with the right market and service selected                           | PASS: e2e checks the Get help link on all 18 pages carries that market and service (winch out: that market and a tow, see above)                                              |
 
+## RSOS-027: How it works, FAQ, About, Contact, Safety
+
+- Pages (all copy in `packages/i18n/messages`, English and Spanish): How it works with For drivers and For providers tabs and who pays whom; FAQ in four groups (getting help, prices and payment, safety, providers) with a search box that filters the server-rendered questions (answers stay in the page) and one FAQPage block; About; Contact; Safety tips. Each has a title, description and canonical URL.
+- Contact form: name, email, optional phone, topic, optional city, message. The server action validates with Zod, rate limits per IP (5 per hour; Upstash when configured, in-memory otherwise), verifies Turnstile (fails closed), stores the message through `submit_contact_message` (migration `20261113090000_contact_form.sql`; visitors still cannot read `contact_messages`), then sends a team notice to the support address and a confirmation to the sender through the email interface. New templates `TeamNoticeEmail` and `FormConfirmationEmail` (reused by RSOS-026).
+- Turnstile: Cloudflare's published test keys (always pass) are set on the `rsos-web` Vercel project in every environment (site key as a public config value, secret as a secret). The widget script loads after the page is interactive.
+- Tests: pgTAP `010_contact_form.test.sql` (5), unit tests for the contact action (stored and emailed; validation, rate limit and Turnstile run before anything is stored), e2e (FAQ data and search, tabs, accessibility, a real contact submission through the test keys).
+
+Acceptance criteria:
+
+| #   | Criterion                                                      | Result                                                                                                                                                                                                                               |
+| --- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | FAQ structured data validates                                  | PASS: e2e parses the FAQPage block on `/faq` (every question has a name and an accepted answer, 13 in all); the home, city and service pages use the same component                                                                  |
+| 2   | Contact submissions are stored and trigger the email interface | PASS: unit test (stored with the market, team notice and confirmation sent through `EmailSender`); pgTAP (stored, tagged with the market, unreadable by visitors); e2e submits the form on the preview (rsos-dev, mock email sender) |
+
 ## BLOCKERS
 
 ### Permissions
@@ -316,6 +330,9 @@ Acceptance criteria:
 4. **Resend for email (RSOS-093).** Create a Resend account, add and verify your sending domain (Resend shows the DNS records to add). Create an API key with "Sending access". Add to the `rsos-provider` and `rsos-admin` Vercel projects (staging and production): `RESEND_API_KEY` (the key) and `EMAIL_FROM` (for example `Security <security@YOUR-DOMAIN>`). Until then staging and production record security emails as not sent, and previews show the code on screen. Supabase's own emails (reset links, email change) use Supabase's default sender until you also set SMTP in each Supabase project (Authentication → Emails → SMTP, using Resend's SMTP details).
 
 5. **Phone numbers per market (RSOS-019).** In Twilio, buy one local number per market (San Antonio, Las Vegas, Houston) for the website. Then add each one as data (not a migration) in the Supabase SQL editor for `rsos-staging` (and production at launch): `insert into public.market_phone_numbers (market_id, phone_number, purpose) select id, '+1XXXXXXXXXX', 'website' from public.markets where slug = 'houston';` Until then the website shows no call buttons (it never shows a made-up number). Tracking numbers for ads use purpose `google_ads`, `meta` or `microsoft`.
+
+6. **Cloudflare Turnstile (RSOS-027).** Forms use Cloudflare's test keys, which let every request through. In Cloudflare: Turnstile → Add widget, add the website hostnames (staging and production), mode Managed. Then replace the values in the `rsos-web` Vercel project (Settings → Environment Variables): `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (site key) and `TURNSTILE_SECRET_KEY` (secret key), for Production and Preview, and redeploy.
+7. **Upstash Redis (optional, RSOS-027).** Rate limits work in memory per server instance. For limits shared across instances, create an Upstash Redis database and add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to `rsos-web` (and the other apps).
 
 ### Decisions
 

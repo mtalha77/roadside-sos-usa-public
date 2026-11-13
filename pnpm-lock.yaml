@@ -348,6 +348,9 @@ importers:
       '@rsos/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@rsos/emails':
+        specifier: workspace:*
+        version: link:../../packages/emails
       '@rsos/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
