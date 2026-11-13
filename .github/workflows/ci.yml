@@ -103,6 +103,8 @@ jobs:
       VERCEL_TEAM_SLUG: ${{ vars.VERCEL_TEAM_SLUG }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 200
       - name: Check secrets are available
         id: guard
         run: |
@@ -122,7 +124,20 @@ jobs:
         run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
       - name: Apply migrations and the dev-only seed to rsos-dev
         if: steps.guard.outputs.run == 'true'
-        run: supabase db push --remote --yes --include-seed
+        # rsos-dev is shared: another open PR may already have applied a newer migration. That only
+        # blocks PRs that change database files themselves; others skip the push and still run the tests.
+        run: |
+          set -o pipefail
+          if supabase db push --remote --yes --include-seed 2>&1 | tee push.log; then exit 0; fi
+          if [ "${{ github.event_name }}" = "pull_request" ] && grep -q "Remote migration versions not found in local" push.log; then
+            git fetch -q --depth=200 origin "${{ github.base_ref }}"
+            if ! git diff --name-only FETCH_HEAD...HEAD | grep -q '^supabase/'; then
+              echo "::notice title=Migrations already applied::rsos-dev has a migration from another open pull request; this PR changes no database files, so there is nothing to apply."
+              exit 0
+            fi
+            echo "::error::rsos-dev has a migration from another open pull request. Merge or rebase onto that work first (database PRs go one at a time)."
+          fi
+          exit 1
       - name: Run database tests on rsos-dev
         if: steps.guard.outputs.run == 'true'
         run: supabase test db --remote --yes

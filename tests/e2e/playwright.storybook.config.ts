@@ -9,8 +9,7 @@ const PORT = 6106;
 export default defineConfig({
   testDir: "./storybook",
   fullyParallel: true,
-  // Tests mostly wait on the network (previews, static server), so run more at once than CPU count.
-  workers: process.env.CI ? 4 : undefined,
+  // Default workers: the scrolling-smoothness check needs CPU to itself.
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI
     ? [["github"], ["html", { open: "never", outputFolder: "playwright-report-storybook" }]]
