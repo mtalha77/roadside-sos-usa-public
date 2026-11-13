@@ -5,6 +5,7 @@ import {
   parseClaims,
   providerAccess,
   staffCanAccessMarket,
+  withSessionState,
 } from "../src/claims";
 
 const now = 1_800_000_000;
@@ -71,4 +72,46 @@ describe("market scope", () => {
     expect(staffCanAccessMarket(staff({ aal: "aal1" })!, "houston-id")).toBe(false);
   });
   it("rejects malformed claims", () => expect(parseClaims({ app_role: "root" })).toBeNull());
+});
+
+describe("session state (RSOS-093)", () => {
+  const provider = parseClaims({
+    sub: "p1",
+    app_role: "provider",
+    aal: "aal1",
+    providers: [{ provider_id: "x", role: "owner" }],
+  });
+  const state = (over: Partial<{ active: boolean; secondStepPassed: boolean }> = {}) => ({
+    claims: provider,
+    active: true,
+    secondStepPassed: true,
+    ...over,
+  });
+
+  it("a session signed out from another device is revoked on its next request", () => {
+    expect(withSessionState("ok", state({ active: false }), { requireSecondStep: true })).toBe(
+      "revoked",
+    );
+  });
+
+  it("providers need the second step; an authenticator (aal2) counts", () => {
+    expect(
+      withSessionState("ok", state({ secondStepPassed: false }), { requireSecondStep: true }),
+    ).toBe("second-step");
+    const totp = {
+      ...state({ secondStepPassed: false }),
+      claims: { ...provider!, aal: "aal2" as const },
+    };
+    expect(withSessionState("ok", totp, { requireSecondStep: true })).toBe("ok");
+    expect(withSessionState("ok", state(), { requireSecondStep: true })).toBe("ok");
+  });
+
+  it("keeps earlier decisions and does not ask admins for the email step", () => {
+    expect(
+      withSessionState("forbidden", state({ active: false }), { requireSecondStep: true }),
+    ).toBe("forbidden");
+    expect(
+      withSessionState("ok", state({ secondStepPassed: false }), { requireSecondStep: false }),
+    ).toBe("ok");
+  });
 });

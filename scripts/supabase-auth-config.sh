@@ -41,6 +41,7 @@ body=$(cat <<JSON
   "mfa_totp_verify_enabled": true,
   "mfa_max_enrolled_factors": 10,
   "password_min_length": 12,
+  "mailer_secure_email_change_enabled": true,
   "security_update_password_require_reauthentication": true
 }
 JSON

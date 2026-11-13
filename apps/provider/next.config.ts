@@ -13,7 +13,14 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   // Workspace packages ship TypeScript source; Next compiles them.
-  transpilePackages: ["@rsos/config", "@rsos/core", "@rsos/db", "@rsos/i18n", "@rsos/ui"],
+  transpilePackages: [
+    "@rsos/account",
+    "@rsos/config",
+    "@rsos/core",
+    "@rsos/db",
+    "@rsos/i18n",
+    "@rsos/ui",
+  ],
   async headers() {
     const headers = securityHeaders(APP);
     // Staging, previews, the provider portal and the admin dashboard are never indexed.

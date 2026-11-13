@@ -37,3 +37,37 @@ describe("session claims", () => {
     expect(isAuthCookie("NEXT_LOCALE")).toBe(false);
   });
 });
+
+describe("session state", () => {
+  it("reports remote sign-out and second step from the database", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://ref.supabase.co");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test");
+    const ssr = await import("@supabase/ssr");
+    const rpc = vi.fn(async () => ({ data: [{ active: false, second_step_passed: true }] }));
+    vi.mocked(ssr.createServerClient).mockReturnValueOnce({
+      auth: {
+        getClaims: async () => ({
+          data: { claims: { sub: "u", app_role: "provider", providers: [] } },
+          error: null,
+        }),
+      },
+      rpc,
+    } as never);
+    const { getSessionState } = await import("../src/session");
+    expect(await getSessionState({ getAll: () => [], setAll: () => {} })).toMatchObject({
+      active: false,
+      secondStepPassed: true,
+    });
+    expect(rpc).toHaveBeenCalledWith("session_status");
+  });
+
+  it("is inactive without Supabase or claims", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
+    const { getSessionState } = await import("../src/session");
+    expect(await getSessionState({ getAll: () => [], setAll: () => {} })).toEqual({
+      claims: null,
+      active: false,
+      secondStepPassed: false,
+    });
+  });
+});

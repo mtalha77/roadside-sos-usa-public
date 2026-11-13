@@ -45,7 +45,13 @@ describe("provider security headers", () => {
     expect(home.status).toBe(307);
     expect(new URL(home.headers.get("location")!).pathname).toBe("/sign-in");
     expect(new URL(home.headers.get("location")!).searchParams.get("next")).toBe("/requests");
-    for (const open of ["/sign-in", "/api/health", "/no-access"]) {
+    for (const open of [
+      "/sign-in",
+      "/api/health",
+      "/no-access",
+      "/forgot-password",
+      "/reset-password",
+    ]) {
       expect(
         (await proxy(new NextRequest("https://app.test" + open))).headers.get("location"),
       ).toBeNull();

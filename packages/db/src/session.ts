@@ -37,3 +37,35 @@ export async function getSessionClaims(
 export function isAuthCookie(name: string): boolean {
   return name.startsWith("sb-");
 }
+
+export type SessionState = { claims: AppClaims | null; active: boolean; secondStepPassed: boolean };
+
+/**
+ * Claims plus server-side session state: `active` is false once the session was signed out from
+ * another device (checked on every request, so a remote sign-out takes effect immediately);
+ * `secondStepPassed` is true after the emailed code, SMS, authenticator, trusted device or recovery code.
+ */
+export async function getSessionState(
+  cookies: CookieMethodsServer,
+  cookieOptions?: CookieOptions,
+): Promise<SessionState> {
+  if (!supabaseConfigured()) return { claims: null, active: false, secondStepPassed: false };
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      cookies,
+      ...(cookieOptions ? { cookieOptions } : {}),
+    },
+  );
+  const { data, error } = await supabase.auth.getClaims();
+  const claims = error || !data ? null : parseClaims(data.claims);
+  if (!claims) return { claims: null, active: false, secondStepPassed: false };
+  const { data: status } = await supabase.rpc("session_status");
+  const row = Array.isArray(status) ? status[0] : status;
+  return {
+    claims,
+    active: Boolean(row?.active),
+    secondStepPassed: Boolean(row?.second_step_passed),
+  };
+}

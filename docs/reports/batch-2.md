@@ -7,10 +7,30 @@
 
 ## Summary
 
-| Ticket   | Status      | Pull request                                                     |
-| -------- | ----------- | ---------------------------------------------------------------- |
-| RSOS-010 | Done        | [#7](https://github.com/mtalha77/roadside-sos-usa-public/pull/7) |
-| RSOS-096 | In progress | (this PR)                                                        |
+| Ticket                         | Status      | Pull request                                                         |
+| ------------------------------ | ----------- | -------------------------------------------------------------------- |
+| RSOS-010                       | Done        | [#7](https://github.com/mtalha77/roadside-sos-usa-public/pull/7)     |
+| RSOS-096                       | Done        | [#8](https://github.com/mtalha77/roadside-sos-usa-public/pull/8)     |
+| RSOS-097                       | Done        | [#110](https://github.com/mtalha77/roadside-sos-usa-public/pull/110) |
+| RSOS-011                       | Done        | [#111](https://github.com/mtalha77/roadside-sos-usa-public/pull/111) |
+| RSOS-012                       | Done        | [#112](https://github.com/mtalha77/roadside-sos-usa-public/pull/112) |
+| RSOS-013                       | Done        | [#113](https://github.com/mtalha77/roadside-sos-usa-public/pull/113) |
+| RSOS-014                       | Done        | [#114](https://github.com/mtalha77/roadside-sos-usa-public/pull/114) |
+| RSOS-015                       | Done        | [#115](https://github.com/mtalha77/roadside-sos-usa-public/pull/115) |
+| RSOS-016                       | Done        | [#116](https://github.com/mtalha77/roadside-sos-usa-public/pull/116) |
+| RSOS-017                       | Done        | [#117](https://github.com/mtalha77/roadside-sos-usa-public/pull/117) |
+| RSOS-018                       | Done        | [#118](https://github.com/mtalha77/roadside-sos-usa-public/pull/118) |
+| RSOS-096 follow-up (faster CI) | Done        | [#119](https://github.com/mtalha77/roadside-sos-usa-public/pull/119) |
+| RSOS-093                       | In review   | [#120](https://github.com/mtalha77/roadside-sos-usa-public/pull/120) |
+| RSOS-019                       | Not started |                                                                      |
+| RSOS-020                       | Not started |                                                                      |
+| RSOS-024                       | Not started |                                                                      |
+| RSOS-025                       | Not started |                                                                      |
+| RSOS-027                       | Not started |                                                                      |
+| RSOS-026                       | Not started |                                                                      |
+| RSOS-028                       | Not started |                                                                      |
+| RSOS-032                       | Not started |                                                                      |
+| RSOS-033                       | Not started |                                                                      |
 
 ## RSOS-010: Testing setup
 
@@ -197,6 +217,24 @@ Acceptance criteria:
 | 2   | Admin sign-in without the second step is impossible              | PASS: database returns nothing to staff without aal2 (policy test); the proxy sends aal1 sessions to `/sign-in/verify` (unit test); the verify page and every admin page refuse visitors without a session (e2e) |
 | 3   | Provider operators cannot read wallet or billing data            | PASS: policy test (operator sees the company, no wallet, no billing; owner sees both)                                                                                                                            |
 
+## RSOS-093: Account and security settings
+
+- Migration `20261113050000_account_security.sql`: security settings, emailed second-step codes (SHA-256 hashes only, 10 minutes, 5 wrong codes then a 15-minute lock), verified sessions (keyed by the JWT `session_id`), trusted devices (hashed 32-byte tokens, 30 days), single-use recovery codes, account requests; definer functions for every change, each writing the audit log. Follow-up migration `20261113050100_email_code_attempts.sql`: asking for a new code no longer resets the wrong-code count (found while building the screens; without it, five wrong codes spread over new codes never locked).
+- Remote sign-out: `session_status()` is checked by the provider and admin proxies on every request (`withSessionState` in `@rsos/db/claims`), so a device signed out from the account page is sent to sign-in on its very next request, well inside the 1-minute target. Provider cookies are now Secure + HttpOnly + SameSite=Lax like admin's.
+- Shared package `@rsos/account` (used by both apps): server actions for name, email (Supabase secure email change: confirmed on old and new address; `mailer_secure_email_change_enabled` added to `scripts/supabase-auth-config.sh`), password (current password checked first), second-step method, authenticator setup, recovery codes, sign out a device, forget a trusted device, closure request, forgot and reset password; screens for the account page, second step, password reset and the paused/suspended/closed status.
+- Provider app: `/sign-in/second-step` (trusted device skips it; otherwise the emailed code is sent on arrival, or the authenticator code if chosen; "Trust this device for 30 days"; recovery code), `/account`, `/forgot-password`, `/reset-password`, `/account-status` (home redirects there when the company is paused, suspended or closed, with the reason and support contact).
+- Admin app: `/account` (authenticator always required), `/staff` for super admins (reset a member's authenticator: removes their factors and signs them out everywhere, audited), forgot/reset password, `/auth/callback`; the verify screen says a super admin resets lost authenticators.
+- Security emails (new sign-in after the second step, password change, email change, second-step change, recovery codes, device signed out, closure request) go through the `EmailSender` interface in `@rsos/emails`: Resend when `RESEND_API_KEY` and `EMAIL_FROM` are set, a mock on development and previews (the code is shown on screen there), otherwise recorded as not sent. SMS as a second step is shown but disabled until Twilio is set up (BLOCKERS).
+- Tests: pgTAP `006_account_security.test.sql` (18, now including the lock across new codes); `@rsos/account` unit tests (13: codes, lock, trusted device, audit and email per change, no account probing, safe redirects); `withSessionState` tests; proxy tests for the new public pages; Playwright: forgot-password flow, account pages need a session, signed-out notice, second step needs a session.
+
+Acceptance criteria:
+
+| #   | Criterion                                                                               | Result                                                                                                                                                                                                               |
+| --- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Email-code providers cannot sign in without the code; 5 wrong codes lock for 15 minutes | PASS: the proxy sends sessions without a passed second step to `/sign-in/second-step` (unit test); pgTAP proves 5 wrong codes lock for 15 minutes, even across new codes, and the right code is refused while locked |
+| 2   | Signing out a device ends that session within 1 minute                                  | PASS: `revoke_my_session` deletes the session (pgTAP: `session_status().active` becomes false); the proxy checks it on every request and redirects to `/sign-in?signedOut=1` (unit test)                             |
+| 3   | Every security change is written to the audit log and triggers the email interface      | PASS: unit tests check an audit row (from the action or the database function) and an email per change; pgTAP checks the database-side audit rows                                                                    |
+
 ## BLOCKERS
 
 ### Permissions
@@ -211,6 +249,8 @@ Acceptance criteria:
 
 2. **Google Maps Platform (RSOS-013).** Create a Google Cloud project, enable "Maps JavaScript API", create a browser API key restricted by HTTP referrer to the six hostnames and `*.vercel.app` previews of the team. Add it to Vercel as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (all three projects, all environments) and to GitHub Actions as a secret `STORYBOOK_GOOGLE_MAPS_API_KEY` if you want the live map story. Until then maps show a static placeholder.
 3. **Twilio for SMS codes (RSOS-018).** Create a Twilio account and a Verify service. In each Supabase project: Authentication → Providers → Phone → enable, provider Twilio Verify, paste Account SID, Auth Token and Verify Service SID. Then add `SUPABASE_SMS_ENABLED=true` to the `rsos-provider` and `rsos-web` Vercel projects (staging and production). Until then staging and production show "text messages aren't set up yet"; previews use the mock code 000000.
+
+4. **Resend for email (RSOS-093).** Create a Resend account, add and verify your sending domain (Resend shows the DNS records to add). Create an API key with "Sending access". Add to the `rsos-provider` and `rsos-admin` Vercel projects (staging and production): `RESEND_API_KEY` (the key) and `EMAIL_FROM` (for example `Security <security@YOUR-DOMAIN>`). Until then staging and production record security emails as not sent, and previews show the code on screen. Supabase's own emails (reset links, email change) use Supabase's default sender until you also set SMTP in each Supabase project (Authentication → Emails → SMTP, using Resend's SMTP details).
 
 ## Notes for the next developer
 
