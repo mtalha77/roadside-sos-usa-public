@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "gen:types": "supabase gen types typescript --local > src/database.types.ts"
+    "gen:types": "supabase gen types --remote --lang typescript --schema public > src/database.types.ts"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",
