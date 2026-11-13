@@ -16,12 +16,17 @@
     "./logo": "./src/logo.ts",
     "./metadata": "./src/metadata.ts",
     "./brand-guard": "./src/brand-guard.ts",
-    "./security": "./src/security.ts"
+    "./security": "./src/security.ts",
+    "./tokens": "./src/tokens.ts",
+    "./color": "./src/color.ts",
+    "./theme-colors": "./src/theme-colors.ts"
   },
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "tokens:build": "node scripts/build-tokens.ts",
+    "tokens:check": "node scripts/check-contrast.ts && node scripts/build-tokens.ts --check"
   },
   "dependencies": {
     "@eslint/js": "10.0.1",
