@@ -13,3 +13,8 @@ allowBuilds:
   esbuild: true
   sharp: true
   supabase: true
+
+# Security overrides for transitive dependencies (remove when upstream updates).
+overrides:
+  # GHSA-c475-qrg2-pj4r (high) via @lhci/cli > proxy-agent > get-uri; FTP is never used.
+  basic-ftp: 6.2.6

@@ -6,10 +6,13 @@
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "lighthouse": "node scripts/lighthouse.ts",
+    "test:smoke": "playwright test --grep @smoke"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
+    "@lhci/cli": "0.16.1",
     "@playwright/test": "1.65.0",
     "@rsos/config": "workspace:*",
     "@types/node": "26.6.6",

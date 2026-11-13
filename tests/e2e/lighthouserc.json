@@ -1,0 +1,27 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "settings": {
+        "formFactor": "mobile",
+        "chromeFlags": "--no-sandbox --headless=new",
+        "onlyCategories": ["performance", "accessibility"],
+        "extraHeaders": "{\"x-vercel-skip-toolbar\":\"1\"}"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "largest-contentful-paint": [
+          "error",
+          { "maxNumericValue": 2000, "aggregationMethod": "median" }
+        ],
+        "cumulative-layout-shift": [
+          "error",
+          { "maxNumericValue": 0.05, "aggregationMethod": "median" }
+        ],
+        "categories:accessibility": ["error", { "minScore": 0.9, "aggregationMethod": "median" }]
+      }
+    },
+    "upload": { "target": "filesystem", "outputDir": "./lighthouse-report" }
+  }
+}

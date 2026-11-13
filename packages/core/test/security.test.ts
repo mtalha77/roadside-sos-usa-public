@@ -88,3 +88,64 @@ describe("rate limiting", () => {
     expect((await checkRateLimits(rule, store)).allowed).toBe(true);
   });
 });
+
+describe("Upstash store", () => {
+  it("increments with INCR and EXPIRE NX in one pipeline", async () => {
+    const { createUpstashStore } = await import("../src/security");
+    const fetchImpl = vi.fn(
+      async () => new Response(JSON.stringify([{ result: 3 }, { result: 1 }])),
+    ) as unknown as typeof fetch;
+    const store = createUpstashStore("https://redis.test/", "token", fetchImpl);
+    expect(await store.increment("rl:ip:x", 60)).toBe(3);
+    const [url, init] = (fetchImpl as unknown as ReturnType<typeof vi.fn>).mock.calls[0] as [
+      string,
+      RequestInit,
+    ];
+    expect(url).toBe("https://redis.test/pipeline");
+    expect(JSON.parse(String(init.body))).toEqual([
+      ["INCR", "rl:ip:x"],
+      ["EXPIRE", "rl:ip:x", "60", "NX"],
+    ]);
+  });
+
+  it("throws on Upstash errors so callers can decide", async () => {
+    const { createUpstashStore } = await import("../src/security");
+    const failing = vi.fn(
+      async () => new Response("no", { status: 500 }),
+    ) as unknown as typeof fetch;
+    await expect(
+      createUpstashStore("https://redis.test", "t", failing).increment("k", 1),
+    ).rejects.toThrow();
+    const odd = vi.fn(async () => new Response(JSON.stringify([{}]))) as unknown as typeof fetch;
+    await expect(
+      createUpstashStore("https://redis.test", "t", odd).increment("k", 1),
+    ).rejects.toThrow();
+  });
+
+  it("picks Upstash when configured, memory otherwise", async () => {
+    const { getRateLimitStore } = await import("../src/security");
+    const memory = getRateLimitStore({});
+    expect(getRateLimitStore({})).toBe(memory);
+    expect(
+      getRateLimitStore({
+        UPSTASH_REDIS_REST_URL: "https://r.test",
+        UPSTASH_REDIS_REST_TOKEN: "t",
+      }),
+    ).not.toBe(memory);
+  });
+
+  it("turnstile reports unavailable on HTTP and schema errors", async () => {
+    const { verifyTurnstile } = await import("../src/security");
+    const http = vi.fn(async () => new Response("x", { status: 503 })) as unknown as typeof fetch;
+    expect(
+      await verifyTurnstile("t", { secret: "s", fetchImpl: http, remoteIp: "203.0.113.1" }),
+    ).toEqual({ ok: false, reason: "unavailable" });
+    const bad = vi.fn(
+      async () => new Response(JSON.stringify({ nope: true })),
+    ) as unknown as typeof fetch;
+    expect(await verifyTurnstile("t", { secret: "s", fetchImpl: bad })).toEqual({
+      ok: false,
+      reason: "unavailable",
+    });
+  });
+});

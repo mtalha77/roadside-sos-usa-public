@@ -1,0 +1,68 @@
+name: Release QA
+
+# Gate 3: a pull request from staging into main must pass the full regression suite against
+# the staging hosts, and gets a checklist issue for manual smoke testing and sign-off.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: release-qa-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-qa:
+    name: release-qa
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      E2E_WEB_URL: https://staging.${{ vars.APP_DOMAIN }}
+      E2E_PROVIDER_URL: https://staging-pro.${{ vars.APP_DOMAIN }}
+      E2E_ADMIN_URL: https://staging-admin.${{ vars.APP_DOMAIN }}
+      VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+    steps:
+      - name: Only staging can be released to main
+        if: github.event_name == 'pull_request' && github.head_ref != 'staging'
+        run: |
+          echo "::error::Pull requests into main must come from staging (got ${{ github.head_ref }})."
+          exit 1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - name: Install browsers
+        run: pnpm --filter @rsos/e2e exec playwright install --with-deps chromium webkit
+      - name: Full regression suite against staging
+        run: pnpm --filter @rsos/e2e test:e2e
+      - name: Lighthouse budgets on staging
+        env:
+          LIGHTHOUSE_URLS: https://staging.${{ vars.APP_DOMAIN }}
+        run: pnpm --filter @rsos/e2e lighthouse
+      - name: Open the manual sign-off checklist
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          DOMAIN: ${{ vars.APP_DOMAIN }}
+        run: |
+          title="Release QA sign-off for PR #${PR}"
+          if gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number' | grep -q .; then
+            echo "Checklist issue already open."; exit 0
+          fi
+          gh issue create --title "$title" --label release --body "$(cat <<BODY
+          Automated regression and Lighthouse passed on staging for #${PR}. Complete the manual smoke test before merging:
+
+          - [ ] Website home on a real phone (375px) and desktop (1440px), light and dark: https://staging.${DOMAIN}
+          - [ ] Provider portal loads and sign-in page works: https://staging-pro.${DOMAIN}
+          - [ ] Admin dashboard loads and sign-in page works: https://staging-admin.${DOMAIN}
+          - [ ] New features from this release work end to end (list them in a comment)
+          - [ ] No console errors in the browser
+          - [ ] Database migrations in this release applied to staging (Database deploy workflow green)
+          - [ ] Sign-off: comment "Approved for release" and close this issue
+
+          Rollback plan: docs/QA.md, Gate 4.
+          BODY
+          )"

@@ -143,7 +143,7 @@ Run from the repository root.
 - **`staging`** is the integration branch: open every ticket PR from `rsos-<id>-<slug>` into `staging`.
 - **`main`** is production: release by opening a PR from `staging` into `main`.
 - Both branches are protected: no direct pushes (owner included), no force pushes, no deletion, a pull request is required (0 approvals, so a solo developer can merge their own PR), conversations must be resolved, and the branch must be up to date.
-- **Required checks** (job names in `.github/workflows/ci.yml`): `lint`, `typecheck`, `test`, `build`, `db`. Renaming a job means updating branch protection too.
+- **Required checks** (job names in `.github/workflows/ci.yml`): `lint`, `typecheck`, `test`, `build`, `db`, `storybook`, `e2e`, `lighthouse`, `scan`; `main` also requires `release-qa`. Renaming a job means updating branch protection too. What each gate checks and how to read failures: `docs/QA.md`.
   - `build` builds only the apps a PR affects (`turbo --affected`); pushes build everything.
   - `db` skips cleanly until `supabase/migrations/` has SQL files; then it resets a fresh local database, lints the schema and runs `supabase/tests/` (pgTAP/RLS tests).
 - Dependabot opens grouped weekly update PRs into `staging` (npm and GitHub Actions).
