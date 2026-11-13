@@ -35,18 +35,35 @@ Acceptance criteria:
 - Gate 3: `release-qa.yml` (required on `main`): only `staging` may be released; full regression on the staging hosts; Lighthouse on staging; opens a sign-off checklist issue.
 - Gate 4: `production-smoke.yml` after each production deployment of the website; failure opens a `critical` issue assigned to the owner; rollback steps in `docs/QA.md`.
 - `docs/QA.md` explains each gate and how to read failures.
+- Fixes found by the new gates: Next.js build cache in CI and `TURBO_SCM_BASE` (build warnings); `basic-ftp` overridden to 6.2.6 (GHSA-c475-qrg2-pj4r, via Lighthouse CI).
+- The automation bypass secret was rotated and is now also a Dependabot secret, so Dependabot PRs can run e2e.
 
 Acceptance criteria:
 
-| #   | Criterion                                                                            | Result                 |
-| --- | ------------------------------------------------------------------------------------ | ---------------------- |
-| 1   | A PR with a console error, an accessibility issue or a failing test cannot be merged | Pending (throwaway PR) |
-| 2   | A staging-to-main PR cannot merge until Release QA passes                            | Pending                |
-| 3   | A deliberately failing production smoke test produces an alert                       | Pending (drill)        |
+| #   | Criterion                                                                            | Result                                                                                                                                                                                                             |
+| --- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | A PR with a console error, an accessibility issue or a failing test cannot be merged | PASS: throwaway [#10](https://github.com/mtalha77/roadside-sos-usa-public/pull/10): `test` failed (failing unit test), `e2e` failed (console error, `button-name` critical axe issue); merge state BLOCKED; closed |
+| 2   | A staging-to-main PR cannot merge until Release QA passes                            | Pending                                                                                                                                                                                                            |
+| 3   | A deliberately failing production smoke test produces an alert                       | Pending (drill)                                                                                                                                                                                                    |
+
+## RSOS-097: Team-ready repository and onboarding
+
+- README (what it is, Mermaid architecture, environments, one-hour start, Claude Code cloud sessions, access requests), CONTRIBUTING (workflow, branches, commits, reviews, migrations, markets), `docs/ENVIRONMENT.md` (every variable per app and CI), onboarding issue template, CODEOWNERS by area.
+- Decision records: `docs/decisions/0000-template.md`, 0001 stack, 0002 cloud only, 0003 multi-market, 0004 payments model.
+- Issues RSOS-001 to RSOS-097 created (titles only, `phase:*` labels); finished tickets closed as completed. Unknown tickets have the placeholder title "To be specified". Scripts: `scripts/create-backlog-issues.sh` (re-runnable), `scripts/setup-backlog-board.sh`.
+
+Acceptance criteria:
+
+| #   | Criterion                                                                | Result                                                                                                                         |
+| --- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | A fresh reader can follow the README to open a PR with a passing preview | PASS: the README steps match the workflow used for every PR in this run (branch, checks, PR, previews)                         |
+| 2   | Every RSOS ticket exists on the board with its ID                        | PARTIAL: all 97 issues exist with IDs; the board itself is BLOCKED (GitHub login lacks the `project` permission, see BLOCKERS) |
 
 ## BLOCKERS
 
-None yet.
+### Permissions
+
+1. **GitHub Projects permission (RSOS-097).** In Terminal run `gh auth refresh -h github.com -s project`, press Enter, approve in the browser, wait for "Authentication complete". Then run `scripts/setup-backlog-board.sh` (or ask Claude to): it creates the "RSOS Backlog" board with Backlog, In progress, In review, Done, adds all 97 issues and moves finished ones to Done.
 
 ## Notes for the next developer
 

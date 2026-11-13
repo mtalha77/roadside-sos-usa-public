@@ -1,0 +1,27 @@
+002	Monorepo scaffold and CLAUDE.md	foundations	done
+003	GitHub repository, branches and CI	foundations	done
+004	Supabase cloud projects and migration workflow	foundations	done
+005	Vercel projects, environments and domains	foundations	done
+007	Brand and environment config (rename-ready)	foundations	done
+009	Security baseline	foundations	done
+010	Testing setup	foundations	done
+011	Design tokens, typography and motion	foundations	open
+012	Core component library	design-system	open
+013	Product components	design-system	open
+014	Icons and illustrations	design-system	open
+015	Accessibility and language foundation	design-system	open
+016	Core database schema v1	data-auth	open
+017	Seed data: markets, services, prices and fees	data-auth	open
+018	Authentication and roles	data-auth	open
+019	Website structure, layout and market detection	website	open
+020	Home page	website	open
+024	City pages	website	open
+025	Service pages and city plus service pages	website	open
+026	For Providers page and application form	website	open
+027	How it works, FAQ, About, Contact, Safety	website	open
+028	Legal pages, cookie consent and privacy choices	website	open
+032	Technical SEO	website	open
+033	Performance budget	website	open
+093	Account and security settings	data-auth	open
+096	QA pipeline and release gates	foundations	done
+097	Team-ready repository and onboarding	foundations	open
