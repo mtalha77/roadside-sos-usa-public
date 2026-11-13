@@ -29,5 +29,55 @@
       "tagline": "Roadside help, fast.",
       "questions": "Questions? Email"
     }
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "continue": "Continue",
+    "code": "6-digit code",
+    "verify": "Verify",
+    "sending": "Sending…",
+    "errors": {
+      "invalid": "Check your email and password and try again.",
+      "required": "Fill in every field.",
+      "code": "That code didn't work. Check it and try again.",
+      "notConfigured": "Sign-in isn't available in this environment yet.",
+      "generic": "Something went wrong. Try again.",
+      "expired": "Your session ended. Sign in again."
+    },
+    "admin": {
+      "title": "Admin sign-in",
+      "subtitle": "Staff only. You'll confirm with your authenticator app next.",
+      "verifyTitle": "Confirm it's you",
+      "verifyBody": "Enter the 6-digit code from your authenticator app.",
+      "enrollTitle": "Set up your authenticator app",
+      "enrollBody": "Admin accounts need a second step. Scan this code with an authenticator app (1Password, Google Authenticator, Authy), then enter the 6-digit code it shows.",
+      "secretLabel": "Can't scan? Enter this key:",
+      "noAccessTitle": "No admin access",
+      "noAccessBody": "Your account isn't set up as staff. Ask a super admin to add you.",
+      "dashboardTitle": "Admin dashboard",
+      "signedInAs": "Signed in as {email} ({role})"
+    },
+    "provider": {
+      "title": "Provider sign-in",
+      "subtitle": "Sign in with your password or get a sign-in link by email.",
+      "passwordTab": "Password",
+      "linkTab": "Email link",
+      "sendLink": "Email me a sign-in link",
+      "linkSent": "Check your email for a sign-in link. It expires in 1 hour.",
+      "phoneTitle": "Verify your phone",
+      "phoneBody": "We text a 6-digit code to the phone drivers and dispatch will reach you on.",
+      "phone": "Mobile phone",
+      "sendCode": "Text me a code",
+      "codeSent": "We sent a code to {phone}.",
+      "mockNotice": "Test mode: no text is sent. Use code {code}.",
+      "smsUnavailable": "Text messages aren't set up yet, so phones can't be verified here.",
+      "noAccessTitle": "No provider access",
+      "noAccessBody": "This account isn't linked to a provider company yet.",
+      "dashboardTitle": "Provider portal",
+      "signedInAs": "Signed in as {email}"
+    }
   }
 }

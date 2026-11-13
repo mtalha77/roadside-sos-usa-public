@@ -20,19 +20,35 @@ describe("provider security headers", () => {
 
   it.each(["/", "/api/health", "/some/deep/page", "/robots.txt"])(
     "sends a nonce CSP on %s",
-    (path) => {
+    async (path) => {
       const matcher = new RegExp("^" + proxyConfig.matcher[0] + "$");
       expect(matcher.test(path)).toBe(true);
-      const res = proxy(new NextRequest("https://app.test" + path));
+      const res = await proxy(new NextRequest("https://app.test" + path));
       const csp = res.headers.get("Content-Security-Policy") ?? "";
       expect(csp).toMatch(/script-src 'self' 'nonce-[A-Za-z0-9+/=]+' 'strict-dynamic'/);
       expect(csp).toContain("frame-ancestors 'none'");
     },
   );
 
-  it("uses a new nonce for every request", () => {
-    const a = proxy(new NextRequest("https://app.test/")).headers.get("Content-Security-Policy");
-    const b = proxy(new NextRequest("https://app.test/")).headers.get("Content-Security-Policy");
+  it("uses a new nonce for every request", async () => {
+    const a = (await proxy(new NextRequest("https://app.test/"))).headers.get(
+      "Content-Security-Policy",
+    );
+    const b = (await proxy(new NextRequest("https://app.test/"))).headers.get(
+      "Content-Security-Policy",
+    );
     expect(a).not.toBe(b);
+  });
+
+  it("protects pages: signed-out visitors are sent to sign-in, public pages pass", async () => {
+    const home = await proxy(new NextRequest("https://app.test/requests"));
+    expect(home.status).toBe(307);
+    expect(new URL(home.headers.get("location")!).pathname).toBe("/sign-in");
+    expect(new URL(home.headers.get("location")!).searchParams.get("next")).toBe("/requests");
+    for (const open of ["/sign-in", "/api/health", "/no-access"]) {
+      expect(
+        (await proxy(new NextRequest("https://app.test" + open))).headers.get("location"),
+      ).toBeNull();
+    }
   });
 });

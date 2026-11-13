@@ -175,15 +175,42 @@ Acceptance criteria:
 | 2   | Boundaries render correctly on a map                                                    | PASS: Storybook `Product/Market boundaries` shows all five markets from the same county data (checked visually and by the axe browser checks) |
 | 3   | No fake data in staging or production                                                   | Pending (merge: `no-fake-data` check on staging)                                                                                              |
 
+## RSOS-096 follow-up: faster CI (owner request)
+
+Pull requests now finish their checks in about 2 to 2.5 minutes (was about 5). The preview wait had been timing out at 3 minutes on every run because Vercel reports through commit statuses, not check runs; it now reads those and continues the moment previews are live (about 20 s). Vercel builds install only each app's own dependencies (build cache 464 MB before, builds ~20 s in parallel now); browsers install while Vercel builds and are cached; Turborepo task results are cached per job; Playwright runs 4 workers against previews. The `db` job tolerates migrations from another open PR when the PR itself changes no database files.
+
+## RSOS-018: Authentication and roles
+
+- Migration `20261113040000_auth_roles.sql`: `staff_members` (7 roles, optional market list), `providers` (stub), `provider_members` (owner, manager, operator), wallet and billing stubs; custom access token hook adds `app_role`, `staff_role`, `staff_markets`, `providers` to the JWT; staff policies require `aal2`; market-scoped request access; finance-only money; provider operators see no money.
+- `scripts/supabase-auth-config.sh` (CI, every environment): redirect URLs, the hook, authenticator-app MFA (TOTP), 12-character passwords, reauthentication for password changes. Applied to `rsos-dev` (CI log: "token hook on, TOTP MFA on").
+- `@rsos/db/claims`: Zod-parsed claims; `adminAccess` (staff only, aal2 required, 12-hour sessions), `providerAccess` (members only, 30-day sessions); `@rsos/db/session` refreshes sessions in the request proxy.
+- Admin app: proxy guards every page; `/sign-in` (email and password), `/sign-in/verify` (authenticator setup with QR code and key on first sign-in, code entry after), `/no-access`, dashboard home with sign-out. Session cookies Secure, HttpOnly, SameSite=Lax.
+- Provider app: proxy guards every page; `/sign-in` with Password and Email link tabs; `/auth/callback`; `/verify-phone` (required before the portal); `/no-access`; portal home.
+- Drivers: no account; `PhoneVerifier` interface in `@rsos/core` (Supabase phone auth with Twilio when `SUPABASE_SMS_ENABLED=true`; mock that accepts 000000 only on development and previews; unavailable elsewhere).
+- Tests: pgTAP `005_auth_roles.test.sql` (19), unit tests for claims, access rules, session and phone verification, proxy redirect tests, Playwright `auth.spec.ts` on the previews.
+
+Acceptance criteria:
+
+| #   | Criterion                                                        | Result                                                                                                                                                                                                           |
+| --- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | A dispatcher limited to Houston cannot read San Antonio requests | PASS: policy test (sees the Houston request, not San Antonio's, nor its events)                                                                                                                                  |
+| 2   | Admin sign-in without the second step is impossible              | PASS: database returns nothing to staff without aal2 (policy test); the proxy sends aal1 sessions to `/sign-in/verify` (unit test); the verify page and every admin page refuse visitors without a session (e2e) |
+| 3   | Provider operators cannot read wallet or billing data            | PASS: policy test (operator sees the company, no wallet, no billing; owner sees both)                                                                                                                            |
+
 ## BLOCKERS
 
 ### Permissions
 
 1. **GitHub Projects permission (RSOS-097).** In Terminal run `gh auth refresh -h github.com -s project`, press Enter, approve in the browser, wait for "Authentication complete". Then run `scripts/setup-backlog-board.sh` (or ask Claude to): it creates the "RSOS Backlog" board with Backlog, In progress, In review, Done, adds all 97 issues and moves finished ones to Done.
 
+### First accounts
+
+3. **Create the first super admin (RSOS-018), per environment (staging now, production at release).** In the Supabase dashboard for `rsos-staging`: Authentication → Users → Add user → Create new user (your email, a strong password, Auto Confirm on). Then SQL editor, run (data, not schema): `insert into public.staff_members (user_id, role, display_name) select id, 'super_admin', 'Owner' from auth.users where email = 'YOUR-EMAIL';` Sign in at the staging admin host; the first sign-in asks you to set up your authenticator app.
+
 ### Accounts to create
 
 2. **Google Maps Platform (RSOS-013).** Create a Google Cloud project, enable "Maps JavaScript API", create a browser API key restricted by HTTP referrer to the six hostnames and `*.vercel.app` previews of the team. Add it to Vercel as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (all three projects, all environments) and to GitHub Actions as a secret `STORYBOOK_GOOGLE_MAPS_API_KEY` if you want the live map story. Until then maps show a static placeholder.
+3. **Twilio for SMS codes (RSOS-018).** Create a Twilio account and a Verify service. In each Supabase project: Authentication → Providers → Phone → enable, provider Twilio Verify, paste Account SID, Auth Token and Verify Service SID. Then add `SUPABASE_SMS_ENABLED=true` to the `rsos-provider` and `rsos-web` Vercel projects (staging and production). Until then staging and production show "text messages aren't set up yet"; previews use the mock code 000000.
 
 ## Notes for the next developer
 
