@@ -50,3 +50,4 @@ packages/*/coverage/
 # Lighthouse
 tests/e2e/lighthouse-report/
 tests/e2e/.lighthouseci/
+tests/e2e/playwright-report-storybook/

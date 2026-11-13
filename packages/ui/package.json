@@ -5,10 +5,7 @@
   "type": "module",
   "exports": {
     "./cn": "./src/lib/cn.ts",
-    "./button": "./src/components/button.tsx",
-    "./theme-provider": "./src/components/theme-provider.tsx",
-    "./theme-toggle": "./src/components/theme-toggle.tsx",
-    "./app-placeholder": "./src/components/app-placeholder.tsx"
+    "./*": "./src/components/*.tsx"
   },
   "scripts": {
     "storybook": "storybook dev -p 6006 --no-open",
@@ -19,12 +16,20 @@
   },
   "dependencies": {
     "@rsos/config": "workspace:*",
+    "@tanstack/react-table": "8.21.3",
+    "@tanstack/react-virtual": "3.14.26",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "cmdk": "1.1.1",
+    "date-fns": "4.4.0",
+    "input-otp": "1.5.0",
     "lucide-react": "1.71.0",
     "next-themes": "0.4.6",
     "radix-ui": "1.8.1",
-    "tailwind-merge": "3.7.0"
+    "react-day-picker": "10.0.2",
+    "sonner": "2.0.8",
+    "tailwind-merge": "3.7.0",
+    "vaul": "1.1.2"
   },
   "peerDependencies": {
     "react": "19.3.1",
@@ -45,6 +50,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.3.0",
+    "axe-core": "4.14.0",
     "eslint": "10.14.0",
     "jsdom": "31.0.0",
     "react": "19.3.1",

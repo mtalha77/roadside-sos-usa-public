@@ -58,6 +58,34 @@ ${Object.entries(motion.ease)
   .join("\n")}
   /* Minimum touch target: 48px. Use \`min-h-touch min-w-touch\` on anything tappable. */
   --spacing-touch: 3rem;
+  --spacing-13: 3.25rem;
+  /* Enter animations (reduced motion collapses them, see base layer). */
+  --animate-fade-in: fade-in var(--duration-base) var(--ease-standard);
+  --animate-scale-in: scale-in var(--duration-slow) var(--ease-emphasized);
+  --animate-slide-in-right: slide-in-right var(--duration-slow) var(--ease-emphasized);
+  --animate-slide-up: slide-up var(--duration-slow) var(--ease-emphasized);
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
 }
 
 @layer base {
