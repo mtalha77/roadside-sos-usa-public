@@ -1,4 +1,4 @@
-import { brand } from "@rsos/config/brand";
+import { buildMetadata } from "@rsos/config/metadata";
 import { ThemeProvider } from "@rsos/ui/theme-provider";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
@@ -8,11 +8,7 @@ import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("provider");
-  return {
-    title: { default: `${t("label")} | ${brand.name}`, template: `%s | ${brand.name}` },
-    description: t("body"),
-    applicationName: brand.name,
-  };
+  return buildMetadata({ app: "provider", title: t("label"), description: t("body") });
 }
 
 export const viewport: Viewport = {
