@@ -16,7 +16,7 @@ while :; do
   if [ "$total" -gt 0 ] && [ "$pending" -eq 0 ]; then break; fi
   if [ "$total" -eq 0 ] && [ $SECONDS -gt 180 ]; then echo "No Vercel checks on $sha"; break; fi
   if [ $SECONDS -gt $deadline ]; then echo "::error::Timed out waiting for Vercel previews"; exit 1; fi
-  sleep 15
+  sleep 8
 done
 jq -r '.[] | "\(.name): \(.conclusion)"' <<<"${checks:-[]}"
 
