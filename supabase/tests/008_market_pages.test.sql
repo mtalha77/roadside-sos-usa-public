@@ -25,7 +25,7 @@ reset role;
 
 -- Staff: marketing edits pages; a dispatcher can read but not edit.
 select pg_temp.as_user(jsonb_build_object('sub', gen_random_uuid(), 'role', 'authenticated', 'aal', 'aal2', 'app_role', 'staff', 'staff_role', 'marketing'));
-select lives_ok($$ update public.market_pages set local_tips = local_tips || 'Test tip' where market_id = (select id from public.markets where slug = 'houston') $$,
+select lives_ok($$ update public.market_pages set local_tips = array_append(local_tips, 'Test tip') where market_id = (select id from public.markets where slug = 'houston') $$,
   'marketing edits a page');
 reset role;
 select pg_temp.as_user(jsonb_build_object('sub', gen_random_uuid(), 'role', 'authenticated', 'aal', 'aal2', 'app_role', 'staff', 'staff_role', 'dispatcher'));

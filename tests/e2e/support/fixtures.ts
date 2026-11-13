@@ -20,7 +20,12 @@ export const test = base.extend<{ consoleErrors: string[] }>({
       page.on("console", (msg) => {
         if (msg.type() === "error") errors.push(`console: ${msg.text()}`);
       });
-      page.on("pageerror", (err) => errors.push(`pageerror: ${err.message}`));
+      page.on("pageerror", (err) => {
+        // WebKit reports a Next.js link prefetch (`_rsc=` request) that a navigation cancelled as
+        // "due to access control checks". It is not an app error; anything else still fails.
+        if (/[?&]_rsc=\S* due to access control checks\.$/.test(err.message)) return;
+        errors.push(`pageerror: ${err.message}`);
+      });
       await use(errors);
       expect(errors, "browser console errors").toEqual([]);
     },

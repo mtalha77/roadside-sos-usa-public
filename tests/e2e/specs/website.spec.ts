@@ -48,7 +48,8 @@ test.describe("website structure", () => {
     await page.goto(url(city!));
     await expectNoHorizontalScroll(page);
     await expectNoA11yViolations(page);
-    await page.getByRole("main").getByRole("link").filter({ hasText: /Tow/ }).first().click();
+    // City page prices link to the city plus service pages (the tiles start the request flow).
+    await page.getByRole("main").locator('a[href$="/tow"]').first().click();
     await expect(page).toHaveURL(new RegExp(`${city}/tow$`));
     await page.getByRole("main").getByRole("link", { name: "Get help now" }).click();
     await expect(page).toHaveURL(/\/get-help\?service=tow&market=[a-z-]+$/);
