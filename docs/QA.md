@@ -57,3 +57,10 @@ Close the drill issue afterwards.
 
 `critical` (users blocked or data at risk: fix now), `high` (major feature broken: this week),
 `medium` (degraded, workaround exists), `low` (cosmetic).
+
+## Keeping CI fast
+
+- Jobs run in parallel; the slowest path is the Vercel preview build, then Playwright and Lighthouse.
+- Vercel installs only each app's own dependencies (`pnpm install --filter=@rsos/<app>...`), which keeps installs and the build cache small.
+- Browsers are installed while Vercel builds and cached between runs; Turborepo task results are cached per job, so unchanged packages skip lint, typecheck, tests and builds.
+- Playwright runs 4 workers in CI (tests wait on the network, not the CPU).
