@@ -1,6 +1,7 @@
 packages:
   - apps/*
   - packages/*
+  - tests/*
 
 # Exact versions only: every dependency is pinned.
 savePrefix: ""
