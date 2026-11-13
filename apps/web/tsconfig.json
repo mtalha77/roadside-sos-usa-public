@@ -7,7 +7,6 @@
     "next-env.d.ts",
     "src",
     "test",
-    "e2e",
     "*.ts",
     "*.mjs",
     ".next/types/**/*.ts",

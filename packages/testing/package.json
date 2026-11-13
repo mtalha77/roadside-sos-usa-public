@@ -1,0 +1,30 @@
+{
+  "name": "@rsos/testing",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./vitest/node": "./src/vitest-node.ts",
+    "./vitest/react": "./src/vitest-react.ts",
+    "./setup/react": "./src/setup-react.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@rsos/core": "workspace:*",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@vitejs/plugin-react": "6.3.0",
+    "vitest": "5.1.0"
+  },
+  "devDependencies": {
+    "@rsos/config": "workspace:*",
+    "@types/node": "26.6.6",
+    "eslint": "10.14.0",
+    "typescript": "6.0.3"
+  }
+}
