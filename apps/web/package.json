@@ -15,6 +15,7 @@
     "@rsos/config": "workspace:*",
     "@rsos/core": "workspace:*",
     "@rsos/db": "workspace:*",
+    "@rsos/emails": "workspace:*",
     "@rsos/i18n": "workspace:*",
     "@rsos/ui": "workspace:*",
     "@vercel/analytics": "2.0.1",

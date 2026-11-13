@@ -47,6 +47,24 @@
       "notYou": "If this wasn't you, reset your password now and contact {support}.",
       "codeSubject": "Your {brand} sign-in code",
       "codeBody": "Your sign-in code is {code}. It expires in 10 minutes. Never share it with anyone, including our staff."
+    },
+    "teamNotice": {
+      "subject": {
+        "contact": "New contact message ({brand})",
+        "provider_application": "New provider application ({brand})"
+      }
+    },
+    "formConfirmation": {
+      "subject": {
+        "contact": "We got your message",
+        "provider_application": "We got your application"
+      },
+      "greeting": "Hi {name},",
+      "body": {
+        "contact": "Thanks for writing to us. A member of our team will reply by email, usually within one business day. If you need roadside help now, use the website or call the number for your area.",
+        "provider_application": "Thanks for applying to join. We review every application and will contact you within two business days about the next steps: proof of insurance and, where required, your license."
+      },
+      "signoff": "The {brand} team"
     }
   },
   "auth": {
@@ -456,6 +474,185 @@
       "quoted": "Quoted",
       "accepted": "Picked",
       "en_route": "On the way"
+    }
+  },
+  "pages": {
+    "how": {
+      "title": "How it works",
+      "intro": "Drivers get quotes from nearby providers and choose one. Providers get paid jobs and set their own prices.",
+      "drivers": "For drivers",
+      "providers": "For providers",
+      "driverSteps": [
+        [
+          "Tell us what happened",
+          "Choose the problem (flat tire, dead battery, lockout, fuel or tow) and share your location. No account needed."
+        ],
+        [
+          "Get quotes in minutes",
+          "Verified providers near you send a full price and their arrival time, usually within about 3 minutes."
+        ],
+        [
+          "Choose and track",
+          "Pick the quote you want and follow the provider on the way. You pay the provider directly when the job is done."
+        ]
+      ],
+      "providerSteps": [
+        [
+          "Receive requests nearby",
+          "When a driver near you needs a service you offer, you get the request with the location and details."
+        ],
+        [
+          "Send your quote",
+          "Set your own price and arrival time. Quote the jobs you want, skip the ones you don't."
+        ],
+        [
+          "Get picked, do the job",
+          "If the driver picks you, you get their details and do the job. The driver pays you directly; we charge a flat fee from your prepaid wallet."
+        ]
+      ],
+      "payTitle": "Who pays whom",
+      "payBody": "Drivers pay providers directly for the job. Providers pay us a flat fee per picked request from a prepaid wallet. We never handle the job payment.",
+      "cta": "Get help now",
+      "providerCta": "Learn about joining"
+    },
+    "faqPage": {
+      "title": "Frequently asked questions",
+      "intro": "Answers about getting help, prices, safety and joining as a provider.",
+      "search": "Search questions",
+      "noResults": "No questions match \"{query}\".",
+      "groups": {
+        "drivers": "Getting help",
+        "prices": "Prices and payment",
+        "safety": "Safety",
+        "providers": "For providers"
+      },
+      "items": {
+        "drivers": [
+          [
+            "What can I get help with?",
+            "Flat tires, dead batteries, lockouts, running out of fuel and towing. Some cities add more services over time."
+          ],
+          [
+            "Do I need an account or membership?",
+            "No. You request help when you need it, with no sign-up and no membership."
+          ],
+          [
+            "How fast will help arrive?",
+            "Each quote shows the provider's arrival time, so you can choose the fastest."
+          ],
+          [
+            "Which cities do you serve?",
+            "We open city by city. The cities menu at the top lists every city we serve today."
+          ]
+        ],
+        "prices": [
+          [
+            "How much will it cost?",
+            "Providers quote a full price before you choose. City pages show typical local price ranges."
+          ],
+          [
+            "How do I pay?",
+            "You pay the provider directly when the job is done, by the payment methods they accept. We never charge you for the job."
+          ],
+          [
+            "Are there hidden fees?",
+            "The quote is the price for the service. Some services add a clear extra, like the fuel itself or towing distance, and the quote says so."
+          ]
+        ],
+        "safety": [
+          [
+            "What should I do while I wait?",
+            "Move off the road if you safely can, turn on your hazard lights, and on a highway stay in your vehicle with your seatbelt on. If you are in danger, call 911."
+          ],
+          [
+            "How do you check providers?",
+            "We check insurance and, where required, licenses (for example TDLR towing licenses in Texas) before a provider can quote."
+          ],
+          [
+            "Can I see who is coming?",
+            "Yes. You see the provider's company name and can follow their arrival once you choose them."
+          ]
+        ],
+        "providers": [
+          [
+            "How do I join?",
+            "Apply on the For providers page. We check your insurance and license, then you can start quoting."
+          ],
+          [
+            "What does it cost providers?",
+            "A flat fee per request where the driver picks you, paid from a prepaid wallet. Optional plans add discounts and featured placement."
+          ],
+          ["Do I set my own prices?", "Yes. You quote each job at your price."]
+        ]
+      }
+    },
+    "about": {
+      "title": "About us",
+      "intro": "We connect stranded drivers with independent roadside providers nearby, quickly and with clear prices.",
+      "mission": "Why we exist",
+      "missionBody": "Getting stuck is stressful. Calling around for a tow or a jump takes time you don't have, and prices are often a surprise. We let nearby providers compete for the job with a clear price and arrival time, so you can choose with confidence.",
+      "how": "How we work",
+      "howBody": "We are a marketplace, not a towing company. Independent, insured providers do the work and set their prices. Drivers pay providers directly. Providers pay us a small flat fee when a driver picks them.",
+      "cities": "We open city by city so every driver gets fast local help.",
+      "contact": "Questions? Contact us."
+    },
+    "contact": {
+      "title": "Contact us",
+      "intro": "Questions, feedback or a problem with a job? Send us a message and we'll reply by email.",
+      "urgent": "Need roadside help now? Don't wait for a reply.",
+      "getHelp": "Get help now",
+      "name": "Your name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "topic": "Topic",
+      "topics": {
+        "general": "General question",
+        "job": "A job or a provider",
+        "provider": "Joining as a provider",
+        "privacy": "Privacy request",
+        "other": "Something else"
+      },
+      "message": "Message",
+      "market": "Your city (optional)",
+      "send": "Send message",
+      "sent": "Thanks. We got your message and will reply by email.",
+      "verify": "Security check",
+      "errors": {
+        "required": "Fill in your name, a valid email and your message.",
+        "turnstile": "The security check didn't pass. Please try again.",
+        "limit": "Too many messages. Please try again later.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "safetyPage": {
+      "title": "Safety tips",
+      "intro": "What to do when your vehicle breaks down. If anyone is hurt or in danger, call 911 first.",
+      "sections": [
+        [
+          "Get to a safe place",
+          "If the vehicle still moves, take the next exit or pull as far onto the shoulder as you can, away from curves and hills. Turn on your hazard lights."
+        ],
+        [
+          "On a highway",
+          "Stay in your vehicle with your seatbelt on unless it is safer to get out. If you get out, use the side away from traffic and stand behind a barrier if there is one."
+        ],
+        [
+          "At night",
+          "Keep hazard lights and interior lights on so other drivers and your provider can see you. Share your location with someone you trust."
+        ],
+        [
+          "In heat",
+          "Keep water with you, stay in the shade or in the car with air conditioning if it is safe, and watch for signs of heat illness."
+        ],
+        [
+          "In floods",
+          "Never drive into a flooded road. Turn around. If water is rising around your vehicle, get out to higher ground and call 911."
+        ],
+        [
+          "When help arrives",
+          "Check the provider's name matches the one you chose. Agree on the price before work starts. Pay the provider directly."
+        ]
+      ]
     }
   }
 }

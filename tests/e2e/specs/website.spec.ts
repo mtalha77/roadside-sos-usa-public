@@ -197,3 +197,57 @@ test.describe("service pages", () => {
     await expectNoHorizontalScroll(page);
   });
 });
+
+// RSOS-027: content pages and the contact form.
+test.describe("content pages", () => {
+  test.skip(!web, "No website URL");
+
+  test("FAQ is grouped, searchable and has valid FAQPage data", async ({ page }) => {
+    await page.goto(url("/faq"));
+    const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const faq = blocks
+      .map(
+        (b) =>
+          JSON.parse(b) as {
+            "@type": string;
+            mainEntity?: { name: string; acceptedAnswer: { text: string } }[];
+          },
+      )
+      .find((d) => d["@type"] === "FAQPage");
+    expect(faq?.mainEntity?.length).toBeGreaterThanOrEqual(10);
+    for (const q of faq!.mainEntity!) expect(q.name && q.acceptedAnswer.text).toBeTruthy();
+    await page.getByRole("searchbox", { name: "Search questions" }).fill("membership");
+    await expect(page.locator("main details:visible")).toHaveCount(1);
+    await page.getByRole("searchbox", { name: "Search questions" }).fill("zzzz");
+    await expect(page.getByText('No questions match "zzzz".')).toBeVisible();
+    await expectNoA11yViolations(page);
+  });
+
+  test("how it works has driver and provider tabs; about and safety render", async ({ page }) => {
+    await page.goto(url("/how-it-works"));
+    await page.getByRole("tab", { name: "For providers" }).click();
+    await expect(page.getByRole("heading", { name: "Send your quote" })).toBeVisible();
+    await expectNoA11yViolations(page);
+    for (const p of ["/about", "/safety"]) {
+      await page.goto(url(p));
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      await expectNoA11yViolations(page);
+      await expectNoHorizontalScroll(page);
+    }
+  });
+
+  test("contact form stores a message (Turnstile test keys)", async ({ page }) => {
+    await page.goto(url("/contact"));
+    await page.getByRole("textbox", { name: /Your name/ }).fill("E2E Test");
+    await page.getByRole("textbox", { name: /Email/ }).fill("e2e@example.test");
+    await page
+      .getByRole("textbox", { name: /Message/ })
+      .fill("Automated test message from the e2e suite.");
+    // The Turnstile test key passes on its own; wait until it has added its token.
+    await expect(page.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
+      timeout: 20_000,
+    });
+    await page.getByRole("button", { name: "Send message" }).click();
+    await expect(page.getByText("Thanks. We got your message")).toBeVisible();
+  });
+});

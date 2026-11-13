@@ -59,3 +59,27 @@ describe("email interface", () => {
     ).toEqual({ ok: false, reason: "not-configured" });
   });
 });
+
+describe("form emails (RSOS-026, RSOS-027)", () => {
+  it("renders the team notice and the confirmation in both languages", async () => {
+    const { TeamNoticeEmail, FormConfirmationEmail, teamNoticeSubject, formConfirmationSubject } =
+      await import("../src");
+    const { render } = await import("@react-email/components");
+    const notice = await render(
+      TeamNoticeEmail({
+        kind: "contact",
+        fields: [
+          ["Name", "Dev Test"],
+          ["Phone", ""],
+        ],
+      }),
+    );
+    expect(notice).toContain("Dev Test");
+    expect(teamNoticeSubject("provider_application")).toMatch(/provider application/);
+    const es = await render(
+      FormConfirmationEmail({ kind: "provider_application", name: "Ana", locale: "es" }),
+    );
+    expect(es).toContain("Hola Ana");
+    expect(formConfirmationSubject("contact", "es")).toBe("Recibimos tu mensaje");
+  });
+});
