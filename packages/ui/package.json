@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     "./cn": "./src/lib/cn.ts",
-    "./*": "./src/components/*.tsx"
+    "./*": "./src/components/*.tsx",
+    "./icons": "./src/components/icon.tsx",
+    "./illustrations": "./src/illustrations/index.tsx"
   },
   "scripts": {
     "storybook": "storybook dev -p 6006 --no-open",
