@@ -6,21 +6,23 @@ an `.env.example` with names only. Locally, `vercel env pull apps/<app>/.env.loc
 
 ## All apps (`apps/web`, `apps/provider`, `apps/admin`)
 
-| Variable                                                                   | Secret | Required            | Purpose                                                      |
-| -------------------------------------------------------------------------- | ------ | ------------------- | ------------------------------------------------------------ |
-| `NEXT_PUBLIC_SITE_ENV`                                                     | no     | yes                 | `production`, `staging`, `preview` or `development`          |
-| `NEXT_PUBLIC_SITE_URL`                                                     | no     | production, staging | Absolute URL of this app                                     |
-| `NEXT_PUBLIC_SUPABASE_URL`                                                 | no     | yes                 | Supabase project URL for this environment                    |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`                                     | no     | yes                 | Supabase publishable key (RLS applies)                       |
-| `NEXT_PUBLIC_APP_DOMAIN`                                                   | no     | no                  | Overrides the default domain in `packages/config` (rename)   |
-| `NEXT_PUBLIC_WEB_URL`, `NEXT_PUBLIC_PROVIDER_URL`, `NEXT_PUBLIC_ADMIN_URL` | no     | no                  | Cross-app links per environment                              |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`                                           | no     | forms               | Cloudflare Turnstile widget                                  |
-| `TURNSTILE_SECRET_KEY`                                                     | yes    | forms               | Turnstile server verification (forms fail closed without it) |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`                       | token  | no                  | Shared rate limits (in-memory fallback without them)         |
-| `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`                      | no     | no                  | Product analytics (after consent)                            |
-| `NEXT_PUBLIC_SENTRY_DSN`                                                   | no     | no                  | Error reporting                                              |
-| `SENTRY_AUTH_TOKEN`                                                        | yes    | no                  | Source map upload at build                                   |
-| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`                                          | no*    | maps                | Google Maps (restrict by HTTP referrer)                      |
+| Variable                                                                   | Secret | Required            | Purpose                                                                                                                                                              |
+| -------------------------------------------------------------------------- | ------ | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_ENV`                                                     | no     | yes                 | `production`, `staging`, `preview` or `development`                                                                                                                  |
+| `NEXT_PUBLIC_SITE_URL`                                                     | no     | production, staging | Absolute URL of this app                                                                                                                                             |
+| `NEXT_PUBLIC_SUPABASE_URL`                                                 | no     | yes                 | Supabase project URL for this environment                                                                                                                            |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`                                     | no     | yes                 | Supabase publishable key (RLS applies)                                                                                                                               |
+| `NEXT_PUBLIC_APP_DOMAIN`                                                   | no     | no                  | Overrides the default domain in `packages/config` (rename)                                                                                                           |
+| `NEXT_PUBLIC_WEB_URL`, `NEXT_PUBLIC_PROVIDER_URL`, `NEXT_PUBLIC_ADMIN_URL` | no     | no                  | Cross-app links per environment                                                                                                                                      |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`                                           | no     | forms               | Cloudflare Turnstile widget                                                                                                                                          |
+| `TURNSTILE_SECRET_KEY`                                                     | yes    | forms               | Turnstile server verification (forms fail closed without it)                                                                                                         |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`                       | token  | no                  | Shared rate limits (in-memory fallback without them)                                                                                                                 |
+| `REVALIDATE_SECRET` (web, admin)                                           | yes    | no                  | Lets admin refresh cached website pages at once (`POST /api/revalidate`); pages refresh within 5 minutes anyway. Generated with openssl, same value in both projects |
+| `RESEND_API_KEY`, `EMAIL_FROM` (provider, admin)                           | yes    | no                  | Security and account emails through Resend; without them previews use the mock and other environments record "not sent"                                              |
+| `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`                      | no     | no                  | Product analytics (after consent)                                                                                                                                    |
+| `NEXT_PUBLIC_SENTRY_DSN`                                                   | no     | no                  | Error reporting                                                                                                                                                      |
+| `SENTRY_AUTH_TOKEN`                                                        | yes    | no                  | Source map upload at build                                                                                                                                           |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`                                          | no*    | maps                | Google Maps (restrict by HTTP referrer)                                                                                                                              |
 
 \* Browser keys are visible to users; restrict them by referrer and API.
 

@@ -321,7 +321,16 @@
       "home": "Go to the home page"
     },
     "city": {
-      "title": "Roadside assistance in {city}, {state}"
+      "title": "Roadside assistance in {city}, {state}",
+      "description": "Get price and arrival-time quotes from verified roadside providers in {city}, {state}. Flat tires, jump starts, lockouts, fuel delivery and towing.",
+      "servicesTitle": "What do you need in {city}?",
+      "call": "Call {phone}",
+      "areasTitle": "Areas we cover",
+      "highwaysTitle": "Highways and main roads",
+      "tipsTitle": "Tips for drivers in {city}",
+      "faqTitle": "{city} questions",
+      "nearbyTitle": "Other cities we serve",
+      "serviceIn": "{service} in {city}"
     },
     "cityService": {
       "title": "{service} in {city}"

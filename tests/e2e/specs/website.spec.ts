@@ -120,3 +120,33 @@ test.describe("home page", () => {
     expect(faq?.mainEntity?.length).toBeGreaterThanOrEqual(3);
   });
 });
+
+// RSOS-024: city pages.
+test.describe("city pages", () => {
+  test.skip(!web, "No website URL");
+
+  test("each test market has its own copy, a canonical URL and valid structured data", async ({
+    page,
+  }) => {
+    await page.goto(url("/"));
+    const hrefs = await page
+      .getByRole("contentinfo")
+      .getByRole("navigation", { name: "Cities" })
+      .getByRole("link")
+      .evaluateAll((as) => as.map((a) => a.getAttribute("href")!));
+    const intros = new Set<string>();
+    for (const href of hrefs) {
+      await page.goto(url(href));
+      const h1 = (await page.getByRole("heading", { level: 1 }).textContent()) ?? "";
+      intros.add(h1 + (await page.locator("main p").first().textContent()));
+      expect(await page.locator('link[rel="canonical"]').getAttribute("href")).toContain(href);
+      const types = (
+        await page.locator('script[type="application/ld+json"]').allTextContents()
+      ).map((b) => (JSON.parse(b) as { "@type": string })["@type"]);
+      expect(types).toEqual(expect.arrayContaining(["Service", "BreadcrumbList", "FAQPage"]));
+    }
+    expect(intros.size).toBe(hrefs.length);
+    await expectNoA11yViolations(page);
+    await expectNoHorizontalScroll(page);
+  });
+});
