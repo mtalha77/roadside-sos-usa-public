@@ -2,15 +2,16 @@ import { buildMetadata } from "@rsos/config/metadata";
 import { themeColor } from "@rsos/config/theme-colors";
 import { getSiteEnv } from "@rsos/config/site";
 import { ThemeProvider } from "@rsos/ui/theme-provider";
-import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
-import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
-import { ConsentManager } from "@/components/site/consent-manager";
-import { CONSENT_HEAD_SCRIPT } from "@/lib/consent";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { cookies } from "next/headers";
+import { ConsentBanner } from "@/components/site/consent-banner";
+import { CONSENT_COOKIE, CONSENT_HEAD_SCRIPT, parseConsent } from "@/lib/consent";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -30,22 +31,24 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = await getLocale();
   const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const consent = parseConsent((await cookies()).get(CONSENT_COOKIE)?.value);
+  // Analytics only after analytics consent, and only in production (no preview or staging noise).
+  const analytics = getSiteEnv() === "production" && consent?.a === true;
   return (
-    <html
-      lang={locale}
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang={locale} className={GeistSans.variable} suppressHydrationWarning>
       <head>
         {/* Consent Mode defaults run before anything else: Google tags start denied (RSOS-028). */}
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: CONSENT_HEAD_SCRIPT }} />
       </head>
       <body>
-        <NextIntlClientProvider>
-          <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
-          {/* Analytics load only after consent, and only in production (no preview or staging noise). */}
-          <ConsentManager analyticsTags={getSiteEnv() === "production"} />
-        </NextIntlClientProvider>
+        <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
+        <ConsentBanner />
+        {analytics ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
     </html>
   );

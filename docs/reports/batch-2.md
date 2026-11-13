@@ -7,30 +7,30 @@
 
 ## Summary
 
-| Ticket                         | Status      | Pull request                                                         |
-| ------------------------------ | ----------- | -------------------------------------------------------------------- |
-| RSOS-010                       | Done        | [#7](https://github.com/mtalha77/roadside-sos-usa-public/pull/7)     |
-| RSOS-096                       | Done        | [#8](https://github.com/mtalha77/roadside-sos-usa-public/pull/8)     |
-| RSOS-097                       | Done        | [#110](https://github.com/mtalha77/roadside-sos-usa-public/pull/110) |
-| RSOS-011                       | Done        | [#111](https://github.com/mtalha77/roadside-sos-usa-public/pull/111) |
-| RSOS-012                       | Done        | [#112](https://github.com/mtalha77/roadside-sos-usa-public/pull/112) |
-| RSOS-013                       | Done        | [#113](https://github.com/mtalha77/roadside-sos-usa-public/pull/113) |
-| RSOS-014                       | Done        | [#114](https://github.com/mtalha77/roadside-sos-usa-public/pull/114) |
-| RSOS-015                       | Done        | [#115](https://github.com/mtalha77/roadside-sos-usa-public/pull/115) |
-| RSOS-016                       | Done        | [#116](https://github.com/mtalha77/roadside-sos-usa-public/pull/116) |
-| RSOS-017                       | Done        | [#117](https://github.com/mtalha77/roadside-sos-usa-public/pull/117) |
-| RSOS-018                       | Done        | [#118](https://github.com/mtalha77/roadside-sos-usa-public/pull/118) |
-| RSOS-096 follow-up (faster CI) | Done        | [#119](https://github.com/mtalha77/roadside-sos-usa-public/pull/119) |
-| RSOS-093                       | Done        | [#120](https://github.com/mtalha77/roadside-sos-usa-public/pull/120) |
-| RSOS-019                       | Done        | [#121](https://github.com/mtalha77/roadside-sos-usa-public/pull/121) |
-| RSOS-020                       | Done        | [#122](https://github.com/mtalha77/roadside-sos-usa-public/pull/122) |
-| RSOS-024                       | Done        | [#123](https://github.com/mtalha77/roadside-sos-usa-public/pull/123) |
-| RSOS-025                       | Done        | [#124](https://github.com/mtalha77/roadside-sos-usa-public/pull/124) |
-| RSOS-027                       | Done        | [#125](https://github.com/mtalha77/roadside-sos-usa-public/pull/125) |
-| RSOS-026                       | Done        | [#126](https://github.com/mtalha77/roadside-sos-usa-public/pull/126) |
-| RSOS-028                       | Done        | [#127](https://github.com/mtalha77/roadside-sos-usa-public/pull/127) |
-| RSOS-032                       | Done        | [#128](https://github.com/mtalha77/roadside-sos-usa-public/pull/128) |
-| RSOS-033                       | Not started |                                                                      |
+| Ticket                         | Status | Pull request                                                         |
+| ------------------------------ | ------ | -------------------------------------------------------------------- |
+| RSOS-010                       | Done   | [#7](https://github.com/mtalha77/roadside-sos-usa-public/pull/7)     |
+| RSOS-096                       | Done   | [#8](https://github.com/mtalha77/roadside-sos-usa-public/pull/8)     |
+| RSOS-097                       | Done   | [#110](https://github.com/mtalha77/roadside-sos-usa-public/pull/110) |
+| RSOS-011                       | Done   | [#111](https://github.com/mtalha77/roadside-sos-usa-public/pull/111) |
+| RSOS-012                       | Done   | [#112](https://github.com/mtalha77/roadside-sos-usa-public/pull/112) |
+| RSOS-013                       | Done   | [#113](https://github.com/mtalha77/roadside-sos-usa-public/pull/113) |
+| RSOS-014                       | Done   | [#114](https://github.com/mtalha77/roadside-sos-usa-public/pull/114) |
+| RSOS-015                       | Done   | [#115](https://github.com/mtalha77/roadside-sos-usa-public/pull/115) |
+| RSOS-016                       | Done   | [#116](https://github.com/mtalha77/roadside-sos-usa-public/pull/116) |
+| RSOS-017                       | Done   | [#117](https://github.com/mtalha77/roadside-sos-usa-public/pull/117) |
+| RSOS-018                       | Done   | [#118](https://github.com/mtalha77/roadside-sos-usa-public/pull/118) |
+| RSOS-096 follow-up (faster CI) | Done   | [#119](https://github.com/mtalha77/roadside-sos-usa-public/pull/119) |
+| RSOS-093                       | Done   | [#120](https://github.com/mtalha77/roadside-sos-usa-public/pull/120) |
+| RSOS-019                       | Done   | [#121](https://github.com/mtalha77/roadside-sos-usa-public/pull/121) |
+| RSOS-020                       | Done   | [#122](https://github.com/mtalha77/roadside-sos-usa-public/pull/122) |
+| RSOS-024                       | Done   | [#123](https://github.com/mtalha77/roadside-sos-usa-public/pull/123) |
+| RSOS-025                       | Done   | [#124](https://github.com/mtalha77/roadside-sos-usa-public/pull/124) |
+| RSOS-027                       | Done   | [#125](https://github.com/mtalha77/roadside-sos-usa-public/pull/125) |
+| RSOS-026                       | Done   | [#126](https://github.com/mtalha77/roadside-sos-usa-public/pull/126) |
+| RSOS-028                       | Done   | [#127](https://github.com/mtalha77/roadside-sos-usa-public/pull/127) |
+| RSOS-032                       | Done   | [#128](https://github.com/mtalha77/roadside-sos-usa-public/pull/128) |
+| RSOS-033                       | Done   | [#129](https://github.com/mtalha77/roadside-sos-usa-public/pull/129) |
 
 ## RSOS-010: Testing setup
 
@@ -357,6 +357,22 @@ Acceptance criteria:
 | --- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 1   | No duplicate titles or missing canonicals (automated crawl test)          | PASS: e2e reads the sitemap index, opens every sitemap and every listed page, and checks each has a title, no title repeats, and its canonical URL is its own path                               |
 | 2   | Sitemap lists only published pages and updates when a market is activated | PASS: unit tests (paused markets and unoffered services excluded; a newly published market appears with no code change); e2e checks the paused markets and `/get-help` are absent on the preview |
+
+## RSOS-033: Performance budget
+
+- Lighthouse CI (mobile, 3 runs, median) on four page types per preview: home, a city page and a service page (found from the site's own sitemaps, so no city is hardcoded) and `/get-help`. Budgets: LCP under 2 s, CLS under 0.05, TBT under 200 ms (Lighthouse cannot measure INP in a lab run; TBT is its lab proxy), total JavaScript under 150 KB, accessibility at least 0.9.
+- What it took to fit: measured on the preview, the React 19 and Next.js 16 runtime alone is about 138 KB on every page, which left about 12 KB for our own code (we started at 17 to 37 KB). Changes:
+  - The cookie banner, "Your privacy choices" (now its own page, `/privacy-choices`), the area picker and the waitlist are plain HTML forms posting to route handlers (`/api/consent`, `/api/market`, `/api/waitlist`) that redirect back. They work without JavaScript; Global Privacy Control is read from the `Sec-GPC` header on the server and still from `navigator.globalPrivacyControl` in the head script.
+  - Translations are no longer sent to the browser on every page, only on the contact and application forms that need them.
+  - The theme toggle uses a plain button and inline icons; shared `Avatar` renders on the server without a photo (its photo part is a tiny client component without Radix).
+  - Vercel Analytics and Speed Insights render only after analytics consent (and only in production); Turnstile loads after the page is interactive and only on the two forms; the unused mono font is gone. Fonts are self-hosted (Geist via `next/font`); the site has no raster images (Open Graph images are generated).
+
+Acceptance criteria:
+
+| #   | Criterion                                                                                         | Result          |
+| --- | ------------------------------------------------------------------------------------------------- | --------------- |
+| 1   | A pull request that breaks a budget fails CI (prove with a throwaway pull request, then close it) | PROOF_PENDING   |
+| 2   | All listed pages pass on staging                                                                  | STAGING_PENDING |
 
 ## BLOCKERS
 

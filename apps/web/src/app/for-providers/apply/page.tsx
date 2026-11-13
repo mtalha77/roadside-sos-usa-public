@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
 import { ApplyForm } from "@/components/site/apply-form";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { PageHero } from "@/components/site/page-hero";
@@ -21,6 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ApplyPage() {
+  const messages = await getMessages();
   const [t, ts, markets, services] = await Promise.all([
     getTranslations("forProviders"),
     getTranslations("site"),
@@ -37,11 +39,20 @@ export default async function ApplyPage() {
       />
       <PageHero title={t("form.title")} intro={t("form.intro")} />
       <div className="mx-auto max-w-3xl px-4">
-        <ApplyForm
-          markets={markets.map((m) => ({ value: m.slug, label: cityLabel(m) }))}
-          services={services.map((s) => ({ value: s.slug, label: serviceName(ts, s) }))}
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? null}
-        />
+        {/* Only this form needs translations in the browser; the rest of the site ships none. */}
+        <NextIntlClientProvider
+          messages={{
+            forProviders: {
+              form: (messages as Record<string, Record<string, unknown>>).forProviders!.form,
+            },
+          }}
+        >
+          <ApplyForm
+            markets={markets.map((m) => ({ value: m.slug, label: cityLabel(m) }))}
+            services={services.map((s) => ({ value: s.slug, label: serviceName(ts, s) }))}
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? null}
+          />
+        </NextIntlClientProvider>
       </div>
     </SitePage>
   );

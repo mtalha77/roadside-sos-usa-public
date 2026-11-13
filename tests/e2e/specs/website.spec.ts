@@ -29,7 +29,10 @@ test.describe("website structure", () => {
 
   test("a service tile opens get-help with that service selected", async ({ page }) => {
     await page.goto(url("/"));
-    const tile = page.getByRole("main").getByRole("link", { name: /Flat tire/ });
+    const tile = page
+      .getByRole("main")
+      .getByRole("link", { name: /Flat tire/ })
+      .first();
     await tile.click();
     await expect(page).toHaveURL(/\/get-help\?service=flat-tire/);
     await expect(page.locator("[data-service='flat-tire']")).toBeVisible();
@@ -62,14 +65,9 @@ test.describe("website structure", () => {
     const select = page.getByRole("combobox", { name: /area/i });
     const value = await select.locator("option:not([disabled])").first().getAttribute("value");
     await select.selectOption(value!);
-    // The choice is saved by a server action (a POST); wait for it before leaving the page.
-    await Promise.all([
-      page.waitForResponse((r) => r.request().method() === "POST" && r.ok()),
-      page.getByRole("button", { name: "Use this area" }).click(),
-    ]);
+    // A plain form post that comes back to this page with the choice remembered.
+    await page.getByRole("button", { name: "Use this area" }).click();
     await expect(page.getByRole("combobox", { name: "Change area" })).toHaveValue(value!);
-    // WebKit reports link prefetches cancelled by a navigation as errors: let them finish first.
-    await page.waitForLoadState("networkidle");
     await page.goto(url("/get-help"));
     await expect(page.locator(`[data-market='${value}']`)).toBeVisible();
   });
@@ -326,7 +324,7 @@ test.describe("legal pages and consent", () => {
         if (TAGS.test(r.url())) tagRequests.push(r.url());
       });
       await page.goto(url("/"));
-      await expect(page.getByRole("dialog", { name: "Your privacy choices" })).toBeVisible();
+      await expect(page.getByRole("region", { name: "Your privacy choices" })).toBeVisible();
       const defaults = await page.evaluate(() =>
         (window as unknown as { dataLayer: unknown[][] }).dataLayer
           .map((a) => Array.from(a as ArrayLike<unknown>))
@@ -344,12 +342,22 @@ test.describe("legal pages and consent", () => {
     });
 
     test("choices update Consent Mode; Global Privacy Control keeps ads off", async ({ page }) => {
+      // A browser with Global Privacy Control on sends Sec-GPC and exposes navigator.globalPrivacyControl.
+      await page.setExtraHTTPHeaders({ "Sec-GPC": "1" });
       await page.addInitScript(() =>
         Object.defineProperty(navigator, "globalPrivacyControl", { value: true }),
       );
       await page.goto(url("/"));
-      await page.getByRole("button", { name: "Accept all" }).click();
-      await expect(page.getByRole("dialog", { name: "Your privacy choices" })).toBeHidden();
+      // The form posts, then the page reloads with the choice applied by the head script.
+      await Promise.all([
+        page.waitForResponse((r) => r.url().endsWith("/api/consent")),
+        page.getByRole("button", { name: "Accept all" }).click(),
+      ]);
+      await page.waitForLoadState("load");
+      await page.waitForFunction(() =>
+        Array.isArray((window as unknown as { dataLayer?: unknown[] }).dataLayer),
+      );
+      await expect(page.getByRole("region", { name: "Your privacy choices" })).toBeHidden();
       const update = await page.evaluate(() =>
         (window as unknown as { dataLayer: unknown[][] }).dataLayer
           .map((a) => Array.from(a as ArrayLike<unknown>))
@@ -361,9 +369,11 @@ test.describe("legal pages and consent", () => {
         ad_storage: "denied",
         ad_personalization: "denied",
       });
-      // The footer link reopens the choices.
-      await page.getByRole("button", { name: "Your privacy choices" }).click();
-      await expect(page.getByRole("switch", { name: "Advertising" })).toBeDisabled();
+      // The footer link opens the choices page; advertising cannot be turned on with GPC.
+      await page.getByRole("link", { name: "Your privacy choices" }).click();
+      await expect(page.getByRole("switch", { name: /Advertising/ })).toBeDisabled();
+      await expect(page.getByRole("switch", { name: /Analytics/ })).toBeChecked();
+      await expectNoA11yViolations(page);
     });
   });
 });

@@ -19,6 +19,11 @@
           "error",
           { "maxNumericValue": 0.05, "aggregationMethod": "median" }
         ],
+        "total-blocking-time": ["error", { "maxNumericValue": 200, "aggregationMethod": "median" }],
+        "resource-summary:script:size": [
+          "error",
+          { "maxNumericValue": 153600, "aggregationMethod": "median" }
+        ],
         "categories:accessibility": ["error", { "minScore": 0.9, "aggregationMethod": "median" }]
       }
     },

@@ -1,7 +1,5 @@
-"use client";
-
-import { Avatar as AvatarPrimitive } from "radix-ui";
 import { cn } from "../lib/cn";
+import { AvatarPhoto } from "./avatar-photo";
 
 export type AvatarProps = {
   src?: string | null;
@@ -21,26 +19,31 @@ function initials(name: string) {
     .join("");
 }
 
-/** Photo with an initials fallback; the name is the accessible text. */
+/**
+ * Photo with an initials fallback; the name is the accessible text. Without a photo it renders on
+ * the server with no JavaScript; with one, the photo part loads in the browser.
+ */
 export function Avatar({ src, name, size = "md", className }: AvatarProps) {
+  if (src)
+    return (
+      <AvatarPhoto
+        src={src}
+        name={name}
+        initials={initials(name)}
+        className={cn(sizes[size], className)}
+      />
+    );
   return (
-    <AvatarPrimitive.Root
+    <span
+      role="img"
+      aria-label={name}
       className={cn(
-        "relative inline-flex shrink-0 overflow-hidden rounded-full bg-muted",
+        "relative inline-grid shrink-0 place-items-center overflow-hidden rounded-full bg-muted font-semibold text-foreground",
         sizes[size],
         className,
       )}
     >
-      {src ? (
-        <AvatarPrimitive.Image src={src} alt={name} className="size-full object-cover" />
-      ) : null}
-      <AvatarPrimitive.Fallback
-        className="grid size-full place-items-center font-semibold text-foreground"
-        aria-label={name}
-        role="img"
-      >
-        {initials(name)}
-      </AvatarPrimitive.Fallback>
-    </AvatarPrimitive.Root>
+      {initials(name)}
+    </span>
   );
 }
