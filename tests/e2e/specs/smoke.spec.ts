@@ -16,7 +16,12 @@ for (const app of Object.keys(appUrls) as AppName[]) {
       await page.emulateMedia({ colorScheme });
       const response = await page.goto(url!, { waitUntil: "networkidle" });
       expect(response?.status()).toBe(200);
-      await expect(page.getByRole("heading", { level: 1 })).toContainText(brand.name);
+      // The website leads with the help headline; its header carries the brand.
+      if (app === "web")
+        await expect(
+          page.getByRole("banner").getByRole("link", { name: brand.name }),
+        ).toBeVisible();
+      else await expect(page.getByRole("heading", { level: 1 })).toContainText(brand.name);
       await expectNoHorizontalScroll(page);
       await expectNoA11yViolations(page);
     });
@@ -37,7 +42,8 @@ test("@smoke website home and health are up", async ({ page, request }) => {
   test.skip(!url, "No website URL");
   const res = await page.goto(url!);
   expect(res?.status()).toBe(200);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(brand.name);
+  await expect(page.getByRole("banner").getByRole("link", { name: brand.name })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   expect((await request.get(new URL("/api/health", url).toString())).status()).toBe(200);
 });
 

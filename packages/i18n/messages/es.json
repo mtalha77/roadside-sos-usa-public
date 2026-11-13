@@ -213,5 +213,118 @@
     "toSignIn": "Ir a iniciar sesión",
     "account": "Cuenta",
     "signedOutNotice": "Se cerró tu sesión desde otro dispositivo. Inicia sesión de nuevo."
+  },
+  "site": {
+    "nav": {
+      "services": "Servicios",
+      "cities": "Ciudades",
+      "forProviders": "Para proveedores",
+      "getHelp": "Pedir ayuda ahora",
+      "call": "Llamar",
+      "callMarket": "Llamar al {phone}",
+      "menu": "Menú",
+      "closeMenu": "Cerrar menú",
+      "mainNav": "Principal",
+      "home": "Inicio",
+      "allServices": "Todos los servicios",
+      "allCities": "Todas las ciudades",
+      "breadcrumb": "Ruta de navegación"
+    },
+    "market": {
+      "label": "Tu zona",
+      "change": "Cambiar zona",
+      "choose": "Elige tu zona",
+      "save": "Usar esta zona",
+      "current": "Mostrando ayuda para {city}",
+      "none": "Elige tu ciudad",
+      "outsideTitle": "Todavía no estamos en tu zona",
+      "outsideBody": "Abrimos ciudad por ciudad. Déjanos tu correo y te avisaremos cuando los conductores cerca de ti puedan recibir cotizaciones.",
+      "outsideBodyCity": "Todavía no estamos en {city}. Déjanos tu correo y te avisaremos cuando abramos cerca de ti.",
+      "emergency": "Si estás en peligro o bloqueando el tráfico, llama primero al 911.",
+      "email": "Correo electrónico",
+      "zip": "Código postal (opcional)",
+      "join": "Avísame",
+      "joined": "Gracias. Te escribiremos cuando abramos cerca de ti.",
+      "errors": {
+        "email": "Escribe un correo electrónico válido.",
+        "zip": "Escribe un código postal de 5 dígitos o déjalo vacío.",
+        "limit": "Demasiados intentos. Inténtalo más tarde.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      },
+      "servedCities": "Ciudades donde estamos"
+    },
+    "footer": {
+      "cities": "Ciudades",
+      "services": "Servicios",
+      "company": "Empresa",
+      "legal": "Legal",
+      "providers": "Para proveedores",
+      "providerSignIn": "Acceso de proveedores",
+      "apply": "Solicitar unirse",
+      "howItWorks": "Cómo funciona",
+      "faq": "Preguntas frecuentes",
+      "about": "Quiénes somos",
+      "contact": "Contacto",
+      "safety": "Consejos de seguridad",
+      "driverTerms": "Términos para conductores",
+      "providerTerms": "Términos para proveedores",
+      "privacy": "Política de privacidad",
+      "smsTerms": "Términos de SMS",
+      "callRecording": "Aviso de grabación de llamadas",
+      "cookies": "Política de cookies",
+      "accessibility": "Accesibilidad",
+      "privacyChoices": "Tus opciones de privacidad",
+      "tagline": "Un mercado que conecta a conductores con proveedores independientes y verificados de asistencia en carretera. Los proveedores fijan sus precios y los conductores les pagan directamente.",
+      "rights": "© {year} {brand}"
+    },
+    "services": {
+      "flat-tire": {
+        "name": "Llanta ponchada",
+        "short": "Ponemos la de repuesto o la parchamos para seguir"
+      },
+      "wont-start": {
+        "name": "No arranca",
+        "short": "Paso de corriente para la batería"
+      },
+      "locked-out": {
+        "name": "Llaves adentro",
+        "short": "Abrimos tu vehículo"
+      },
+      "out-of-gas": {
+        "name": "Sin gasolina",
+        "short": "Combustible para llegar a la gasolinera"
+      },
+      "tow": {
+        "name": "Grúa",
+        "short": "Remolque al taller, a casa o a donde elijas"
+      },
+      "winch-out": {
+        "name": "Rescate con malacate",
+        "short": "Te sacamos del lodo, la arena o una zanja"
+      }
+    },
+    "placeholder": {
+      "getHelpTitle": "Pedir ayuda",
+      "getHelpBody": "Muy pronto podrás hacer tu solicitud aquí. Si necesitas ayuda ahora, llama al número de tu zona.",
+      "getHelpService": "Servicio: {service}",
+      "getHelpMarket": "Zona: {city}",
+      "trackTitle": "Tu solicitud",
+      "trackBody": "Muy pronto podrás seguir tu solicitud aquí.",
+      "providerTitle": "Perfil del proveedor",
+      "providerBody": "Muy pronto verás los perfiles de proveedores aquí.",
+      "applyTitle": "Solicitar unirse",
+      "applyBody": "Muy pronto el formulario de solicitud estará aquí."
+    },
+    "notFound": {
+      "title": "Página no encontrada",
+      "body": "Esa página no existe o cambió de lugar.",
+      "home": "Ir al inicio"
+    },
+    "city": {
+      "title": "Asistencia en carretera en {city}, {state}"
+    },
+    "cityService": {
+      "title": "{service} en {city}"
+    }
   }
 }

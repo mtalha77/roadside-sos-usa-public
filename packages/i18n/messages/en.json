@@ -213,5 +213,118 @@
     "toSignIn": "Go to sign in",
     "account": "Account",
     "signedOutNotice": "You were signed out from another device. Sign in again."
+  },
+  "site": {
+    "nav": {
+      "services": "Services",
+      "cities": "Cities",
+      "forProviders": "For providers",
+      "getHelp": "Get help now",
+      "call": "Call",
+      "callMarket": "Call {phone}",
+      "menu": "Menu",
+      "closeMenu": "Close menu",
+      "mainNav": "Main",
+      "home": "Home",
+      "allServices": "All services",
+      "allCities": "All cities",
+      "breadcrumb": "Breadcrumb"
+    },
+    "market": {
+      "label": "Your area",
+      "change": "Change area",
+      "choose": "Choose your area",
+      "save": "Use this area",
+      "current": "Showing help for {city}",
+      "none": "Choose your city",
+      "outsideTitle": "We're not in your area yet",
+      "outsideBody": "We're opening city by city. Leave your email and we'll tell you when drivers near you can get quotes.",
+      "outsideBodyCity": "We're not in {city} yet. Leave your email and we'll tell you when we open near you.",
+      "emergency": "If you're in danger or blocking traffic, call 911 first.",
+      "email": "Email",
+      "zip": "ZIP code (optional)",
+      "join": "Notify me",
+      "joined": "Thanks. We'll email you when we open near you.",
+      "errors": {
+        "email": "Enter a valid email address.",
+        "zip": "Enter a 5-digit ZIP code or leave it empty.",
+        "limit": "Too many tries. Please try again later.",
+        "generic": "Something went wrong. Please try again."
+      },
+      "servedCities": "Cities we serve"
+    },
+    "footer": {
+      "cities": "Cities",
+      "services": "Services",
+      "company": "Company",
+      "legal": "Legal",
+      "providers": "For providers",
+      "providerSignIn": "Provider sign-in",
+      "apply": "Apply to join",
+      "howItWorks": "How it works",
+      "faq": "FAQ",
+      "about": "About",
+      "contact": "Contact",
+      "safety": "Safety tips",
+      "driverTerms": "Driver terms",
+      "providerTerms": "Provider terms",
+      "privacy": "Privacy policy",
+      "smsTerms": "SMS terms",
+      "callRecording": "Call recording notice",
+      "cookies": "Cookie policy",
+      "accessibility": "Accessibility",
+      "privacyChoices": "Your privacy choices",
+      "tagline": "A marketplace that connects drivers with independent, verified roadside providers. Providers set their prices and are paid directly by drivers.",
+      "rights": "© {year} {brand}"
+    },
+    "services": {
+      "flat-tire": {
+        "name": "Flat tire",
+        "short": "Spare on, or a plug to get you rolling"
+      },
+      "wont-start": {
+        "name": "Won't start",
+        "short": "Jump start for a dead battery"
+      },
+      "locked-out": {
+        "name": "Locked out",
+        "short": "Get back into your vehicle"
+      },
+      "out-of-gas": {
+        "name": "Out of gas",
+        "short": "Fuel to reach the next station"
+      },
+      "tow": {
+        "name": "Tow",
+        "short": "Tow to a shop, home or a place you pick"
+      },
+      "winch-out": {
+        "name": "Winch out",
+        "short": "Pulled out of mud, sand or a ditch"
+      }
+    },
+    "placeholder": {
+      "getHelpTitle": "Get help",
+      "getHelpBody": "The request flow opens here soon. For help right now, call the number for your area.",
+      "getHelpService": "Service: {service}",
+      "getHelpMarket": "Area: {city}",
+      "trackTitle": "Your request",
+      "trackBody": "Request tracking opens here soon.",
+      "providerTitle": "Provider profile",
+      "providerBody": "Provider profiles open here soon.",
+      "applyTitle": "Apply to join",
+      "applyBody": "The application form opens here soon."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "body": "That page doesn't exist or moved.",
+      "home": "Go to the home page"
+    },
+    "city": {
+      "title": "Roadside assistance in {city}, {state}"
+    },
+    "cityService": {
+      "title": "{service} in {city}"
+    }
   }
 }
