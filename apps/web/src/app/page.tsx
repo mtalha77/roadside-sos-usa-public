@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { BudgetBreaker } from "@/components/site/budget-breaker";
 import { FaqList } from "@/components/site/faq-list";
 import { JsonLd } from "@/components/site/json-ld";
 import { HowItWorks } from "@/components/site/how-it-works";
@@ -146,6 +147,7 @@ export default async function HomePage() {
           />
         </section>
         <ProviderBand />
+        <BudgetBreaker />
       </div>
       <JsonLd
         data={{
