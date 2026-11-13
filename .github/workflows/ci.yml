@@ -234,7 +234,7 @@ jobs:
       - name: Wait for Vercel previews
         id: previews
         run: scripts/ci/wait-for-previews.sh "${{ github.event.pull_request.head.sha }}" "${{ github.head_ref }}"
-      - name: Lighthouse budgets (mobile LCP < 2 s, CLS < 0.05, accessibility >= 0.9)
+      - name: Lighthouse budgets (home, city, service, get-help; mobile LCP < 2 s, CLS < 0.05, TBT < 200 ms, JS < 150 KB, a11y >= 0.9)
         env:
           LIGHTHOUSE_URLS: ${{ steps.previews.outputs.web_url }}
         run: pnpm --filter @rsos/e2e lighthouse

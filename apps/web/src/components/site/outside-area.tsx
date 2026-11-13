@@ -2,7 +2,10 @@ import { getTranslations } from "next-intl/server";
 import { cityLabel, marketPath, type SiteMarket } from "@/lib/market";
 import Link from "next/link";
 import { MarketPicker } from "./market-picker";
-import { WaitlistForm } from "./waitlist-form";
+import dynamic from "next/dynamic";
+
+// Only visitors outside every market see this form, so its code is a separate chunk.
+const WaitlistForm = dynamic(() => import("./waitlist-form").then((m) => m.WaitlistForm));
 
 /** Shown instead of the request flow when the visitor is outside every market. Never a dead end. */
 export async function OutsideArea({
@@ -25,7 +28,20 @@ export async function OutsideArea({
       </h2>
       <p>{city ? t("outsideBodyCity", { city }) : t("outsideBody")}</p>
       <p className="font-medium">{t("emergency")}</p>
-      <WaitlistForm city={city} region={region} />
+      <WaitlistForm
+        city={city}
+        region={region}
+        labels={{
+          email: t("email"),
+          zip: t("zip"),
+          join: t("join"),
+          joined: t("joined"),
+          "errors.email": t("errors.email"),
+          "errors.zip": t("errors.zip"),
+          "errors.limit": t("errors.limit"),
+          "errors.generic": t("errors.generic"),
+        }}
+      />
       {/* IP locations are often wrong: let the visitor pick their city anyway. */}
       {markets.length ? <MarketPicker markets={markets} current={null} /> : null}
       {markets.length ? (

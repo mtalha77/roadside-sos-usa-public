@@ -4,18 +4,39 @@ import { Alert } from "@rsos/ui/alert";
 import { Button } from "@rsos/ui/button";
 import { Field } from "@rsos/ui/field";
 import { Input } from "@rsos/ui/input";
-import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { joinWaitlistAction, type WaitlistState } from "@/lib/actions";
 
 /** "Not in your area yet": email (and optional ZIP) saved to the waitlist. */
-export function WaitlistForm({ city, region }: { city: string | null; region: string | null }) {
-  const t = useTranslations("site.market");
+export type WaitlistLabels = Record<
+  | "email"
+  | "zip"
+  | "join"
+  | "joined"
+  | "errors.email"
+  | "errors.zip"
+  | "errors.limit"
+  | "errors.generic",
+  string
+>;
+
+export function WaitlistForm({
+  city,
+  region,
+  labels,
+}: {
+  city: string | null;
+  region: string | null;
+  labels: WaitlistLabels;
+}) {
+  const t = (k: keyof WaitlistLabels) => labels[k];
   const [state, action, pending] = useActionState<WaitlistState, FormData>(joinWaitlistAction, {});
   if (state.ok) return <Alert tone="success" title={t("joined")} />;
   return (
     <form action={action} className="flex flex-col gap-4" noValidate>
-      {state.error ? <Alert tone="critical" title={t(`errors.${state.error}`)} /> : null}
+      {state.error ? (
+        <Alert tone="critical" title={t(`errors.${state.error}` as keyof WaitlistLabels)} />
+      ) : null}
       {city ? <input type="hidden" name="city" value={city} /> : null}
       {region ? <input type="hidden" name="region" value={region} /> : null}
       <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">

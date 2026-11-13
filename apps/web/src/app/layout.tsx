@@ -2,14 +2,12 @@ import { buildMetadata } from "@rsos/config/metadata";
 import { themeColor } from "@rsos/config/theme-colors";
 import { getSiteEnv } from "@rsos/config/site";
 import { ThemeProvider } from "@rsos/ui/theme-provider";
-import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
-import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
-import { ConsentManager } from "@/components/site/consent-manager";
+import { ConsentManager, type ConsentLabels } from "@/components/site/consent-manager";
 import { CONSENT_HEAD_SCRIPT } from "@/lib/consent";
 import "./globals.css";
 
@@ -27,25 +25,41 @@ export const viewport: Viewport = {
   ],
 };
 
+const CONSENT_KEYS = [
+  "title",
+  "body",
+  "necessary",
+  "necessaryHint",
+  "analytics",
+  "analyticsHint",
+  "ads",
+  "adsHint",
+  "gpc",
+  "acceptAll",
+  "rejectAll",
+  "save",
+  "manage",
+  "policy",
+  "saved",
+] as const;
+
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = await getLocale();
   const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const tc = await getTranslations("consent");
   return (
-    <html
-      lang={locale}
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang={locale} className={GeistSans.variable} suppressHydrationWarning>
       <head>
         {/* Consent Mode defaults run before anything else: Google tags start denied (RSOS-028). */}
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: CONSENT_HEAD_SCRIPT }} />
       </head>
       <body>
-        <NextIntlClientProvider>
-          <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
-          {/* Analytics load only after consent, and only in production (no preview or staging noise). */}
-          <ConsentManager analyticsTags={getSiteEnv() === "production"} />
-        </NextIntlClientProvider>
+        <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
+        {/* Analytics load only after consent, and only in production (no preview or staging noise). */}
+        <ConsentManager
+          analyticsTags={getSiteEnv() === "production"}
+          labels={Object.fromEntries(CONSENT_KEYS.map((k) => [k, tc(k)])) as ConsentLabels}
+        />
       </body>
     </html>
   );
