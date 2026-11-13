@@ -95,11 +95,32 @@ Acceptance criteria:
 | 2   | Sheets and dialogs trap focus and close with Escape and swipe down on mobile | PASS: browser tests: Tab stays inside Sheet and Dialog, Escape closes and returns focus to the trigger, a downward swipe closes the Sheet                                                                                |
 | 3   | DataTable scrolls 10,000 rows smoothly                                       | PASS: virtual mode keeps under 80 rows in the page, reaches row 10,000, 95th-percentile frame under 50 ms while sweeping the whole list in CI                                                                            |
 
+## RSOS-013: Product components
+
+- ServiceTile (large pressable tile, selected and disabled states), StatusPill (all 10 request states, text always shown, live pulse for quoting and en route), EtaChip, PriceTag (tabular, whole cents).
+- CountdownRing: remaining time is computed from `Date.now()` against the end timestamp (no tick counting), refreshed on `visibilitychange` and focus, `role="timer"`, polite announcements once a minute and every 10 s in the last 30 s.
+- QuoteCard (provider, rating and count or "New provider", insured and licensed badges, ETA, all-in price, Fastest or Best price tag; whole card is the choice button) with loading and error variants; ProviderCard and ProviderBadgeRow.
+- MapView: Google Maps (`@googlemaps/js-api-loader`) with quiet light and dark styles built from the ink tokens, HTML driver and provider markers, provider marker glides between updates; static placeholder listing locations when no key or load failure.
+- BigToggle (online/offline switch), SwipeToConfirm (drag, or Enter/Space for keyboard and screen readers), LiveDot and UpdatedAgo.
+- Stories for every state (`Product/Components`, `Product/MapView`); unit tests in `test/product.test.tsx`; all new stories pass the browser axe and console checks (134 checks in total).
+
+Acceptance criteria:
+
+| #   | Criterion                                                              | Result                                                                                                                                                                                                    |
+| --- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Every component has stories for all states including loading and error | PASS: Product stories cover selected, disabled, loading, error, empty and live states                                                                                                                     |
+| 2   | CountdownRing keeps correct time with the tab in the background        | PASS: test jumps the clock 95 s with no timer ticks (throttled background tab), then the tab becomes visible: the ring shows 1:25 immediately                                                             |
+| 3   | MapView works with a key and degrades cleanly without one              | PARTIAL: without a key the placeholder renders and passes axe (tested); with a key the loader is called with the key and the map is created (mocked test). A live check needs a Google Maps key (BLOCKER) |
+
 ## BLOCKERS
 
 ### Permissions
 
 1. **GitHub Projects permission (RSOS-097).** In Terminal run `gh auth refresh -h github.com -s project`, press Enter, approve in the browser, wait for "Authentication complete". Then run `scripts/setup-backlog-board.sh` (or ask Claude to): it creates the "RSOS Backlog" board with Backlog, In progress, In review, Done, adds all 97 issues and moves finished ones to Done.
+
+### Accounts to create
+
+2. **Google Maps Platform (RSOS-013).** Create a Google Cloud project, enable "Maps JavaScript API", create a browser API key restricted by HTTP referrer to the six hostnames and `*.vercel.app` previews of the team. Add it to Vercel as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (all three projects, all environments) and to GitHub Actions as a secret `STORYBOOK_GOOGLE_MAPS_API_KEY` if you want the live map story. Until then maps show a static placeholder.
 
 ## Notes for the next developer
 
