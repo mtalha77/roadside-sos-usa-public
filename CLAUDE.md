@@ -57,7 +57,7 @@ Validate with Zod (`packages/core` schemas) wherever data enters or leaves trust
   | `rsos-staging` | merge to `staging` (`db-deploy.yml`)      | staging hosts                |
   | `rsos-prod`    | merge to `main` (`db-deploy.yml`)         | production hosts             |
 
-- Project IDs are GitHub Actions variables `SUPABASE_PROJECT_ID_{DEV,STAGING,PROD}`; database passwords are secrets `SUPABASE_DB_PASSWORD_{DEV,STAGING,PROD}`; `SUPABASE_ACCESS_TOKEN` is the CI token. Auth site and redirect URLs are set by `scripts/supabase-auth-urls.sh` from the `APP_DOMAIN` variable.
+- Project IDs are GitHub Actions variables `SUPABASE_PROJECT_ID_{DEV,STAGING,PROD}`; database passwords are secrets `SUPABASE_DB_PASSWORD_{DEV,STAGING,PROD}`; `SUPABASE_ACCESS_TOKEN` is the CI token. Auth settings (site and redirect URLs from the `APP_DOMAIN` variable, the role hook, MFA, password rules) are applied by `scripts/supabase-auth-config.sh`.
 - Tests for the database live in `supabase/tests/*.test.sql` (pgTAP) and run against the target project after each migration run.
 - After a migration that changes the `public` schema, run `pnpm --filter @rsos/db gen:types` (generates from `rsos-dev`) and commit `packages/db/src/database.types.ts`.
 
