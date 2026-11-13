@@ -13,3 +13,6 @@ packages/db/src/database.types.ts
 
 # generated (tokens:build)
 packages/config/tailwind/theme.css
+
+# Census source data (minified on purpose)
+supabase/data/*.geojson

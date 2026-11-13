@@ -1,0 +1,136 @@
+{
+  "effectiveFrom": "2026-11-13T00:00:00Z",
+  "markets": [
+    {
+      "slug": "san-antonio",
+      "name": "San Antonio",
+      "stateCode": "TX",
+      "timeZone": "America/Chicago",
+      "status": "test",
+      "center": [29.4241, -98.4936],
+      "counties": ["48029", "48013", "48019", "48091", "48187", "48259", "48325", "48493"]
+    },
+    {
+      "slug": "las-vegas",
+      "name": "Las Vegas",
+      "stateCode": "NV",
+      "timeZone": "America/Los_Angeles",
+      "status": "test",
+      "center": [36.1699, -115.1398],
+      "counties": ["32003"]
+    },
+    {
+      "slug": "houston",
+      "name": "Houston",
+      "stateCode": "TX",
+      "timeZone": "America/Chicago",
+      "status": "test",
+      "center": [29.7604, -95.3698],
+      "counties": ["48201", "48157", "48339"]
+    },
+    {
+      "slug": "phoenix",
+      "name": "Phoenix",
+      "stateCode": "AZ",
+      "timeZone": "America/Phoenix",
+      "status": "paused",
+      "center": [33.4484, -112.074],
+      "counties": ["04013"]
+    },
+    {
+      "slug": "orlando",
+      "name": "Orlando",
+      "stateCode": "FL",
+      "timeZone": "America/New_York",
+      "status": "paused",
+      "center": [28.5384, -81.3789],
+      "counties": ["12095", "12117", "12097"]
+    }
+  ],
+  "services": [
+    {
+      "slug": "flat-tire",
+      "name": "Flat tire",
+      "description": "Spare tire installed or a tire plugged so you can drive to a shop.",
+      "iconKey": "flat-tire",
+      "needsDestination": false,
+      "vehicles": ["car", "suv", "pickup", "van", "rv"],
+      "sortOrder": 1,
+      "priceMinCents": 5000,
+      "priceMaxCents": 16000,
+      "priceNote": null,
+      "feeCents": 2250,
+      "enabled": true
+    },
+    {
+      "slug": "wont-start",
+      "name": "Won't start",
+      "description": "Jump start for a dead battery.",
+      "iconKey": "wont-start",
+      "needsDestination": false,
+      "vehicles": ["car", "suv", "pickup", "motorcycle", "van", "rv"],
+      "sortOrder": 2,
+      "priceMinCents": 5000,
+      "priceMaxCents": 15000,
+      "priceNote": null,
+      "feeCents": 2250,
+      "enabled": true
+    },
+    {
+      "slug": "locked-out",
+      "name": "Locked out",
+      "description": "Vehicle unlocked when your keys are inside.",
+      "iconKey": "locked-out",
+      "needsDestination": false,
+      "vehicles": ["car", "suv", "pickup", "van", "rv"],
+      "sortOrder": 3,
+      "priceMinCents": 5000,
+      "priceMaxCents": 17000,
+      "priceNote": null,
+      "feeCents": 2750,
+      "enabled": true
+    },
+    {
+      "slug": "out-of-gas",
+      "name": "Out of gas",
+      "description": "Enough fuel delivered to reach a gas station.",
+      "iconKey": "out-of-gas",
+      "needsDestination": false,
+      "vehicles": ["car", "suv", "pickup", "motorcycle", "van", "rv"],
+      "sortOrder": 4,
+      "priceMinCents": 5000,
+      "priceMaxCents": 19000,
+      "priceNote": "plus_fuel",
+      "feeCents": 2250,
+      "enabled": true
+    },
+    {
+      "slug": "tow",
+      "name": "Basic tow",
+      "description": "Tow to a shop, home or another place you choose.",
+      "iconKey": "tow",
+      "needsDestination": true,
+      "vehicles": ["car", "suv", "pickup", "motorcycle", "van"],
+      "sortOrder": 5,
+      "priceMinCents": 8200,
+      "priceMaxCents": 13000,
+      "priceNote": "plus_per_mile",
+      "feeCents": 4250,
+      "enabled": true
+    },
+    {
+      "slug": "winch-out",
+      "name": "Winch out",
+      "description": "Vehicle pulled out of mud, sand, snow or a ditch.",
+      "iconKey": "winch-out",
+      "needsDestination": true,
+      "vehicles": ["car", "suv", "pickup", "van"],
+      "sortOrder": 6,
+      "priceMinCents": null,
+      "priceMaxCents": null,
+      "priceNote": null,
+      "feeCents": null,
+      "enabled": false
+    }
+  ]
+}

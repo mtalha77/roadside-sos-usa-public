@@ -37,5 +37,7 @@ jobs:
         run: supabase db push --remote --yes
       - name: Run database tests
         run: supabase test db --remote --yes
+      - name: Reference data complete and no fake data (staging and production only)
+        run: supabase test db --remote --yes supabase/checks/no-fake-data.test.sql
       - name: Set Auth URLs
         run: scripts/supabase-auth-urls.sh "$TARGET" "$SUPABASE_PROJECT_ID"

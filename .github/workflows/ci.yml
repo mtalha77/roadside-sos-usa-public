@@ -120,9 +120,9 @@ jobs:
       - name: Link rsos-dev
         if: steps.guard.outputs.run == 'true'
         run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
-      - name: Apply migrations to rsos-dev
+      - name: Apply migrations and the dev-only seed to rsos-dev
         if: steps.guard.outputs.run == 'true'
-        run: supabase db push --remote --yes
+        run: supabase db push --remote --yes --include-seed
       - name: Run database tests on rsos-dev
         if: steps.guard.outputs.run == 'true'
         run: supabase test db --remote --yes
