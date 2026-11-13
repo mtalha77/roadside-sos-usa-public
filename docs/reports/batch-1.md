@@ -1,6 +1,6 @@
 # RSOS Batch 1: run report
 
-- Run started: 2026-11-12 23:47 UTC (stop at about 02:47 UTC)
+- Run started: 2026-11-12 23:47 UTC. Stopped: 2026-11-13 06:45 UTC after RSOS-009 (past the 3-hour limit because the run paused several times for owner steps: Supabase cost approval and two Supabase token fixes).
 - Repository: `mtalha77/roadside-sos-usa-public`. The batch file names `mtalha77/roadside-sos-usa`; that private repository was deleted after RSOS-003 because GitHub Free cannot protect branches on private repositories.
 - Supabase organization: **mtalha77's Org** (`vtcdceoqxcuqqrztdvha`). No organization is named "Roadside SOS USA" and there are three organizations, so the personal one was used. It is a paid organization (8 existing projects); the owner approved the extra monthly compute for three new projects before they were created.
 
@@ -116,6 +116,7 @@ Acceptance criteria:
 - Service role key: server-only module plus `packages/db/test/service-role.test.ts` (fails if a client component imports it, if it gets a `NEXT_PUBLIC_` prefix, or if any other file reads it).
 - `@rsos/core/security`: `verifyTurnstile` (fails closed when keys are missing) and `checkRateLimits` per IP and per phone (Upstash REST when configured, in-memory fallback otherwise) with `rateLimitResponse` returning 429.
 - Admin session cookies Secure, HttpOnly, SameSite=Lax (`strictCookieOptions`).
+- Checked on the real web preview in a browser: all headers present, no CSP violations. Vercel Analytics and Speed Insights now load on production only (on previews they logged 404 console errors because Analytics is not yet enabled).
 - CI dependency audit: `pnpm audit --prod --audit-level high`. Dev-only tools are excluded: `@react-email/preview-server` bundles an old Next.js with known advisories but never ships to users.
 - `SECURITY.md` (reporting, secret locations, rotation); GitHub private vulnerability reporting turned on.
 
@@ -133,3 +134,9 @@ Acceptance criteria:
 2. **Turn on Web Analytics and Speed Insights for `rsos-web` (RSOS-005).** Vercel dashboard, project `rsos-web`, Analytics tab, Enable; then Speed Insights tab, Enable. The code is already installed; data starts after the next deployment.
 3. **Cloudflare Turnstile keys (RSOS-009).** Create a Turnstile widget at dash.cloudflare.com → Turnstile → Add widget (hostnames: the apex, staging, pro, staging-pro, admin, staging-admin). Add `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (plain) and `TURNSTILE_SECRET_KEY` (sensitive) to the three Vercel projects, all environments. Until then, Turnstile-protected forms reject every submit (fail closed).
 4. **Upstash Redis (RSOS-009).** Create a Redis database at console.upstash.com (region us-east-1), copy the REST URL and token, and add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (sensitive) to the three Vercel projects. Until then, rate limits use a per-instance in-memory fallback.
+5. **Promote `main` to production on Vercel (RSOS-005).** Each project's first deployment came from the RSOS-005 branch and was made production. When you are ready to release, open a pull request from `staging` into `main` and merge it; Vercel then deploys `main` to the production domains. Before that release, also switch on the `rsos-prod` settings listed under RSOS-004.
+6. **Staging provider/admin hosts are behind Vercel login.** staging-pro and staging-admin redirect to Vercel Authentication (preview protection). Sign in with your Vercel account to view them. If you want them open, Vercel → project → Settings → Deployment Protection → change Vercel Authentication to "Standard Protection".
+
+## Next run
+
+Continue with RSOS-010 (testing setup), RSOS-096 (QA gates), RSOS-097 (onboarding and backlog board), then RSOS-011 (design tokens).
