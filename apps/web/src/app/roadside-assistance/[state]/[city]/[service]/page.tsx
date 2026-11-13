@@ -5,6 +5,7 @@ import { Alert } from "@rsos/ui/alert";
 import { Button } from "@rsos/ui/button";
 import { Phone } from "lucide-react";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -46,11 +47,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = await getTranslations("site");
   const name = serviceName(t, { slug: data.svc.service_slug, name: data.svc.service_name });
   const vars = { service: name, city: data.market.name, state: data.market.state_code };
-  return {
+  return pageMetadata({
     title: `${t("cityService.title", vars)}, ${data.market.state_code}`,
     description: t("service.cityDescription", vars),
-    alternates: { canonical: `${marketPath(data.market)}/${data.svc.service_slug}` },
-  };
+    path: `${marketPath(data.market)}/${data.svc.service_slug}`,
+  });
 }
 
 /** City plus service page: local price, local note, and the flow started with both preselected. */

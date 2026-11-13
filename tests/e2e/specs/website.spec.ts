@@ -367,3 +367,58 @@ test.describe("legal pages and consent", () => {
     });
   });
 });
+
+// RSOS-032: technical SEO, checked by crawling every page in the sitemaps.
+test.describe("technical SEO", () => {
+  test.skip(!web, "No website URL");
+
+  test("AC1: no duplicate titles and no missing canonicals; AC2: only published pages", async ({
+    request,
+  }) => {
+    test.setTimeout(120_000);
+    const locs = (xml: string) =>
+      [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]!.replace(/&amp;/g, "&"));
+    const index = await (await request.get(url("/sitemap.xml"))).text();
+    const paths: string[] = [];
+    for (const sm of locs(index)) {
+      const res = await request.get(url(new URL(sm).pathname));
+      expect(res.status(), sm).toBe(200);
+      paths.push(...locs(await res.text()).map((l) => new URL(l).pathname));
+    }
+    expect(paths.length).toBeGreaterThanOrEqual(30);
+    expect(
+      paths.some((p) => /phoenix|orlando/.test(p)),
+      "paused markets are not listed",
+    ).toBe(false);
+    expect(paths).not.toContain("/get-help");
+    const titles = new Map<string, string>();
+    for (const p of paths) {
+      const html = await (await request.get(url(p))).text();
+      const title = /<title>([^<]*)<\/title>/.exec(html)?.[1];
+      const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1];
+      expect(title, `title on ${p}`).toBeTruthy();
+      expect(
+        canonical && new URL(canonical).pathname.replace(/\/$/, "") === p.replace(/\/$/, ""),
+        `canonical on ${p}: ${canonical}`,
+      ).toBe(true);
+      expect(titles.get(title!), `duplicate title "${title}"`).toBeUndefined();
+      titles.set(title!, p);
+    }
+  });
+
+  test("robots blocks crawling outside production; Organization and WebSite data on the home page", async ({
+    page,
+    request,
+  }) => {
+    expect(await (await request.get(url("/robots.txt"))).text()).toMatch(/Disallow: \/\s*$/m);
+    await page.goto(url("/"));
+    const graph = (await page.locator('script[type="application/ld+json"]').allTextContents())
+      .map((b) => JSON.parse(b) as { "@graph"?: { "@type": string }[] })
+      .flatMap((d) => d["@graph"] ?? [])
+      .map((n) => n["@type"]);
+    expect(graph).toEqual(expect.arrayContaining(["Organization", "WebSite"]));
+    expect(await page.locator('meta[property="og:image"]').getAttribute("content")).toMatch(
+      /opengraph-image/,
+    );
+  });
+});

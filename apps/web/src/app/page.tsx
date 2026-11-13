@@ -1,10 +1,13 @@
 import { brand } from "@rsos/config/brand";
+import { getSiteUrl } from "@rsos/config/site";
 import { Button } from "@rsos/ui/button";
 import { BadgeCheck, Clock, Phone, WalletCards } from "lucide-react";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { FaqList } from "@/components/site/faq-list";
+import { JsonLd } from "@/components/site/json-ld";
 import { HowItWorks } from "@/components/site/how-it-works";
 import { LiveProof } from "@/components/site/live-proof";
 import { MarketPicker } from "@/components/site/market-picker";
@@ -23,10 +26,12 @@ const FAQ_IDS = ["cost", "fast", "membership", "who", "safe"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("home");
-  return {
-    title: { absolute: `${t("title")} | ${brand.name}` },
+  return pageMetadata({
+    title: `${t("title")} | ${brand.name}`,
+    absolute: true,
     description: t("metaDescription"),
-  };
+    path: "/",
+  });
 }
 
 /** Home: services first (the main action), then how it works, local prices and proof, FAQ. */
@@ -142,6 +147,29 @@ export default async function HomePage() {
         </section>
         <ProviderBand />
       </div>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": `${getSiteUrl()}/#organization`,
+              name: brand.name,
+              url: getSiteUrl(),
+              logo: `${getSiteUrl()}${brand.logos.icon}`,
+              email: brand.emails.support,
+              areaServed: markets.map((m) => ({ "@type": "City", name: cityLabel(m) })),
+            },
+            {
+              "@type": "WebSite",
+              "@id": `${getSiteUrl()}/#website`,
+              name: brand.name,
+              url: getSiteUrl(),
+              publisher: { "@id": `${getSiteUrl()}/#organization` },
+            },
+          ],
+        }}
+      />
     </SitePage>
   );
 }

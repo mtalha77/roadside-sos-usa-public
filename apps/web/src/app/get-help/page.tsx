@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { MarketPicker } from "@/components/site/market-picker";
 import { OutsideArea } from "@/components/site/outside-area";
@@ -11,7 +12,11 @@ import { getMarkets, getServices } from "@/lib/site-data";
 import { getVisitorMarket } from "@/lib/visitor";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { robots: { index: false } };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("site.placeholder");
+  return pageMetadata({ title: t("getHelpTitle"), path: "/get-help", noindex: true });
+}
 
 /** Start of the request flow (placeholder until the request flow tickets): keeps market and service. */
 export default async function GetHelpPage({

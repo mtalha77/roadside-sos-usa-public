@@ -2,6 +2,7 @@ import { formatCurrency, formatPriceRange, type Locale } from "@rsos/i18n";
 import { Button } from "@rsos/ui/button";
 import { Check } from "lucide-react";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { PageHero } from "@/components/site/page-hero";
@@ -14,11 +15,11 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("forProviders");
-  return {
+  return pageMetadata({
     title: t("title"),
     description: t("intro"),
-    alternates: { canonical: "/for-providers" },
-  };
+    path: "/for-providers",
+  });
 }
 
 /** For providers: how jobs arrive, the per-request fees (from `market_services`), plans, requirements. */
