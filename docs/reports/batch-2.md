@@ -159,6 +159,22 @@ Acceptance criteria:
 | 2   | Anonymous users cannot read or write any table directly                     | PASS: as `anon`, select/insert on tables and the fee view fail with 42501; only the public functions work; RLS enabled on every table (asserted) |
 | 3   | Changing a fee creates a new dated row; old requests keep their fee         | PASS: new row becomes current, old row kept, the request keeps 22.50; UPDATE and DELETE on fee rows are refused                                  |
 
+## RSOS-017: Seed data (markets, services, prices, fees)
+
+- Source data in `supabase/data/`: `census-counties-2024-500k.geojson` (16 counties from the US Census Bureau's generalized 1:500k cartographic boundaries via TIGERweb, ACS 2024) and `markets.json` (markets, county lists, time zones, statuses, services, prices, fees).
+- `scripts/seed/build-reference-seed.ts` generates the production-safe migration `20261113030000_reference_data.sql` (idempotent): six services; markets San Antonio (8 counties: Bexar, Atascosa, Bandera, Comal, Guadalupe, Kendall, Medina, Wilson; test), Las Vegas (Clark; test), Houston (Harris, Fort Bend, Montgomery; test), Phoenix (Maricopa; paused = inactive), Orlando (Orange, Seminole, Osceola; paused); boundary = union of the counties; prices and fees as specified (winch out disabled, no fee). Price notes are message keys (`plus_fuel`, `plus_per_mile`) so they can be translated.
+- `supabase/seed.sql` (dev only): fake requests, applications, a contact message and a waitlist entry, all named "Dev Seed ..." with fictional 555-01xx numbers; pushed only by the CI `db` job (`--include-seed`) to `rsos-dev`.
+- `supabase/checks/no-fake-data.test.sql` runs in `db-deploy` after every staging and production deploy: five markets, six services, 25 enabled market services, and zero dev seed or test rows.
+- `BoundaryPreview` component and Storybook story `Product/Market boundaries` (SVG, no map key needed).
+
+Acceptance criteria:
+
+| #   | Criterion                                                                               | Result                                                                                                                                        |
+| --- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Staging contains the five markets and six services; production gets the same on release | Pending (merge: staging deploy runs the reference migration and the no-fake-data check); production gets the same migration on release        |
+| 2   | Boundaries render correctly on a map                                                    | PASS: Storybook `Product/Market boundaries` shows all five markets from the same county data (checked visually and by the axe browser checks) |
+| 3   | No fake data in staging or production                                                   | Pending (merge: `no-fake-data` check on staging)                                                                                              |
+
 ## BLOCKERS
 
 ### Permissions
