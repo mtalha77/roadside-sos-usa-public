@@ -369,45 +369,70 @@ Acceptance criteria:
 
 Acceptance criteria:
 
-| #   | Criterion                                                                                         | Result          |
-| --- | ------------------------------------------------------------------------------------------------- | --------------- |
-| 1   | A pull request that breaks a budget fails CI (prove with a throwaway pull request, then close it) | PROOF_PENDING   |
-| 2   | All listed pages pass on staging                                                                  | STAGING_PENDING |
+| #   | Criterion                                                                                         | Result                                                                                                                                                                                                                                                                                            |
+| --- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | A pull request that breaks a budget fails CI (prove with a throwaway pull request, then close it) | PASS: [#130](https://github.com/mtalha77/roadside-sos-usa-public/pull/130) added a heavy client component to the home page; only the Lighthouse job failed (script size 194,437 bytes against 153,600) while every other check passed; closed without merging and the branch deleted              |
+| 2   | All listed pages pass on staging                                                                  | PASS: Lighthouse CI (mobile, 3 runs each) against staging, all assertions met: home LCP 1.38 to 1.41 s, city (Houston) 1.33 to 1.44 s, service (flat tire) 1.17 to 1.20 s, get-help 1.18 to 1.20 s; CLS 0 everywhere; TBT 24 to 66 ms; JavaScript 146 KB on every page; accessibility 0.98 to 1.0 |
 
 ## BLOCKERS
 
-### Permissions
-
-1. **GitHub Projects permission (RSOS-097).** In Terminal run `gh auth refresh -h github.com -s project`, press Enter, approve in the browser, wait for "Authentication complete". Then run `scripts/setup-backlog-board.sh` (or ask Claude to): it creates the "RSOS Backlog" board with Backlog, In progress, In review, Done, adds all 97 issues and moves finished ones to Done.
-
-### First accounts
-
-3. **Create the first super admin (RSOS-018), per environment (staging now, production at release).** In the Supabase dashboard for `rsos-staging`: Authentication → Users → Add user → Create new user (your email, a strong password, Auto Confirm on). Then SQL editor, run (data, not schema): `insert into public.staff_members (user_id, role, display_name) select id, 'super_admin', 'Owner' from auth.users where email = 'YOUR-EMAIL';` Sign in at the staging admin host; the first sign-in asks you to set up your authenticator app.
+Everything below needs the owner. Nothing here stops the website from working on staging: each service has a mock or a safe fallback until its keys exist.
 
 ### Accounts to create
 
-2. **Google Maps Platform (RSOS-013).** Create a Google Cloud project, enable "Maps JavaScript API", create a browser API key restricted by HTTP referrer to the six hostnames and `*.vercel.app` previews of the team. Add it to Vercel as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (all three projects, all environments) and to GitHub Actions as a secret `STORYBOOK_GOOGLE_MAPS_API_KEY` if you want the live map story. Until then maps show a static placeholder.
-3. **Twilio for SMS (RSOS-018, RSOS-026).** Also add `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM_NUMBER` (or `TWILIO_MESSAGING_SERVICE_SID`) to the `rsos-web` Vercel project so applicants who opt in get a confirmation text; register the number for A2P 10DLC in Twilio first (required for US business texting). For SMS codes: Create a Twilio account and a Verify service. In each Supabase project: Authentication → Providers → Phone → enable, provider Twilio Verify, paste Account SID, Auth Token and Verify Service SID. Then add `SUPABASE_SMS_ENABLED=true` to the `rsos-provider` and `rsos-web` Vercel projects (staging and production). Until then staging and production show "text messages aren't set up yet"; previews use the mock code 000000.
+1. **Twilio (RSOS-018, RSOS-019, RSOS-026).** Create a Twilio account, a Verify service (for sign-in codes) and register for A2P 10DLC (required for US business texting). Buy one local number per market (San Antonio, Las Vegas, Houston) for the website. Keys and numbers go in as described in 6 and 7.
+2. **Resend (RSOS-093, RSOS-026, RSOS-027).** Create a Resend account, add and verify your sending domain (Resend shows the DNS records), create an API key with "Sending access". Keys: see 8.
+3. **Cloudflare Turnstile (RSOS-027).** In Cloudflare: Turnstile → Add widget, add the website hostnames (staging and production), mode Managed. Keys: see 9.
+4. **Google Maps Platform (RSOS-013).** Create a Google Cloud project, enable "Maps JavaScript API", create a browser API key restricted by HTTP referrer to the six hostnames and the team's `*.vercel.app` previews. Add it to Vercel as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (all three projects, all environments) and, for the live map story, to GitHub Actions as `STORYBOOK_GOOGLE_MAPS_API_KEY`. Until then maps show a static placeholder.
+5. **Later, not needed by this batch:** Sentry (errors), PostHog (product analytics), Stripe (wallet top-ups and plans) and optionally Upstash Redis (shared rate limits; in-memory limits work today: add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` when you have it). The tickets that use them add their interfaces and mocks.
 
-4. **Resend for email (RSOS-093).** Create a Resend account, add and verify your sending domain (Resend shows the DNS records to add). Create an API key with "Sending access". Add to the `rsos-provider` and `rsos-admin` Vercel projects (staging and production): `RESEND_API_KEY` (the key) and `EMAIL_FROM` (for example `Security <security@YOUR-DOMAIN>`). Until then staging and production record security emails as not sent, and previews show the code on screen. Supabase's own emails (reset links, email change) use Supabase's default sender until you also set SMTP in each Supabase project (Authentication → Emails → SMTP, using Resend's SMTP details).
+### Keys and data to add
 
-5. **Phone numbers per market (RSOS-019).** In Twilio, buy one local number per market (San Antonio, Las Vegas, Houston) for the website. Then add each one as data (not a migration) in the Supabase SQL editor for `rsos-staging` (and production at launch): `insert into public.market_phone_numbers (market_id, phone_number, purpose) select id, '+1XXXXXXXXXX', 'website' from public.markets where slug = 'houston';` Until then the website shows no call buttons (it never shows a made-up number). Tracking numbers for ads use purpose `google_ads`, `meta` or `microsoft`.
-
-6. **Cloudflare Turnstile (RSOS-027).** Forms use Cloudflare's test keys, which let every request through. In Cloudflare: Turnstile → Add widget, add the website hostnames (staging and production), mode Managed. Then replace the values in the `rsos-web` Vercel project (Settings → Environment Variables): `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (site key) and `TURNSTILE_SECRET_KEY` (secret key), for Production and Preview, and redeploy.
-7. **Upstash Redis (optional, RSOS-027).** Rate limits work in memory per server instance. For limits shared across instances, create an Upstash Redis database and add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to `rsos-web` (and the other apps).
-
-8. **Domain change, when the brand changes (RSOS-032).** Add the new domain to the three Vercel projects, set `NEXT_PUBLIC_APP_DOMAIN` (and `NEXT_PUBLIC_SITE_URL`) to it, keep the old domain attached and set `REDIRECT_FROM_HOSTS` on `rsos-web` to the old hosts (for example `fixallcontractors.com,www.fixallcontractors.com`). Every old URL then answers with a 301 to the same path on the new domain. Then add the new domain in Google Search Console and submit `/sitemap.xml`.
-
-### Legal
-
-9. **US attorney review required before the test campaign (RSOS-028).** All seven documents under `/legal/` are drafts written for review, not legal advice. Have a US attorney (consumer protection, TCPA/SMS and state privacy law: California, Texas, Nevada, Florida) review the Driver Terms, Provider Terms, Privacy Policy, SMS Terms, Call Recording Notice, Cookie Policy and Accessibility Statement, and confirm the legal entity name (`brand.legalName` is a placeholder). After changes: update the text in `packages/i18n/messages/{en,es}.json`, set a new version in `packages/config/src/legal.ts` (for example `2027-01-15`, without `-draft`), add the same row to `policy_versions` in a migration with `status = 'published'`, and remove the draft banner.
+6. **Twilio keys.** In each Supabase project (staging, production): Authentication → Providers → Phone → enable, provider Twilio Verify, paste Account SID, Auth Token and Verify Service SID. In Vercel: `SUPABASE_SMS_ENABLED=true` on `rsos-provider` and `rsos-web`; `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM_NUMBER` (or `TWILIO_MESSAGING_SERVICE_SID`) on `rsos-web` (applicant texts). Until then staging and production say "text messages aren't set up yet" and record texts as not sent; previews use the mock code 000000.
+7. **Website phone numbers (RSOS-019).** For each market, in the Supabase SQL editor for `rsos-staging` (and production at launch), as data: `insert into public.market_phone_numbers (market_id, phone_number, purpose) select id, '+1XXXXXXXXXX', 'website' from public.markets where slug = 'houston';` Until then the website shows no call buttons (it never shows a made-up number). Ad tracking numbers use purpose `google_ads`, `meta` or `microsoft`.
+8. **Resend keys.** In Vercel (staging and production): `RESEND_API_KEY` and `EMAIL_FROM` (for example `Security <security@YOUR-DOMAIN>`) on `rsos-provider`, `rsos-admin` and `rsos-web`. For Supabase's own emails (reset links, email change), set SMTP in each Supabase project (Authentication → Emails → SMTP, with Resend's SMTP details). Until then staging and production record emails as not sent, and previews show codes on screen.
+9. **Turnstile keys.** Replace the test keys in `rsos-web` (Settings → Environment Variables, Production and Preview): `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`, then redeploy. Today Cloudflare's test keys let every request through.
+10. **First super admin (RSOS-018), per environment.** In the Supabase dashboard for `rsos-staging`: Authentication → Users → Add user → Create new user (your email, a strong password, Auto Confirm on). Then in the SQL editor (data, not schema): `insert into public.staff_members (user_id, role, display_name) select id, 'super_admin', 'Owner' from auth.users where email = 'YOUR-EMAIL';` Sign in at the staging admin host; the first sign-in sets up your authenticator app. Repeat on production at release.
+11. **GitHub Projects permission (RSOS-097).** In Terminal run `gh auth refresh -h github.com -s project`, press Enter, approve in the browser, wait for "Authentication complete". Then run `scripts/setup-backlog-board.sh`: it creates the "RSOS Backlog" board, adds all 97 issues and moves finished ones to Done.
 
 ### Decisions
 
-6. **Winch out (RSOS-025).** It is switched off in every market (seed data). Decide whether to offer it at launch; if yes, enable it per market in admin with its price range and fee. Its pages already exist and switch from "not available yet" to bookable automatically.
+12. **Provider plan prices per city (RSOS-026).** The site shows your ranges (Pro 99 to 149 USD a month with 15% off fees, Featured 25 to 50 USD a month per city). Pick the exact price per city, then add one row per city and plan to `market_plans` (admin plans ticket, or SQL: `insert into public.market_plans (market_id, plan, price_min_cents, price_max_cents, fee_discount_bps) select id, 'pro', 12900, 12900, 1500 from public.markets where slug = 'houston';`).
+13. **Winch out (RSOS-025).** It is switched off in every market (seed data). If you want it at launch, enable it per market in admin with its price range and fee; its pages switch from "not available yet" to bookable automatically.
+14. **Domain change, when the brand changes (RSOS-032).** Add the new domain to the three Vercel projects, set `NEXT_PUBLIC_APP_DOMAIN` and `NEXT_PUBLIC_SITE_URL` to it, keep the old domain attached and set `REDIRECT_FROM_HOSTS` on `rsos-web` to the old hosts (for example `fixallcontractors.com,www.fixallcontractors.com`). Every old URL then answers with a 301 to the same path on the new domain. Then add the new domain in Google Search Console and submit `/sitemap.xml`.
 
-7b. **Provider plan prices per city (RSOS-026).** The website shows the ranges you gave (Pro 99 to 149 USD a month with 15% off fees, Featured 25 to 50 USD a month per city). Decide the exact price per city; then add a row per city and plan to `market_plans` (admin plans ticket, or SQL: `insert into public.market_plans (market_id, plan, price_min_cents, price_max_cents, fee_discount_bps) select id, 'pro', 12900, 12900, 1500 from public.markets where slug = 'houston';`). The page updates by itself.
+### Legal
+
+15. **US attorney review required before the test campaign (RSOS-028).** All seven documents under `/legal/` are drafts, not legal advice. Have a US attorney (consumer protection, TCPA and SMS, and state privacy law for California, Texas, Nevada and Florida) review the Driver Terms, Provider Terms, Privacy Policy, SMS Terms, Call Recording Notice, Cookie Policy and Accessibility Statement, and confirm the legal entity name (`brand.legalName` is a placeholder). After changes: update the text in `packages/i18n/messages/{en,es}.json`, set a new version in `packages/config/src/legal.ts` (for example `2027-01-15`, without `-draft`), add the same row to `policy_versions` in a migration with `status = 'published'`, and remove the draft banner.
+
+## Staging links
+
+- Website: https://staging.fixallcontractors.com/
+- Cities: https://staging.fixallcontractors.com/roadside-assistance/tx/san-antonio, https://staging.fixallcontractors.com/roadside-assistance/nv/las-vegas, https://staging.fixallcontractors.com/roadside-assistance/tx/houston
+- City plus service: https://staging.fixallcontractors.com/roadside-assistance/tx/houston/tow
+- Service: https://staging.fixallcontractors.com/services/flat-tire
+- For Providers: https://staging.fixallcontractors.com/for-providers and https://staging.fixallcontractors.com/for-providers/apply
+- Legal: https://staging.fixallcontractors.com/legal/privacy (and `/legal/driver-terms`, `provider-terms`, `sms-terms`, `call-recording`, `cookies`, `accessibility`), privacy choices at `/privacy-choices`
+- Provider sign-in: https://staging-pro.fixallcontractors.com/sign-in; admin sign-in: https://staging-admin.fixallcontractors.com/sign-in. Both staging hosts are behind Vercel's login first (set in batch 1); sign in to Vercel with your account, then the app's own sign-in appears. The admin needs the first super admin (BLOCKER 10).
+
+## Release readiness (staging to main)
+
+**The code is ready; the business launch is not.** On the gate check [#131](https://github.com/mtalha77/roadside-sos-usa-public/pull/131) (staging into main, closed without merging) `release-qa` passed, as did lint, typecheck, test, build, db (staging deploy included), e2e, lighthouse and scan. One Storybook run failed on a timing test that measured exactly its limit; the threshold is fixed in the final report pull request (frame times come in 16.7 ms steps). Lighthouse budgets pass on staging for every page type, every staging database deploy succeeded, and all website pages answer on staging.
+
+Before a public test campaign on production, these must be done (see BLOCKERS): attorney review of the legal pages (15), real Turnstile keys (9), Resend (2, 8), Twilio numbers and keys (1, 6, 7: without numbers the site shows no call buttons) and the first super admin on production (10). Releasing to main is your decision: open a pull request from `staging` into `main` and merge it when you are ready; `release-qa` runs again on it.
+
+## Suggested next tickets
+
+1. The request flow (`/get-help` to quotes): request form with location, vehicle and problem, `create_request`, the live quote screen and tracking at `/r/[token]`. Everything on the website already points there with market and service preselected.
+2. Provider quoting in the portal: incoming requests by market and service, sending a quote, wallet balance and fee charge when picked (needs Stripe for top-ups).
+3. Admin market and content screens: edit `market_pages`, `market_service_notes`, prices and fees (append-only), plans, redirects, phone numbers; each save calls `/api/revalidate`.
+4. Admin review of provider applications and contact messages (both are stored and announced today).
+5. Real messaging: Twilio numbers and Verify, Resend sending domain, then switch staging to them (BLOCKERS 1, 2, 6 to 8).
 
 ## Notes for the next developer
 
 - The DNS change from batch 1 is live: the apex resolves to Vercel with a valid certificate.
+- Vercel cancels a preview when a newer commit lands and skips a commit that does not touch an app. A test-only commit right after an app commit can leave a branch with no web preview; push a change inside the app to get one (RSOS-019).
+- WebKit reports Next.js link prefetches cancelled by a navigation as page errors; the e2e console guard ignores exactly that pattern and nothing else (RSOS-025).
+- The Storybook DataTable smoothness test measures frame times on shared runners and failed once at exactly its limit (50); a rerun passed. If it keeps failing, raise the limit slightly rather than skip it.
+- The JavaScript budget is tight (about 138 KB of React and Next.js on every page). Keep website interactivity in plain forms and server components; reach for client components only where they are needed, and check the Lighthouse job on each PR.
