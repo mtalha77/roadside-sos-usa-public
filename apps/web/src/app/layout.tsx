@@ -1,5 +1,7 @@
 import { brand } from "@rsos/config/brand";
 import { ThemeProvider } from "@rsos/ui/theme-provider";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -32,6 +34,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <NextIntlClientProvider>
           <ThemeProvider>{children}</ThemeProvider>
         </NextIntlClientProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
