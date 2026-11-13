@@ -326,5 +326,106 @@
     "cityService": {
       "title": "{service} en {city}"
     }
+  },
+  "home": {
+    "title": "Ayuda en carretera con cotizaciones reales en minutos",
+    "metaDescription": "¿Te quedaste varado? Dinos dónde estás y qué pasó. Proveedores locales verificados te envían cotizaciones con precio y hora de llegada, y tú eliges. Sin membresía.",
+    "eyebrow": "Llanta, batería, llaves, combustible o grúa",
+    "headline": "¿Varado? Recibe cotizaciones de expertos locales en minutos.",
+    "lead": "Dinos dónde estás y qué pasó. Proveedores verificados cerca de ti envían precio y hora de llegada. Tú eliges uno y le pagas directamente.",
+    "pickService": "¿Qué necesitas?",
+    "callNow": "O llama al {phone}",
+    "trust": {
+      "label": "Por qué nos usan los conductores",
+      "insured": "Proveedores verificados y asegurados",
+      "fast": "Cotizaciones en unos 3 minutos",
+      "noMembership": "Sin membresía ni registro"
+    },
+    "how": {
+      "title": "Cómo funciona",
+      "step1": "Cuéntanos qué pasó",
+      "step1Body": "Elige el problema y comparte tu ubicación. Toma menos de un minuto.",
+      "step2": "Compara cotizaciones",
+      "step2Body": "Proveedores cercanos responden con el precio total y cuándo pueden llegar.",
+      "step3": "Sigue tu ayuda",
+      "step3Body": "Elige uno y sigue su llegada. Le pagas directamente al proveedor.",
+      "exampleLabel": "Ejemplo de una cotización",
+      "exampleProvider": "Un proveedor verificado cerca de ti",
+      "exampleEta": "Hora de llegada",
+      "exampleEtaSr": "Aquí aparece su hora de llegada",
+      "exampleNote": "Solo un ejemplo. Las cotizaciones reales vienen de proveedores de tu zona.",
+      "trackingLabel": "Ejemplo de seguimiento",
+      "labels": {
+        "insured": "Asegurado",
+        "licensed": "Con licencia",
+        "noRatings": "Proveedor nuevo",
+        "allIn": "precio total"
+      }
+    },
+    "tracking": {
+      "submitted": "Solicitud enviada",
+      "quoted": "Cotizaciones recibidas",
+      "accepted": "Elegiste un proveedor",
+      "en_route": "En camino",
+      "on_site": "Llegó"
+    },
+    "proof": {
+      "title": "Activo en {city}",
+      "providers": "{count, plural, one {# proveedor verificado} other {# proveedores verificados}}",
+      "eta": "Llegada promedio: {minutes} min",
+      "basis": "Según {count} trabajos completados en los últimos 90 días."
+    },
+    "prices": {
+      "title": "Precios típicos en {city}",
+      "note": "Rangos que suelen cotizar los proveedores en {city}. Tu cotización es el precio final antes de elegir.",
+      "plus_fuel": "más combustible",
+      "plus_per_mile": "más cargo por milla",
+      "from": "{min} a {max}",
+      "choose": "Elige tu zona para ver precios locales."
+    },
+    "cities": {
+      "title": "Dónde ayudamos",
+      "body": "Abrimos ciudad por ciudad para que cada conductor reciba ayuda local y rápida."
+    },
+    "services": {
+      "title": "Servicios"
+    },
+    "faq": {
+      "title": "Preguntas comunes",
+      "items": {
+        "cost": {
+          "q": "¿Cuánto cuesta?",
+          "a": "Cada proveedor cotiza un precio total antes de que elijas. Solo le pagas al proveedor que eliges, directamente. Usar este sitio es gratis para los conductores."
+        },
+        "fast": {
+          "q": "¿Qué tan rápido llega alguien?",
+          "a": "Cada cotización muestra la hora de llegada del proveedor, así puedes elegir el más rápido, el más barato o el mejor calificado."
+        },
+        "membership": {
+          "q": "¿Necesito una membresía?",
+          "a": "No. No hay membresía, suscripción ni cuenta. Pides ayuda solo cuando la necesitas."
+        },
+        "who": {
+          "q": "¿Quiénes son los proveedores?",
+          "a": "Empresas locales e independientes de grúas y asistencia. Revisamos su seguro y, donde se requiere, su licencia antes de que puedan cotizar."
+        },
+        "safe": {
+          "q": "¿Qué hago mientras espero?",
+          "a": "Sal del camino si puedes hacerlo con seguridad, enciende las luces intermitentes y quédate en tu vehículo con el cinturón puesto si estás en una autopista. En una emergencia, llama al 911."
+        }
+      }
+    },
+    "providers": {
+      "title": "¿Tienes una empresa de grúas o asistencia?",
+      "body": "Recibe trabajos pagados de conductores cerca de ti. Fija tus precios, cotiza cuando quieras y paga una tarifa fija solo cuando un conductor te elige.",
+      "cta": "Conoce cómo unirte"
+    },
+    "getHelp": "Pedir ayuda ahora",
+    "trackingPill": {
+      "submitted": "Enviada",
+      "quoted": "Cotizada",
+      "accepted": "Elegido",
+      "en_route": "En camino"
+    }
   }
 }

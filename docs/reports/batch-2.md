@@ -21,8 +21,8 @@
 | RSOS-017                       | Done        | [#117](https://github.com/mtalha77/roadside-sos-usa-public/pull/117) |
 | RSOS-018                       | Done        | [#118](https://github.com/mtalha77/roadside-sos-usa-public/pull/118) |
 | RSOS-096 follow-up (faster CI) | Done        | [#119](https://github.com/mtalha77/roadside-sos-usa-public/pull/119) |
-| RSOS-093                       | In review   | [#120](https://github.com/mtalha77/roadside-sos-usa-public/pull/120) |
-| RSOS-019                       | Not started |                                                                      |
+| RSOS-093                       | Done        | [#120](https://github.com/mtalha77/roadside-sos-usa-public/pull/120) |
+| RSOS-019                       | Done        | [#121](https://github.com/mtalha77/roadside-sos-usa-public/pull/121) |
 | RSOS-020                       | Not started |                                                                      |
 | RSOS-024                       | Not started |                                                                      |
 | RSOS-025                       | Not started |                                                                      |
@@ -235,6 +235,23 @@ Acceptance criteria:
 | 2   | Signing out a device ends that session within 1 minute                                  | PASS: `revoke_my_session` deletes the session (pgTAP: `session_status().active` becomes false); the proxy checks it on every request and redirects to `/sign-in?signedOut=1` (unit test)                             |
 | 3   | Every security change is written to the audit log and triggers the email interface      | PASS: unit tests check an audit row (from the action or the database function) and an email per change; pgTAP checks the database-side audit rows                                                                    |
 
+## RSOS-019: Website structure, layout and market detection
+
+- Migration `20261113060000_website_structure.sql` (definer functions only; anonymous visitors still read no tables): `list_site_markets` (published markets with their website number: the active "website" tracking number, else the market support line), `list_public_services` (every service, its range across published markets and how many markets offer it), `market_public_stats` (verified active providers and average arrival from real completed jobs; null under 10 jobs), `join_waitlist`. pgTAP `007_website_structure.test.sql` (12).
+- `@rsos/db/public`: a cookie-less anonymous client so public data is cached and shared (`unstable_cache`, 5 minutes, tag `site-data`); rows are validated with Zod.
+- Routes: `/`, `/get-help` (placeholder start screen that keeps the chosen market and service), `/r/[token]`, `/roadside-assistance/[state]/[city]`, `/services/[service]`, `/roadside-assistance/[state]/[city]/[service]`, `/providers/[slug]`, `/for-providers`, `/for-providers/apply`, `/how-it-works`, `/faq`, `/about`, `/contact`, `/safety`, `/legal/*`, and a 404 page. Market and service pages are generated from the database (unknown ones are 404).
+- Header: logo, Services and Cities menus (native disclosures: no JavaScript, closed on navigation, Escape and outside click), For providers, tap-to-call with the visitor's market number, Get help now. Phones: sticky bottom bar with Call and Get help now. Footer: cities, services, company, providers (including provider sign-in), legal, the market number. Breadcrumbs with BreadcrumbList data.
+- Market detection: the city page's market, else the visitor's choice (HttpOnly cookie, 90 days), else Vercel's IP location checked against market boundaries in the database. Outside every market: "We're not in your area yet" with a waitlist form (email, optional ZIP; rate limited per IP) plus a city picker, because IP locations are often wrong. Non-US visitors are not told "not in your area".
+- Found while testing: Vercel cancels a preview when a newer commit is pushed, and skips the newer one if it does not touch the app. That leaves a branch with no preview for e2e. Fix used here: push a change inside the app. Tip for developers: avoid pushing a test-only commit right after an app commit.
+
+Acceptance criteria:
+
+| #   | Criterion                                                                           | Result                                                                                                                                                                                                                                                        |
+| --- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | A Houston visitor sees the Houston number without choosing (mocked headers)         | PASS: unit test with Vercel IP headers for downtown Houston returns the Houston market and its number; the header and phone bar render that number. Real numbers are an owner blocker (none bought yet), so staging shows no call button until they are added |
+| 2   | A visitor outside all markets sees the waitlist message, never a broken flow        | PASS: unit test (Dallas headers → outside, with the city); pgTAP stores a waitlist entry and rejects a bad email; on CI runners (outside every market) e2e uses the city picker in that box                                                                   |
+| 3   | Adding a market in the database adds its pages and menu entries with no code change | PASS: pgTAP inserts a new test market and it appears in `list_site_markets`; menus, footer, city pages and paths are built only from those rows (unit and e2e tests)                                                                                          |
+
 ## BLOCKERS
 
 ### Permissions
@@ -251,6 +268,8 @@ Acceptance criteria:
 3. **Twilio for SMS codes (RSOS-018).** Create a Twilio account and a Verify service. In each Supabase project: Authentication → Providers → Phone → enable, provider Twilio Verify, paste Account SID, Auth Token and Verify Service SID. Then add `SUPABASE_SMS_ENABLED=true` to the `rsos-provider` and `rsos-web` Vercel projects (staging and production). Until then staging and production show "text messages aren't set up yet"; previews use the mock code 000000.
 
 4. **Resend for email (RSOS-093).** Create a Resend account, add and verify your sending domain (Resend shows the DNS records to add). Create an API key with "Sending access". Add to the `rsos-provider` and `rsos-admin` Vercel projects (staging and production): `RESEND_API_KEY` (the key) and `EMAIL_FROM` (for example `Security <security@YOUR-DOMAIN>`). Until then staging and production record security emails as not sent, and previews show the code on screen. Supabase's own emails (reset links, email change) use Supabase's default sender until you also set SMTP in each Supabase project (Authentication → Emails → SMTP, using Resend's SMTP details).
+
+5. **Phone numbers per market (RSOS-019).** In Twilio, buy one local number per market (San Antonio, Las Vegas, Houston) for the website. Then add each one as data (not a migration) in the Supabase SQL editor for `rsos-staging` (and production at launch): `insert into public.market_phone_numbers (market_id, phone_number, purpose) select id, '+1XXXXXXXXXX', 'website' from public.markets where slug = 'houston';` Until then the website shows no call buttons (it never shows a made-up number). Tracking numbers for ads use purpose `google_ads`, `meta` or `microsoft`.
 
 ## Notes for the next developer
 

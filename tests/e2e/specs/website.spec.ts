@@ -67,6 +67,8 @@ test.describe("website structure", () => {
       page.getByRole("button", { name: "Use this area" }).click(),
     ]);
     await expect(page.getByRole("combobox", { name: "Change area" })).toHaveValue(value!);
+    // WebKit reports link prefetches cancelled by a navigation as errors: let them finish first.
+    await page.waitForLoadState("networkidle");
     await page.goto(url("/get-help"));
     await expect(page.locator(`[data-market='${value}']`)).toBeVisible();
   });
@@ -88,5 +90,33 @@ test.describe("website structure", () => {
       expect((await request.get(url(p))).status(), p).toBe(200);
     }
     expect((await request.get(url("/legal/not-a-doc"))).status()).toBe(404);
+  });
+});
+
+// RSOS-020: home page.
+test.describe("home page", () => {
+  test.skip(!web, "No website URL");
+
+  test("services are the main action and nothing is invented", async ({ page }) => {
+    await page.goto(url("/"));
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "What do you need?" })).toBeVisible();
+    // The example quote is labelled as an example and shows no rating or review count.
+    const example = page.getByRole("figure", { name: "Example of a quote" });
+    await expect(example).toContainText("Example only");
+    await expect(example).toContainText("New provider");
+    await expect(page.getByText(/reviews?\b/i)).toHaveCount(0);
+    await expect(page.getByText(/★|stars?\b/i)).toHaveCount(0);
+    await expectNoA11yViolations(page);
+    await expectNoHorizontalScroll(page);
+  });
+
+  test("FAQ has FAQPage structured data", async ({ page }) => {
+    await page.goto(url("/"));
+    const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const faq = blocks
+      .map((b) => JSON.parse(b) as { "@type": string; mainEntity?: unknown[] })
+      .find((d) => d["@type"] === "FAQPage");
+    expect(faq?.mainEntity?.length).toBeGreaterThanOrEqual(3);
   });
 });

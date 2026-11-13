@@ -326,5 +326,106 @@
     "cityService": {
       "title": "{service} in {city}"
     }
+  },
+  "home": {
+    "title": "Roadside help with real quotes in minutes",
+    "metaDescription": "Stuck on the road? Share where you are and what happened. Verified local providers send quotes with price and arrival time, and you pick one. No membership.",
+    "eyebrow": "Flat tire, dead battery, lockout, fuel or tow",
+    "headline": "Stuck? Get quotes from local roadside pros in minutes.",
+    "lead": "Tell us where you are and what happened. Verified providers nearby send a price and arrival time. You pick one and pay them directly.",
+    "pickService": "What do you need?",
+    "callNow": "Or call {phone}",
+    "trust": {
+      "label": "Why drivers use us",
+      "insured": "Insured, verified providers",
+      "fast": "Quotes in about 3 minutes",
+      "noMembership": "No membership or sign-up"
+    },
+    "how": {
+      "title": "How it works",
+      "step1": "Tell us what happened",
+      "step1Body": "Pick the problem and share your location. It takes under a minute.",
+      "step2": "Compare quotes",
+      "step2Body": "Nearby providers reply with a full price and how soon they can arrive.",
+      "step3": "Track your help",
+      "step3Body": "Choose one and follow their arrival. You pay the provider directly.",
+      "exampleLabel": "Example of a quote",
+      "exampleProvider": "A verified provider near you",
+      "exampleEta": "Arrival time",
+      "exampleEtaSr": "Their arrival time appears here",
+      "exampleNote": "Example only. Real quotes come from providers in your area.",
+      "trackingLabel": "Example of tracking",
+      "labels": {
+        "insured": "Insured",
+        "licensed": "Licensed",
+        "noRatings": "New provider",
+        "allIn": "all-in"
+      }
+    },
+    "tracking": {
+      "submitted": "Request sent",
+      "quoted": "Quotes received",
+      "accepted": "You picked a provider",
+      "en_route": "On the way",
+      "on_site": "Arrived"
+    },
+    "proof": {
+      "title": "Live in {city}",
+      "providers": "{count, plural, one {# verified provider} other {# verified providers}}",
+      "eta": "Average arrival: {minutes} min",
+      "basis": "From {count} completed jobs in the last 90 days."
+    },
+    "prices": {
+      "title": "Typical prices in {city}",
+      "note": "Ranges providers in {city} usually quote. Your quote is the final price before you choose.",
+      "plus_fuel": "plus fuel",
+      "plus_per_mile": "plus per-mile charge",
+      "from": "{min} to {max}",
+      "choose": "Choose your area to see local prices."
+    },
+    "cities": {
+      "title": "Where we help",
+      "body": "We open city by city so every driver gets fast, local help."
+    },
+    "services": {
+      "title": "Services"
+    },
+    "faq": {
+      "title": "Common questions",
+      "items": {
+        "cost": {
+          "q": "How much does it cost?",
+          "a": "Each provider quotes a full price before you choose. You only pay the provider you pick, directly. Using this site is free for drivers."
+        },
+        "fast": {
+          "q": "How fast will someone arrive?",
+          "a": "Every quote shows the provider's arrival time, so you can pick the fastest, the cheapest or the best rated."
+        },
+        "membership": {
+          "q": "Do I need a membership?",
+          "a": "No. There's no membership, subscription or account. You request help only when you need it."
+        },
+        "who": {
+          "q": "Who are the providers?",
+          "a": "Independent local towing and roadside companies. We check their insurance and, where required, their license before they can quote."
+        },
+        "safe": {
+          "q": "What should I do while I wait?",
+          "a": "Move off the road if you safely can, turn on your hazard lights and stay in your vehicle with your seatbelt on if you're on a highway. In an emergency, call 911."
+        }
+      }
+    },
+    "providers": {
+      "title": "Run a towing or roadside business?",
+      "body": "Get paid jobs from drivers near you. Set your own prices, quote when you want, and pay a flat fee only when a driver picks you.",
+      "cta": "Learn about joining"
+    },
+    "getHelp": "Get help now",
+    "trackingPill": {
+      "submitted": "Sent",
+      "quoted": "Quoted",
+      "accepted": "Picked",
+      "en_route": "On the way"
+    }
   }
 }
