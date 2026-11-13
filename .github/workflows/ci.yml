@@ -29,6 +29,8 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm lint
       - run: pnpm format:check
+      - name: No hardcoded brand name or domain
+        run: node scripts/check-brand.ts
 
   typecheck:
     name: typecheck

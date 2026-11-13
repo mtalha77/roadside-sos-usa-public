@@ -1,4 +1,4 @@
-import { brand } from "@rsos/config/brand";
+import { buildMetadata } from "@rsos/config/metadata";
 import { ThemeProvider } from "@rsos/ui/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -10,11 +10,7 @@ import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("web");
-  return {
-    title: { default: `${t("label")} | ${brand.name}`, template: `%s | ${brand.name}` },
-    description: t("body"),
-    applicationName: brand.name,
-  };
+  return buildMetadata({ app: "web", title: t("label"), description: t("body") });
 }
 
 export const viewport: Viewport = {

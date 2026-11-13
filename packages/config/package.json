@@ -12,7 +12,10 @@
     "./tsconfig/base.json": "./tsconfig/base.json",
     "./tsconfig/nextjs.json": "./tsconfig/nextjs.json",
     "./tsconfig/library.json": "./tsconfig/library.json",
-    "./site": "./src/site.ts"
+    "./site": "./src/site.ts",
+    "./logo": "./src/logo.ts",
+    "./metadata": "./src/metadata.ts",
+    "./brand-guard": "./src/brand-guard.ts"
   },
   "scripts": {
     "lint": "eslint .",
@@ -29,7 +32,11 @@
   },
   "devDependencies": {
     "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
     "eslint": "10.14.0",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "typescript": "6.0.3",
     "vitest": "5.1.0"
   }

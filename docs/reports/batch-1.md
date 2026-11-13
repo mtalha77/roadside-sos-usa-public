@@ -86,11 +86,27 @@ No TXT verification records are needed: all six domains are already verified on 
 
 Acceptance criteria:
 
-| #   | Criterion                                                           | Result                          |
-| --- | ------------------------------------------------------------------- | ------------------------------- |
-| 1   | Every pull request gets preview links for the apps it changes       | Pending (this PR)               |
-| 2   | Merging to `staging` updates the three staging hosts                | Pending (merge)                 |
-| 3   | All hostnames serve over HTTPS; non-production hosts send `noindex` | Pending (merge; apex needs DNS) |
+| #   | Criterion                                                           | Result                                                                                                                                                  |
+| --- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Every pull request gets preview links for the apps it changes       | Pending (this PR)                                                                                                                                       |
+| 2   | Merging to `staging` updates the three staging hosts                | Pending (merge)                                                                                                                                         |
+| 3   | All hostnames serve over HTTPS; non-production hosts send `noindex` | PARTIAL: staging, pro and admin serve HTTPS with `X-Robots-Tag: noindex, nofollow`; the apex still points to the old host until the DNS blocker is done |
+
+## RSOS-007: Brand and environment config (rename-ready)
+
+Existing (RSOS-002): `brand.ts` with name and domain, ESLint `no-restricted-syntax` rule. Added:
+
+- `brand.ts`: legal entity placeholder, description, social links (empty until accounts exist), logo paths, brand colour; domain from `NEXT_PUBLIC_APP_DOMAIN`; app URLs overridable by `NEXT_PUBLIC_{WEB,PROVIDER,ADMIN}_URL`. The provider URL now matches the real host (`pro.`).
+- `buildMetadata()` (`@rsos/config/metadata`): titles, descriptions, canonical, Open Graph, Twitter and robots; used by all three layouts.
+- Generated from the brand: wordmark at `/logo.svg`, app icon `/icon` (512 px) and `/apple-icon` (180 px) in every app.
+- CI check `node scripts/check-brand.ts` (lint job) fails on "Roadside SOS" or "fixallcontractors" outside `packages/config`, `.env*` files and Markdown docs (documentation and this report must name the working brand and DNS hostnames). Root package and Supabase CLI project renamed to `rsos`.
+
+Acceptance criteria:
+
+| #   | Criterion                                                                                | Result                                                                                                                                                           |
+| --- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Changing the name in config and the domain variables updates every page title and footer | PASS: `packages/config/test/rename.test.ts` changes the domain variable and checks every URL, email and metadata title; titles and footer read only from `brand` |
+| 2   | The CI check catches a hardcoded brand string (prove with a test)                        | PASS: `packages/config/test/brand-guard.test.ts`                                                                                                                 |
 
 ## BLOCKERS
 
