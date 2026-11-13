@@ -6,9 +6,10 @@
 
 ## Summary
 
-| Ticket   | Status      | Pull request |
-| -------- | ----------- | ------------ |
-| RSOS-004 | In progress | (this PR)    |
+| Ticket   | Status      | Pull request                                                     |
+| -------- | ----------- | ---------------------------------------------------------------- |
+| RSOS-004 | Done        | [#2](https://github.com/mtalha77/roadside-sos-usa-public/pull/2) |
+| RSOS-005 | In progress | (this PR)                                                        |
 
 ## RSOS-004: Supabase cloud projects and migration workflow
 
@@ -49,6 +50,49 @@ Production settings the owner must switch on in the Supabase dashboard for `rsos
 5. **Leaked password protection** and **MFA** for the dashboard organization members (Authentication, Providers; Organization, Security).
 6. **Spend cap** decision for the organization (Billing).
 
+## RSOS-005: Vercel projects, environments and domains
+
+Team: **Muhammad Talha's projects** (`muhammad-talhas-projects-e2b4ee4c`), plan **Pro**, so no plan blocker.
+
+| Project         | Root directory  | Production domain(s)                     | Staging branch domain               | Preview protection |
+| --------------- | --------------- | ---------------------------------------- | ----------------------------------- | ------------------ |
+| `rsos-web`      | `apps/web`      | fixallcontractors.com, www (308 to apex) | staging.fixallcontractors.com       | Public, noindex    |
+| `rsos-provider` | `apps/provider` | pro.fixallcontractors.com                | staging-pro.fixallcontractors.com   | Vercel Auth        |
+| `rsos-admin`    | `apps/admin`    | admin.fixallcontractors.com              | staging-admin.fixallcontractors.com | Vercel Auth        |
+
+- Node: Vercel set **26.x**, matching `.nvmrc` (26.13.0); no change needed.
+- "Skip unaffected projects" is on for all three (only apps a commit changes are built).
+- Production branch `main`; the `staging` branch is assigned to the staging domains.
+- Environment variables (piped from the Supabase CLI, never printed): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SITE_ENV`, `NEXT_PUBLIC_SITE_URL`; `SUPABASE_SERVICE_ROLE_KEY` (sensitive) on `rsos-admin` only. Production uses `rsos-prod`; the `staging` branch uses `rsos-staging`; other previews and Development use `rsos-dev`.
+- Variables are validated with Zod at build time (`validateAppEnv` in each `next.config.ts`); a Vercel build with a missing variable fails and names it.
+- Non-production hosts and all provider/admin hosts send `X-Robots-Tag: noindex, nofollow` and a disallow-all `robots.txt`. Vercel also marks `*.vercel.app` preview URLs noindex.
+- `@vercel/analytics` and `@vercel/speed-insights` are added to `rsos-web`.
+
+DNS records for fixallcontractors.com (DNS host: stackdns.com nameservers). **Do not change anything yet except the apex**; the five subdomains already resolve to Vercel.
+
+| Hostname                            | Type   | Name            | Value                                        | Status now                             |
+| ----------------------------------- | ------ | --------------- | -------------------------------------------- | -------------------------------------- |
+| fixallcontractors.com               | A      | `@`             | `216.150.1.1`                                | **Change needed**                      |
+| fixallcontractors.com               | A      | `@`             | `216.150.16.1`                               | **Change needed** (add)                |
+| fixallcontractors.com               | A/AAAA | `@`             | delete `185.151.30.209` and `2a07:7800::209` | **Conflicting, remove**                |
+| www.fixallcontractors.com           | CNAME  | `www`           | `2aa3b310123237e4.vercel-dns-016.com.`       | OK (currently `cname.vercel-dns.com.`) |
+| staging.fixallcontractors.com       | CNAME  | `staging`       | `2aa3b310123237e4.vercel-dns-016.com.`       | OK (currently `cname.vercel-dns.com.`) |
+| pro.fixallcontractors.com           | CNAME  | `pro`           | `ffeec8e2c3750e7f.vercel-dns-016.com.`       | OK (currently `cname.vercel-dns.com.`) |
+| staging-pro.fixallcontractors.com   | CNAME  | `staging-pro`   | `ffeec8e2c3750e7f.vercel-dns-016.com.`       | OK (currently `cname.vercel-dns.com.`) |
+| admin.fixallcontractors.com         | CNAME  | `admin`         | `0abd3939185a2c23.vercel-dns-016.com.`       | OK (currently `cname.vercel-dns.com.`) |
+| staging-admin.fixallcontractors.com | CNAME  | `staging-admin` | `0abd3939185a2c23.vercel-dns-016.com.`       | OK (currently `cname.vercel-dns.com.`) |
+
+No TXT verification records are needed: all six domains are already verified on the Vercel team. Switching the CNAMEs from `cname.vercel-dns.com.` to the project-specific values is optional (Vercel's recommendation).
+
+Acceptance criteria:
+
+| #   | Criterion                                                           | Result                          |
+| --- | ------------------------------------------------------------------- | ------------------------------- |
+| 1   | Every pull request gets preview links for the apps it changes       | Pending (this PR)               |
+| 2   | Merging to `staging` updates the three staging hosts                | Pending (merge)                 |
+| 3   | All hostnames serve over HTTPS; non-production hosts send `noindex` | Pending (merge; apex needs DNS) |
+
 ## BLOCKERS
 
-None yet.
+1. **DNS for the apex domain (RSOS-005).** At your DNS host for fixallcontractors.com (nameservers `ns1-4.stackdns.com`): delete the `@` A record `185.151.30.209` and the `@` AAAA record `2a07:7800::209`, then add `@` A `216.150.1.1` and `@` A `216.150.16.1`. Vercel issues the certificate automatically within minutes.
+2. **Turn on Web Analytics and Speed Insights for `rsos-web` (RSOS-005).** Vercel dashboard, project `rsos-web`, Analytics tab, Enable; then Speed Insights tab, Enable. The code is already installed; data starts after the next deployment.
