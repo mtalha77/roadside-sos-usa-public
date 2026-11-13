@@ -21,5 +21,13 @@
     "headline": "Administra todos los mercados desde un solo lugar.",
     "body": "Lanza mercados, verifica proveedores y gestiona precios, tarifas y planes.",
     "cta": "Iniciar sesión"
+  },
+  "emails": {
+    "welcome": {
+      "preview": "Bienvenido a {brand}",
+      "heading": "Bienvenido a {brand}, {name}",
+      "tagline": "Ayuda en el camino, rápido.",
+      "questions": "¿Preguntas? Escribe a"
+    }
   }
 }

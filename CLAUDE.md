@@ -75,6 +75,16 @@ Validate with Zod (`packages/core` schemas) wherever data enters or leaves trust
 - **WCAG 2.2 AA:** 4.5:1 text contrast, visible focus, full keyboard use, labelled controls, semantic landmarks and headings, `prefers-reduced-motion` respected.
 - **48px touch targets:** everything tappable uses at least `min-h-touch` (and `min-w-touch` for icon buttons). The shared `Button` already does.
 
+### 7. Accessibility checklist (every page and component)
+
+- **Labels:** every input has a visible `<label>` (use `Field`); icon-only buttons use `IconButton` (label required); images have `alt` (decorative: `alt=""`).
+- **Focus order:** follows the visual order; no positive `tabIndex`; dialogs and sheets trap focus and return it to the trigger; a "skip to main content" link on every page.
+- **Contrast:** only design tokens (CI checks every pair at WCAG 2.2 AA in both themes); never convey meaning by colour alone (status pills always show text).
+- **Live regions:** announce changes that matter (quotes arriving, status changes, countdowns) with `aria-live="polite"`; errors use `role="alert"`; do not announce every tick.
+- **Targets:** at least 48x48px (`min-h-touch`, `min-w-touch`) with space between them.
+- **Text:** no hardcoded user-facing strings: put them in `packages/i18n/messages/{en,es}.json` and use `useTranslations`/`getTranslations` (ESLint `react/jsx-no-literals` and literal `aria-label`/`placeholder`/`alt`/`title` checks enforce it). Format money, numbers, dates and times with `@rsos/i18n` helpers in the **market's time zone**.
+- **Verify:** keyboard-only pass, screen reader spot check (VoiceOver on iPhone), 200% zoom, reduced motion, light and dark. CI runs axe on every story and every preview page.
+
 ## Stack
 
 Turborepo + pnpm workspaces · Next.js (App Router) + TypeScript strict · Tailwind CSS v4 + shadcn/ui (Radix) + Motion · React Hook Form + Zod · TanStack Query and Table · Supabase (Postgres + PostGIS, Auth, Realtime, Storage, Edge Functions) · Vercel · Google Maps Platform · Twilio · Stripe · Resend · Sentry · PostHog · next-intl (English first, Spanish-ready) · Vitest, Playwright, Storybook.

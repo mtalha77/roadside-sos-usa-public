@@ -16,7 +16,13 @@ export type PhoneInputProps = Omit<
 };
 
 /** US phone number with "(512) 555-0123" formatting; emits E.164. */
-export function PhoneInput({ value, onValueChange, className, ...props }: PhoneInputProps) {
+export function PhoneInput({
+  value,
+  onValueChange,
+  className,
+  placeholder = "(555) 555-0123",
+  ...props
+}: PhoneInputProps) {
   const [display, setDisplay] = useState(() => formatUsPhone(value ?? ""));
   return (
     <div className="relative">
@@ -30,7 +36,7 @@ export function PhoneInput({ value, onValueChange, className, ...props }: PhoneI
         type="tel"
         inputMode="tel"
         autoComplete="tel-national"
-        placeholder="(555) 555-0123"
+        placeholder={placeholder}
         value={display}
         onChange={(e) => {
           const next = formatUsPhone(e.target.value);
