@@ -45,3 +45,20 @@ describe("Supabase clients", () => {
     expect(typeof createAdminSupabase().from).toBe("function");
   });
 });
+
+describe("public client", () => {
+  it("is null without configuration and a client with it", async () => {
+    const { createPublicSupabase } = await import("../src/public");
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+    delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+    expect(createPublicSupabase()).toBeNull();
+    process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_test";
+    expect(createPublicSupabase()).not.toBeNull();
+    if (url) process.env.NEXT_PUBLIC_SUPABASE_URL = url;
+    else delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (key) process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = key;
+    else delete process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  });
+});
