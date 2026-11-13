@@ -348,7 +348,15 @@ test.describe("legal pages and consent", () => {
         Object.defineProperty(navigator, "globalPrivacyControl", { value: true }),
       );
       await page.goto(url("/"));
-      await page.getByRole("button", { name: "Accept all" }).click();
+      // The form posts, then the page reloads with the choice applied by the head script.
+      await Promise.all([
+        page.waitForResponse((r) => r.url().endsWith("/api/consent")),
+        page.getByRole("button", { name: "Accept all" }).click(),
+      ]);
+      await page.waitForLoadState("load");
+      await page.waitForFunction(() =>
+        Array.isArray((window as unknown as { dataLayer?: unknown[] }).dataLayer),
+      );
       await expect(page.getByRole("region", { name: "Your privacy choices" })).toBeHidden();
       const update = await page.evaluate(() =>
         (window as unknown as { dataLayer: unknown[][] }).dataLayer
