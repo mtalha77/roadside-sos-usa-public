@@ -97,3 +97,24 @@ export async function getMarketByPath(state: string, city: string) {
   const m = (await getMarkets()).find((x) => x.slug === city);
   return m && m.state_code.toLowerCase() === state.toLowerCase() ? m : null;
 }
+
+export const MarketPageSchema = z.object({
+  headline: z.string(),
+  intro: z.string(),
+  areas: z.array(z.string()),
+  highways: z.array(z.string()),
+  local_tips: z.array(z.string()),
+  faqs: z.array(z.object({ q: z.string(), a: z.string() })),
+  updated_at: z.string(),
+});
+export type MarketPage = z.infer<typeof MarketPageSchema>;
+
+/** City page copy from `market_pages` (falls back to English); null when none is written yet. */
+export const getMarketPage = unstable_cache(
+  async (slug: string, locale: string): Promise<MarketPage | null> =>
+    (
+      await rpc(MarketPageSchema, "get_market_page", { p_market_slug: slug, p_locale: locale })
+    )[0] ?? null,
+  ["get_market_page"],
+  { revalidate: REVALIDATE, tags: [SITE_TAG] },
+);

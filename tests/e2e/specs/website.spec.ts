@@ -48,7 +48,8 @@ test.describe("website structure", () => {
     await page.goto(url(city!));
     await expectNoHorizontalScroll(page);
     await expectNoA11yViolations(page);
-    await page.getByRole("main").getByRole("link").filter({ hasText: /Tow/ }).first().click();
+    // City page prices link to the city plus service pages (the tiles start the request flow).
+    await page.getByRole("main").locator('a[href$="/tow"]').first().click();
     await expect(page).toHaveURL(new RegExp(`${city}/tow$`));
     await page.getByRole("main").getByRole("link", { name: "Get help now" }).click();
     await expect(page).toHaveURL(/\/get-help\?service=tow&market=[a-z-]+$/);
@@ -118,5 +119,35 @@ test.describe("home page", () => {
       .map((b) => JSON.parse(b) as { "@type": string; mainEntity?: unknown[] })
       .find((d) => d["@type"] === "FAQPage");
     expect(faq?.mainEntity?.length).toBeGreaterThanOrEqual(3);
+  });
+});
+
+// RSOS-024: city pages.
+test.describe("city pages", () => {
+  test.skip(!web, "No website URL");
+
+  test("each test market has its own copy, a canonical URL and valid structured data", async ({
+    page,
+  }) => {
+    await page.goto(url("/"));
+    const hrefs = await page
+      .getByRole("contentinfo")
+      .getByRole("navigation", { name: "Cities" })
+      .getByRole("link")
+      .evaluateAll((as) => as.map((a) => a.getAttribute("href")!));
+    const intros = new Set<string>();
+    for (const href of hrefs) {
+      await page.goto(url(href));
+      const h1 = (await page.getByRole("heading", { level: 1 }).textContent()) ?? "";
+      intros.add(h1 + (await page.locator("main p").first().textContent()));
+      expect(await page.locator('link[rel="canonical"]').getAttribute("href")).toContain(href);
+      const types = (
+        await page.locator('script[type="application/ld+json"]').allTextContents()
+      ).map((b) => (JSON.parse(b) as { "@type": string })["@type"]);
+      expect(types).toEqual(expect.arrayContaining(["Service", "BreadcrumbList", "FAQPage"]));
+    }
+    expect(intros.size).toBe(hrefs.length);
+    await expectNoA11yViolations(page);
+    await expectNoHorizontalScroll(page);
   });
 });

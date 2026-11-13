@@ -321,7 +321,16 @@
       "home": "Ir al inicio"
     },
     "city": {
-      "title": "Asistencia en carretera en {city}, {state}"
+      "title": "Asistencia en carretera en {city}, {state}",
+      "description": "Recibe cotizaciones con precio y hora de llegada de proveedores verificados en {city}, {state}. Llantas, paso de corriente, llaves adentro, combustible y grúa.",
+      "servicesTitle": "¿Qué necesitas en {city}?",
+      "call": "Llamar al {phone}",
+      "areasTitle": "Zonas que cubrimos",
+      "highwaysTitle": "Autopistas y vías principales",
+      "tipsTitle": "Consejos para conductores en {city}",
+      "faqTitle": "Preguntas sobre {city}",
+      "nearbyTitle": "Otras ciudades donde estamos",
+      "serviceIn": "{service} en {city}"
     },
     "cityService": {
       "title": "{service} en {city}"

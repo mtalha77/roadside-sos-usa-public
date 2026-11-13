@@ -74,3 +74,22 @@ export function formatPhone(e164: string): string {
 /** City label for menus and headings, e.g. "Houston, TX" (name and state from the market row). */
 export const cityLabel = (m: Pick<SiteMarket, "name" | "state_code">) =>
   `${m.name}, ${m.state_code}`;
+
+/** Other markets, nearest first (great-circle distance between market centres). */
+export function nearestMarkets(from: SiteMarket, all: SiteMarket[], limit = 4): SiteMarket[] {
+  const rad = (d: number) => (d * Math.PI) / 180;
+  const km = (m: SiteMarket) => {
+    const dLat = rad(m.center_lat - from.center_lat);
+    const dLng = rad(m.center_lng - from.center_lng);
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(rad(from.center_lat)) * Math.cos(rad(m.center_lat)) * Math.sin(dLng / 2) ** 2;
+    return 6371 * 2 * Math.asin(Math.sqrt(a));
+  };
+  return all
+    .filter((m) => m.slug !== from.slug)
+    .map((m) => ({ m, d: km(m) }))
+    .sort((a, b) => a.d - b.d)
+    .slice(0, limit)
+    .map((x) => x.m);
+}

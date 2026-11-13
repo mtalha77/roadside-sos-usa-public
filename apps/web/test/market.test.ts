@@ -3,6 +3,7 @@ import {
   detectMarket,
   formatPhone,
   marketPath,
+  nearestMarkets,
   readGeoHeaders,
   type SiteMarket,
 } from "../src/lib/market";
@@ -106,5 +107,27 @@ describe("market detection (RSOS-019)", () => {
   it("formats numbers for display", () => {
     expect(formatPhone("+17135550123")).toBe("(713) 555-0123");
     expect(formatPhone("911")).toBe("911");
+  });
+});
+
+describe("nearby cities", () => {
+  it("lists other markets nearest first", () => {
+    const at = (slug: string, lat: number, lng: number) => ({
+      ...market(slug, slug, "TX", null),
+      center_lat: lat,
+      center_lng: lng,
+    });
+    const sa = at("san-antonio", 29.42, -98.49);
+    const list = [
+      sa,
+      at("houston", 29.76, -95.37),
+      at("las-vegas", 36.17, -115.14),
+      at("austin-test", 30.27, -97.74),
+    ];
+    expect(nearestMarkets(sa, list).map((m) => m.slug)).toEqual([
+      "austin-test",
+      "houston",
+      "las-vegas",
+    ]);
   });
 });

@@ -23,8 +23,8 @@
 | RSOS-096 follow-up (faster CI) | Done        | [#119](https://github.com/mtalha77/roadside-sos-usa-public/pull/119) |
 | RSOS-093                       | Done        | [#120](https://github.com/mtalha77/roadside-sos-usa-public/pull/120) |
 | RSOS-019                       | Done        | [#121](https://github.com/mtalha77/roadside-sos-usa-public/pull/121) |
-| RSOS-020                       | Not started |                                                                      |
-| RSOS-024                       | Not started |                                                                      |
+| RSOS-020                       | Done        | [#122](https://github.com/mtalha77/roadside-sos-usa-public/pull/122) |
+| RSOS-024                       | Done        | [#123](https://github.com/mtalha77/roadside-sos-usa-public/pull/123) |
 | RSOS-025                       | Not started |                                                                      |
 | RSOS-027                       | Not started |                                                                      |
 | RSOS-026                       | Not started |                                                                      |
@@ -251,6 +251,36 @@ Acceptance criteria:
 | 1   | A Houston visitor sees the Houston number without choosing (mocked headers)         | PASS: unit test with Vercel IP headers for downtown Houston returns the Houston market and its number; the header and phone bar render that number. Real numbers are an owner blocker (none bought yet), so staging shows no call button until they are added |
 | 2   | A visitor outside all markets sees the waitlist message, never a broken flow        | PASS: unit test (Dallas headers → outside, with the city); pgTAP stores a waitlist entry and rejects a bad email; on CI runners (outside every market) e2e uses the city picker in that box                                                                   |
 | 3   | Adding a market in the database adds its pages and menu entries with no code change | PASS: pgTAP inserts a new test market and it appears in `list_site_markets`; menus, footer, city pages and paths are built only from those rows (unit and e2e tests)                                                                                          |
+
+## RSOS-020: Home page
+
+- Hero: headline about fast quotes from local providers, the service tiles as the main action (each opens `/get-help` with that service and the visitor's market), Call now when the market has a number, trust row (insured providers, quotes in about 3 minutes, no membership).
+- How it works in 3 steps with the real `QuoteCard`, `Timeline` and `StatusPill`: the quote is labelled "Example only", uses the low end of a real local price range, shows "New provider" (no rating) and no invented arrival time.
+- Live proof only from `market_public_stats` (hidden until there are real providers or at least 10 completed jobs); typical prices from `market_services`; cities; FAQ as native disclosures with FAQPage data; provider recruitment band. No reviews section (no real reviews exist).
+- The hero is text only: nothing waits for maps or third-party scripts. Menus and FAQ use no JavaScript.
+- Fixed during CI: the how-it-works grid overflowed phone width (implicit grid column grew to its widest child); WebKit reported cancelled link prefetches as errors in one e2e test.
+
+Acceptance criteria:
+
+| #   | Criterion                                                           | Result                                                                                                                                                                                      |
+| --- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Lighthouse mobile LCP under 1.5 seconds on the staging home page    | PASS: Lighthouse CI (mobile, 3 runs) on the staging home: LCP 1.34 s, 1.11 s, 1.17 s; CLS 0; performance 0.98 to 1.0; accessibility 1.0                                                     |
+| 2   | Tapping a service tile opens `/get-help` with that service selected | PASS: e2e (Flat tire tile → `/get-help?service=flat-tire`, selection shown) on phones and desktop                                                                                           |
+| 3   | No fake numbers or reviews anywhere                                 | PASS: e2e checks the example is labelled and shows no rating, and the page has no review or star text; stats come only from real rows (pgTAP: 0 providers and no average without real jobs) |
+
+## RSOS-024: City pages
+
+- Migration `20261113070000_market_pages.sql`: `market_pages` (headline, intro, areas, highways, local tips, local FAQs, per locale; RLS: staff read in their markets, super admin, ops manager and marketing edit; no anonymous access) and `get_market_page` (published markets only, Spanish falls back to English). Unique copy for San Antonio, Las Vegas and Houston written for each city (local roads, areas, heat, flooding, garages, TDLR licensing), plus titles and meta descriptions in `markets.seo_title` and `seo_intro`. pgTAP `008_market_pages.test.sql` (10).
+- City page: headline and intro from the database, Get help now (market preselected) and Call (market number), service tiles, live proof (real data only), typical prices per service linking to the city plus service pages, areas and highways, local tips, local FAQ, nearby cities (nearest first). Structured data: Service (with an offer catalog of real price ranges), BreadcrumbList, FAQPage. Canonical URL. Paused and draft markets are 404.
+- Caching: market data is cached for 5 minutes and tagged; `POST /api/revalidate` (Bearer `REVALIDATE_SECRET`, compared in constant time) refreshes every page at once. The secret was generated with openssl and piped into the `rsos-web` and `rsos-admin` Vercel projects (all environments); the admin market screens will call it.
+- Indexing stays off on staging by rule (`X-Robots-Tag: noindex` everywhere except the production website).
+
+Acceptance criteria:
+
+| #   | Criterion                                                                     | Result                                                                                                                                                                                                                                                                                                        |
+| --- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | The three test markets have live, indexable pages on staging with unique copy | PASS: pgTAP checks three different intros with areas, highways and FAQs; e2e opens every city page and checks a different headline and intro, a canonical URL and no accessibility issues. "Indexable" means the page is crawlable with a canonical and structured data; staging itself stays noindex by rule |
+| 2   | Structured data validates                                                     | PASS: e2e parses every JSON-LD block on each city page and finds Service, BreadcrumbList and FAQPage with their required fields (schema.org shapes). Google's Rich Results Test needs a public URL, so run it on production after launch (noted for RSOS-032)                                                 |
 
 ## BLOCKERS
 
