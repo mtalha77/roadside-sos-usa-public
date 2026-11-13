@@ -1,0 +1,38 @@
+name: Onboarding
+description: Checklist for a new team member's first day.
+title: "Onboarding: "
+labels: ["onboarding"]
+body:
+  - type: input
+    id: who
+    attributes:
+      label: New team member (GitHub username)
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: Role
+      options: [Developer, Designer, Operations, Support, Marketing]
+    validations:
+      required: true
+  - type: checkboxes
+    id: access
+    attributes:
+      label: Accounts and access (owner grants, member confirms)
+      options:
+        - label: "GitHub: repository collaborator with Write access"
+        - label: "Vercel: team member (Member role; Viewer for non-developers)"
+        - label: "Supabase: organization member (Developer role; never Owner)"
+        - label: "Sentry: project member (when set up)"
+        - label: "PostHog: project member (when set up)"
+        - label: "Password manager vault for shared test accounts (never share real secrets in chat)"
+  - type: checkboxes
+    id: first-day
+    attributes:
+      label: First day
+      options:
+        - label: Read README.md, CLAUDE.md, CONTRIBUTING.md and docs/QA.md
+        - label: "Ran the apps locally (pnpm dev) against rsos-dev"
+        - label: Opened a first pull request into staging with a passing preview
+        - label: Picked a first ticket from the RSOS Backlog board

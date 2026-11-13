@@ -1,2 +1,22 @@
-# Every file is owned by the repository owner.
-* @mtalha77
+# Code owners by area. Today one owner covers everything; when the team grows, replace the
+# handle per area (for example @org/web-team) and enable "Require review from Code Owners".
+*                       @mtalha77
+
+# Apps
+/apps/web/              @mtalha77
+/apps/provider/         @mtalha77
+/apps/admin/            @mtalha77
+
+# Shared packages
+/packages/ui/           @mtalha77
+/packages/core/         @mtalha77
+/packages/db/           @mtalha77
+/packages/config/       @mtalha77
+/packages/i18n/         @mtalha77
+/packages/emails/       @mtalha77
+
+# Database, CI and security-sensitive files
+/supabase/              @mtalha77
+/.github/               @mtalha77
+/SECURITY.md            @mtalha77
+/scripts/               @mtalha77
