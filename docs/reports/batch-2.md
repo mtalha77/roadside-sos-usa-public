@@ -27,7 +27,7 @@
 | RSOS-024                       | Done        | [#123](https://github.com/mtalha77/roadside-sos-usa-public/pull/123) |
 | RSOS-025                       | Done        | [#124](https://github.com/mtalha77/roadside-sos-usa-public/pull/124) |
 | RSOS-027                       | Done        | [#125](https://github.com/mtalha77/roadside-sos-usa-public/pull/125) |
-| RSOS-026                       | Not started |                                                                      |
+| RSOS-026                       | Done        | [#126](https://github.com/mtalha77/roadside-sos-usa-public/pull/126) |
 | RSOS-028                       | Not started |                                                                      |
 | RSOS-032                       | Not started |                                                                      |
 | RSOS-033                       | Not started |                                                                      |
@@ -312,6 +312,21 @@ Acceptance criteria:
 | 1   | FAQ structured data validates                                  | PASS: e2e parses the FAQPage block on `/faq` (every question has a name and an accepted answer, 13 in all); the home, city and service pages use the same component                                                                  |
 | 2   | Contact submissions are stored and trigger the email interface | PASS: unit test (stored with the market, team notice and confirmation sent through `EmailSender`); pgTAP (stored, tagged with the market, unreadable by visitors); e2e submits the form on the preview (rsos-dev, mock email sender) |
 
+## RSOS-026: For Providers page and application form
+
+- Migration `20261113100000_provider_applications.sql`: `market_plans` (Pro and Featured per market, append-only like prices, RLS: staff read, finance and super admin add), `list_market_plans`, and `submit_provider_application` (markets and services by slug stored as ids, unpublished markets ignored; an SMS opt-in is stored in `consents` with the SMS terms version shown). Plans are seeded with the owner's ranges for the three test markets: Pro 99 to 149 USD a month with 15% off fees, Featured 25 to 50 USD a month per market. pgTAP `011_provider_applications.test.sql` (9).
+- `/for-providers`: how jobs arrive (3 steps), how the money works (own prices, drivers pay providers directly, flat fee only when picked, prepaid wallet), the fee per picked request for each city and service read from `market_services`, the optional plans from `market_plans`, requirements (insurance; TDLR tow license in Texas).
+- `/for-providers/apply`: company, contact name, mobile phone, email, cities, services, number of trucks, insurance carrier, license number, how they heard about us, optional SMS opt-in with the STOP/HELP wording and a link to the SMS terms. Zod validation (fields with errors are marked), rate limit (3 per hour per IP), Turnstile, then a team notice by email and a confirmation to the applicant by email and, with opt-in, by text.
+- SMS interface in `@rsos/core` (`SmsSender`): Twilio over HTTPS when `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM_NUMBER` (or `TWILIO_MESSAGING_SERVICE_SID`) are set; a mock on development and previews; "unavailable" elsewhere, which fails safely (the application is still stored and emailed).
+- Legal document versions live in `@rsos/config/legal` (RSOS-028 adds the database side).
+
+Acceptance criteria:
+
+| #   | Criterion                                                                                | Result                                                                                                                                                                                                                      |
+| --- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Applications are stored with all fields and the market tagged                            | PASS: pgTAP stores an application and checks every field, the published markets chosen (an unpublished one is ignored) and the services; unit test checks the action sends every field; e2e submits the form on the preview |
+| 2   | Applicant confirmation goes through the email and SMS interfaces (mock until keys exist) | PASS: unit test (confirmation email to the applicant, team notice, a text through `SmsSender` only with opt-in); SMS interface unit tests (Twilio request, messaging service, failure, environment choice)                  |
+
 ## BLOCKERS
 
 ### Permissions
@@ -325,7 +340,7 @@ Acceptance criteria:
 ### Accounts to create
 
 2. **Google Maps Platform (RSOS-013).** Create a Google Cloud project, enable "Maps JavaScript API", create a browser API key restricted by HTTP referrer to the six hostnames and `*.vercel.app` previews of the team. Add it to Vercel as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (all three projects, all environments) and to GitHub Actions as a secret `STORYBOOK_GOOGLE_MAPS_API_KEY` if you want the live map story. Until then maps show a static placeholder.
-3. **Twilio for SMS codes (RSOS-018).** Create a Twilio account and a Verify service. In each Supabase project: Authentication → Providers → Phone → enable, provider Twilio Verify, paste Account SID, Auth Token and Verify Service SID. Then add `SUPABASE_SMS_ENABLED=true` to the `rsos-provider` and `rsos-web` Vercel projects (staging and production). Until then staging and production show "text messages aren't set up yet"; previews use the mock code 000000.
+3. **Twilio for SMS (RSOS-018, RSOS-026).** Also add `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM_NUMBER` (or `TWILIO_MESSAGING_SERVICE_SID`) to the `rsos-web` Vercel project so applicants who opt in get a confirmation text; register the number for A2P 10DLC in Twilio first (required for US business texting). For SMS codes: Create a Twilio account and a Verify service. In each Supabase project: Authentication → Providers → Phone → enable, provider Twilio Verify, paste Account SID, Auth Token and Verify Service SID. Then add `SUPABASE_SMS_ENABLED=true` to the `rsos-provider` and `rsos-web` Vercel projects (staging and production). Until then staging and production show "text messages aren't set up yet"; previews use the mock code 000000.
 
 4. **Resend for email (RSOS-093).** Create a Resend account, add and verify your sending domain (Resend shows the DNS records to add). Create an API key with "Sending access". Add to the `rsos-provider` and `rsos-admin` Vercel projects (staging and production): `RESEND_API_KEY` (the key) and `EMAIL_FROM` (for example `Security <security@YOUR-DOMAIN>`). Until then staging and production record security emails as not sent, and previews show the code on screen. Supabase's own emails (reset links, email change) use Supabase's default sender until you also set SMTP in each Supabase project (Authentication → Emails → SMTP, using Resend's SMTP details).
 
@@ -337,6 +352,8 @@ Acceptance criteria:
 ### Decisions
 
 6. **Winch out (RSOS-025).** It is switched off in every market (seed data). Decide whether to offer it at launch; if yes, enable it per market in admin with its price range and fee. Its pages already exist and switch from "not available yet" to bookable automatically.
+
+7b. **Provider plan prices per city (RSOS-026).** The website shows the ranges you gave (Pro 99 to 149 USD a month with 15% off fees, Featured 25 to 50 USD a month per city). Decide the exact price per city; then add a row per city and plan to `market_plans` (admin plans ticket, or SQL: `insert into public.market_plans (market_id, plan, price_min_cents, price_max_cents, fee_discount_bps) select id, 'pro', 12900, 12900, 1500 from public.markets where slug = 'houston';`). The page updates by itself.
 
 ## Notes for the next developer
 

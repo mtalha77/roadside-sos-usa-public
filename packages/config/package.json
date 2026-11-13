@@ -19,7 +19,8 @@
     "./security": "./src/security.ts",
     "./tokens": "./src/tokens.ts",
     "./color": "./src/color.ts",
-    "./theme-colors": "./src/theme-colors.ts"
+    "./theme-colors": "./src/theme-colors.ts",
+    "./legal": "./src/legal.ts"
   },
   "scripts": {
     "lint": "eslint .",

@@ -160,3 +160,18 @@ export const getMarketServiceNote = unstable_cache(
   ["get_market_service_note"],
   { revalidate: REVALIDATE, tags: [SITE_TAG] },
 );
+
+export const MarketPlanSchema = z.object({
+  market_slug: z.string(),
+  plan: z.enum(["pro", "featured"]),
+  price_min_cents: z.number(),
+  price_max_cents: z.number(),
+  fee_discount_bps: z.number(),
+});
+export type MarketPlan = z.infer<typeof MarketPlanSchema>;
+
+export const getMarketPlans = unstable_cache(
+  async (): Promise<MarketPlan[]> => rpc(MarketPlanSchema, "list_market_plans"),
+  ["list_market_plans"],
+  { revalidate: REVALIDATE, tags: [SITE_TAG] },
+);
