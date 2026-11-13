@@ -731,5 +731,243 @@
       "checkField": "Revisa este campo."
     },
     "smsConfirmation": "{brand}: recibimos tu solicitud para {company}. Te contactaremos en 2 días hábiles. Responde STOP para cancelar."
+  },
+  "legal": {
+    "draftBanner": "Borrador para revisión legal. Aún no está vigente.",
+    "version": "Versión {version}",
+    "updated": "Última actualización: {date}",
+    "toc": "En esta página",
+    "contactLine": "Preguntas sobre este documento: {email}",
+    "docs": {
+      "driver-terms": {
+        "title": "Términos de uso para conductores",
+        "intro": "Estos términos aplican cuando usas nuestro sitio web o línea telefónica para pedir asistencia en carretera.",
+        "sections": [
+          [
+            "Somos un mercado, no un proveedor de asistencia",
+            "Te conectamos con proveedores independientes. No remolcamos, reparamos, abrimos vehículos ni entregamos combustible, y los proveedores no son nuestros empleados ni agentes. El proveedor que eliges es responsable del trabajo."
+          ],
+          [
+            "Cotizaciones y precios",
+            "Los proveedores fijan sus precios. Una cotización es la oferta del proveedor por el servicio descrito. Algunos servicios indican extras, como combustible o distancia de remolque. Confirma el precio con el proveedor antes de empezar."
+          ],
+          [
+            "Pago",
+            "Le pagas directamente al proveedor, con los métodos que acepte. No te cobramos por el trabajo ni manejamos ese pago."
+          ],
+          [
+            "Tu información",
+            "Aceptas dar datos correctos sobre tu ubicación, vehículo y problema, y que los compartamos con los proveedores para que coticen y te ayuden. Consulta la Política de privacidad."
+          ],
+          [
+            "Seguridad y emergencias",
+            "Nuestro servicio no es un servicio de emergencias. Si alguien está herido o en peligro, llama primero al 911."
+          ],
+          [
+            "Calificaciones y conducta",
+            "Trata a los proveedores con respeto. Las calificaciones deben ser honestas y sobre tu propia experiencia."
+          ],
+          [
+            "Límites de nuestra responsabilidad",
+            "En la medida que la ley lo permita, no somos responsables del trabajo, retrasos, daños o precios del proveedor. Las disputas sobre un trabajo son entre tú y el proveedor, aunque intentaremos ayudar."
+          ],
+          [
+            "Cambios y contacto",
+            "Podemos actualizar estos términos. La versión y la fecha aparecen arriba. Contáctanos con cualquier pregunta."
+          ]
+        ]
+      },
+      "provider-terms": {
+        "title": "Términos para proveedores",
+        "intro": "Estos términos aplican a los proveedores de asistencia que se unen al mercado.",
+        "sections": [
+          [
+            "Ingreso y verificación",
+            "Debes tener el seguro y las licencias requeridas para los servicios que ofreces (por ejemplo, la licencia de operador de grúa de TDLR en Texas), mantenerlos vigentes y enviar comprobantes cuando se pidan."
+          ],
+          [
+            "Cotizaciones y trabajos",
+            "Eliges qué solicitudes cotizar. Una cotización debe incluir el precio total del servicio y una hora de llegada honesta. Si un conductor te elige, aceptas hacer el trabajo como lo cotizaste."
+          ],
+          [
+            "Tarifas",
+            "Cuando un conductor elige tu cotización, se cobra de tu saldo prepagado una tarifa fija para esa ciudad y servicio. Las tarifas actuales aparecen en la página Para proveedores y en tu portal."
+          ],
+          [
+            "Saldo y créditos",
+            "Recargas tu saldo por adelantado. Las tarifas se descuentan del saldo. Los créditos que emitimos (por ejemplo, por un trabajo cancelado sin culpa tuya) se suman al saldo. Los saldos no usados se manejan como se indica en tu portal."
+          ],
+          [
+            "Planes",
+            "Los planes opcionales Pro y Destacado se cobran mensualmente al precio indicado para tu ciudad y puedes cancelarlos antes de la siguiente fecha de cobro."
+          ],
+          [
+            "Pago de los conductores",
+            "Los conductores te pagan directamente. Eres responsable de tu procesamiento de pagos, recibos e impuestos."
+          ],
+          [
+            "Conducta",
+            "Sé honesto, seguro y amable. No cobres más de lo cotizado, no acoses y no hagas trabajos inseguros."
+          ],
+          [
+            "Suspensión y baja",
+            "Podemos pausar o dar de baja a un proveedor por seguro o licencias vencidas, ausencias repetidas, quejas, fraude o incumplir estos términos. Te diremos el motivo y el siguiente paso."
+          ],
+          [
+            "Cambios y contacto",
+            "Podemos actualizar estos términos y tarifas con aviso. La versión y la fecha aparecen arriba."
+          ]
+        ]
+      },
+      "privacy": {
+        "title": "Política de privacidad",
+        "intro": "Cómo recopilamos, usamos y compartimos información personal, y las opciones que tienes.",
+        "sections": [
+          [
+            "Qué recopilamos",
+            "Datos de contacto (nombre, teléfono, correo), tu ubicación y datos del vehículo cuando pides ayuda, mensajes que nos envías, datos del dispositivo y de uso, y para proveedores, datos de la empresa, seguro y licencias."
+          ],
+          [
+            "Cómo la usamos",
+            "Para conectarte con proveedores, enviarte avisos sobre tu solicitud, prevenir fraude, mantener el servicio seguro, mejorarlo y cumplir obligaciones legales."
+          ],
+          [
+            "Con quién la compartimos",
+            "Con los proveedores que cotizan o hacen tu trabajo, con empresas que nos ayudan a operar el servicio (alojamiento, mensajes, correo) y cuando la ley lo exige. No vendemos información personal por dinero."
+          ],
+          [
+            "Cookies y tecnologías similares",
+            "Usamos cookies necesarias para que el sitio funcione. Las cookies de análisis y publicidad se usan solo con tu consentimiento. Consulta la Política de cookies y \"Tus opciones de privacidad\"."
+          ],
+          [
+            "Residentes de California",
+            "Puedes pedir conocer, eliminar o corregir tu información personal, y excluirte de la venta o el intercambio de información y de la publicidad dirigida. Respetamos la señal Global Privacy Control. No te discriminaremos por ejercer estos derechos."
+          ],
+          [
+            "Residentes de Texas, Nevada y Florida",
+            "Según tu estado, puedes pedir acceso, corrección o eliminación de tus datos personales, una copia de ellos, y excluirte de la publicidad dirigida, la venta o la elaboración de perfiles. Los residentes de Nevada pueden excluirse de la venta de información cubierta."
+          ],
+          [
+            "Cómo hacer una solicitud",
+            "Usa la página de contacto y elige \"Solicitud de privacidad\", o escríbenos. Verificaremos tu solicitud y responderemos en el plazo que exige la ley. Puedes apelar una decisión respondiendo a nuestra respuesta."
+          ],
+          [
+            "Conservación y seguridad",
+            "Guardamos la información solo el tiempo necesario para estos fines y obligaciones legales, y la protegemos con medidas técnicas y organizativas."
+          ],
+          [
+            "Menores",
+            "El servicio no es para menores de 16 años y no recopilamos su información a sabiendas."
+          ],
+          ["Cambios y contacto", "Publicaremos los cambios aquí con una nueva versión y fecha."]
+        ]
+      },
+      "sms-terms": {
+        "title": "Términos de SMS",
+        "intro": "Términos de los mensajes de texto sobre tus solicitudes y aplicaciones.",
+        "sections": [
+          [
+            "Qué recibirás",
+            "Mensajes sobre tu solicitud de asistencia (cotizaciones, llegada del proveedor, estado) o tu solicitud como proveedor. La frecuencia varía según tu actividad."
+          ],
+          [
+            "Cómo aceptas",
+            "Al dar tu número de celular y marcar la casilla de aceptación (o al escribirnos por texto), aceptas recibir estos mensajes. El consentimiento no es condición para ninguna compra."
+          ],
+          [
+            "Cancelar y ayuda",
+            "Responde STOP para dejar de recibir mensajes en cualquier momento. Responde HELP para recibir ayuda, o contáctanos."
+          ],
+          ["Costos", "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."],
+          [
+            "Operadores",
+            "Los operadores no son responsables de mensajes retrasados o no entregados."
+          ],
+          [
+            "Privacidad",
+            "Usamos tu número como se describe en la Política de privacidad y no lo compartimos para mercadeo de terceros."
+          ]
+        ]
+      },
+      "call-recording": {
+        "title": "Aviso de grabación de llamadas",
+        "intro": "Las llamadas hacia y desde nuestros números pueden grabarse.",
+        "sections": [
+          [
+            "Por qué grabamos",
+            "Para ayudarte rápido, revisar la calidad, capacitar al equipo, resolver disputas y prevenir fraude."
+          ],
+          [
+            "Aviso y consentimiento",
+            "Cuando nos llamas, un mensaje te avisa que la llamada puede grabarse antes de empezar a hablar. Algunos estados exigen que todos en la llamada acepten; continuar la llamada significa que aceptas. Si no quieres que se grabe, dínoslo y te ayudaremos de otra forma, por ejemplo por texto o en el sitio web."
+          ],
+          [
+            "Conservación de grabaciones",
+            "Las grabaciones se guardan solo el tiempo necesario para estos fines y luego se eliminan, salvo que la ley exija guardarlas más tiempo."
+          ]
+        ]
+      },
+      "cookies": {
+        "title": "Política de cookies",
+        "intro": "Cómo usamos cookies y tecnologías similares, y cómo controlarlas.",
+        "sections": [
+          [
+            "Necesarias",
+            "Se necesitan para que el sitio funcione: tu zona elegida, idioma, verificaciones de seguridad y tus opciones de privacidad. Siempre están activas."
+          ],
+          [
+            "Análisis",
+            "Nos ayudan a entender cómo se usa el sitio para mejorarlo. Solo con tu consentimiento."
+          ],
+          [
+            "Publicidad",
+            "Miden nuestros anuncios y muestran anuncios relevantes en otros sitios. Solo con tu consentimiento, y nunca cuando tu navegador envía la señal Global Privacy Control."
+          ],
+          [
+            "Tus opciones",
+            "Usa \"Tus opciones de privacidad\" en el pie de página para cambiar tu configuración en cualquier momento. Usamos el Modo de consentimiento de Google, así que las etiquetas de Google quedan apagadas hasta que aceptes."
+          ]
+        ]
+      },
+      "accessibility": {
+        "title": "Declaración de accesibilidad",
+        "intro": "Queremos que todas las personas puedan pedir asistencia en nuestro sitio web.",
+        "sections": [
+          [
+            "Nuestra meta",
+            "Buscamos cumplir las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.2, nivel AA."
+          ],
+          [
+            "Qué hacemos",
+            "Probamos solo con teclado y con lectores de pantalla, usamos buen contraste en modo claro y oscuro, áreas táctiles grandes y lenguaje claro, y revisamos cada página automáticamente antes de publicarla."
+          ],
+          [
+            "Límites conocidos",
+            "Los mapas pueden no ser totalmente accesibles; siempre puedes escribir una dirección o llamar."
+          ],
+          [
+            "Comentarios",
+            "Si algo es difícil de usar, dínoslo en la página de contacto y te ayudaremos y lo corregiremos."
+          ]
+        ]
+      }
+    }
+  },
+  "consent": {
+    "title": "Tus opciones de privacidad",
+    "body": "Usamos cookies necesarias para que este sitio funcione. Con tu consentimiento también usamos cookies de análisis y publicidad. Puedes cambiarlo cuando quieras.",
+    "necessary": "Necesarias",
+    "necessaryHint": "Siempre activas: tu zona, idioma y verificaciones de seguridad.",
+    "analytics": "Análisis",
+    "analyticsHint": "Nos ayuda a mejorar el sitio.",
+    "ads": "Publicidad",
+    "adsHint": "Mide nuestros anuncios y muestra anuncios relevantes en otros sitios.",
+    "gpc": "Tu navegador envió la señal Global Privacy Control, así que la publicidad queda apagada.",
+    "acceptAll": "Aceptar todo",
+    "rejectAll": "Rechazar todo",
+    "save": "Guardar opciones",
+    "manage": "Elegir",
+    "policy": "Política de cookies",
+    "saved": "Tus opciones quedaron guardadas."
   }
 }

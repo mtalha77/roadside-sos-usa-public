@@ -2,8 +2,6 @@ import { buildMetadata } from "@rsos/config/metadata";
 import { themeColor } from "@rsos/config/theme-colors";
 import { getSiteEnv } from "@rsos/config/site";
 import { ThemeProvider } from "@rsos/ui/theme-provider";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
@@ -11,6 +9,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
+import { ConsentManager } from "@/components/site/consent-manager";
+import { CONSENT_HEAD_SCRIPT } from "@/lib/consent";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,17 +36,16 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Consent Mode defaults run before anything else: Google tags start denied (RSOS-028). */}
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: CONSENT_HEAD_SCRIPT }} />
+      </head>
       <body>
         <NextIntlClientProvider>
           <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
+          {/* Analytics load only after consent, and only in production (no preview or staging noise). */}
+          <ConsentManager analyticsTags={getSiteEnv() === "production"} />
         </NextIntlClientProvider>
-        {/* Production only: previews and staging must not pollute analytics or log 404s. */}
-        {getSiteEnv() === "production" && (
-          <>
-            <Analytics />
-            <SpeedInsights />
-          </>
-        )}
       </body>
     </html>
   );

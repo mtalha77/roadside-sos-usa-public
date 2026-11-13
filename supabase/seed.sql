@@ -30,7 +30,7 @@ begin
       'vehicle', jsonb_build_object('year', 2018, 'make', 'Test', 'model', 'Sedan', 'color', 'Gray', 'type', 'car'),
       'situation', jsonb_build_object('safe_spot', true, 'on_highway', false),
       'attribution', jsonb_build_object('utm_source', 'dev-seed', 'landing_page', '/'),
-      'consents', jsonb_build_array(jsonb_build_object('type', 'sms_transactional', 'granted', true, 'policy_version', 'dev')),
+      'consents', jsonb_build_array(jsonb_build_object('type', 'sms_transactional', 'granted', true, 'policy_version', '2026-11-13-draft')),
       'source', 'dev-seed'
     ));
   end loop;

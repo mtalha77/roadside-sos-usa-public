@@ -734,5 +734,240 @@
       "checkField": "Check this field."
     },
     "smsConfirmation": "{brand}: we got your application for {company}. We'll be in touch within 2 business days. Reply STOP to opt out."
+  },
+  "legal": {
+    "draftBanner": "Draft for attorney review. Not yet in effect.",
+    "version": "Version {version}",
+    "updated": "Last updated: {date}",
+    "toc": "On this page",
+    "contactLine": "Questions about this document: {email}",
+    "docs": {
+      "driver-terms": {
+        "title": "Driver Terms of Use",
+        "intro": "These terms apply when you use our website or phone line to request roadside help.",
+        "sections": [
+          [
+            "We are a marketplace, not a roadside provider",
+            "We connect you with independent roadside providers. We do not tow, repair, unlock or deliver fuel ourselves, and providers are not our employees or agents. The provider you choose is responsible for the work."
+          ],
+          [
+            "Quotes and prices",
+            "Providers set their own prices. A quote is the provider's offer for the service described. Some services list extras, such as fuel or towing distance. Confirm the price with the provider before work starts."
+          ],
+          [
+            "Payment",
+            "You pay the provider directly, using the payment methods they accept. We do not charge you for the job and do not handle the job payment."
+          ],
+          [
+            "Your information",
+            "You agree to give accurate details about your location, vehicle and problem, and to let us share them with providers so they can quote and help you. See the Privacy Policy."
+          ],
+          [
+            "Safety and emergencies",
+            "Our service is not an emergency service. If anyone is hurt or in danger, call 911 first."
+          ],
+          [
+            "Ratings and conduct",
+            "Treat providers with respect. Ratings and reviews must be honest and about your own experience."
+          ],
+          [
+            "Limits of our responsibility",
+            "To the extent the law allows, we are not responsible for the provider's work, delays, damage or pricing. Disputes about a job are between you and the provider, though we will try to help."
+          ],
+          [
+            "Changes and contact",
+            "We may update these terms. The version and date are shown above. Contact us with any questions."
+          ]
+        ]
+      },
+      "provider-terms": {
+        "title": "Provider Terms",
+        "intro": "These terms apply to roadside providers who join the marketplace.",
+        "sections": [
+          [
+            "Joining and verification",
+            "You must hold the insurance and licenses required for the services you offer (for example a TDLR tow operator license in Texas), keep them current and send proof when asked."
+          ],
+          [
+            "Quotes and jobs",
+            "You choose which requests to quote. A quote must include the full price for the service and an honest arrival time. If a driver picks you, you agree to do the job as quoted."
+          ],
+          [
+            "Fees",
+            "When a driver picks your quote, a flat fee for that city and service is charged to your prepaid wallet. Current fees are shown on the For Providers page and in your portal."
+          ],
+          [
+            "Wallet and credits",
+            "You top up your wallet in advance. Fees are taken from the balance. Credits we issue (for example for a cancelled job that was not your fault) are added to the wallet. Unused balances are handled as described in your portal."
+          ],
+          [
+            "Plans",
+            "Optional Pro and Featured plans are billed monthly at the price shown for your city and can be cancelled before the next billing date."
+          ],
+          [
+            "Payment from drivers",
+            "Drivers pay you directly. You are responsible for your own payment processing, receipts and taxes."
+          ],
+          [
+            "Conduct",
+            "Be honest, safe and courteous. No overcharging against your quote, no harassment, no unsafe work."
+          ],
+          [
+            "Suspension and removal",
+            "We may pause or remove a provider for lapsed insurance or licenses, repeated no-shows, complaints, fraud or breaking these terms. We tell you the reason and the next step."
+          ],
+          [
+            "Changes and contact",
+            "We may update these terms and fees with notice. The version and date are shown above."
+          ]
+        ]
+      },
+      "privacy": {
+        "title": "Privacy Policy",
+        "intro": "How we collect, use and share personal information, and the choices you have.",
+        "sections": [
+          [
+            "What we collect",
+            "Contact details (name, phone, email), your location and vehicle details when you request help, messages you send us, device and usage data, and for providers, business, insurance and license details."
+          ],
+          [
+            "How we use it",
+            "To connect you with providers, send updates about your request, prevent fraud, keep the service safe, improve it and meet legal duties."
+          ],
+          [
+            "Who we share it with",
+            "With the providers who quote or do your job, with service companies that help us run the service (hosting, messaging, email), and when the law requires it. We do not sell personal information for money."
+          ],
+          [
+            "Cookies and similar technologies",
+            "We use necessary cookies to run the site. Analytics and advertising cookies are used only with your consent. See the Cookie Policy and \"Your privacy choices\"."
+          ],
+          [
+            "California residents",
+            "You can ask to know, delete or correct your personal information, and to opt out of the sale or sharing of personal information and of targeted advertising. We honor Global Privacy Control signals. We will not discriminate against you for using these rights."
+          ],
+          [
+            "Texas, Nevada and Florida residents",
+            "Depending on your state, you can ask to access, correct or delete your personal data, get a copy of it, and opt out of targeted advertising, sale or profiling. Nevada residents can opt out of the sale of covered information."
+          ],
+          [
+            "How to make a request",
+            "Use the contact page and choose \"Privacy request\", or email us. We will verify your request and reply within the time the law requires. You can appeal a decision by replying to our answer."
+          ],
+          [
+            "Retention and security",
+            "We keep information only as long as needed for these purposes and legal duties, and protect it with technical and organizational safeguards."
+          ],
+          [
+            "Children",
+            "The service is not for children under 16, and we do not knowingly collect their information."
+          ],
+          ["Changes and contact", "We will post changes here with a new version and date."]
+        ]
+      },
+      "sms-terms": {
+        "title": "SMS Terms",
+        "intro": "Terms for text messages about your requests and applications.",
+        "sections": [
+          [
+            "What you will receive",
+            "Messages about your roadside request (quotes, the provider's arrival, status) or your provider application. Message frequency varies with your activity."
+          ],
+          [
+            "How you opt in",
+            "By giving your mobile number and checking the opt-in box (or by texting us), you agree to receive these messages. Consent is not a condition of any purchase."
+          ],
+          [
+            "Opt out and help",
+            "Reply STOP to stop messages at any time. Reply HELP for help, or contact us."
+          ],
+          ["Costs", "Message and data rates may apply, depending on your mobile plan."],
+          ["Carriers", "Carriers are not liable for delayed or undelivered messages."],
+          [
+            "Privacy",
+            "We use your number as described in the Privacy Policy and do not share it for third-party marketing."
+          ]
+        ]
+      },
+      "call-recording": {
+        "title": "Call Recording Notice",
+        "intro": "Calls to and from our phone numbers may be recorded.",
+        "sections": [
+          [
+            "Why we record",
+            "To help you quickly, check quality, train our team, resolve disputes and prevent fraud."
+          ],
+          [
+            "Notice and consent",
+            "When you call us, a message tells you the call may be recorded before the conversation starts. Some states require everyone on the call to agree; continuing the call means you agree. If you do not want to be recorded, tell us and we will help another way, for example by text or the website."
+          ],
+          [
+            "Keeping recordings",
+            "Recordings are kept only as long as needed for these purposes and then deleted, unless the law requires us to keep them longer."
+          ]
+        ]
+      },
+      "cookies": {
+        "title": "Cookie Policy",
+        "intro": "How we use cookies and similar technologies, and how to control them.",
+        "sections": [
+          [
+            "Necessary",
+            "Needed for the site to work: your chosen area, language, security checks and your privacy choices. These are always on."
+          ],
+          [
+            "Analytics",
+            "Help us understand how the site is used so we can improve it. Only with your consent."
+          ],
+          [
+            "Advertising",
+            "Measure our ads and show relevant ads on other sites. Only with your consent, and never when your browser sends a Global Privacy Control signal."
+          ],
+          [
+            "Your choices",
+            "Use \"Your privacy choices\" in the footer to change your settings at any time. We use Google Consent Mode, so Google tags stay off until you agree."
+          ]
+        ]
+      },
+      "accessibility": {
+        "title": "Accessibility Statement",
+        "intro": "We want everyone to be able to get roadside help on our website.",
+        "sections": [
+          [
+            "Our goal",
+            "We aim to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA."
+          ],
+          [
+            "What we do",
+            "We test with keyboard only and screen readers, use clear contrast in light and dark mode, large touch targets and plain language, and check every page automatically before release."
+          ],
+          [
+            "Known limits",
+            "Maps may not be fully accessible; you can always type an address or call instead."
+          ],
+          [
+            "Feedback",
+            "If something is hard to use, tell us through the contact page and we will help and fix it."
+          ]
+        ]
+      }
+    }
+  },
+  "consent": {
+    "title": "Your privacy choices",
+    "body": "We use necessary cookies to run this site. With your consent we also use analytics and advertising cookies. You can change this any time.",
+    "necessary": "Necessary",
+    "necessaryHint": "Always on: your area, language, security checks.",
+    "analytics": "Analytics",
+    "analyticsHint": "Helps us improve the site.",
+    "ads": "Advertising",
+    "adsHint": "Measures our ads and shows relevant ads elsewhere.",
+    "gpc": "Your browser sent a Global Privacy Control signal, so advertising stays off.",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all",
+    "save": "Save choices",
+    "manage": "Choose",
+    "policy": "Cookie policy",
+    "saved": "Your choices are saved."
   }
 }

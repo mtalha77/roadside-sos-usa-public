@@ -28,7 +28,7 @@
 | RSOS-025                       | Done        | [#124](https://github.com/mtalha77/roadside-sos-usa-public/pull/124) |
 | RSOS-027                       | Done        | [#125](https://github.com/mtalha77/roadside-sos-usa-public/pull/125) |
 | RSOS-026                       | Done        | [#126](https://github.com/mtalha77/roadside-sos-usa-public/pull/126) |
-| RSOS-028                       | Not started |                                                                      |
+| RSOS-028                       | Done        | [#127](https://github.com/mtalha77/roadside-sos-usa-public/pull/127) |
 | RSOS-032                       | Not started |                                                                      |
 | RSOS-033                       | Not started |                                                                      |
 
@@ -327,6 +327,21 @@ Acceptance criteria:
 | 1   | Applications are stored with all fields and the market tagged                            | PASS: pgTAP stores an application and checks every field, the published markets chosen (an unpublished one is ignored) and the services; unit test checks the action sends every field; e2e submits the form on the preview |
 | 2   | Applicant confirmation goes through the email and SMS interfaces (mock until keys exist) | PASS: unit test (confirmation email to the applicant, team notice, a text through `SmsSender` only with opt-in); SMS interface unit tests (Twilio request, messaging service, failure, environment choice)                  |
 
+## RSOS-028: Legal pages, cookie consent and privacy choices
+
+- Pages under `/legal/`: Driver Terms (we are a marketplace, not the provider; prices, direct payment, emergencies, limits), Provider Terms (verification, quotes, fees, wallet and credits, plans, conduct, insurance, suspension and removal), Privacy Policy (with California, Texas, Nevada and Florida sections and Global Privacy Control), SMS Terms (opt-in wording, STOP and HELP, frequency, message and data rates, carriers), Call Recording Notice, Cookie Policy and Accessibility Statement. English and Spanish. Every page shows "Draft for attorney review. Not yet in effect." and its version.
+- Versions: `@rsos/config/legal` (code) and `policy_versions` (database, migration `20261113110000_legal_consent.sql`, RLS: staff read, super admin manages). `consents` now names its document (generated from the consent type) and has a foreign key to `(document, version)`, added `NOT VALID` so only rows written before versioning (development data) are not rechecked; every new consent must name a real version. The dev seed and an older test were moved to the real draft version.
+- Cookie banner ("Your privacy choices"): Accept all, Reject all, Choose (analytics and advertising switches; necessary is always on). Choices are saved in a first-party cookie and stored in `cookie_consents` (append-only; a random browser id, the choices, GPC and the cookie policy version; no personal data). The footer link reopens it at any time.
+- Google Consent Mode v2: a nonce'd script in `<head>` runs before anything else and sets ad_storage, ad_user_data, ad_personalization and analytics_storage to denied, then applies a stored choice. Global Privacy Control (`navigator.globalPrivacyControl`) always keeps advertising denied, in the browser and in the database (check constraint).
+- Vercel Analytics and Speed Insights now load only after analytics consent (and only in production). No Google, Meta or Microsoft tags exist yet; when they are added they must go through the same consent check.
+
+Acceptance criteria:
+
+| #   | Criterion                                                                         | Result                                                                                                                                                                                                                                                                                                                                                                         |
+| --- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Analytics and ad tags cannot fire before consent where consent is required (test) | PASS: e2e (no stored choice) watches every request on the home page: none to Google, Meta, Microsoft or Vercel Analytics hosts, and Consent Mode defaults are all denied; after "Accept all" with GPC on, analytics is granted and advertising stays denied; unit tests for the head script and the mapping. Consent is asked of every visitor (strictest reading, all states) |
+| 2   | Every consent record links to a policy version                                    | PASS: pgTAP: an SMS consent with a known version is stored and names its document; an unknown version is refused by the foreign key; cookie choices need a real version and GPC forces advertising off                                                                                                                                                                         |
+
 ## BLOCKERS
 
 ### Permissions
@@ -348,6 +363,10 @@ Acceptance criteria:
 
 6. **Cloudflare Turnstile (RSOS-027).** Forms use Cloudflare's test keys, which let every request through. In Cloudflare: Turnstile → Add widget, add the website hostnames (staging and production), mode Managed. Then replace the values in the `rsos-web` Vercel project (Settings → Environment Variables): `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (site key) and `TURNSTILE_SECRET_KEY` (secret key), for Production and Preview, and redeploy.
 7. **Upstash Redis (optional, RSOS-027).** Rate limits work in memory per server instance. For limits shared across instances, create an Upstash Redis database and add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to `rsos-web` (and the other apps).
+
+### Legal
+
+9. **US attorney review required before the test campaign (RSOS-028).** All seven documents under `/legal/` are drafts written for review, not legal advice. Have a US attorney (consumer protection, TCPA/SMS and state privacy law: California, Texas, Nevada, Florida) review the Driver Terms, Provider Terms, Privacy Policy, SMS Terms, Call Recording Notice, Cookie Policy and Accessibility Statement, and confirm the legal entity name (`brand.legalName` is a placeholder). After changes: update the text in `packages/i18n/messages/{en,es}.json`, set a new version in `packages/config/src/legal.ts` (for example `2027-01-15`, without `-draft`), add the same row to `policy_versions` in a migration with `status = 'published'`, and remove the draft banner.
 
 ### Decisions
 
