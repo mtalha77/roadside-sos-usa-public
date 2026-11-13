@@ -61,7 +61,12 @@ test.describe("website structure", () => {
     const select = page.getByRole("combobox", { name: /area/i });
     const value = await select.locator("option:not([disabled])").first().getAttribute("value");
     await select.selectOption(value!);
-    await page.getByRole("button", { name: "Use this area" }).click();
+    // The choice is saved by a server action (a POST); wait for it before leaving the page.
+    await Promise.all([
+      page.waitForResponse((r) => r.request().method() === "POST" && r.ok()),
+      page.getByRole("button", { name: "Use this area" }).click(),
+    ]);
+    await expect(page.getByRole("combobox", { name: "Change area" })).toHaveValue(value!);
     await page.goto(url("/get-help"));
     await expect(page.locator(`[data-market='${value}']`)).toBeVisible();
   });
