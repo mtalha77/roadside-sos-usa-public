@@ -1,10 +1,9 @@
 "use client";
 
-import { Button } from "@rsos/ui/button";
-import { Switch } from "@rsos/ui/switch";
 import Link from "next/link";
 import { useId, useState } from "react";
 import type { ConsentLabels } from "./consent-manager";
+import { LightButton, LightSwitch } from "./light-controls";
 
 /** The banner and preferences UI; loaded only when it has to be shown. */
 export default function ConsentDialog({
@@ -50,16 +49,16 @@ export default function ConsentDialog({
               <span className="font-medium">{t("necessary")}</span>
               <span className="block text-sm text-muted-foreground">{t("necessaryHint")}</span>
             </span>
-            <Switch checked disabled aria-label={t("necessary")} />
+            <LightSwitch checked disabled readOnly aria-label={t("necessary")} />
           </li>
           <li className="flex items-center justify-between gap-4">
             <span>
               <span className="font-medium">{t("analytics")}</span>
               <span className="block text-sm text-muted-foreground">{t("analyticsHint")}</span>
             </span>
-            <Switch
+            <LightSwitch
               checked={analytics}
-              onCheckedChange={setAnalytics}
+              onChange={(e) => setAnalytics(e.target.checked)}
               aria-label={t("analytics")}
             />
           </li>
@@ -68,10 +67,10 @@ export default function ConsentDialog({
               <span className="font-medium">{t("ads")}</span>
               <span className="block text-sm text-muted-foreground">{t("adsHint")}</span>
             </span>
-            <Switch
+            <LightSwitch
               checked={ads && !gpc}
               disabled={gpc}
-              onCheckedChange={setAds}
+              onChange={(e) => setAds(e.target.checked)}
               aria-label={t("ads")}
             />
           </li>
@@ -79,20 +78,12 @@ export default function ConsentDialog({
       ) : null}
       <div className="flex flex-wrap gap-2">
         {details ? (
-          <Button type="button" variant="outline" onClick={() => save(analytics, ads)}>
-            {t("save")}
-          </Button>
+          <LightButton onClick={() => save(analytics, ads)}>{t("save")}</LightButton>
         ) : (
-          <Button type="button" variant="outline" onClick={() => setDetails(true)}>
-            {t("manage")}
-          </Button>
+          <LightButton onClick={() => setDetails(true)}>{t("manage")}</LightButton>
         )}
-        <Button type="button" variant="outline" onClick={() => save(false, false)}>
-          {t("rejectAll")}
-        </Button>
-        <Button type="button" variant="outline" onClick={() => save(true, true)}>
-          {t("acceptAll")}
-        </Button>
+        <LightButton onClick={() => save(false, false)}>{t("rejectAll")}</LightButton>
+        <LightButton onClick={() => save(true, true)}>{t("acceptAll")}</LightButton>
       </div>
     </section>
   );
