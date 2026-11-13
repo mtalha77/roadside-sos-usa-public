@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { ApplyForm } from "@/components/site/apply-form";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
@@ -12,11 +13,11 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("forProviders.form");
-  return {
+  return pageMetadata({
     title: t("title"),
     description: t("intro"),
-    alternates: { canonical: "/for-providers/apply" },
-  };
+    path: "/for-providers/apply",
+  });
 }
 
 export default async function ApplyPage() {

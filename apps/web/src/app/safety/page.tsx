@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { PageHero } from "@/components/site/page-hero";
 import { SitePage } from "@/components/site/site-page";
@@ -7,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("pages.safetyPage");
-  return { title: t("title"), description: t("intro"), alternates: { canonical: "/safety" } };
+  return pageMetadata({ title: t("title"), description: t("intro"), path: "/safety" });
 }
 
 export default async function SafetyPage() {

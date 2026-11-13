@@ -3,6 +3,7 @@ import { getSiteUrl } from "@rsos/config/site";
 import { Button } from "@rsos/ui/button";
 import { Phone } from "lucide-react";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -47,11 +48,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = await getTranslations("site.city");
   const vars = { city: data.market.name, state: data.market.state_code };
   const path = marketPath(data.market);
-  return {
-    title: { absolute: `${t("title", vars)} | ${brand.name}` },
-    description: t("description", vars),
-    alternates: { canonical: path },
-  };
+  return pageMetadata({ title: t("title", vars), description: t("description", vars), path });
 }
 
 /** City page: one per published market, copy and prices from the database. */

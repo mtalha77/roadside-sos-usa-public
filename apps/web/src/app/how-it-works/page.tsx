@@ -1,6 +1,7 @@
 import { Button } from "@rsos/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rsos/ui/tabs";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { PageHero } from "@/components/site/page-hero";
@@ -10,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("pages.how");
-  return { title: t("title"), description: t("intro"), alternates: { canonical: "/how-it-works" } };
+  return pageMetadata({ title: t("title"), description: t("intro"), path: "/how-it-works" });
 }
 
 function Steps({ steps }: { steps: [string, string][] }) {

@@ -29,7 +29,7 @@
 | RSOS-027                       | Done        | [#125](https://github.com/mtalha77/roadside-sos-usa-public/pull/125) |
 | RSOS-026                       | Done        | [#126](https://github.com/mtalha77/roadside-sos-usa-public/pull/126) |
 | RSOS-028                       | Done        | [#127](https://github.com/mtalha77/roadside-sos-usa-public/pull/127) |
-| RSOS-032                       | Not started |                                                                      |
+| RSOS-032                       | Done        | [#128](https://github.com/mtalha77/roadside-sos-usa-public/pull/128) |
 | RSOS-033                       | Not started |                                                                      |
 
 ## RSOS-010: Testing setup
@@ -342,6 +342,22 @@ Acceptance criteria:
 | 1   | Analytics and ad tags cannot fire before consent where consent is required (test) | PASS: e2e (no stored choice) watches every request on the home page: none to Google, Meta, Microsoft or Vercel Analytics hosts, and Consent Mode defaults are all denied; after "Accept all" with GPC on, analytics is granted and advertising stays denied; unit tests for the head script and the mapping. Consent is asked of every visitor (strictest reading, all states) |
 | 2   | Every consent record links to a policy version                                    | PASS: pgTAP: an SMS consent with a known version is stored and names its document; an unknown version is refused by the foreign key; cookie choices need a real version and GPC forces advertising off                                                                                                                                                                         |
 
+## RSOS-032: Technical SEO
+
+- One metadata template for every website page (`pageMetadata` in `apps/web/src/lib/seo.ts`): title (with " | brand", or absolute on the home page), description, canonical URL, Open Graph and Twitter tags, robots. The request flow, tracking links and placeholders are `noindex`; staging and previews are never indexable whatever a page says.
+- Sitemap index at `/sitemap.xml` with four sitemaps (`/sitemaps/pages.xml`, `cities.xml`, `services.xml`, `city-services.xml`) built from published rows only: test or active markets, services offered in at least one of them, and city plus service pages where the service is enabled. They share the 5-minute cache tag with the pages, so activating a market (or calling `/api/revalidate`) adds its pages.
+- `robots.txt`: staging and previews disallow everything; production allows published pages, disallows `/get-help`, `/r/`, `/providers/` and `/api/`, and points to the sitemap.
+- Generated Open Graph images (design tokens, no stock art) for the site, each city, each service and each city plus service page.
+- Organization and WebSite structured data on the home page (with the cities served); breadcrumbs with BreadcrumbList on every inner page (since RSOS-019).
+- Redirects ready for the domain change: migration `20261113120000_redirects.sql` (`redirects` table, RLS: staff read, super admin and marketing manage; `list_redirects` for the site; pgTAP `013_redirects.test.sql`, 5). The proxy sends hosts listed in `REDIRECT_FROM_HOSTS` to `NEXT_PUBLIC_SITE_URL` with a 301 (same path and query) and follows the table for moved pages (301 or 308, cached 5 minutes per instance).
+
+Acceptance criteria:
+
+| #   | Criterion                                                                 | Result                                                                                                                                                                                           |
+| --- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | No duplicate titles or missing canonicals (automated crawl test)          | PASS: e2e reads the sitemap index, opens every sitemap and every listed page, and checks each has a title, no title repeats, and its canonical URL is its own path                               |
+| 2   | Sitemap lists only published pages and updates when a market is activated | PASS: unit tests (paused markets and unoffered services excluded; a newly published market appears with no code change); e2e checks the paused markets and `/get-help` are absent on the preview |
+
 ## BLOCKERS
 
 ### Permissions
@@ -363,6 +379,8 @@ Acceptance criteria:
 
 6. **Cloudflare Turnstile (RSOS-027).** Forms use Cloudflare's test keys, which let every request through. In Cloudflare: Turnstile → Add widget, add the website hostnames (staging and production), mode Managed. Then replace the values in the `rsos-web` Vercel project (Settings → Environment Variables): `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (site key) and `TURNSTILE_SECRET_KEY` (secret key), for Production and Preview, and redeploy.
 7. **Upstash Redis (optional, RSOS-027).** Rate limits work in memory per server instance. For limits shared across instances, create an Upstash Redis database and add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to `rsos-web` (and the other apps).
+
+8. **Domain change, when the brand changes (RSOS-032).** Add the new domain to the three Vercel projects, set `NEXT_PUBLIC_APP_DOMAIN` (and `NEXT_PUBLIC_SITE_URL`) to it, keep the old domain attached and set `REDIRECT_FROM_HOSTS` on `rsos-web` to the old hosts (for example `fixallcontractors.com,www.fixallcontractors.com`). Every old URL then answers with a 301 to the same path on the new domain. Then add the new domain in Google Search Console and submit `/sitemap.xml`.
 
 ### Legal
 

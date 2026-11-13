@@ -1,6 +1,7 @@
 import { Alert } from "@rsos/ui/alert";
 import { Button } from "@rsos/ui/button";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { ContactForm } from "@/components/site/contact-form";
@@ -15,7 +16,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("pages.contact");
-  return { title: t("title"), description: t("intro"), alternates: { canonical: "/contact" } };
+  return pageMetadata({ title: t("title"), description: t("intro"), path: "/contact" });
 }
 
 export default async function ContactPage() {

@@ -2,6 +2,7 @@ import { brand } from "@rsos/config/brand";
 import { type LegalDocument, legalDocuments } from "@rsos/config/legal";
 import { Alert } from "@rsos/ui/alert";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { doc } = await params;
   if (!isDoc(doc)) return {};
   const t = await getTranslations(`legal.docs.${doc}`);
-  return { title: t("title"), description: t("intro"), alternates: { canonical: `/legal/${doc}` } };
+  return pageMetadata({ title: t("title"), description: t("intro"), path: `/legal/${doc}` });
 }
 
 /**

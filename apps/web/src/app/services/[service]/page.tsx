@@ -3,6 +3,7 @@ import { getSiteUrl } from "@rsos/config/site";
 import { formatPriceRange, type Locale } from "@rsos/i18n";
 import { Button } from "@rsos/ui/button";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -32,11 +33,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!data) return {};
   const t = await getTranslations("site");
   const name = serviceName(t, data.svc);
-  return {
+  return pageMetadata({
     title: name,
     description: t("service.description", { service: name }),
-    alternates: { canonical: `/services/${data.svc.slug}` },
-  };
+    path: `/services/${data.svc.slug}`,
+  });
 }
 
 /** Service page: one per service in the database, with links to every city that offers it. */

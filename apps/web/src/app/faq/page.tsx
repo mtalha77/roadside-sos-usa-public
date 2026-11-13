@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import { FaqList } from "@/components/site/faq-list";
 import { FaqSearch } from "@/components/site/faq-search";
@@ -12,7 +13,7 @@ const GROUPS = ["drivers", "prices", "safety", "providers"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("pages.faqPage");
-  return { title: t("title"), description: t("intro"), alternates: { canonical: "/faq" } };
+  return pageMetadata({ title: t("title"), description: t("intro"), path: "/faq" });
 }
 
 /** FAQ: grouped, searchable, with one FAQPage block for every question. */
