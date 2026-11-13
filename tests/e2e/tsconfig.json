@@ -1,4 +1,4 @@
 {
   "extends": "@rsos/config/tsconfig/library.json",
-  "include": ["specs", "support", "playwright.config.ts"]
+  "include": ["specs", "support", "scripts", "playwright.config.ts"]
 }

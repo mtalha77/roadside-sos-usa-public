@@ -1,0 +1,49 @@
+name: Production smoke
+
+# Gate 4: after every production deployment, smoke-test the live website. On failure, open a
+# critical issue assigned to the owner (GitHub emails the assignee) with rollback steps.
+# Alert drill: add the label "simulate-smoke-failure" to any pull request; the drill runs the
+# same smoke test with one deliberately failing check and never touches data.
+on:
+  deployment_status:
+  workflow_dispatch:
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  smoke:
+    name: production-smoke
+    if: >-
+      (github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && startsWith(github.event.deployment.environment, 'Production') && contains(github.event.deployment.environment, 'rsos-web')) ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && github.event.label.name == 'simulate-smoke-failure')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      E2E_WEB_URL: https://${{ vars.APP_DOMAIN }}
+      SMOKE_SIMULATE_FAILURE: ${{ github.event_name == 'pull_request' && '1' || '0' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - name: Install Chromium
+        run: pnpm --filter @rsos/e2e exec playwright install --with-deps chromium
+      - name: Smoke test the production website
+        run: pnpm --filter @rsos/e2e test:smoke --project=desktop-chrome
+      - name: Alert on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          prefix=""; [ "$SMOKE_SIMULATE_FAILURE" = "1" ] && prefix="[Drill] "
+          gh issue create --title "${prefix}Production smoke test failed" --label critical --assignee "${{ github.repository_owner }}" --body "$(cat <<BODY
+          The production smoke test failed: ${RUN_URL}
+
+          Roll back now (one click): Vercel dashboard, project rsos-web, Deployments, open the last good production deployment, menu "Instant Rollback". Details in docs/QA.md, Gate 4.
+          ${prefix:+This is an alert drill (simulated failure). No action needed beyond confirming the alert arrived.}
+          BODY
+          )"

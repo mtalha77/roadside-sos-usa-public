@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --coverage",
     "gen:types": "supabase gen types --remote --lang typescript --schema public > src/database.types.ts"
   },
   "dependencies": {
@@ -22,7 +22,9 @@
   },
   "devDependencies": {
     "@rsos/config": "workspace:*",
+    "@rsos/testing": "workspace:*",
     "@types/node": "26.6.6",
+    "@vitest/coverage-v8": "5.1.0",
     "eslint": "10.14.0",
     "typescript": "6.0.3",
     "vitest": "5.1.0"
