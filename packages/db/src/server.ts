@@ -1,15 +1,10 @@
 import "server-only";
 import { createServerClient, type CookieMethodsServer, type CookieOptions } from "@supabase/ssr";
+import { strictCookieOptions } from "./cookies";
 import type { Database } from "./database.types";
 import { readPublicSupabaseEnv } from "./env";
 
-/** Cookie flags for apps whose session must never be readable by browser scripts (admin). */
-export const strictCookieOptions: CookieOptions = {
-  httpOnly: true,
-  secure: true,
-  sameSite: "lax",
-  path: "/",
-};
+export { strictCookieOptions };
 
 /**
  * Supabase client for Server Components, Route Handlers and Server Actions.

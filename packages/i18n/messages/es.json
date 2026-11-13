@@ -29,5 +29,55 @@
       "tagline": "Ayuda en el camino, rápido.",
       "questions": "¿Preguntas? Escribe a"
     }
+  },
+  "auth": {
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "signIn": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
+    "continue": "Continuar",
+    "code": "Código de 6 dígitos",
+    "verify": "Verificar",
+    "sending": "Enviando…",
+    "errors": {
+      "invalid": "Revisa tu correo y contraseña e inténtalo de nuevo.",
+      "required": "Completa todos los campos.",
+      "code": "Ese código no funcionó. Revísalo e inténtalo de nuevo.",
+      "notConfigured": "El inicio de sesión aún no está disponible en este entorno.",
+      "generic": "Algo salió mal. Inténtalo de nuevo.",
+      "expired": "Tu sesión terminó. Vuelve a iniciar sesión."
+    },
+    "admin": {
+      "title": "Acceso de administración",
+      "subtitle": "Solo personal. Después confirmarás con tu app de autenticación.",
+      "verifyTitle": "Confirma que eres tú",
+      "verifyBody": "Ingresa el código de 6 dígitos de tu app de autenticación.",
+      "enrollTitle": "Configura tu app de autenticación",
+      "enrollBody": "Las cuentas de administración necesitan un segundo paso. Escanea este código con una app de autenticación (1Password, Google Authenticator, Authy) e ingresa el código de 6 dígitos.",
+      "secretLabel": "¿No puedes escanear? Ingresa esta clave:",
+      "noAccessTitle": "Sin acceso de administración",
+      "noAccessBody": "Tu cuenta no está configurada como personal. Pide a un superadministrador que te agregue.",
+      "dashboardTitle": "Panel de administración",
+      "signedInAs": "Sesión iniciada como {email} ({role})"
+    },
+    "provider": {
+      "title": "Acceso de proveedores",
+      "subtitle": "Inicia sesión con tu contraseña o recibe un enlace por correo.",
+      "passwordTab": "Contraseña",
+      "linkTab": "Enlace por correo",
+      "sendLink": "Enviarme un enlace",
+      "linkSent": "Revisa tu correo para ver el enlace. Vence en 1 hora.",
+      "phoneTitle": "Verifica tu teléfono",
+      "phoneBody": "Te enviamos un código de 6 dígitos al teléfono donde te contactarán conductores y despacho.",
+      "phone": "Teléfono móvil",
+      "sendCode": "Enviarme un código",
+      "codeSent": "Enviamos un código a {phone}.",
+      "mockNotice": "Modo de prueba: no se envía ningún mensaje. Usa el código {code}.",
+      "smsUnavailable": "Los mensajes de texto aún no están configurados, así que no se pueden verificar teléfonos aquí.",
+      "noAccessTitle": "Sin acceso de proveedor",
+      "noAccessBody": "Esta cuenta aún no está vinculada a una empresa proveedora.",
+      "dashboardTitle": "Portal de proveedores",
+      "signedInAs": "Sesión iniciada como {email}"
+    }
   }
 }
