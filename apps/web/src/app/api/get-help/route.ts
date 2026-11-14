@@ -170,6 +170,18 @@ export async function POST(request: NextRequest) {
       return p.success ? save(p.data, "safety") : fail("vehicle", "required");
     }
     case "safety": {
+      const quick = str("quick");
+      if (quick) {
+        // One-tap answers on a quick repeat request.
+        const map: Record<string, Draft> = {
+          safe: { safe: true, highway: false },
+          highway: { safe: true, highway: true },
+          unsafe: { safe: false, highway: true },
+        };
+        return map[quick]
+          ? save({ ...map[quick], passengers: 0 }, draft.phone ? "verify" : "contact")
+          : fail("safety", "required");
+      }
       const safe = str("safe");
       const highway = str("highway");
       if (!["yes", "no"].includes(safe) || !["yes", "no"].includes(highway))

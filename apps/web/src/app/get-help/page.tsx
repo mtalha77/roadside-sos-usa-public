@@ -326,6 +326,38 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         </button>
       </form>
     );
+  } else if (step === "safety" && draft.quick) {
+    // Quick repeat request (driver account): one tap answers both safety questions.
+    body = (
+      <form method="post" action="/api/get-help" className="flex flex-col gap-3">
+        {hidden("step", "safety")}
+        <button
+          type="submit"
+          name="quick"
+          value="safe"
+          className={`${ui.button.primary} min-h-14 w-full`}
+        >
+          {t("safety.quickSafe")}
+        </button>
+        <button
+          type="submit"
+          name="quick"
+          value="highway"
+          className={`${ui.button.outline} min-h-14 w-full`}
+        >
+          {t("safety.quickHighway")}
+        </button>
+        <button
+          type="submit"
+          name="quick"
+          value="unsafe"
+          className={`${ui.button.outline} min-h-14 w-full`}
+        >
+          {t("safety.quickUnsafe")}
+        </button>
+        <p className="text-sm font-medium">{t("safety.unsafe")}</p>
+      </form>
+    );
   } else if (step === "safety") {
     body = (
       <form method="post" action="/api/get-help" className="flex flex-col gap-5">

@@ -1062,7 +1062,10 @@
       "yes": "Sí",
       "no": "No",
       "unsafe": "Si estás en peligro o bloqueando el tráfico, llama primero al 911. Quédate en el vehículo con el cinturón puesto si estás en una autopista.",
-      "call911": "Llamar al 911"
+      "call911": "Llamar al 911",
+      "quickSafe": "Estoy a salvo, fuera del camino",
+      "quickHighway": "Estoy a salvo, en el acotamiento de la autopista",
+      "quickUnsafe": "No estoy a salvo"
     },
     "contact": {
       "title": "¿Cómo te contacta el proveedor?",
@@ -1263,5 +1266,57 @@
         "a": "No. Sin membresía, registro ni suscripción."
       }
     }
+  },
+  "driverAccount": {
+    "title": "Tu cuenta",
+    "signIn": {
+      "title": "Entra con tu teléfono",
+      "body": "Te enviaremos un código por texto. Sin contraseña.",
+      "phone": "Número de celular",
+      "send": "Envíame un código",
+      "code": "Código de 6 dígitos",
+      "demoCode": "Modo demostración: tu código es {code}.",
+      "verify": "Entrar",
+      "wrong": "Ese código no es correcto."
+    },
+    "tabs": "Secciones de la cuenta",
+    "requests": "Solicitudes",
+    "vehicles": "Vehículos",
+    "places": "Lugares",
+    "favorites": "Proveedores favoritos",
+    "settings": "Configuración",
+    "quick": {
+      "title": "Pedir otra vez",
+      "body": "Usa tu vehículo y número guardados. Confirmarás tu ubicación.",
+      "start": "Empezar una solicitud"
+    },
+    "history": {
+      "again": "Pedir otra vez",
+      "none": "Todavía no hay solicitudes.",
+      "daysAgo": "{days, plural, one {hace # día} other {hace # días}}"
+    },
+    "vehicle": {
+      "add": "Agregar un vehículo",
+      "default": "Predeterminado",
+      "makeDefault": "Hacer predeterminado",
+      "remove": "Quitar"
+    },
+    "place": {
+      "add": "Agregar un lugar",
+      "remove": "Quitar"
+    },
+    "favorite": {
+      "remove": "Quitar de favoritos",
+      "none": "Todavía no hay favoritos. Después de un trabajo, toca el corazón del proveedor."
+    },
+    "delete": {
+      "title": "Eliminar cuenta",
+      "body": "Esto elimina tus vehículos, lugares y favoritos guardados. Las solicitudes pasadas se conservan para los proveedores y nuestro equipo como lo exige la ley.",
+      "confirm": "Escribe DELETE para confirmar",
+      "button": "Eliminar mi cuenta",
+      "done": "Tu cuenta fue eliminada."
+    },
+    "signOut": "Salir",
+    "demoOnly": "Cuentas de demostración con datos ficticios."
   }
 }
