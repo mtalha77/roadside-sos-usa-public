@@ -85,7 +85,6 @@ test.describe("website structure", () => {
       "/legal/privacy",
       "/legal/driver-terms",
       "/r/abc",
-      "/providers/x",
     ]) {
       expect((await request.get(url(p))).status(), p).toBe(200);
     }

@@ -1318,5 +1318,107 @@
     },
     "signOut": "Sign out",
     "demoOnly": "Demo accounts with fictional data."
+  },
+  "providerProfile": {
+    "based": "Based in {area}",
+    "demoNote": "Demo provider: fictional company, prices and reviews for the staging walkthrough.",
+    "insured": "Insurance verified",
+    "licensed": "Tow license checked",
+    "eta": "Typical arrival {minutes} min",
+    "rating": "{rating} from {count} reviews",
+    "newProvider": "New provider",
+    "services": "Services and prices",
+    "from": "from {price}",
+    "area": "Service area: {miles} miles",
+    "areaMap": "Service area of {miles} miles around the provider's base",
+    "hours": "Hours",
+    "hours24": "Open 24 hours, every day",
+    "hoursDay": "Every day, 6 am to 10 pm",
+    "payments": "Payment methods",
+    "paymentList": "Card, cash, Apple Pay, Google Pay",
+    "photos": "Job photos",
+    "noPhotos": "No photos yet.",
+    "reviews": "Reviews",
+    "noReviews": "No reviews yet.",
+    "stars": "{count, plural, one {# star} other {# stars}}",
+    "demoReviews": [
+      {
+        "name": "Maria G.",
+        "stars": 5,
+        "text": "Arrived faster than quoted and changed the tire in 15 minutes."
+      },
+      {
+        "name": "James T.",
+        "stars": 5,
+        "text": "Clear price up front, friendly driver."
+      },
+      {
+        "name": "Priya S.",
+        "stars": 4,
+        "text": "Good tow, a little late because of traffic, but kept me updated."
+      }
+    ]
+  },
+  "portal": {
+    "nav": {
+      "label": "Portal",
+      "home": "Home",
+      "jobs": "Jobs",
+      "wallet": "Wallet",
+      "profile": "Profile",
+      "more": "More",
+      "services": "Services and prices",
+      "team": "Team",
+      "insights": "Insights",
+      "notifications": "Notifications",
+      "help": "Help",
+      "account": "Account and security",
+      "install": "Install the app",
+      "onboarding": "Setup"
+    },
+    "shell": {
+      "offline": "You're offline. New requests will appear when you're back online.",
+      "online": "Back online.",
+      "update": "A new version is ready.",
+      "reload": "Update now",
+      "company": "{company}"
+    },
+    "install": {
+      "title": "Install the app",
+      "body": "Get requests full screen with sound, and open the portal in one tap.",
+      "iphone": "iPhone (Safari)",
+      "iphoneSteps": ["Tap the Share button.", "Choose \"Add to Home Screen\".", "Tap Add."],
+      "android": "Android (Chrome)",
+      "androidSteps": ["Tap the menu (three dots).", "Choose \"Install app\".", "Tap Install."],
+      "installNow": "Install now"
+    },
+    "home": {
+      "title": "Today",
+      "online": "You're online",
+      "offline": "You're offline",
+      "onlineHint": "New requests nearby can reach you",
+      "offlineHint": "Go online to receive requests",
+      "swipeOff": "Swipe to go offline",
+      "truck": "Truck or operator",
+      "stats": {
+        "requests": "Requests nearby",
+        "quotes": "Quotes sent",
+        "won": "Jobs won",
+        "value": "Job value",
+        "fees": "Fees paid"
+      },
+      "wallet": "Wallet balance",
+      "low": "Low balance: top up so you don't miss jobs.",
+      "topUp": "Top up",
+      "blockers": "Before you can get jobs",
+      "empty": "Your wallet is empty.",
+      "expired": "Your insurance certificate expires in {days} days.",
+      "review": "Your company is in review.",
+      "fix": "Fix now",
+      "map": "Your service area and requests nearby",
+      "offers": "{count, plural, one {# request waiting for quotes} other {# requests waiting for quotes}}",
+      "seeOffer": "See the next request",
+      "demo": "Demo data: requests and stats are simulated; the wallet balance is real."
+    }
   }
 }

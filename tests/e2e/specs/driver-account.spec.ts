@@ -62,3 +62,22 @@ test.describe("driver account", () => {
     expect(taps).toBeLessThanOrEqual(3);
   });
 });
+
+// RSOS-019b: provider public profile (demo providers in demo mode only).
+test.describe("provider profile", () => {
+  test.skip(!web, "No website URL");
+
+  test("a demo provider's profile shows services, area, hours, payments and reviews", async ({
+    page,
+  }, info) => {
+    await page.goto(url("/providers/bayou-city-roadside"));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Bayou City Roadside/);
+    for (const h of ["Services and prices", "Hours", "Reviews"])
+      await expect(page.getByRole("heading", { name: h })).toBeVisible();
+    await expect(page.getByRole("img", { name: /Service area/ })).toBeVisible();
+    await expectNoA11yViolations(page);
+    await expectNoHorizontalScroll(page);
+    await page.screenshot({ path: info.outputPath("provider-profile.png"), fullPage: true });
+    expect((await page.request.get(url("/providers/not-a-provider"))).status()).toBe(404);
+  });
+});
