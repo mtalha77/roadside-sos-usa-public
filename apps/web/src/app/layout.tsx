@@ -7,6 +7,8 @@ import type { Metadata, Viewport } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
+import { isDemoMode } from "@rsos/config/demo";
+import { DemoBadge } from "@rsos/ui/demo-badge";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cookies } from "next/headers";
@@ -29,6 +31,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  const demoLabel = (await getTranslations("demo"))("badge");
   const locale = await getLocale();
   const nonce = (await headers()).get("x-nonce") ?? undefined;
   const consent = parseConsent((await cookies()).get(CONSENT_COOKIE)?.value);
@@ -41,6 +44,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: CONSENT_HEAD_SCRIPT }} />
       </head>
       <body>
+        {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}
         <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
         <ConsentBanner />
         {analytics ? (

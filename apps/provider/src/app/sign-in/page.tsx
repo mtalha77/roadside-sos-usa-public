@@ -1,4 +1,5 @@
 import { Alert } from "@rsos/ui/alert";
+import { DemoSignIn } from "@rsos/account/components/demo-sign-in";
 import { AuthShell } from "@rsos/ui/auth-shell";
 import { getTranslations } from "next-intl/server";
 import { ProviderSignIn } from "./sign-in-forms";
@@ -15,6 +16,7 @@ export default async function SignInPage({
     <AuthShell title={t("title")} subtitle={t("subtitle")}>
       {signedOut === "1" ? <Alert tone="info" title={ta("signedOutNotice")} /> : null}
       <ProviderSignIn expired={expired === "1"} />
+      <DemoSignIn roles={["provider_owner", "provider_operator"]} />
       <a
         href="/forgot-password"
         className="inline-flex min-h-touch items-center self-center underline underline-offset-4"

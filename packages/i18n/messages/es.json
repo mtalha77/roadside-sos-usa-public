@@ -969,5 +969,16 @@
     "manage": "Elegir",
     "policy": "Política de cookies",
     "saved": "Tus opciones quedaron guardadas."
+  },
+  "demo": {
+    "badge": "Datos de demostración",
+    "signInTitle": "Entrar como demostración",
+    "signInBody": "Solo en staging y vistas previas. Usa cuentas y datos ficticios.",
+    "roles": {
+      "provider_owner": "Dueño del proveedor",
+      "provider_operator": "Operador del proveedor",
+      "admin_super": "Superadministrador",
+      "admin_dispatcher": "Despachador"
+    }
   }
 }

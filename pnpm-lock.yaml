@@ -528,13 +528,13 @@ importers:
 
   packages/core:
     dependencies:
+      '@rsos/config':
+        specifier: workspace:*
+        version: link:../config
       zod:
         specifier: 4.6.7
         version: 4.6.7
     devDependencies:
-      '@rsos/config':
-        specifier: workspace:*
-        version: link:../config
       '@types/node':
         specifier: 26.6.6
         version: 26.6.6

@@ -20,7 +20,9 @@
     "./tokens": "./src/tokens.ts",
     "./color": "./src/color.ts",
     "./theme-colors": "./src/theme-colors.ts",
-    "./legal": "./src/legal.ts"
+    "./legal": "./src/legal.ts",
+    "./demo": "./src/demo.ts",
+    "./demo-fixtures": "./src/demo-fixtures.ts"
   },
   "scripts": {
     "lint": "eslint .",
