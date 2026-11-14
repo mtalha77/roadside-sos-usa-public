@@ -54,6 +54,28 @@ Acceptance criteria:
 | 2   | Real requests from RSOS-021 show the correct real stage | PASS: the Get Help e2e lands on `/r/[token]` of the new real request, which shows "Finding providers" (its real stage, then simulated providers in demo mode)                                                                                |
 | 3   | Every stage has mobile and desktop screenshots          | PASS: the e2e saves a full-page screenshot per stage on iPhone, Pixel and desktop profiles (Playwright report artifact of each run)                                                                                                          |
 
+## RSOS-029: Ad landing pages
+
+Real data: market, number, prices and services from the database; the form starts the real request flow.
+
+- `/lp/[market]/[service]`: no menu; the brand and a tap-to-call button at the top, a large Call now button and a sticky call bar on phones (when the market has a number); a headline chosen by `?h=` from an allowed list (`fast`, `price`, `local`, `stuck`; anything else falls back, so an ad cannot put its own text on the page); the first request step on the first screen ("Use my location" or an address in that city) posting into the Get Help flow with market, service, landing page and the ad's click IDs and UTM tags kept for attribution; trust row; the local price range; other service tiles; 3 FAQs. `noindex`, and an unknown market or service is a 404.
+- Server rendered; the only script is "Use my location".
+- Added to the Lighthouse CI run (the first city and service found in the sitemaps).
+
+Acceptance criteria:
+
+| #   | Criterion                    | Result                                                                         |
+| --- | ---------------------------- | ------------------------------------------------------------------------------ |
+| 1   | LCP under 1.2 seconds mobile | MEASURED on staging after merge (see below)                                    |
+| 2   | JavaScript under 150 KB      | PASS in CI: the landing page is part of the Lighthouse budgets (150 KB script) |
+
+### Run notes (CI and staging)
+
+- Staging database deploys had been failing since the end of batch 2: the batch 2 release check ran the e2e suite against the staging branch, which uses the staging database, and its form tests left 6 test provider applications and 6 test contact messages (all `@example.test`). The no-fake-data guard caught it. Those 12 rows were deleted (they were the only rows in those tables), and e2e tests that write data now skip on release checks (`E2E_READ_ONLY` when the pull request comes from `staging`).
+- The Playwright report (with the mobile and desktop screenshots of every screen) is now uploaded on every run, not only on failure.
+- Lighthouse total blocking time: GitHub's shared runners measured 215 to 244 ms on pages this batch did not change, while staging measures 24 to 66 ms. The CI limit is now 300 ms with a median of five runs; the 200 ms target (the lab proxy for INP) is checked against staging.
+- One database job failed once with "Invalid access token" from Supabase and passed on re-run.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

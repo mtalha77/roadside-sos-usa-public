@@ -23,11 +23,16 @@ for (const base of bases) {
   const root = new URL("/", base).toString();
   const city = await firstLoc(root, "cities");
   const service = await firstLoc(root, "services");
+  // An ad landing page for the first city and service (RSOS-029; not in the sitemaps: noindex).
+  const slug = (u: string | null) => (u ? new URL(u).pathname.split("/").pop() : null);
+  const lp =
+    city && service ? new URL(`/lp/${slug(city)}/${slug(service)}`, root).toString() : null;
   urls.push(
     root,
     ...(city ? [city] : []),
     ...(service ? [service] : []),
     new URL("/get-help", root).toString(),
+    ...(lp ? [lp] : []),
   );
 }
 console.log(`Lighthouse pages:\n${urls.join("\n")}`);
