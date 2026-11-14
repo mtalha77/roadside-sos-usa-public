@@ -980,5 +980,119 @@
       "admin_super": "Super admin",
       "admin_dispatcher": "Dispatcher"
     }
+  },
+  "getHelp": {
+    "progress": "Step {n} of {total}",
+    "back": "Back",
+    "next": "Continue",
+    "edit": "Change",
+    "location": {
+      "title": "Where are you?",
+      "useMine": "Use my location",
+      "locating": "Finding you…",
+      "denied": "We couldn't get your location. Type the address instead.",
+      "or": "Or type the address",
+      "address": "Street address or cross streets",
+      "city": "City",
+      "note": "Landmark, exit or mile marker (optional)",
+      "notePlaceholderHint": "For example: northbound past exit 160, white pickup on the shoulder",
+      "found": "Near {place}",
+      "approx": "We'll use the address you typed; the provider will confirm the exact spot."
+    },
+    "problem": {
+      "title": "What happened?",
+      "flatTire": {
+        "q": "Do you have a usable spare?",
+        "yes": "Yes",
+        "no": "No",
+        "unsure": "Not sure"
+      },
+      "lockedOut": {
+        "q": "Where are the keys?",
+        "inside": "Locked inside",
+        "lost": "Lost or broken"
+      },
+      "outOfGas": {
+        "q": "Which fuel?",
+        "regular": "Regular gas",
+        "diesel": "Diesel"
+      },
+      "wontStart": {
+        "q": "What happens when you turn the key?",
+        "clicking": "Clicking",
+        "nothing": "Nothing at all",
+        "lights": "Lights work, engine won't turn"
+      }
+    },
+    "destination": {
+      "title": "Where should we tow it?",
+      "address": "Destination address or shop name",
+      "miles": "About how far?",
+      "ranges": {
+        "lt5": "Under 5 miles",
+        "5to10": "5 to 10 miles",
+        "10to20": "10 to 20 miles",
+        "20to40": "20 to 40 miles",
+        "gt40": "Over 40 miles"
+      },
+      "note": "Providers include the distance in their price."
+    },
+    "vehicle": {
+      "title": "What are you driving?",
+      "type": "Type",
+      "types": {
+        "car": "Car",
+        "suv": "SUV",
+        "pickup": "Pickup",
+        "van": "Van",
+        "motorcycle": "Motorcycle",
+        "rv": "RV"
+      },
+      "make": "Make",
+      "model": "Model",
+      "color": "Color",
+      "year": "Year (optional)",
+      "ev": "Electric vehicle"
+    },
+    "safety": {
+      "title": "Are you safe?",
+      "safe": "Are you in a safe place, off the road?",
+      "highway": "Are you on a highway?",
+      "passengers": "Passengers with you",
+      "yes": "Yes",
+      "no": "No",
+      "unsafe": "If you're in danger or blocking traffic, call 911 first. Stay in your vehicle with your seatbelt on if you're on a highway.",
+      "call911": "Call 911"
+    },
+    "contact": {
+      "title": "How can the provider reach you?",
+      "name": "Your name",
+      "phone": "Mobile number",
+      "sendCode": "Text me a code",
+      "consent": "By continuing you agree to the <terms>Driver Terms</terms> and <privacy>Privacy Policy</privacy>, and to receive text messages about this request (message and data rates may apply; reply STOP to stop).",
+      "terms": "Driver Terms",
+      "privacy": "Privacy Policy"
+    },
+    "verify": {
+      "title": "Enter the 6-digit code",
+      "body": "We texted a code to {phone}.",
+      "code": "Code",
+      "demoCode": "Demo mode: no text was sent. Your code is {code}.",
+      "noSms": "Text messages aren't set up here yet, so we'll confirm your number by phone.",
+      "submit": "Send my request",
+      "resend": "Change number"
+    },
+    "errors": {
+      "required": "Please answer this question.",
+      "location": "We need your location or an address.",
+      "outside": "That location is outside the areas we serve.",
+      "phone": "Enter a valid US mobile number.",
+      "code": "That code isn't right. Check it and try again.",
+      "locked": "Too many tries. Start again with your number.",
+      "turnstile": "The security check didn't pass. Please try again.",
+      "limit": "Too many requests from this connection. Please call us instead.",
+      "generic": "Something went wrong. Please try again, or call us.",
+      "service": "That service isn't available in this area yet."
+    }
   }
 }
