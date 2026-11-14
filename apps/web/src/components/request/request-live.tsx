@@ -18,7 +18,8 @@ import { Stepper } from "@rsos/ui/stepper";
 import { MessageSquare, Phone, Share2, Star } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Skeleton } from "@rsos/ui/skeleton";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 type RealStatus =
   | "draft"
@@ -65,12 +66,31 @@ export type RequestLiveProps = {
 };
 
 const storageKey = (token: string) => `rsos_pick_${token}`;
+const noop = () => () => {};
+
+/** Live view only in the browser (it depends on the current second); the server sends a skeleton. */
+export function RequestLive(props: RequestLiveProps) {
+  const browser = useSyncExternalStore(
+    noop,
+    () => true,
+    () => false,
+  );
+  if (!browser)
+    return (
+      <div aria-busy="true" className="mx-auto flex w-full max-w-2xl flex-col gap-4 px-4 pt-6">
+        <Skeleton className="h-5 w-40" />
+        <Skeleton className="h-10 w-3/4" />
+        <Skeleton className="h-48 w-full rounded-2xl" />
+      </div>
+    );
+  return <RequestLiveView {...props} />;
+}
 
 /**
  * The driver's status page (RSOS-022, 065 to 069): finding providers, live quotes, confirm,
  * tracking, completed with review, cancel and report at any stage.
  */
-export function RequestLive({
+function RequestLiveView({
   token,
   code,
   serviceName,

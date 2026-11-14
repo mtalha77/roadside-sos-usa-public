@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "numberOfRuns": 3,
+      "numberOfRuns": 5,
       "settings": {
         "formFactor": "mobile",
         "chromeFlags": "--no-sandbox --headless=new",
