@@ -404,14 +404,14 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         </label>
         <p className="text-sm text-muted-foreground">
           {t.rich("contact.consent", {
-            terms: (
+            terms: (chunks) => (
               <Link className="underline underline-offset-4" href="/legal/driver-terms">
-                {t("contact.terms")}
+                {chunks}
               </Link>
             ),
-            privacy: (
+            privacy: (chunks) => (
               <Link className="underline underline-offset-4" href="/legal/privacy">
-                {t("contact.privacy")}
+                {chunks}
               </Link>
             ),
           })}
