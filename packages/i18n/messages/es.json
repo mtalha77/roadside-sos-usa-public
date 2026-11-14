@@ -1318,5 +1318,107 @@
     },
     "signOut": "Salir",
     "demoOnly": "Cuentas de demostración con datos ficticios."
+  },
+  "providerProfile": {
+    "based": "Con base en {area}",
+    "demoNote": "Proveedor de demostración: empresa, precios y reseñas ficticios para el recorrido de staging.",
+    "insured": "Seguro verificado",
+    "licensed": "Licencia de grúa revisada",
+    "eta": "Llegada típica {minutes} min",
+    "rating": "{rating} de {count} reseñas",
+    "newProvider": "Proveedor nuevo",
+    "services": "Servicios y precios",
+    "from": "desde {price}",
+    "area": "Zona de servicio: {miles} millas",
+    "areaMap": "Zona de servicio de {miles} millas alrededor de la base del proveedor",
+    "hours": "Horario",
+    "hours24": "Abierto las 24 horas, todos los días",
+    "hoursDay": "Todos los días, de 6 am a 10 pm",
+    "payments": "Métodos de pago",
+    "paymentList": "Tarjeta, efectivo, Apple Pay, Google Pay",
+    "photos": "Fotos de trabajos",
+    "noPhotos": "Todavía no hay fotos.",
+    "reviews": "Reseñas",
+    "noReviews": "Todavía no hay reseñas.",
+    "stars": "{count, plural, one {# estrella} other {# estrellas}}",
+    "demoReviews": [
+      {
+        "name": "Maria G.",
+        "stars": 5,
+        "text": "Llegó antes de lo cotizado y cambió la llanta en 15 minutos."
+      },
+      {
+        "name": "James T.",
+        "stars": 5,
+        "text": "Precio claro desde el inicio, conductor amable."
+      },
+      {
+        "name": "Priya S.",
+        "stars": 4,
+        "text": "Buen remolque, un poco tarde por el tráfico, pero me mantuvo informado."
+      }
+    ]
+  },
+  "portal": {
+    "nav": {
+      "label": "Portal",
+      "home": "Inicio",
+      "jobs": "Trabajos",
+      "wallet": "Saldo",
+      "profile": "Perfil",
+      "more": "Más",
+      "services": "Servicios y precios",
+      "team": "Equipo",
+      "insights": "Estadísticas",
+      "notifications": "Notificaciones",
+      "help": "Ayuda",
+      "account": "Cuenta y seguridad",
+      "install": "Instalar la app",
+      "onboarding": "Configuración"
+    },
+    "shell": {
+      "offline": "Estás sin conexión. Las solicitudes nuevas aparecerán cuando vuelvas a conectarte.",
+      "online": "Conexión restablecida.",
+      "update": "Hay una versión nueva lista.",
+      "reload": "Actualizar ahora",
+      "company": "{company}"
+    },
+    "install": {
+      "title": "Instalar la app",
+      "body": "Recibe solicitudes en pantalla completa con sonido y abre el portal con un toque.",
+      "iphone": "iPhone (Safari)",
+      "iphoneSteps": ["Toca el botón Compartir.", "Elige \"Agregar a inicio\".", "Toca Agregar."],
+      "android": "Android (Chrome)",
+      "androidSteps": ["Toca el menú (tres puntos).", "Elige \"Instalar app\".", "Toca Instalar."],
+      "installNow": "Instalar ahora"
+    },
+    "home": {
+      "title": "Hoy",
+      "online": "Estás en línea",
+      "offline": "Estás desconectado",
+      "onlineHint": "Las solicitudes cercanas pueden llegarte",
+      "offlineHint": "Conéctate para recibir solicitudes",
+      "swipeOff": "Desliza para desconectarte",
+      "truck": "Grúa u operador",
+      "stats": {
+        "requests": "Solicitudes cercanas",
+        "quotes": "Cotizaciones enviadas",
+        "won": "Trabajos ganados",
+        "value": "Valor de trabajos",
+        "fees": "Tarifas pagadas"
+      },
+      "wallet": "Saldo",
+      "low": "Saldo bajo: recarga para no perder trabajos.",
+      "topUp": "Recargar",
+      "blockers": "Antes de recibir trabajos",
+      "empty": "Tu saldo está en cero.",
+      "expired": "Tu certificado de seguro vence en {days} días.",
+      "review": "Tu empresa está en revisión.",
+      "fix": "Resolver",
+      "map": "Tu zona de servicio y solicitudes cercanas",
+      "offers": "{count, plural, one {# solicitud esperando cotizaciones} other {# solicitudes esperando cotizaciones}}",
+      "seeOffer": "Ver la siguiente solicitud",
+      "demo": "Datos de demostración: las solicitudes y estadísticas son simuladas; el saldo es real."
+    }
   }
 }

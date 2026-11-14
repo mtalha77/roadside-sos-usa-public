@@ -90,6 +90,13 @@ Acceptance criteria:
 | --- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Returning driver can submit a request in 3 taps after location (demo) | PASS: e2e signs in, starts a quick request and counts 2 taps after the location step (safety, send) before landing on the new request's status page |
 
+## RSOS-019b: Provider public profile page
+
+Demo data: demo providers only, in demo mode (marked "Demo provider" on the page); in production the page is hidden (404) until real providers have profiles. Prices are inside the market's real ranges.
+
+- `/providers/[slug]`: generated cover (design tokens, no stock or AI art) and initials logo, city and base area, badges (insurance verified, tow license checked in Texas, typical arrival, rating or "New provider"), services with "from" prices, service area on the LiteMap, hours, payment methods, job photos ("No photos yet": no invented photos), reviews (fictional, demo only) and a Get help button with the market preselected.
+- Also fixed while testing RSOS-070: the Get Help handler now resumes at the first unanswered step (a quick request no longer asks again), and request rate limits are higher on demo-mode previews and staging (test suites submit from one IP); production limits are unchanged.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
