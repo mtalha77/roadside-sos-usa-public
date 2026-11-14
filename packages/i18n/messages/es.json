@@ -980,5 +980,119 @@
       "admin_super": "Superadministrador",
       "admin_dispatcher": "Despachador"
     }
+  },
+  "getHelp": {
+    "progress": "Paso {n} de {total}",
+    "back": "Atrás",
+    "next": "Continuar",
+    "edit": "Cambiar",
+    "location": {
+      "title": "¿Dónde estás?",
+      "useMine": "Usar mi ubicación",
+      "locating": "Buscándote…",
+      "denied": "No pudimos obtener tu ubicación. Escribe la dirección.",
+      "or": "O escribe la dirección",
+      "address": "Dirección o cruce de calles",
+      "city": "Ciudad",
+      "note": "Referencia, salida o marcador de milla (opcional)",
+      "notePlaceholderHint": "Por ejemplo: dirección norte pasando la salida 160, camioneta blanca en el acotamiento",
+      "found": "Cerca de {place}",
+      "approx": "Usaremos la dirección que escribiste; el proveedor confirmará el lugar exacto."
+    },
+    "problem": {
+      "title": "¿Qué pasó?",
+      "flatTire": {
+        "q": "¿Tienes una llanta de repuesto en buen estado?",
+        "yes": "Sí",
+        "no": "No",
+        "unsure": "No estoy seguro"
+      },
+      "lockedOut": {
+        "q": "¿Dónde están las llaves?",
+        "inside": "Adentro del vehículo",
+        "lost": "Perdidas o rotas"
+      },
+      "outOfGas": {
+        "q": "¿Qué combustible?",
+        "regular": "Gasolina regular",
+        "diesel": "Diésel"
+      },
+      "wontStart": {
+        "q": "¿Qué pasa al girar la llave?",
+        "clicking": "Hace clic",
+        "nothing": "Nada",
+        "lights": "Las luces funcionan, el motor no gira"
+      }
+    },
+    "destination": {
+      "title": "¿A dónde lo remolcamos?",
+      "address": "Dirección de destino o nombre del taller",
+      "miles": "¿Aproximadamente qué tan lejos?",
+      "ranges": {
+        "lt5": "Menos de 5 millas",
+        "5to10": "De 5 a 10 millas",
+        "10to20": "De 10 a 20 millas",
+        "20to40": "De 20 a 40 millas",
+        "gt40": "Más de 40 millas"
+      },
+      "note": "Los proveedores incluyen la distancia en su precio."
+    },
+    "vehicle": {
+      "title": "¿Qué vehículo manejas?",
+      "type": "Tipo",
+      "types": {
+        "car": "Auto",
+        "suv": "SUV",
+        "pickup": "Camioneta",
+        "van": "Van",
+        "motorcycle": "Motocicleta",
+        "rv": "Casa rodante"
+      },
+      "make": "Marca",
+      "model": "Modelo",
+      "color": "Color",
+      "year": "Año (opcional)",
+      "ev": "Vehículo eléctrico"
+    },
+    "safety": {
+      "title": "¿Estás a salvo?",
+      "safe": "¿Estás en un lugar seguro, fuera del camino?",
+      "highway": "¿Estás en una autopista?",
+      "passengers": "Pasajeros contigo",
+      "yes": "Sí",
+      "no": "No",
+      "unsafe": "Si estás en peligro o bloqueando el tráfico, llama primero al 911. Quédate en el vehículo con el cinturón puesto si estás en una autopista.",
+      "call911": "Llamar al 911"
+    },
+    "contact": {
+      "title": "¿Cómo te contacta el proveedor?",
+      "name": "Tu nombre",
+      "phone": "Número de celular",
+      "sendCode": "Envíame un código",
+      "consent": "Al continuar aceptas los {terms} y la {privacy}, y recibir mensajes de texto sobre esta solicitud (pueden aplicar tarifas de mensajes y datos; responde STOP para cancelar).",
+      "terms": "Términos para conductores",
+      "privacy": "Política de privacidad"
+    },
+    "verify": {
+      "title": "Escribe el código de 6 dígitos",
+      "body": "Enviamos un código al {phone}.",
+      "code": "Código",
+      "demoCode": "Modo demostración: no se envió ningún texto. Tu código es {code}.",
+      "noSms": "Aquí todavía no hay mensajes de texto, así que confirmaremos tu número por teléfono.",
+      "submit": "Enviar mi solicitud",
+      "resend": "Cambiar número"
+    },
+    "errors": {
+      "required": "Responde esta pregunta.",
+      "location": "Necesitamos tu ubicación o una dirección.",
+      "outside": "Esa ubicación está fuera de las zonas donde estamos.",
+      "phone": "Escribe un celular válido de EE. UU.",
+      "code": "Ese código no es correcto. Revísalo e inténtalo de nuevo.",
+      "locked": "Demasiados intentos. Empieza de nuevo con tu número.",
+      "turnstile": "La verificación de seguridad no pasó. Inténtalo de nuevo.",
+      "limit": "Demasiadas solicitudes desde esta conexión. Llámanos, por favor.",
+      "generic": "Algo salió mal. Inténtalo de nuevo o llámanos.",
+      "service": "Ese servicio todavía no está disponible en esta zona."
+    }
   }
 }

@@ -35,7 +35,7 @@ test.describe("website structure", () => {
       .first();
     await tile.click();
     await expect(page).toHaveURL(/\/get-help\?service=flat-tire/);
-    await expect(page.locator("[data-service='flat-tire']")).toBeVisible();
+    await expect(page.locator("input[name=service][value='flat-tire']")).toHaveCount(1);
     await expectNoA11yViolations(page);
   });
 
@@ -56,7 +56,7 @@ test.describe("website structure", () => {
     await expect(page).toHaveURL(new RegExp(`${city}/tow$`));
     await page.getByRole("main").getByRole("link", { name: "Get help now" }).click();
     await expect(page).toHaveURL(/\/get-help\?service=tow&market=[a-z-]+$/);
-    await expect(page.locator("[data-market]")).toBeVisible();
+    await expect(page.locator("select[name=market]")).not.toHaveValue("");
     expect((await page.request.get(url("/roadside-assistance/tx/not-a-city"))).status()).toBe(404);
   });
 
@@ -69,7 +69,7 @@ test.describe("website structure", () => {
     await page.getByRole("button", { name: "Use this area" }).click();
     await expect(page.getByRole("combobox", { name: "Change area" })).toHaveValue(value!);
     await page.goto(url("/get-help"));
-    await expect(page.locator(`[data-market='${value}']`)).toBeVisible();
+    await expect(page.locator("select[name=market]")).toHaveValue(value!);
   });
 
   test("structure pages and legal pages exist", async ({ request }) => {
