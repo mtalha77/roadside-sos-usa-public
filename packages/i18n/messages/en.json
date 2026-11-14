@@ -1062,7 +1062,10 @@
       "yes": "Yes",
       "no": "No",
       "unsafe": "If you're in danger or blocking traffic, call 911 first. Stay in your vehicle with your seatbelt on if you're on a highway.",
-      "call911": "Call 911"
+      "call911": "Call 911",
+      "quickSafe": "I'm safe, off the road",
+      "quickHighway": "I'm safe, on a highway shoulder",
+      "quickUnsafe": "I'm not safe"
     },
     "contact": {
       "title": "How can the provider reach you?",
@@ -1263,5 +1266,57 @@
         "a": "No. No membership, sign-up or subscription."
       }
     }
+  },
+  "driverAccount": {
+    "title": "Your account",
+    "signIn": {
+      "title": "Sign in with your phone",
+      "body": "We'll text you a code. No password.",
+      "phone": "Mobile number",
+      "send": "Text me a code",
+      "code": "6-digit code",
+      "demoCode": "Demo mode: your code is {code}.",
+      "verify": "Sign in",
+      "wrong": "That code isn't right."
+    },
+    "tabs": "Account sections",
+    "requests": "Requests",
+    "vehicles": "Vehicles",
+    "places": "Places",
+    "favorites": "Favorite providers",
+    "settings": "Settings",
+    "quick": {
+      "title": "Request again",
+      "body": "Uses your saved vehicle and number. You'll confirm your location.",
+      "start": "Start a request"
+    },
+    "history": {
+      "again": "Request again",
+      "none": "No requests yet.",
+      "daysAgo": "{days, plural, one {# day ago} other {# days ago}}"
+    },
+    "vehicle": {
+      "add": "Add a vehicle",
+      "default": "Default",
+      "makeDefault": "Make default",
+      "remove": "Remove"
+    },
+    "place": {
+      "add": "Add a place",
+      "remove": "Remove"
+    },
+    "favorite": {
+      "remove": "Remove from favorites",
+      "none": "No favorites yet. After a job, tap the heart on the provider."
+    },
+    "delete": {
+      "title": "Delete account",
+      "body": "This removes your saved vehicles, places and favorites. Past requests stay on record for the providers and our team as the law requires.",
+      "confirm": "Type DELETE to confirm",
+      "button": "Delete my account",
+      "done": "Your account is deleted."
+    },
+    "signOut": "Sign out",
+    "demoOnly": "Demo accounts with fictional data."
   }
 }

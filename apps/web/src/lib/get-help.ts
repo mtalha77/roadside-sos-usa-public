@@ -94,6 +94,8 @@ export const DraftSchema = z
     demoCode: z.string(),
     smsAvailable: z.boolean(),
     attribution: z.record(z.string(), z.string()),
+    /** Quick repeat request from the driver account: safety becomes one tap. */
+    quick: z.boolean(),
   })
   .partial();
 export type Draft = z.infer<typeof DraftSchema>;
