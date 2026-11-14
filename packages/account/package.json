@@ -6,7 +6,8 @@
   "exports": {
     "./actions": "./src/server/actions.ts",
     "./server": "./src/server/index.ts",
-    "./components/*": "./src/components/*.tsx"
+    "./components/*": "./src/components/*.tsx",
+    "./demo": "./src/server/demo.ts"
   },
   "scripts": {
     "lint": "eslint .",
