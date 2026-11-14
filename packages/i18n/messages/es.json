@@ -1225,5 +1225,43 @@
       "body": "El enlace puede ser antiguo o estar mal escrito. Si necesitas ayuda ahora, empieza una nueva solicitud o llámanos.",
       "again": "Empezar una nueva solicitud"
     }
+  },
+  "lp": {
+    "metaTitle": "Asistencia en carretera en {city}",
+    "headlines": {
+      "fast": "¿{service} en {city}? Recibe cotizaciones en minutos.",
+      "price": "{service} en {city}: mira precios reales antes de elegir.",
+      "local": "Proveedores locales de {city}, listos ahora.",
+      "stuck": "¿Varado en {city}? La ayuda va en camino."
+    },
+    "callNow": "Llama ahora al {phone}",
+    "startTitle": "Empieza tu solicitud",
+    "useLocation": "Usar mi ubicación",
+    "locating": "Buscándote…",
+    "denied": "No pudimos obtener tu ubicación. Escribe la dirección.",
+    "address": "Tu dirección o cruce de calles en {city}",
+    "continue": "Continuar",
+    "trust": {
+      "label": "Por qué nos usan los conductores",
+      "insured": "Proveedores verificados y asegurados",
+      "fast": "Cotizaciones en unos 3 minutos",
+      "noMembership": "Sin membresía"
+    },
+    "priceLabel": "Precio típico de {service} en {city}",
+    "otherServices": "¿Necesitas otra cosa?",
+    "faq": {
+      "cost": {
+        "q": "¿Cuánto cuesta?",
+        "a": "Los proveedores cotizan el precio total antes de que elijas, y les pagas directamente."
+      },
+      "fast": {
+        "q": "¿Qué tan rápido llegan?",
+        "a": "Cada cotización muestra la hora de llegada, así puedes elegir la más rápida."
+      },
+      "membership": {
+        "q": "¿Necesito una membresía?",
+        "a": "No. Sin membresía, registro ni suscripción."
+      }
+    }
   }
 }

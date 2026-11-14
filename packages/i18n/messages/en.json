@@ -1225,5 +1225,43 @@
       "body": "The link may be old or mistyped. If you need help now, start a new request or call us.",
       "again": "Start a new request"
     }
+  },
+  "lp": {
+    "metaTitle": "Roadside help in {city}",
+    "headlines": {
+      "fast": "{service} in {city}? Get quotes in minutes.",
+      "price": "{service} in {city}: see real prices before you choose.",
+      "local": "Local {city} providers, ready now.",
+      "stuck": "Stuck in {city}? Help is on the way."
+    },
+    "callNow": "Call now {phone}",
+    "startTitle": "Start your request",
+    "useLocation": "Use my location",
+    "locating": "Finding you…",
+    "denied": "We couldn't get your location. Type the address instead.",
+    "address": "Your address or cross streets in {city}",
+    "continue": "Continue",
+    "trust": {
+      "label": "Why drivers use us",
+      "insured": "Insured, verified providers",
+      "fast": "Quotes in about 3 minutes",
+      "noMembership": "No membership"
+    },
+    "priceLabel": "Typical {service} price in {city}",
+    "otherServices": "Need something else?",
+    "faq": {
+      "cost": {
+        "q": "How much does it cost?",
+        "a": "Providers quote a full price before you choose, and you pay them directly."
+      },
+      "fast": {
+        "q": "How fast can someone get here?",
+        "a": "Every quote shows the arrival time, so you can choose the fastest."
+      },
+      "membership": {
+        "q": "Do I need a membership?",
+        "a": "No. No membership, sign-up or subscription."
+      }
+    }
   }
 }

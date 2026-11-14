@@ -91,3 +91,33 @@ test.describe("get help flow", () => {
     await expect(page.getByLabel("Street address or cross streets")).toHaveValue("500 Commerce St");
   });
 });
+
+// RSOS-029: ad landing pages.
+test.describe("ad landing pages", () => {
+  test.skip(!web, "No website URL");
+
+  test("one job: no menu, headline from the allowed list, first step on screen, noindex", async ({
+    page,
+  }, info) => {
+    await page.goto(url("/lp/houston/tow?h=price&utm_source=google&gclid=test123"));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/see real prices/);
+    await expect(page.getByRole("navigation")).toHaveCount(0);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    await expect(page.locator('input[name="gclid"]')).toHaveValue("test123");
+    await expectNoA11yViolations(page);
+    await expectNoHorizontalScroll(page);
+    await page.screenshot({ path: info.outputPath("lp.png"), fullPage: true });
+    await page.goto(url("/lp/houston/tow?h=<script>"));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Get quotes in minutes/);
+    expect((await page.request.get(url("/lp/nowhere/tow"))).status()).toBe(404);
+  });
+
+  test("the first step continues into the request flow with market and service kept", async ({
+    page,
+  }) => {
+    await page.goto(url("/lp/houston/flat-tire"));
+    await page.getByLabel(/Your address/).fill("800 Bagby St");
+    await page.getByRole("button", { name: "Continue" }).click();
+    await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
+  });
+});
