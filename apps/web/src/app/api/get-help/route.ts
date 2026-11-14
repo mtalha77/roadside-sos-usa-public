@@ -1,5 +1,6 @@
 import { createHash, randomInt } from "node:crypto";
 import { brand } from "@rsos/config/brand";
+import { isDemoMode } from "@rsos/config/demo";
 import { legalDocuments } from "@rsos/config/legal";
 import { chooseSmsSender } from "@rsos/core";
 import { checkRateLimits, rateLimitKeys, verifyTurnstile } from "@rsos/core/security";
@@ -29,6 +30,11 @@ const db = () => {
   if (!s) throw new Error("Supabase is not configured");
   return s.rpc.bind(s) as unknown as Rpc;
 };
+/** Production limits; demo-mode previews and staging allow more because test suites submit from one IP. */
+const LIMITS = isDemoMode()
+  ? { codeIp: 100, codePhone: 50, requestIp: 100 }
+  : { codeIp: 10, codePhone: 5, requestIp: 5 };
+
 const hash = (code: string, token: string) =>
   createHash("sha256").update(`${token}:${code}`).digest("hex");
 
@@ -206,8 +212,8 @@ export async function POST(request: NextRequest) {
       if (!phone) return fail("contact", "phone");
       const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
       const limit = await checkRateLimits([
-        { key: `code:${rateLimitKeys.ip(ip)}`, limit: 10, windowSeconds: 3600 },
-        { key: `code:${rateLimitKeys.phone(phone)}`, limit: 5, windowSeconds: 3600 },
+        { key: `code:${rateLimitKeys.ip(ip)}`, limit: LIMITS.codeIp, windowSeconds: 3600 },
+        { key: `code:${rateLimitKeys.phone(phone)}`, limit: LIMITS.codePhone, windowSeconds: 3600 },
       ]);
       if (!limit.allowed) return fail("contact", "limit");
       const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
@@ -265,7 +271,11 @@ export async function POST(request: NextRequest) {
       if (
         !(
           await checkRateLimits([
-            { key: `request:${rateLimitKeys.ip(ip)}`, limit: 5, windowSeconds: 3600 },
+            {
+              key: `request:${rateLimitKeys.ip(ip)}`,
+              limit: LIMITS.requestIp,
+              windowSeconds: 3600,
+            },
           ])
         ).allowed
       )
