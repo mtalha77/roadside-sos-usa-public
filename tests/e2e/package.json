@@ -16,6 +16,7 @@
     "@lhci/cli": "0.16.1",
     "@playwright/test": "1.65.0",
     "@rsos/config": "workspace:*",
+    "@rsos/core": "workspace:*",
     "@types/node": "26.6.6",
     "eslint": "10.14.0",
     "typescript": "6.0.3"

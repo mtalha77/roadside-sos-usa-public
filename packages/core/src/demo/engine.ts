@@ -193,8 +193,13 @@ export type DemoState = {
   timeline: { stage: DemoStage; atSec: number }[];
 };
 
-/** Where a demo request is at `now` (ms). Pure: every app computes the same answer. */
-export function demoState(req: DemoRequest, now: number): DemoState {
+export type DemoPick = { quoteId: string; atSec: number };
+
+/**
+ * Where a demo request is at `now` (ms). Pure: every app computes the same answer. `pick` is the
+ * driver's own choice (which quote, and when); without it the fastest quote is picked at 190 s.
+ */
+export function demoState(req: DemoRequest, now: number, pick?: DemoPick | null): DemoState {
   const t = Math.max(0, (now - req.createdAt) / 1000);
   const arrived = req.quotes.filter((q) => q.arrivesAtSec <= t);
   const timeline: DemoState["timeline"] = [{ stage: "searching", atSec: 0 }];
@@ -227,18 +232,20 @@ export function demoState(req: DemoRequest, now: number): DemoState {
       ],
     };
   }
-  if (t < TIMING.pickAt)
+  const pickAt = pick ? pick.atSec : TIMING.pickAt;
+  if (t < pickAt)
     return {
       ...base,
       stage: arrived.length ? "quoting" : "searching",
       timeline: timeline.filter((x) => x.atSec <= t),
     };
-  // The driver picks the fastest quote.
-  const picked = [...req.quotes].sort((a, b) => a.etaMinutes - b.etaMinutes)[0]!;
-  const drive = TIMING.pickAt + 10;
+  const picked =
+    req.quotes.find((q) => q.id === pick?.quoteId) ??
+    [...req.quotes].sort((a, b) => a.etaMinutes - b.etaMinutes)[0]!;
+  const drive = pickAt + 10;
   const arrive = drive + TIMING.travelSec;
   const done = arrive + TIMING.workSec;
-  timeline.push({ stage: "picked", atSec: TIMING.pickAt });
+  timeline.push({ stage: "picked", atSec: pickAt });
   const progress = Math.min(1, Math.max(0, (t - drive) / TIMING.travelSec));
   const truck = {
     lat: picked.provider.home.lat + (req.location.lat - picked.provider.home.lat) * progress,
@@ -299,4 +306,11 @@ export function demoRequestFromToken(
   const seed = parseInt(m[2]!, 36);
   const fromStream = demoStream(now, { markets: [m[1]!] }).find((r) => r.token === token);
   return fromStream ?? makeDemoRequest(m[1]!, seed, now - 5_000, ranges);
+}
+
+/** A stable seed from any string (FNV-1a), e.g. to simulate providers for a real request in demo mode. */
+export function seedFrom(text: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193) >>> 0;
+  return h % 1_000_000_007;
 }
