@@ -7,12 +7,14 @@ export function Choice({
   checked,
   children,
   id,
+  required = true,
 }: {
   name: string;
   value: string;
   checked?: boolean;
   children: ReactNode;
   id?: string;
+  required?: boolean;
 }) {
   return (
     <label className="flex min-h-touch cursor-pointer items-center gap-3 rounded-xl border-2 border-border bg-surface px-4 py-3 transition-colors duration-150 has-[:checked]:border-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring">
@@ -22,7 +24,7 @@ export function Choice({
         name={name}
         value={value}
         defaultChecked={checked}
-        required
+        required={required}
         className="size-5 accent-[var(--primary)]"
       />
       <span className="font-medium">{children}</span>
