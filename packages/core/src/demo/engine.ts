@@ -113,7 +113,7 @@ export function makeDemoRequest(
 ): DemoRequest | null {
   const m = demoMarkets[marketSlug];
   if (!m) return null;
-  const r = rng(seed);
+  const r = rng((seed ^ seedFrom(marketSlug)) >>> 0);
   const service = pick(r, DEMO_SERVICES);
   const area = pick(r, m.areas);
   const at = { lat: area.lat + (r() - 0.5) * 0.04, lng: area.lng + (r() - 0.5) * 0.04 };
@@ -283,19 +283,24 @@ export function demoStream(
   const out: DemoRequest[] = [];
   const latest = Math.floor(now / interval);
   const back = Math.ceil((DEMO_LIFETIME_SEC * 1000) / interval);
-  opts.markets.forEach((slug, mi) => {
+  for (const slug of opts.markets) {
     for (let k = 0; k <= back; k++) {
       const bucket = latest - k;
-      const createdAt = bucket * interval + ((mi * 17_000) % interval);
+      const createdAt = slotTime(slug, bucket, interval);
       if (createdAt > now) continue;
-      const req = makeDemoRequest(slug, bucket * 31 + mi * 7919, createdAt, opts.ranges?.[slug]);
+      const req = makeDemoRequest(slug, bucket, createdAt, opts.ranges?.[slug]);
       if (req) out.push(req);
     }
-  });
+  }
   return out.sort((a, b) => b.createdAt - a.createdAt);
 }
 
-/** Find a demo request from its tracking token (demo tokens encode market and seed). */
+/** When a stream slot's request was sent: each market has its own fixed offset inside the slot. */
+function slotTime(market: string, bucket: number, interval: number): number {
+  return bucket * interval + (seedFrom(market) % interval);
+}
+
+/** Find a demo request from its tracking token (demo tokens encode market and time slot). */
 export function demoRequestFromToken(
   token: string,
   now: number,
@@ -303,9 +308,11 @@ export function demoRequestFromToken(
 ): DemoRequest | null {
   const m = /^demo_([a-z0-9-]+)_([0-9a-z]+)$/.exec(token);
   if (!m) return null;
-  const seed = parseInt(m[2]!, 36);
-  const fromStream = demoStream(now, { markets: [m[1]!] }).find((r) => r.token === token);
-  return fromStream ?? makeDemoRequest(m[1]!, seed, now - 5_000, ranges);
+  // The token holds the market and the time slot, so the request is rebuilt exactly, in any app.
+  const bucket = parseInt(m[2]!, 36);
+  const createdAt = slotTime(m[1]!, bucket, 75_000);
+  if (!Number.isFinite(bucket) || createdAt > now) return null;
+  return makeDemoRequest(m[1]!, bucket, createdAt, ranges);
 }
 
 /** A stable seed from any string (FNV-1a), e.g. to simulate providers for a real request in demo mode. */
