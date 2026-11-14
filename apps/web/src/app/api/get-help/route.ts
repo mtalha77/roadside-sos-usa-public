@@ -26,7 +26,7 @@ type Rpc = (
 const db = () => {
   const s = createPublicSupabase();
   if (!s) throw new Error("Supabase is not configured");
-  return s.rpc as unknown as Rpc;
+  return s.rpc.bind(s) as unknown as Rpc;
 };
 const hash = (code: string, token: string) =>
   createHash("sha256").update(`${token}:${code}`).digest("hex");
