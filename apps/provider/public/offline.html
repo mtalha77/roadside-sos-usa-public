@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offline</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: system-ui, sans-serif;
+        background: #f7f8fa;
+        color: #14171f;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #14171f;
+          color: #f7f8fa;
+        }
+      }
+      main {
+        max-width: 22rem;
+        padding: 1.5rem;
+        text-align: center;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      button {
+        min-height: 48px;
+        padding: 0 1.25rem;
+        border-radius: 0.75rem;
+        border: 0;
+        font: inherit;
+        font-weight: 600;
+        background: #f5a623;
+        color: #14171f;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>You're offline</h1>
+      <p>New requests will appear when your phone is back online.</p>
+      <button type="button" onclick="location.reload()">Try again</button>
+    </main>
+  </body>
+</html>
