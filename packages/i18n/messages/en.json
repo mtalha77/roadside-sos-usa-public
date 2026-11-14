@@ -1069,7 +1069,7 @@
       "name": "Your name",
       "phone": "Mobile number",
       "sendCode": "Text me a code",
-      "consent": "By continuing you agree to the {terms} and {privacy}, and to receive text messages about this request (message and data rates may apply; reply STOP to stop).",
+      "consent": "By continuing you agree to the <terms>Driver Terms</terms> and <privacy>Privacy Policy</privacy>, and to receive text messages about this request (message and data rates may apply; reply STOP to stop).",
       "terms": "Driver Terms",
       "privacy": "Privacy Policy"
     },

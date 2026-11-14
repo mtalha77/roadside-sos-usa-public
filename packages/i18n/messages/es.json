@@ -1069,7 +1069,7 @@
       "name": "Tu nombre",
       "phone": "Número de celular",
       "sendCode": "Envíame un código",
-      "consent": "Al continuar aceptas los {terms} y la {privacy}, y recibir mensajes de texto sobre esta solicitud (pueden aplicar tarifas de mensajes y datos; responde STOP para cancelar).",
+      "consent": "Al continuar aceptas los <terms>Términos para conductores</terms> y la <privacy>Política de privacidad</privacy>, y recibir mensajes de texto sobre esta solicitud (pueden aplicar tarifas de mensajes y datos; responde STOP para cancelar).",
       "terms": "Términos para conductores",
       "privacy": "Política de privacidad"
     },
