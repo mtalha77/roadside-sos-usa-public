@@ -213,6 +213,7 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
                 name={`followUp-${slug}`}
                 value={o}
                 checked={draft.service === slug && draft.followUp === o}
+                required={false}
               >
                 {t(`problem.${fu.key}.${o}` as never)}
               </Choice>
