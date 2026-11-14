@@ -76,6 +76,20 @@ Acceptance criteria:
 - Lighthouse total blocking time: GitHub's shared runners measured 215 to 244 ms on pages this batch did not change, while staging measures 24 to 66 ms. The CI limit is now 300 ms with a median of five runs; the 200 ms target (the lab proxy for INP) is checked against staging.
 - One database job failed once with "Invalid access token" from Supabase and passed on re-run.
 
+## RSOS-070: Driver account (UI)
+
+Demo data: there are no driver account tables yet, so `/account` exists in demo mode only (404 in production). Quick requests are real: they create a real request in the database.
+
+- Phone-code sign-in (the code is shown on screen in demo mode; stored only as a hash); the demo session is an HttpOnly cookie.
+- Tabs: request history (each opens its status page; "Request again"), saved vehicles (default, remove), saved places, favorite providers (linking to their profiles), settings with sign out and delete account (type DELETE to confirm; explains what is kept by law). Saved data is fictional and derived from the phone number, so it is stable.
+- Quick request: one tap on a service pre-fills a Get Help draft with the default vehicle and the number; the driver confirms location, answers safety with one tap ("I'm safe, off the road", "on a highway shoulder", "not safe") and sends.
+
+Acceptance criteria:
+
+| #   | Criterion                                                             | Result                                                                                                                                              |
+| --- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Returning driver can submit a request in 3 taps after location (demo) | PASS: e2e signs in, starts a quick request and counts 2 taps after the location step (safety, send) before landing on the new request's status page |
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

@@ -1,5 +1,6 @@
 import { createHash, randomInt } from "node:crypto";
 import { brand } from "@rsos/config/brand";
+import { isDemoMode } from "@rsos/config/demo";
 import { legalDocuments } from "@rsos/config/legal";
 import { chooseSmsSender } from "@rsos/core";
 import { checkRateLimits, rateLimitKeys, verifyTurnstile } from "@rsos/core/security";
@@ -14,6 +15,7 @@ import {
   FOLLOW_UPS,
   MILE_RANGES,
   NEEDS_DESTINATION,
+  currentStep,
   toE164,
   VEHICLE_TYPES,
 } from "@/lib/get-help";
@@ -28,6 +30,11 @@ const db = () => {
   if (!s) throw new Error("Supabase is not configured");
   return s.rpc.bind(s) as unknown as Rpc;
 };
+/** Production limits; demo-mode previews and staging allow more because test suites submit from one IP. */
+const LIMITS = isDemoMode()
+  ? { codeIp: 100, codePhone: 50, requestIp: 100 }
+  : { codeIp: 10, codePhone: 5, requestIp: 5 };
+
 const hash = (code: string, token: string) =>
   createHash("sha256").update(`${token}:${code}`).digest("hex");
 
@@ -64,7 +71,10 @@ export async function POST(request: NextRequest) {
       p_patch: patch,
     });
     if (error) return fail(step, "generic");
-    return go(`/get-help?step=${next}`, String(data));
+    // Resume at the first unanswered step: answers already in the draft (a quick repeat request)
+    // are not asked again.
+    const resume = step === "contact" ? next : currentStep({ ...draft, ...patch });
+    return go(`/get-help?step=${resume}`, String(data));
   };
   const str = (k: string, max = 200) =>
     String(form.get(k) ?? "")
@@ -170,6 +180,18 @@ export async function POST(request: NextRequest) {
       return p.success ? save(p.data, "safety") : fail("vehicle", "required");
     }
     case "safety": {
+      const quick = str("quick");
+      if (quick) {
+        // One-tap answers on a quick repeat request.
+        const map: Record<string, Draft> = {
+          safe: { safe: true, highway: false },
+          highway: { safe: true, highway: true },
+          unsafe: { safe: false, highway: true },
+        };
+        return map[quick]
+          ? save({ ...map[quick], passengers: 0 }, draft.phone ? "verify" : "contact")
+          : fail("safety", "required");
+      }
       const safe = str("safe");
       const highway = str("highway");
       if (!["yes", "no"].includes(safe) || !["yes", "no"].includes(highway))
@@ -190,8 +212,8 @@ export async function POST(request: NextRequest) {
       if (!phone) return fail("contact", "phone");
       const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
       const limit = await checkRateLimits([
-        { key: `code:${rateLimitKeys.ip(ip)}`, limit: 10, windowSeconds: 3600 },
-        { key: `code:${rateLimitKeys.phone(phone)}`, limit: 5, windowSeconds: 3600 },
+        { key: `code:${rateLimitKeys.ip(ip)}`, limit: LIMITS.codeIp, windowSeconds: 3600 },
+        { key: `code:${rateLimitKeys.phone(phone)}`, limit: LIMITS.codePhone, windowSeconds: 3600 },
       ]);
       if (!limit.allowed) return fail("contact", "limit");
       const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
@@ -249,7 +271,11 @@ export async function POST(request: NextRequest) {
       if (
         !(
           await checkRateLimits([
-            { key: `request:${rateLimitKeys.ip(ip)}`, limit: 5, windowSeconds: 3600 },
+            {
+              key: `request:${rateLimitKeys.ip(ip)}`,
+              limit: LIMITS.requestIp,
+              windowSeconds: 3600,
+            },
           ])
         ).allowed
       )
