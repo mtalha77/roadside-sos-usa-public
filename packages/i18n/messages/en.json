@@ -1094,5 +1094,136 @@
       "generic": "Something went wrong. Please try again, or call us.",
       "service": "That service isn't available in this area yet."
     }
+  },
+  "track": {
+    "title": "Your request {code}",
+    "demoNote": "Demo providers: quotes and movement on this page are simulated.",
+    "stages": {
+      "searching": "Finding providers near you",
+      "quoting": "Quotes are coming in",
+      "picked": "Provider confirmed",
+      "en_route": "On the way",
+      "on_site": "Provider arrived",
+      "completed": "Job completed",
+      "cancelled": "Request cancelled",
+      "expired": "No provider was available"
+    },
+    "searching": {
+      "body": "We sent your request to verified providers nearby. Quotes usually arrive within 3 minutes. Stay where you are and keep your phone on.",
+      "call": "Call us {phone}",
+      "timeLeft": "Time left for quotes"
+    },
+    "quotes": {
+      "count": "{count, plural, one {# quote} other {# quotes}}",
+      "sortFastest": "Fastest",
+      "sortCheapest": "Cheapest",
+      "sortLabel": "Sort quotes",
+      "autoPick": "Get help fastest: pick the fastest quote for me",
+      "newQuote": "New quote from {provider}: {price}, about {minutes} minutes",
+      "choose": "Choose",
+      "viewProfile": "View profile",
+      "waiting": "Waiting for more providers…"
+    },
+    "confirm": {
+      "title": "Confirm {provider}",
+      "price": "Price",
+      "eta": "Arrives in about",
+      "minutes": "{minutes} min",
+      "included": "What's included",
+      "includedBody": "The service you asked for, done where your vehicle is.",
+      "extras": "Extra charges",
+      "extrasTow": "Towing beyond the miles in your request is charged per mile, as quoted.",
+      "extrasWait": "Waiting more than 15 minutes after arrival can be charged.",
+      "payDirect": "You pay the provider directly when the job is done.",
+      "methods": "Accepted: card, cash, Apple Pay, Google Pay",
+      "confirm": "Confirm and request",
+      "cancel": "Back to quotes"
+    },
+    "profile": {
+      "rating": "Rated {rating} from {count} reviews",
+      "newProvider": "New provider",
+      "trucks": "{count, plural, one {# truck} other {# trucks}}",
+      "based": "Based in {area}",
+      "verified": "Insurance verified"
+    },
+    "tracking": {
+      "etaLabel": "Arrives in",
+      "minutes": "{minutes} min",
+      "arrived": "Your provider is here",
+      "call": "Call provider",
+      "text": "Text provider",
+      "masked": "Calls and texts go through a private number.",
+      "share": "Share tracking link",
+      "copied": "Link copied",
+      "steps": "Request progress",
+      "safety": "While you wait",
+      "safetyTips": [
+        "Stay in your vehicle with your seatbelt on if you're on a highway.",
+        "Keep your hazard lights on.",
+        "Check the provider's name and truck match before work starts."
+      ],
+      "map": "Map of the provider on the way to you"
+    },
+    "cancel": {
+      "open": "Cancel request",
+      "title": "Cancel this request?",
+      "reason": "Reason",
+      "reasons": {
+        "found_help": "I found help another way",
+        "too_slow": "It's taking too long",
+        "too_expensive": "The quotes are too expensive",
+        "fixed": "The problem is fixed",
+        "other": "Something else"
+      },
+      "confirm": "Cancel request",
+      "keep": "Keep my request",
+      "done": "Your request is cancelled."
+    },
+    "report": {
+      "open": "Report a problem",
+      "title": "Report a problem",
+      "kinds": {
+        "no_show": "The provider didn't show up",
+        "overcharge": "I was charged more than the quote",
+        "damage": "My vehicle was damaged",
+        "safety": "I felt unsafe"
+      },
+      "details": "What happened?",
+      "send": "Send report",
+      "sent": "Thanks. Our team will contact you."
+    },
+    "review": {
+      "title": "How was your help?",
+      "stars": "{count, plural, one {# star} other {# stars}}",
+      "tags": {
+        "fast": "Fast",
+        "friendly": "Friendly",
+        "fair_price": "Fair price",
+        "professional": "Professional",
+        "clean": "Careful with my vehicle"
+      },
+      "comment": "Anything else? (optional)",
+      "send": "Send review",
+      "thanks": "Thanks for your review."
+    },
+    "receipt": {
+      "title": "Summary",
+      "service": "Service",
+      "provider": "Provider",
+      "price": "Quoted price",
+      "paid": "Paid directly to the provider",
+      "requested": "Requested",
+      "completed": "Completed"
+    },
+    "ended": {
+      "cancelledBody": "Need help again? Start a new request any time.",
+      "expiredBody": "We're sorry: no provider could take this request in time. Call us and we'll help you find someone.",
+      "again": "Start a new request"
+    },
+    "invalid": {
+      "title": "We couldn't find that request",
+      "body": "The link may be old or mistyped. If you need help now, start a new request or call us.",
+      "again": "Start a new request"
+    }
   }
 }

@@ -1,4 +1,5 @@
 import {
+  readOnly,
   appUrls,
   expect,
   expectNoA11yViolations,
@@ -235,6 +236,7 @@ test.describe("content pages", () => {
   });
 
   test("contact form stores a message (Turnstile test keys)", async ({ page }) => {
+    test.skip(readOnly, "Writes to the database");
     await page.goto(url("/contact"));
     await page.getByRole("textbox", { name: /Your name/ }).fill("E2E Test");
     await page.getByRole("textbox", { name: /Email/ }).fill("e2e@example.test");
@@ -255,6 +257,7 @@ test.describe("for providers", () => {
   test.skip(!web, "No website URL");
 
   test("fees come from the database and the application is stored", async ({ page }) => {
+    test.skip(readOnly, "Writes to the database");
     await page.goto(url("/for-providers"));
     await expect(page.getByRole("heading", { name: "Fee per picked request" })).toBeVisible();
     await expect(page.locator("main table").first()).toContainText("$");

@@ -1094,5 +1094,136 @@
       "generic": "Algo salió mal. Inténtalo de nuevo o llámanos.",
       "service": "Ese servicio todavía no está disponible en esta zona."
     }
+  },
+  "track": {
+    "title": "Tu solicitud {code}",
+    "demoNote": "Proveedores de demostración: las cotizaciones y el movimiento en esta página son simulados.",
+    "stages": {
+      "searching": "Buscando proveedores cerca de ti",
+      "quoting": "Están llegando cotizaciones",
+      "picked": "Proveedor confirmado",
+      "en_route": "En camino",
+      "on_site": "El proveedor llegó",
+      "completed": "Trabajo terminado",
+      "cancelled": "Solicitud cancelada",
+      "expired": "No hubo un proveedor disponible"
+    },
+    "searching": {
+      "body": "Enviamos tu solicitud a proveedores verificados cercanos. Las cotizaciones suelen llegar en 3 minutos. Quédate donde estás y mantén tu teléfono encendido.",
+      "call": "Llámanos al {phone}",
+      "timeLeft": "Tiempo restante para cotizaciones"
+    },
+    "quotes": {
+      "count": "{count, plural, one {# cotización} other {# cotizaciones}}",
+      "sortFastest": "Más rápida",
+      "sortCheapest": "Más barata",
+      "sortLabel": "Ordenar cotizaciones",
+      "autoPick": "Ayuda más rápida: elegir por mí la cotización más rápida",
+      "newQuote": "Nueva cotización de {provider}: {price}, unos {minutes} minutos",
+      "choose": "Elegir",
+      "viewProfile": "Ver perfil",
+      "waiting": "Esperando más proveedores…"
+    },
+    "confirm": {
+      "title": "Confirmar a {provider}",
+      "price": "Precio",
+      "eta": "Llega en unos",
+      "minutes": "{minutes} min",
+      "included": "Qué incluye",
+      "includedBody": "El servicio que pediste, en el lugar donde está tu vehículo.",
+      "extras": "Cargos extra",
+      "extrasTow": "El remolque más allá de las millas de tu solicitud se cobra por milla, según la cotización.",
+      "extrasWait": "Esperar más de 15 minutos después de la llegada puede tener costo.",
+      "payDirect": "Le pagas directamente al proveedor al terminar.",
+      "methods": "Aceptan: tarjeta, efectivo, Apple Pay, Google Pay",
+      "confirm": "Confirmar y solicitar",
+      "cancel": "Volver a las cotizaciones"
+    },
+    "profile": {
+      "rating": "Calificación {rating} de {count} reseñas",
+      "newProvider": "Proveedor nuevo",
+      "trucks": "{count, plural, one {# grúa} other {# grúas}}",
+      "based": "Con base en {area}",
+      "verified": "Seguro verificado"
+    },
+    "tracking": {
+      "etaLabel": "Llega en",
+      "minutes": "{minutes} min",
+      "arrived": "Tu proveedor llegó",
+      "call": "Llamar al proveedor",
+      "text": "Enviar texto al proveedor",
+      "masked": "Las llamadas y textos pasan por un número privado.",
+      "share": "Compartir enlace de seguimiento",
+      "copied": "Enlace copiado",
+      "steps": "Avance de la solicitud",
+      "safety": "Mientras esperas",
+      "safetyTips": [
+        "Quédate en el vehículo con el cinturón puesto si estás en una autopista.",
+        "Mantén encendidas las luces intermitentes.",
+        "Verifica que el nombre del proveedor y la grúa coincidan antes de empezar."
+      ],
+      "map": "Mapa del proveedor en camino hacia ti"
+    },
+    "cancel": {
+      "open": "Cancelar solicitud",
+      "title": "¿Cancelar esta solicitud?",
+      "reason": "Motivo",
+      "reasons": {
+        "found_help": "Encontré ayuda de otra forma",
+        "too_slow": "Está tardando demasiado",
+        "too_expensive": "Las cotizaciones son muy caras",
+        "fixed": "El problema se resolvió",
+        "other": "Otra cosa"
+      },
+      "confirm": "Cancelar solicitud",
+      "keep": "Mantener mi solicitud",
+      "done": "Tu solicitud está cancelada."
+    },
+    "report": {
+      "open": "Reportar un problema",
+      "title": "Reportar un problema",
+      "kinds": {
+        "no_show": "El proveedor no llegó",
+        "overcharge": "Me cobraron más de lo cotizado",
+        "damage": "Dañaron mi vehículo",
+        "safety": "Me sentí inseguro"
+      },
+      "details": "¿Qué pasó?",
+      "send": "Enviar reporte",
+      "sent": "Gracias. Nuestro equipo te contactará."
+    },
+    "review": {
+      "title": "¿Cómo fue tu ayuda?",
+      "stars": "{count, plural, one {# estrella} other {# estrellas}}",
+      "tags": {
+        "fast": "Rápido",
+        "friendly": "Amable",
+        "fair_price": "Precio justo",
+        "professional": "Profesional",
+        "clean": "Cuidadoso con mi vehículo"
+      },
+      "comment": "¿Algo más? (opcional)",
+      "send": "Enviar reseña",
+      "thanks": "Gracias por tu reseña."
+    },
+    "receipt": {
+      "title": "Resumen",
+      "service": "Servicio",
+      "provider": "Proveedor",
+      "price": "Precio cotizado",
+      "paid": "Pagado directamente al proveedor",
+      "requested": "Solicitado",
+      "completed": "Terminado"
+    },
+    "ended": {
+      "cancelledBody": "¿Necesitas ayuda otra vez? Empieza una nueva solicitud cuando quieras.",
+      "expiredBody": "Lo sentimos: ningún proveedor pudo tomar esta solicitud a tiempo. Llámanos y te ayudamos a encontrar a alguien.",
+      "again": "Empezar una nueva solicitud"
+    },
+    "invalid": {
+      "title": "No encontramos esa solicitud",
+      "body": "El enlace puede ser antiguo o estar mal escrito. Si necesitas ayuda ahora, empieza una nueva solicitud o llámanos.",
+      "again": "Empezar una nueva solicitud"
+    }
   }
 }

@@ -201,9 +201,12 @@ jobs:
           E2E_PROVIDER_URL: ${{ steps.previews.outputs.provider_url }}
           E2E_ADMIN_URL: ${{ steps.previews.outputs.admin_url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          # Release checks (staging into main) run against the staging database: no test writes there.
+          E2E_READ_ONLY: ${{ github.head_ref == 'staging' && '1' || '' }}
         run: pnpm --filter @rsos/e2e test:e2e
+      # Always uploaded: it holds the mobile and desktop screenshots of every screen for review.
       - name: Upload Playwright report
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: playwright-report

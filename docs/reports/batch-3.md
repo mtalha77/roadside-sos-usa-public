@@ -37,6 +37,23 @@ Acceptance criteria:
 | 2   | Denied location falls back smoothly                      | PASS: e2e denies location; the message appears, focus moves to the address field and the flow continues                             |
 | 3   | Request appears in admin within 2 seconds                | Covered with the dispatch board (RSOS-034), which reads `requests` and refreshes every 2 seconds                                    |
 
+## RSOS-022 + RSOS-065 to 069: request status, live quotes, selection, tracking, cancel, review
+
+Real vs demo: the request, its stage, cancelling and problem reports are real (database). Quotes, providers, truck movement and reviews are demo (no provider matching or reviews tables yet): in demo mode a real request gets simulated providers, clearly labelled "Demo providers", seeded by its token so every reload and every app shows the same ones; demo tokens play the shared scenario. In production a real request shows only its real stage.
+
+- One page, `/r/[token]`, through every stage: finding providers (countdown ring, reassurance, call button with the market number); live quotes (cards slide in, sort fastest or cheapest, "Get help fastest" auto-pick, provider profile sheet, a polite screen-reader announcement per new quote); confirm sheet (price, ETA, what's included, extra-charge rules, "You pay the provider directly", accepted methods; a second tap is ignored); tracking (LiteMap with the truck moving, live ETA, provider card, call and text through a private number, status steps, share link, safety tips); completed (1 to 5 stars, tags, comment, receipt-style summary); cancelled and expired (friendly message and a new request link); unknown token (friendly page with the support number).
+- Cancel with a reason at any stage before arrival (`cancel_request_by_token`, migration `20261114020000_request_actions.sql`, the reason recorded in the request timeline; pgTAP `016_request_actions.test.sql`, 4). Report a problem (no-show, overcharge, damage, safety) goes to the team's contact messages with the request code.
+- The driver's pick is kept across reloads; real requests poll their status every 4 seconds.
+- The demo engine now takes the driver's own pick (which quote, when) and seeds real requests from their token.
+
+Acceptance criteria:
+
+| #   | Criterion                                               | Result                                                                                                                                                                                                                                       |
+| --- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | All stages reachable in demo                            | PASS: e2e finds live demo requests in each stage through the shared engine and opens them (searching, quoting, en route, on site, completed, cancelled, expired), plus choosing a quote moves the page to tracking, and cancel with a reason |
+| 2   | Real requests from RSOS-021 show the correct real stage | PASS: the Get Help e2e lands on `/r/[token]` of the new real request, which shows "Finding providers" (its real stage, then simulated providers in demo mode)                                                                                |
+| 3   | Every stage has mobile and desktop screenshots          | PASS: the e2e saves a full-page screenshot per stage on iPhone, Pixel and desktop profiles (Playwright report artifact of each run)                                                                                                          |
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

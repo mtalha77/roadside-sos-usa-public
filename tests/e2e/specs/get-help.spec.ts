@@ -1,5 +1,6 @@
 import {
   appUrls,
+  readOnly,
   expect,
   expectNoA11yViolations,
   expectNoHorizontalScroll,
@@ -14,6 +15,7 @@ test.describe("get help flow", () => {
   test.skip(!web, "No website URL");
 
   test("a first-time driver sends a request in under 60 seconds", async ({ page }, info) => {
+    test.skip(readOnly, "Writes to the database");
     test.setTimeout(90_000);
     const started = Date.now();
     await page.goto(url("/get-help"));

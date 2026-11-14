@@ -6,6 +6,7 @@ import {
   demoState,
   demoStream,
   makeDemoRequest,
+  seedFrom,
   TIMING,
 } from "../src/demo";
 
@@ -83,5 +84,18 @@ describe("demo scenario engine", () => {
     expect(demoRequestFromToken(a[0]!.token, now)?.id).toBe(a[0]!.id);
     expect(demoRequestFromToken("not-a-token", now)).toBeNull();
     expect(demoStream(now, { markets: ["houston"], intervalSec: 5 }).length).toBeGreaterThan(200);
+  });
+
+  it("follows the driver's own pick", () => {
+    let seed = 1;
+    let req = makeDemoRequest("houston", seed, t0)!;
+    while (req.outcome !== "completed" || req.quotes.length < 2)
+      req = makeDemoRequest("houston", ++seed, t0)!;
+    const slowest = [...req.quotes].sort((a, b) => b.etaMinutes - a.etaMinutes)[0]!;
+    const s = demoState(req, t0 + 100_000, { quoteId: slowest.id, atSec: 60 });
+    expect(s.stage).toBe("en_route");
+    expect(s.picked?.id).toBe(slowest.id);
+    expect(seedFrom("abc")).toBe(seedFrom("abc"));
+    expect(seedFrom("abc")).not.toBe(seedFrom("abd"));
   });
 });
