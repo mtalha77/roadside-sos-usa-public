@@ -32,6 +32,14 @@ import { ui } from "@/lib/ui-classes";
 import { getVisitorMarket } from "@/lib/visitor";
 import { createPublicSupabase } from "@rsos/db/public";
 
+// Written out in full so Tailwind generates them: each follow-up shows when its service is picked.
+const SHOW_WHEN: Record<string, string> = {
+  "flat-tire": "[form:has(#svc-flat-tire:checked)_&]:flex",
+  "locked-out": "[form:has(#svc-locked-out:checked)_&]:flex",
+  "out-of-gas": "[form:has(#svc-out-of-gas:checked)_&]:flex",
+  "wont-start": "[form:has(#svc-wont-start:checked)_&]:flex",
+};
+
 // Only the last step loads the Turnstile widget.
 const Turnstile = nextDynamic(() => import("@/components/site/turnstile").then((m) => m.Turnstile));
 
@@ -197,10 +205,7 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
           })}
         </fieldset>
         {Object.entries(FOLLOW_UPS).map(([slug, fu]) => (
-          <fieldset
-            key={slug}
-            className={`${fieldset} hidden [form:has(#svc-${slug}:checked)_&]:flex`}
-          >
+          <fieldset key={slug} className={`${fieldset} hidden ${SHOW_WHEN[slug] ?? ""}`}>
             <legend className="mb-1 font-semibold">{t(`problem.${fu.key}.q` as never)}</legend>
             {fu.options.map((o) => (
               <Choice
