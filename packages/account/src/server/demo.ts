@@ -1,21 +1,14 @@
 "use server";
 
-import { createHmac } from "node:crypto";
 import { isDemoMode } from "@rsos/config/demo";
 import { demoMarkets } from "@rsos/config/demo-fixtures";
-import { createAdminSupabase } from "@rsos/db/admin";
+import { createAdminSupabase, demoAccountPassword } from "@rsos/db/admin";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getAccountSupabase } from "./client";
 import { totp } from "./totp";
 
-export const DEMO_ROLES = [
-  "provider_owner",
-  "provider_operator",
-  "admin_super",
-  "admin_dispatcher",
-] as const;
-export type DemoRole = (typeof DEMO_ROLES)[number];
+import { DEMO_ROLES, type DemoRole } from "./demo-roles";
 
 const LABELS: Record<DemoRole, string> = {
   provider_owner: "Demo Owner",
@@ -38,10 +31,7 @@ export async function demoSignInAction(form: FormData): Promise<void> {
   const role = z.enum(DEMO_ROLES).parse(form.get("role"));
   const admin = createAdminSupabase();
   const email = emailFor(role);
-  const password = createHmac("sha256", process.env.SUPABASE_SERVICE_ROLE_KEY!)
-    .update(email)
-    .digest("base64url")
-    .slice(0, 32);
+  const password = demoAccountPassword(email);
   const isProvider = role.startsWith("provider");
 
   // 1. The account (idempotent).

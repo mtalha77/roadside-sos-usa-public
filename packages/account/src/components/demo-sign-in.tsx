@@ -1,7 +1,8 @@
 import { isDemoMode } from "@rsos/config/demo";
 import { Button } from "@rsos/ui/button";
 import { getTranslations } from "next-intl/server";
-import { type DemoRole, demoSignInAction } from "../server/demo";
+import { demoSignInAction } from "../server/demo";
+import type { DemoRole } from "../server/demo-roles";
 
 /** "Sign in as demo" buttons; renders nothing outside demo mode (never in production). */
 export async function DemoSignIn({ roles }: { roles: DemoRole[] }) {
