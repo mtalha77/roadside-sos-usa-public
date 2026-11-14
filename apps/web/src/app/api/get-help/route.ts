@@ -14,6 +14,7 @@ import {
   FOLLOW_UPS,
   MILE_RANGES,
   NEEDS_DESTINATION,
+  currentStep,
   toE164,
   VEHICLE_TYPES,
 } from "@/lib/get-help";
@@ -64,7 +65,10 @@ export async function POST(request: NextRequest) {
       p_patch: patch,
     });
     if (error) return fail(step, "generic");
-    return go(`/get-help?step=${next}`, String(data));
+    // Resume at the first unanswered step: answers already in the draft (a quick repeat request)
+    // are not asked again.
+    const resume = step === "contact" ? next : currentStep({ ...draft, ...patch });
+    return go(`/get-help?step=${resume}`, String(data));
   };
   const str = (k: string, max = 200) =>
     String(form.get(k) ?? "")
