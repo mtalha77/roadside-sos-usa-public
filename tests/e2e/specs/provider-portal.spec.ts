@@ -25,7 +25,9 @@ test.describe("provider portal shell", () => {
     await expectNoHorizontalScroll(page);
     await page.screenshot({ path: info.outputPath("portal-home.png"), fullPage: true });
     await page.goto(url("/more"));
-    await expect(page.getByRole("link", { name: "Install the app" })).toBeVisible();
+    await expect(
+      page.getByRole("main").getByRole("link", { name: "Install the app" }),
+    ).toBeVisible();
     await page.goto(url("/install"));
     await expect(page.getByRole("heading", { name: "iPhone (Safari)" })).toBeVisible();
     const manifest = await (await request.get(url("/manifest.webmanifest"))).json();

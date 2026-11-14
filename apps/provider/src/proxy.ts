@@ -13,6 +13,8 @@ const PUBLIC = [
   /^\/reset-password$/,
   /^\/api\/health$/,
   /^\/robots\.txt$/,
+  // The installable app needs these before sign-in (RSOS-051).
+  /^\/(manifest\.webmanifest|sw\.js|offline\.html)$/,
   /^\/(icon|apple-icon|logo\.svg)/,
 ];
 
