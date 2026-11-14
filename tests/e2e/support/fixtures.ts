@@ -4,6 +4,9 @@ import { expect, test as base, type Page } from "@playwright/test";
 
 export type AppName = "web" | "provider" | "admin";
 
+/** True when the target uses a real database (release checks against staging): tests that write skip. */
+export const readOnly = process.env.E2E_READ_ONLY === "1";
+
 export const appUrls: Record<AppName, string | undefined> = {
   web: process.env.E2E_WEB_URL,
   provider: process.env.E2E_PROVIDER_URL,

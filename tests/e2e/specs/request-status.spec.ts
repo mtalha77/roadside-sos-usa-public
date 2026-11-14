@@ -58,7 +58,7 @@ test.describe("request status page", () => {
     const token = tokenAt("quoting", 40);
     test.skip(!token, "No demo request taking quotes right now");
     await page.goto(url(`/r/${token}`));
-    await page.getByRole("button", { name: "Cheapest" }).click();
+    await page.getByRole("radio", { name: "Cheapest" }).click();
     await page.getByRole("button", { name: "Choose" }).first().click();
     await expect(
       page.getByText("You pay the provider directly when the job is done."),
