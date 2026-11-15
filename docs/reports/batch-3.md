@@ -133,6 +133,16 @@ Real: company, role, wallet balance and its low-balance warning, in-review block
 
 - Big Go Online toggle (kept on the device), truck or operator choice, service-area map with nearby requests, today's stats, wallet card, blockers with one-tap fixes.
 
+## RSOS-054: Incoming request and one-tap quote
+
+Demo: the offers (the shared demo stream for the company's market). Real: price ranges and fees.
+
+- Full-screen offer with sound and vibration, countdown ring, service and vehicle, distance and drive time, approximate map (exact address hidden until picked), tow miles, situation flags, pre-filled quote (your price, our fee, what the driver pays), one-tap Send, adjust price and ETA within limits, decline with a reason, stacked offers; then waiting, "You were picked" or "Driver chose another provider".
+
+| #   | Criterion                                         | Result                                                                |
+| --- | ------------------------------------------------- | --------------------------------------------------------------------- |
+| 1   | Alert to sent quote in 1 tap with defaults (demo) | PASS: e2e opens the offer and sends the pre-filled quote with one tap |
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

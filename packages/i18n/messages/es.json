@@ -1469,6 +1469,46 @@
       "review": "Tu empresa está en revisión.",
       "edit": "Editar mis respuestas",
       "stripe": "Los pagos con tarjeta se abren cuando se conecte la facturación. Aún no se cobra nada."
+    },
+    "offer": {
+      "title": "Solicitudes entrantes",
+      "subtitle": "Envía una cotización con un toque. La dirección exacta aparece cuando el conductor te elige.",
+      "none": "No hay solicitudes esperando ahora. Mantente en línea: las nuevas aparecen aquí.",
+      "stack": "Solicitudes en espera",
+      "ev": "Eléctrico",
+      "timeLeft": "Tiempo para cotizar",
+      "distance": "Distancia",
+      "drive": "Tiempo de manejo",
+      "tow": "Distancia de remolque",
+      "area": "Zona",
+      "miles": "{miles} mi",
+      "minutes": "{minutes} min",
+      "flags": {
+        "highway": "En autopista",
+        "unsafe": "El conductor no está en un lugar seguro",
+        "passengers": "{count, plural, one {# pasajero} other {# pasajeros}}"
+      },
+      "mapLabel": "Zona aproximada de la solicitud",
+      "addressHidden": "La dirección exacta se oculta hasta que te elijan.",
+      "yourPrice": "Tu precio",
+      "ourFee": "Tarifa si te eligen",
+      "driverPays": "El conductor te paga",
+      "price": "Precio ({min} a {max})",
+      "eta": "Llegada: {minutes} min",
+      "send": "Enviar {price} · {minutes} min",
+      "adjust": "Ajustar precio o tiempo",
+      "decline": "Rechazar",
+      "declineReason": "Motivo del rechazo",
+      "reasons": {
+        "too_far": "Muy lejos",
+        "busy": "Ocupado ahora",
+        "no_equipment": "No tengo el equipo",
+        "price": "Rango de precio muy bajo"
+      },
+      "waiting": "Cotización enviada: {price}, {minutes} min. Esperando a que el conductor elija.",
+      "won": "¡Te eligieron!",
+      "wonBody": "Sal ahora: el trabajo está en Trabajos con la dirección exacta.",
+      "lost": "El conductor eligió a otro proveedor esta vez."
     }
   }
 }
