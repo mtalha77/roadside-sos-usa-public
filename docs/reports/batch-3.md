@@ -111,6 +111,28 @@ Shared data layer: `demoPortal` in `@rsos/core/demo` gives the portal's view of 
 - Install guide for iPhone and Android (`/install`).
 - The existing home and the account and security page (RSOS-093) now sit inside the shell.
 
+## RSOS-051 follow-ups (fixed before merge)
+
+- Demo companies are now marked (`providers.is_demo`) and never counted in the website's live proof (`market_public_stats`); a pgTAP test covers it.
+- The manifest is linked only on staging and production: protected preview deployments answered WebKit's manifest request (sent without the preview cookie) with an endless redirect. The service worker is skipped in automated browsers for the same reason, and answers only offline page loads.
+- Navigation lists only screens that exist (`apps/provider/src/lib/routes.ts`); each Part B ticket adds its own.
+
+## RSOS-052: Sign-up and onboarding wizard
+
+Demo data, except the market price ranges (real, `market_services`). Answers are kept on the device until the backend batch wires saving.
+
+- Nine steps with a progress tracker, saved after each step and resumed on return; "what happens next" and the in-review state at the end. Document steps use the camera on phones and ask for expiry dates.
+
+| #   | Criterion                                                  | Result                                                                                                                                          |
+| --- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Complete in under 15 minutes on a phone (timed, demo data) | PASS: e2e completes all nine steps on the mobile projects, including a reload to prove resume, and asserts the elapsed time is under 15 minutes |
+
+## RSOS-053: Home, go online
+
+Real: company, role, wallet balance and its low-balance warning, in-review blocker. Demo: today's stats, requests nearby on the map, the expiring-document blocker.
+
+- Big Go Online toggle (kept on the device), truck or operator choice, service-area map with nearby requests, today's stats, wallet card, blockers with one-tap fixes.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

@@ -16,6 +16,8 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   timeout: 45_000,
+  // Preview deployments start cold and WebKit on CI is slower: give each expectation 15 s.
+  expect: { timeout: 15_000 },
   use: {
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
