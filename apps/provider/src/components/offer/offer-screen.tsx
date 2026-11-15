@@ -6,7 +6,9 @@ import { CountdownRing } from "@rsos/ui/countdown-ring";
 import { LiteMap } from "@rsos/ui/lite-map";
 import { PartyPopper } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+
+const noop = () => () => {};
 
 export type OfferView = {
   id: string;
@@ -61,6 +63,12 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
   const t = useTranslations("portal.offer");
   const f = useFormatter();
   const [now, setNow] = useState(serverNow);
+  // The countdown shows wall-clock seconds, so it renders only in the browser (no hydration mismatch).
+  const mounted = useSyncExternalStore(
+    noop,
+    () => true,
+    () => false,
+  );
   const [index, setIndex] = useState(0);
   const [sent, setSent] = useState<Record<string, Sent>>({});
   const [declined, setDeclined] = useState<string[]>([]);
@@ -141,7 +149,12 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
               {offer.ev ? ` · ${t("ev")}` : ""}
             </p>
           </div>
-          {mine ? null : (
+          {mine ? null : !mounted ? (
+            <div
+              aria-hidden="true"
+              className="size-40 shrink-0 rounded-full border-[10px] border-muted"
+            />
+          ) : (
             <CountdownRing
               startsAt={offer.expiresAt - 180_000}
               endsAt={offer.expiresAt}

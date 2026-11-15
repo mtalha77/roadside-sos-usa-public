@@ -47,7 +47,6 @@ export async function demoSignInAction(form: FormData): Promise<void> {
     const { data } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
     userId = data.users.find((u) => u.email === email)?.id;
     if (!userId) throw new Error("Demo account could not be created");
-    await admin.auth.admin.updateUserById(userId, { password });
   }
 
   // 2. Its company or staff role, before sign-in (the token hook reads them).
@@ -97,7 +96,13 @@ export async function demoSignInAction(form: FormData): Promise<void> {
 
   // 3. Sign in as that account (user session, HttpOnly cookies).
   const supabase = await getAccountSupabase();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  let { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    // Reset the password only when it no longer works: a password change signs out every other
+    // session of the account, and demo accounts are shared (parallel tests, several people).
+    await admin.auth.admin.updateUserById(userId, { password });
+    ({ error } = await supabase.auth.signInWithPassword({ email, password }));
+  }
   if (error) throw new Error("Demo sign-in failed");
 
   // 4. Second step on the server.
