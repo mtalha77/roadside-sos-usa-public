@@ -143,6 +143,18 @@ Demo: the offers (the shared demo stream for the company's market). Real: price 
 | --- | ------------------------------------------------- | --------------------------------------------------------------------- |
 | 1   | Alert to sent quote in 1 tap with defaults (demo) | PASS: e2e opens the offer and sends the pre-filled quote with one tap |
 
+## RSOS-056: Jobs history and detail
+
+Demo data, priced with the market's real ranges and fees.
+
+- Tabs Active, Won, Lost or missed, Cancelled; service filter; "Show more" paging (server-rendered, no client JavaScript); job detail with timeline, price, fee charged, driver and vehicle, operator, photos, review and a fee dispute button.
+
+Fixed while shipping RSOS-054 (found by the provider e2e suites running in parallel):
+
+- "Sign in as demo" reset the demo account's password on every use, and a password change signs out every other session of the account, so people (and parallel tests) sharing a demo account signed each other out. The password is now reset only when signing in with it fails.
+- The offer countdown showed wall-clock seconds in the server render and again in the browser (React hydration error 418); it now renders in the browser only, with a same-size placeholder first.
+- End-to-end expectations wait up to 15 s (cold preview deployments, WebKit on CI).
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

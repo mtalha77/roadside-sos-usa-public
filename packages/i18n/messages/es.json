@@ -1509,6 +1509,48 @@
       "won": "¡Te eligieron!",
       "wonBody": "Sal ahora: el trabajo está en Trabajos con la dirección exacta.",
       "lost": "El conductor eligió a otro proveedor esta vez."
+    },
+    "jobs": {
+      "title": "Trabajos",
+      "tabs": {
+        "active": "Activos",
+        "won": "Ganados",
+        "lost": "Perdidos",
+        "cancelled": "Cancelados"
+      },
+      "filter": "Servicio",
+      "all": "Todos los servicios",
+      "none": "Todavía no hay nada aquí.",
+      "more": "Ver más",
+      "fee": "Tarifa {fee}",
+      "rated": "Calificación {stars}",
+      "open": "Abrir trabajo"
+    },
+    "job": {
+      "title": "Trabajo {code}",
+      "timeline": "Historial",
+      "price": "Precio",
+      "fee": "Tarifa cobrada",
+      "driver": "Conductor",
+      "vehicle": "Vehículo",
+      "operator": "Operador",
+      "review": "Reseña",
+      "noReview": "Todavía no hay reseña.",
+      "dispute": "Disputar la tarifa",
+      "disputeSent": "Disputa enviada. Nuestro equipo responde en un día hábil.",
+      "photos": "Fotos",
+      "noPhotos": "No hay fotos de este trabajo.",
+      "stages": {
+        "searching": "Solicitud enviada",
+        "quoting": "Cotización enviada",
+        "picked": "Elegido por el conductor",
+        "en_route": "En camino",
+        "on_site": "Llegó",
+        "completed": "Terminado",
+        "cancelled": "Cancelado",
+        "expired": "Vencido"
+      },
+      "activeFlow": "Abrir el flujo del trabajo"
     }
   }
 }

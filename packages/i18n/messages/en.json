@@ -1509,6 +1509,48 @@
       "won": "You were picked!",
       "wonBody": "Head out now: the job is in Jobs with the exact address.",
       "lost": "The driver chose another provider this time."
+    },
+    "jobs": {
+      "title": "Jobs",
+      "tabs": {
+        "active": "Active",
+        "won": "Won",
+        "lost": "Lost or missed",
+        "cancelled": "Cancelled"
+      },
+      "filter": "Service",
+      "all": "All services",
+      "none": "Nothing here yet.",
+      "more": "Show more",
+      "fee": "Fee {fee}",
+      "rated": "Rated {stars}",
+      "open": "Open job"
+    },
+    "job": {
+      "title": "Job {code}",
+      "timeline": "Timeline",
+      "price": "Price",
+      "fee": "Fee charged",
+      "driver": "Driver",
+      "vehicle": "Vehicle",
+      "operator": "Operator",
+      "review": "Review",
+      "noReview": "No review yet.",
+      "dispute": "Dispute the fee",
+      "disputeSent": "Dispute sent. Our team replies within one business day.",
+      "photos": "Photos",
+      "noPhotos": "No photos for this job.",
+      "stages": {
+        "searching": "Request sent",
+        "quoting": "Quote sent",
+        "picked": "Picked by the driver",
+        "en_route": "On the way",
+        "on_site": "Arrived",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "expired": "Expired"
+      },
+      "activeFlow": "Open the job flow"
     }
   }
 }
