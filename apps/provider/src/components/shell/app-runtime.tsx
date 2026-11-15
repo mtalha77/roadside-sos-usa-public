@@ -30,7 +30,9 @@ export function AppRuntime({
   );
   const [waiting, setWaiting] = useState<ServiceWorker | null>(null);
   useEffect(() => {
-    if (!("serviceWorker" in navigator)) return;
+    // Automated browsers skip the worker: on protected previews, the worker's own requests in
+    // WebKit don't carry the test bypass and loop on Vercel's protection redirect.
+    if (!("serviceWorker" in navigator) || navigator.webdriver) return;
     navigator.serviceWorker
       .register("/sw.js")
       .then((reg) => {
