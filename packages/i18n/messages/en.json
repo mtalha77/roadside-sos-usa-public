@@ -1469,6 +1469,46 @@
       "review": "Your company is in review.",
       "edit": "Edit my answers",
       "stripe": "Card payments open once billing is connected. Nothing is charged yet."
+    },
+    "offer": {
+      "title": "Incoming requests",
+      "subtitle": "Send a quote in one tap. The exact address shows once the driver picks you.",
+      "none": "No requests waiting right now. Stay online: new ones appear here.",
+      "stack": "Requests waiting",
+      "ev": "Electric",
+      "timeLeft": "Time to quote",
+      "distance": "Distance",
+      "drive": "Drive time",
+      "tow": "Tow distance",
+      "area": "Area",
+      "miles": "{miles} mi",
+      "minutes": "{minutes} min",
+      "flags": {
+        "highway": "On a highway",
+        "unsafe": "Driver not in a safe place",
+        "passengers": "{count, plural, one {# passenger} other {# passengers}}"
+      },
+      "mapLabel": "Approximate area of the request",
+      "addressHidden": "Exact address hidden until you're picked.",
+      "yourPrice": "Your price",
+      "ourFee": "Fee if picked",
+      "driverPays": "Driver pays you",
+      "price": "Price ({min} to {max})",
+      "eta": "Arrival: {minutes} min",
+      "send": "Send {price} · {minutes} min",
+      "adjust": "Adjust price or time",
+      "decline": "Decline",
+      "declineReason": "Reason for declining",
+      "reasons": {
+        "too_far": "Too far",
+        "busy": "Busy right now",
+        "no_equipment": "Not the right equipment",
+        "price": "Price range too low"
+      },
+      "waiting": "Quote sent: {price}, {minutes} min. Waiting for the driver to choose.",
+      "won": "You were picked!",
+      "wonBody": "Head out now: the job is in Jobs with the exact address.",
+      "lost": "The driver chose another provider this time."
     }
   }
 }
