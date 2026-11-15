@@ -155,6 +155,12 @@ Fixed while shipping RSOS-054 (found by the provider e2e suites running in paral
 - The offer countdown showed wall-clock seconds in the server render and again in the browser (React hydration error 418); it now renders in the browser only, with a same-size placeholder first.
 - End-to-end expectations wait up to 15 s (cold preview deployments, WebKit on CI).
 
+## RSOS-055: Active job flow
+
+Demo data (job progress and photos are kept on the device).
+
+- One large button per step (Start driving, I've arrived, Start the work, Job completed), deep links to Google Maps, Apple Maps and Waze, masked call and text (demo number from `packages/config`), before and after photos with the camera, report an issue, cancel with a reason, assign to an operator.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

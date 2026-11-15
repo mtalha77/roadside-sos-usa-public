@@ -1551,6 +1551,40 @@
         "expired": "Expired"
       },
       "activeFlow": "Open the job flow"
+    },
+    "active": {
+      "title": "Job in progress",
+      "steps": {
+        "start": "Start driving",
+        "arrived": "I've arrived",
+        "working": "Start the work",
+        "completed": "Job completed"
+      },
+      "navigate": "Navigate with",
+      "maps": {
+        "google": "Google Maps",
+        "apple": "Apple Maps",
+        "waze": "Waze"
+      },
+      "call": "Call driver",
+      "text": "Text driver",
+      "masked": "Calls and texts use a private number.",
+      "photosBefore": "Before photos",
+      "photosAfter": "After photos",
+      "addPhoto": "Add photo",
+      "issue": "Report an issue",
+      "cancel": "Cancel job",
+      "cancelReason": "Reason",
+      "cancelReasons": {
+        "driver_no_show": "Driver not there",
+        "vehicle_not_found": "Can't find the vehicle",
+        "unsafe": "Unsafe location",
+        "equipment": "Equipment problem"
+      },
+      "assign": "Assign to",
+      "done": "Job completed. The driver can now rate you.",
+      "addressLine": "Address: {address}",
+      "photoAlt": "Photo {n}"
     }
   }
 }
