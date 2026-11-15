@@ -3,6 +3,7 @@
 import { Alert } from "@rsos/ui/alert";
 import { Button } from "@rsos/ui/button";
 import { inputClass } from "@rsos/ui/input";
+import { Progress } from "@rsos/ui/progress";
 import { Stepper } from "@rsos/ui/stepper";
 import { CircleCheck } from "lucide-react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
@@ -120,7 +121,12 @@ export function OnboardingWizard({
         heading.current?.focus();
       }}
     >
-      <Stepper steps={steps.map((s) => s.label)} current={step} label={l.progress!} />
+      <div className="hidden lg:block">
+        <Stepper steps={steps.map((s) => s.label)} current={step} label={l.progress!} />
+      </div>
+      <div className="lg:hidden">
+        <Progress value={Math.round((step / steps.length) * 100)} label={l.progress!} />
+      </div>
       <section className={`${card} flex flex-col gap-4`}>
         <h2 ref={heading} tabIndex={-1} className="text-xl font-semibold outline-none">
           {steps[step]?.label}
