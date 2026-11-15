@@ -44,7 +44,9 @@ export const test = base.extend<{
     async ({ page }, use) => {
       const errors: string[] = [];
       page.on("console", (msg) => {
-        if (msg.type() === "error") errors.push(`console: ${msg.text()}`);
+        if (msg.type() !== "error") return;
+        const at = msg.location().url;
+        errors.push(`console: ${msg.text()}${at ? ` (${at.replace(/[?#].*$/, "")})` : ""}`);
       });
       page.on("pageerror", (err) => {
         // WebKit reports a Next.js link prefetch (`_rsc=` request) that a navigation cancelled as

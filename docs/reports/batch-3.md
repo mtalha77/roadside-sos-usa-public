@@ -97,6 +97,20 @@ Demo data: demo providers only, in demo mode (marked "Demo provider" on the page
 - `/providers/[slug]`: generated cover (design tokens, no stock or AI art) and initials logo, city and base area, badges (insurance verified, tow license checked in Texas, typical arrival, rating or "New provider"), services with "from" prices, service area on the LiteMap, hours, payment methods, job photos ("No photos yet": no invented photos), reviews (fictional, demo only) and a Get help button with the market preselected.
 - Also fixed while testing RSOS-070: the Get Help handler now resumes at the first unanswered step (a quick request no longer asks again), and request rate limits are higher on demo-mode previews and staging (test suites submit from one IP); production limits are unchanged.
 
+## Part B: provider portal
+
+Sign in on staging: open the provider sign-in page and choose "Sign in as demo" (Provider owner or Provider operator). The demo company is the first fictional San Antonio provider.
+
+Shared data layer: `demoPortal` in `@rsos/core/demo` gives the portal's view of the same live stream the website and admin use: incoming offers (requests still taking quotes in the company's market, with distance and drive time), live jobs, a stable 60-day job history, wallet ledger, team and weekly insights, all priced with the market's real ranges and fees. Real data in the portal: the company, the member's role, the wallet balance (`provider_wallets`, owner and manager only), market prices and fees, and account and security.
+
+## RSOS-051: Provider app shell
+
+- Installable web app: `manifest.webmanifest` (standalone, portrait, brand icons, dark theme colour), a service worker that keeps an offline page and shows "A new version is ready. Update now" when an update is waiting, and a connection banner when the phone goes offline.
+- Navigation: bottom tabs on phones (Home, Jobs, Wallet, Profile, More; operators don't get Wallet), side navigation on desktop for office staff; a More page on phones for everything else; skip link.
+- Dark mode by default at night (7 pm to 7 am local time) unless the provider chose a theme; switches back in the morning only if it switched automatically.
+- Install guide for iPhone and Android (`/install`).
+- The existing home and the account and security page (RSOS-093) now sit inside the shell.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
