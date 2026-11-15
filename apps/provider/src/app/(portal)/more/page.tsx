@@ -7,15 +7,17 @@ import { isBuilt } from "@/lib/routes";
 /** Phones: everything not in the bottom tabs. */
 export default async function MorePage() {
   const t = await getTranslations("portal.nav");
-  const items = [
-    ["/services", t("services")],
-    ["/team", t("team")],
-    ["/insights", t("insights")],
-    ["/notifications", t("notifications")],
-    ["/help", t("help")],
-    ["/account", t("account")],
-    ["/install", t("install")],
-  ].filter(([href]) => isBuilt(href));
+  const items = (
+    [
+      ["/services", t("services")],
+      ["/team", t("team")],
+      ["/insights", t("insights")],
+      ["/notifications", t("notifications")],
+      ["/help", t("help")],
+      ["/account", t("account")],
+      ["/install", t("install")],
+    ] as const
+  ).filter(([href]) => isBuilt(href));
   return (
     <main id="main" className={pageMain}>
       <h1 className="text-2xl font-semibold">{t("more")}</h1>
