@@ -26,6 +26,11 @@ export const viewport: Viewport = {
   ],
 };
 
+// Protected preview deployments answer the manifest request (which WebKit sends without the
+// preview's access cookie) with an endless redirect, so only staging and production link it.
+const linkManifest =
+  process.env.VERCEL_ENV !== "preview" || process.env.VERCEL_GIT_COMMIT_REF === "staging";
+
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const demoLabel = (await getTranslations("demo"))("badge");
   const locale = await getLocale();
@@ -36,9 +41,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials" />
-      </head>
+      {linkManifest ? (
+        <head>
+          <link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials" />
+        </head>
+      ) : null}
       <body>
         {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}
         <NextIntlClientProvider>

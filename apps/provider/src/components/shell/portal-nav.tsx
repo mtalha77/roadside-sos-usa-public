@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { isBuilt } from "@/lib/routes";
 
 export type NavLabels = Record<
   | "label"
@@ -57,7 +58,7 @@ export function PortalNav({
     ...(canSeeMoney ? [{ href: "/wallet", label: labels.wallet, icon: Wallet }] : []),
     { href: "/profile", label: labels.profile, icon: User },
     { href: "/more", label: labels.more, icon: Menu },
-  ];
+  ].filter((t) => isBuilt(t.href));
   const side = [
     ...tabs.filter((t) => t.href !== "/more"),
     { href: "/services", label: labels.services, icon: Tag },
@@ -67,7 +68,7 @@ export function PortalNav({
     { href: "/help", label: labels.help, icon: LifeBuoy },
     { href: "/account", label: labels.account, icon: Settings2 },
     { href: "/install", label: labels.install, icon: Smartphone },
-  ];
+  ].filter((t) => isBuilt(t.href));
   const item =
     "flex min-h-touch items-center gap-3 rounded-lg px-3 font-medium hover:bg-accent aria-[current=page]:bg-accent aria-[current=page]:text-foreground";
   return (

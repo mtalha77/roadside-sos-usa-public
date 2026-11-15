@@ -2,6 +2,7 @@ import { ChevronRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { pageMain } from "@/components/shell/page-head";
+import { isBuilt } from "@/lib/routes";
 
 /** Phones: everything not in the bottom tabs. */
 export default async function MorePage() {
@@ -14,7 +15,7 @@ export default async function MorePage() {
     ["/help", t("help")],
     ["/account", t("account")],
     ["/install", t("install")],
-  ] as const;
+  ].filter(([href]) => isBuilt(href));
   return (
     <main id="main" className={pageMain}>
       <h1 className="text-2xl font-semibold">{t("more")}</h1>
