@@ -1419,6 +1419,56 @@
       "offers": "{count, plural, one {# solicitud esperando cotizaciones} other {# solicitudes esperando cotizaciones}}",
       "seeOffer": "Ver la siguiente solicitud",
       "demo": "Datos de demostración: las solicitudes y estadísticas son simuladas; el saldo es real."
+    },
+    "onboarding": {
+      "title": "Únete como proveedor",
+      "subtitle": "Unos 10 minutos. Tu avance se guarda después de cada paso.",
+      "progress": "Avance de la incorporación",
+      "back": "Atrás",
+      "next": "Guardar y continuar",
+      "submit": "Enviar a revisión",
+      "saved": "El avance se guarda en este dispositivo después de cada paso.",
+      "stepOf": "Paso {n} de {total}",
+      "required": "Completa los campos obligatorios.",
+      "outside": "Fuera del rango del mercado",
+      "miles": "millas",
+      "range": "Rango del mercado {min} a {max}",
+      "steps": {
+        "account": "Tu cuenta",
+        "company": "Empresa",
+        "services": "Servicios y precios",
+        "area": "Área de servicio",
+        "trucks": "Grúas y equipo",
+        "documents": "Documentos",
+        "profile": "Perfil público",
+        "wallet": "Billetera",
+        "agreements": "Acuerdos"
+      },
+      "fields": {
+        "name": "Tu nombre",
+        "phone": "Número de celular",
+        "legalName": "Nombre legal de la empresa",
+        "dot": "Número USDOT (si tienes)",
+        "years": "Años en el negocio",
+        "radius": "Hasta dónde manejas",
+        "trucks": "Grúas",
+        "operators": "Operadores además de ti",
+        "insurance": "Certificado de seguro (foto o PDF)",
+        "insuranceExpiry": "El seguro vence el",
+        "license": "Licencia de grúa (foto o PDF)",
+        "licenseExpiry": "La licencia vence el",
+        "description": "Sobre tu empresa",
+        "topUp": "Primera recarga",
+        "terms": "Acepto los términos para proveedores.",
+        "fees": "Entiendo que el cargo se cobra solo cuando un conductor me elige."
+      },
+      "nextTitle": "¡Gracias! Esto es lo que sigue",
+      "next1": "Revisamos tus documentos, normalmente en un día hábil.",
+      "next2": "Te enviamos un mensaje cuando te aprobemos.",
+      "next3": "Recarga tu billetera y conéctate para recibir solicitudes.",
+      "review": "Tu empresa está en revisión.",
+      "edit": "Editar mis respuestas",
+      "stripe": "Los pagos con tarjeta se abren cuando se conecte la facturación. Aún no se cobra nada."
     }
   }
 }

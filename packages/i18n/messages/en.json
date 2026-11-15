@@ -1419,6 +1419,56 @@
       "offers": "{count, plural, one {# request waiting for quotes} other {# requests waiting for quotes}}",
       "seeOffer": "See the next request",
       "demo": "Demo data: requests and stats are simulated; the wallet balance is real."
+    },
+    "onboarding": {
+      "title": "Join as a provider",
+      "subtitle": "About 10 minutes. Your progress is saved after each step.",
+      "progress": "Onboarding progress",
+      "back": "Back",
+      "next": "Save and continue",
+      "submit": "Submit for review",
+      "saved": "Progress is saved on this device after each step.",
+      "stepOf": "Step {n} of {total}",
+      "required": "Fill in the required fields.",
+      "outside": "Outside the market range",
+      "miles": "miles",
+      "range": "Market range {min} to {max}",
+      "steps": {
+        "account": "Your account",
+        "company": "Company",
+        "services": "Services and prices",
+        "area": "Service area",
+        "trucks": "Trucks and team",
+        "documents": "Documents",
+        "profile": "Public profile",
+        "wallet": "Wallet",
+        "agreements": "Agreements"
+      },
+      "fields": {
+        "name": "Your name",
+        "phone": "Mobile number",
+        "legalName": "Company legal name",
+        "dot": "USDOT number (if you have one)",
+        "years": "Years in business",
+        "radius": "How far you'll drive",
+        "trucks": "Trucks",
+        "operators": "Operators besides you",
+        "insurance": "Insurance certificate (photo or PDF)",
+        "insuranceExpiry": "Insurance expires on",
+        "license": "Towing license (photo or PDF)",
+        "licenseExpiry": "License expires on",
+        "description": "About your company",
+        "topUp": "First top-up",
+        "terms": "I agree to the provider terms.",
+        "fees": "I understand the fee is charged only when a driver picks me."
+      },
+      "nextTitle": "Thanks! Here's what happens next",
+      "next1": "We check your documents, usually within one business day.",
+      "next2": "We text you when you're approved.",
+      "next3": "Top up your wallet and go online to start receiving requests.",
+      "review": "Your company is in review.",
+      "edit": "Edit my answers",
+      "stripe": "Card payments open once billing is connected. Nothing is charged yet."
     }
   }
 }

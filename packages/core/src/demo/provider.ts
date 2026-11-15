@@ -25,6 +25,9 @@ export type PortalJob = {
   at: number;
   rating: number | null;
   operator: string;
+  lat: number;
+  lng: number;
+  address: string;
 };
 export type PortalTxn = {
   id: string;
@@ -138,6 +141,9 @@ export function demoPortal(
       at,
       rating: status === "won" ? (r() > 0.2 ? 5 : 4) : null,
       operator: team[Math.floor(r() * team.length)]!.name,
+      lat: req.location.lat,
+      lng: req.location.lng,
+      address: req.location.note,
     };
   };
   const activeJobs = withState
