@@ -36,6 +36,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials" />
+      </head>
       <body>
         {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}
         <NextIntlClientProvider>
