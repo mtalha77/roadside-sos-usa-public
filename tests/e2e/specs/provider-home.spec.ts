@@ -18,7 +18,7 @@ test.describe("provider home", () => {
     await signInAsDemo(page, base!, "Provider owner");
     await expect(page.getByRole("heading", { name: "Today", level: 1 })).toBeVisible();
     await expect(page.getByText("Quotes sent")).toBeVisible();
-    await expect(page.getByText("Wallet balance")).toBeVisible();
+    await expect(page.getByText("Wallet balance").first()).toBeVisible();
     const toggle = page.getByRole("switch").first();
     const before = await toggle.getAttribute("aria-checked");
     await toggle.click();
