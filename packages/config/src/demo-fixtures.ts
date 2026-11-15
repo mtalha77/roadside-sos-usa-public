@@ -163,6 +163,9 @@ export const demoMarkets: Record<string, DemoMarketFixture> = {
   },
 };
 
+/** Masked number shown for calls and texts between a provider and a driver in demo mode. */
+export const demoMaskedNumber = "+15555550100";
+
 export const demoPeople = {
   first: [
     "Maria",
@@ -199,3 +202,13 @@ export const demoVehicles = [
 ] as const;
 
 export const demoColors = ["White", "Black", "Silver", "Gray", "Blue", "Red"] as const;
+
+/** Provider plans shown in the wallet (RSOS-057). Prices are placeholders until pricing is decided. */
+export const demoPlans = [
+  { id: "basic", monthlyCents: 0, feeDiscountPct: 0, featured: false, priority: false },
+  { id: "pro", monthlyCents: 4900, feeDiscountPct: 20, featured: false, priority: true },
+  { id: "featured", monthlyCents: 9900, feeDiscountPct: 20, featured: true, priority: true },
+] as const;
+
+/** Top-up presets in cents (RSOS-057). */
+export const topUpPresets = [10000, 25000, 50000] as const;
