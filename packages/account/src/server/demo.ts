@@ -68,6 +68,7 @@ export async function demoSignInAction(form: FormData): Promise<void> {
         .insert({
           name: first.name,
           status: "active",
+          is_demo: true,
           market_ids: (markets ?? []).map((m) => m.id),
         })
         .select("id")

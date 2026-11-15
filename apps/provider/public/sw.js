@@ -17,6 +17,9 @@ self.addEventListener("message", (event) => {
   if (event.data === "skip-waiting") self.skipWaiting();
 });
 self.addEventListener("fetch", (event) => {
-  if (event.request.mode !== "navigate") return;
-  event.respondWith(fetch(event.request).catch(() => caches.match(OFFLINE)));
+  // Online requests (and their redirects) go straight to the network untouched; only an offline
+  // page load is answered, with the cached offline page.
+  if (event.request.mode !== "navigate" || event.request.method !== "GET") return;
+  if (self.navigator.onLine) return;
+  event.respondWith(caches.match(OFFLINE));
 });

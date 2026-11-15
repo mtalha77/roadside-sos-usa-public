@@ -81,6 +81,7 @@ export function PortalNav({
           <Link
             key={t.href}
             href={t.href}
+            prefetch={false}
             aria-current={isActive(path, t.href) ? "page" : undefined}
             className={item}
           >
@@ -98,6 +99,7 @@ export function PortalNav({
           <Link
             key={t.href}
             href={t.href}
+            prefetch={false}
             aria-current={isActive(path, t.href) ? "page" : undefined}
             className="flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium text-muted-foreground aria-[current=page]:text-foreground"
           >

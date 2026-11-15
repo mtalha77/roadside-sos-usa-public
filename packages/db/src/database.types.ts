@@ -579,6 +579,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          is_demo: boolean
           market_ids: string[]
           name: string
           status: Database["public"]["Enums"]["provider_status"]
@@ -588,6 +589,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          is_demo?: boolean
           market_ids?: string[]
           name: string
           status?: Database["public"]["Enums"]["provider_status"]
@@ -597,6 +599,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          is_demo?: boolean
           market_ids?: string[]
           name?: string
           status?: Database["public"]["Enums"]["provider_status"]
