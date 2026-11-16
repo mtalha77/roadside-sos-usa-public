@@ -237,6 +237,12 @@ Real: requests from the Get Help form (`admin_live_requests`, a security-invoker
 | 1   | Real Get Help requests appear within 2 seconds | PASS by design: the board polls `/api/board` every 2 s and reads real requests on every poll (RSOS-021 criterion 3). Not yet exercised end to end on CI: admin demo sign-in is blocked (BLOCKERS, keys)                   |
 | 2   | Handles 200 live demo requests without lag     | WRITTEN, NOT YET RUN: the e2e turns on the load test, expects at least 150 open requests and under 600 ms of blocking time over 6 s of live updates on Chromium; it skips until admin demo sign-in works (BLOCKERS, keys) |
 
+## RSOS-073: Request detail
+
+Real: requests, their timeline (`request_events`), attribution and fee, searchable by code, phone or name. Demo: simulated requests (quotes with times, chosen provider, timeline). Placeholders: calls, recordings and texts (need Twilio), review and disputes (no tables yet).
+
+- `/requests` search and table; `/requests/[id]` full page with driver inputs, map, quotes, chosen provider, timeline, attribution, fee, notes and actions with an action log. The dispatch board's cards link here; the side panel is the board card itself.
+
 ## BLOCKERS
 
 New in batch 3 (keys):
