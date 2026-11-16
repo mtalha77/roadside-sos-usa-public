@@ -1,25 +1,34 @@
 "use client";
 
+import { demoMaskedNumber } from "@rsos/config/demo-fixtures";
 import {
+  DRIVER_DEMO_TIMING,
+  DRIVER_STAGES,
   type DemoPick,
   type DemoQuote,
   type DemoRequest,
   type DemoStage,
   demoState,
+  driverStageStarts,
+  milesBetween,
 } from "@rsos/core/demo";
 import { Alert } from "@rsos/ui/alert";
 import { Badge } from "@rsos/ui/badge";
 import { Button } from "@rsos/ui/button";
 import { CountdownRing } from "@rsos/ui/countdown-ring";
 import { LiteMap } from "@rsos/ui/lite-map";
-import { QuoteCard } from "@rsos/ui/quote-card";
+import { ProviderLogo } from "@rsos/ui/provider-logo";
+import { QuoteCard, type QuoteCardLabels } from "@rsos/ui/quote-card";
 import { Sheet, SheetContent } from "@rsos/ui/sheet";
-import { Stepper } from "@rsos/ui/stepper";
 import { MessageSquare, Phone, Share2, Star } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import Link from "next/link";
 import { Skeleton } from "@rsos/ui/skeleton";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { CompareView } from "./compare-view";
+import { ProviderProfilePanel } from "./provider-profile";
+import { DemoBar, StageStepper } from "./stage-stepper";
+import { useDemoClock } from "./use-demo-clock";
 
 type RealStatus =
   | "draft"
@@ -44,14 +53,22 @@ const REAL_TO_STAGE: Record<RealStatus, DemoStage> = {
   cancelled: "cancelled",
   expired: "expired",
 };
-const STEP_ORDER: DemoStage[] = [
-  "searching",
-  "quoting",
-  "picked",
-  "en_route",
-  "on_site",
-  "completed",
-];
+const STEP_ORDER: readonly DemoStage[] = DRIVER_STAGES;
+type Tag = "fastest" | "best-price" | "top-rated";
+
+/** Fastest, best price and top rated, each on a different quote. */
+function tagQuotes(quotes: DemoQuote[]): Map<string, Tag> {
+  const tags = new Map<string, Tag>();
+  const pickBest = (tag: Tag, score: (q: DemoQuote) => number) => {
+    const free = quotes.filter((q) => !tags.has(q.id));
+    const best = free.sort((a, b) => score(a) - score(b))[0];
+    if (best) tags.set(best.id, tag);
+  };
+  pickBest("fastest", (q) => q.etaMinutes);
+  pickBest("best-price", (q) => q.priceCents);
+  pickBest("top-rated", (q) => -(q.provider.rating ?? 0) * 1000 - q.provider.reviews / 1000);
+  return tags;
+}
 
 export type RequestLiveProps = {
   token: string;
@@ -88,7 +105,9 @@ export function RequestLive(props: RequestLiveProps) {
 
 /**
  * The driver's status page (RSOS-022, 065 to 069): finding providers, live quotes, confirm,
- * tracking, completed with review, cancel and report at any stage.
+ * tracking, completed with review, cancel and report at any stage. A demo request runs on the
+ * driver's own clock: a stage stepper they can tap back through, Back/Next, 1x/5x and skips.
+ * Real requests keep real timing and only move forward.
  */
 function RequestLiveView({
   token,
@@ -101,6 +120,8 @@ function RequestLiveView({
 }: RequestLiveProps) {
   const t = useTranslations("track");
   const f = useFormatter();
+  const isDemo = realStatus === null && simulation !== null;
+  const clock = useDemoClock(token, isDemo);
   const [now, setNow] = useState(() => Date.now());
   const [status, setStatus] = useState(realStatus);
   const [pick, setPick] = useState<DemoPick | null>(null);
@@ -109,12 +130,13 @@ function RequestLiveView({
   const [autoPick, setAutoPick] = useState(false);
   const [confirming, setConfirming] = useState<DemoQuote | null>(null);
   const [profile, setProfile] = useState<DemoQuote | null>(null);
+  const [compare, setCompare] = useState<string[]>([]);
+  const [comparing, setComparing] = useState(false);
   const [sheet, setSheet] = useState<"cancel" | "report" | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [rating, setRating] = useState(0);
   const [reviewed, setReviewed] = useState(false);
   const [announcement, setAnnouncement] = useState("");
-  const confirmLock = useRef(false);
   const seen = useRef(0);
 
   useEffect(() => {
@@ -123,14 +145,16 @@ function RequestLiveView({
     if (raw) {
       try {
         // Restore the driver's choice after a reload.
-        queueMicrotask(() => setPick(JSON.parse(raw) as DemoPick));
+        const saved = JSON.parse(raw) as DemoPick;
+        queueMicrotask(() => setPick(saved));
       } catch {
         /* ignore */
       }
     }
+    if (isDemo) return;
     const tick = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(tick);
-  }, [token]);
+  }, [token, isDemo]);
 
   useEffect(() => {
     if (realStatus === null) return;
@@ -141,10 +165,14 @@ function RequestLiveView({
     return () => clearInterval(poll);
   }, [realStatus, token]);
 
-  const sim = useMemo(
-    () => (simulation ? demoState(simulation, now, pick) : null),
-    [simulation, now, pick],
-  );
+  const sim = useMemo(() => {
+    if (!simulation) return null;
+    if (!isDemo) return demoState(simulation, now, pick);
+    return demoState(simulation, simulation.createdAt + clock.elapsed * 1000, pick, {
+      timing: DRIVER_DEMO_TIMING,
+      driverControlled: true,
+    });
+  }, [simulation, isDemo, now, clock.elapsed, pick]);
   const realStage = status ? REAL_TO_STAGE[status] : null;
   const stage: DemoStage =
     localEnd ??
@@ -159,6 +187,9 @@ function RequestLiveView({
       sort === "fastest" ? a.etaMinutes - b.etaMinutes : a.priceCents - b.priceCents,
     );
   }, [sim, sort]);
+  const tags = useMemo(() => tagQuotes(sim?.quotes ?? []), [sim]);
+  const milesTo = (q: DemoQuote) =>
+    simulation ? Math.round(milesBetween(q.provider.home, simulation.location) * 10) / 10 : 0;
   const money = (cents: number) => f.number(cents / 100, { style: "currency", currency: "USD" });
 
   // Announce each new quote once (polite), not every tick.
@@ -177,26 +208,78 @@ function RequestLiveView({
     );
   });
 
-  const choose = (q: DemoQuote) => {
-    if (confirmLock.current) return;
-    confirmLock.current = true;
-    const p = {
-      quoteId: q.id,
-      atSec: Math.max(1, Math.round((Date.now() - (simulation?.createdAt ?? createdAt)) / 1000)),
-    };
+  const savePick = (p: DemoPick | null) => {
     setPick(p);
     try {
-      localStorage.setItem(storageKey(token), JSON.stringify(p));
+      if (p) localStorage.setItem(storageKey(token), JSON.stringify(p));
+      else localStorage.removeItem(storageKey(token));
     } catch {
       /* private mode */
     }
+  };
+  /** Seconds into the request now: the demo clock in demo mode, the wall clock otherwise. */
+  const elapsedNow = () =>
+    isDemo
+      ? Math.max(1, Math.round(clock.elapsed))
+      : Math.max(1, Math.round((Date.now() - (simulation?.createdAt ?? createdAt)) / 1000));
+
+  const choose = (q: DemoQuote) => {
+    if (pick) return;
+    const p = { quoteId: q.id, atSec: elapsedNow() };
+    savePick(p);
     setConfirming(null);
+    setProfile(null);
+    setComparing(false);
+    if (isDemo) clock.jumpTo(p.atSec);
   };
 
   useEffect(() => {
     if (autoPick && stage === "quoting" && quotes[0] && !pick)
       queueMicrotask(() => choose(quotes[0]!));
   });
+
+  // Demo controls: every move is a jump on the demo clock.
+  const starts = simulation ? driverStageStarts(simulation, pick) : null;
+  const stageIndex = STEP_ORDER.indexOf(stage);
+  const fastest = () => [...(sim?.quotes ?? [])].sort((a, b) => a.etaMinutes - b.etaMinutes)[0];
+  const goTo = (i: number) => {
+    if (!isDemo || !starts) return;
+    if (i <= 1) {
+      // Back to searching or to the quotes: the choice is undone; quotes already in stay in.
+      const at = i === 0 ? 0 : (pick?.atSec ?? starts.quoting ?? 0);
+      savePick(null);
+      setReviewed(false);
+      setRating(0);
+      clock.jumpTo(at);
+      return;
+    }
+    const at = starts[STEP_ORDER[i] as keyof typeof starts];
+    if (at !== null) clock.jumpTo(at);
+  };
+  const next = () => {
+    if (!isDemo || !starts || !simulation) return;
+    if (stage === "searching") return clock.jumpTo(starts.quoting ?? 0);
+    if (stage === "quoting") {
+      const q = fastest();
+      if (q) choose(q);
+      return;
+    }
+    goTo(stageIndex + 1);
+  };
+  const skipToArrival = () => {
+    if (!isDemo || !simulation) return;
+    let p = pick;
+    if (!p) {
+      const first = simulation.quotes[0]?.arrivesAtSec ?? 0;
+      const q = fastest() ?? [...simulation.quotes].sort((a, b) => a.etaMinutes - b.etaMinutes)[0];
+      if (!q) return;
+      p = { quoteId: q.id, atSec: Math.max(elapsedNow(), first, q.arrivesAtSec) };
+      savePick(p);
+    }
+    const s = driverStageStarts(simulation, p);
+    if (s.on_site !== null) clock.jumpTo(s.on_site);
+  };
+  const canNext = isDemo && stage !== "completed" && (stage !== "quoting" || quotes.length > 0);
 
   const cancel = async (reason: string) => {
     if (realStatus !== null)
@@ -226,14 +309,73 @@ function RequestLiveView({
     }
   };
 
+  const cardLabels: Partial<QuoteCardLabels> = {
+    insured: t("card.insured"),
+    licensed: t("card.licensed"),
+    rating: (r, c) => t("card.rating", { rating: r.toFixed(1), count: c }),
+    noRatings: t("card.noRatings"),
+    fastest: t("card.fastest"),
+    bestPrice: t("card.bestPrice"),
+    topRated: t("card.topRated"),
+    allIn: t("card.allIn"),
+    arrives: t("card.arrives"),
+    eta: (m) => t("card.eta", { minutes: m }),
+    etaSr: (m) => t("card.etaSr", { minutes: m }),
+    choose: (p, price) => t("card.open", { provider: p, price }),
+    reviews: (c) => t("card.reviews", { count: c }),
+    years: (c) => t("card.years", { count: c }),
+    trucks: (c) => t("card.trucks", { count: c }),
+    distance: (m) => t("card.distance", { miles: m }),
+    selected: t("card.selected"),
+  };
+  const licensed = (q: DemoQuote) => q.provider.marketSlug !== "las-vegas";
+  const toggleCompare = (id: string) =>
+    setCompare((c) => (c.includes(id) ? c.filter((x) => x !== id) : [...c, id].slice(-3)));
+
   const picked = sim?.picked ?? null;
   const active = !["completed", "cancelled", "expired"].includes(stage);
+  const showStepper = stageIndex >= 0 && (active || stage === "completed");
   const card = "rounded-2xl border bg-card p-5";
+  const skipNext =
+    isDemo && canNext ? (
+      <Button type="button" variant="ghost" size="sm" className="self-start" onClick={next}>
+        {t("demo.skipNext")}
+      </Button>
+    ) : null;
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 px-4 pt-6 pb-16">
       <p aria-live="polite" className="sr-only">
         {announcement}
       </p>
+      {showStepper ? (
+        <StageStepper
+          label={t("tracking.steps")}
+          current={stageIndex}
+          stages={STEP_ORDER.map((s) => ({ id: s, label: t(`steps.${s}`) }))}
+          onGoTo={isDemo ? goTo : undefined}
+          goToLabel={(s) => t("demo.goTo", { stage: s })}
+        />
+      ) : null}
+      {isDemo ? (
+        <DemoBar
+          labels={{
+            title: t("demo.title"),
+            back: t("demo.back"),
+            next: t("demo.next"),
+            speed: t("demo.speed"),
+            skip: t("demo.skipArrival"),
+            speedValue: (x) => t("demo.speedValue", { x }),
+          }}
+          speed={clock.speed}
+          canBack={stageIndex > 0}
+          canNext={canNext}
+          canSkip={stageIndex >= 0 && stageIndex < STEP_ORDER.indexOf("on_site")}
+          onBack={() => goTo(stageIndex - 1)}
+          onNext={next}
+          onSpeed={clock.setSpeed}
+          onSkip={skipToArrival}
+        />
+      ) : null}
       <header className="flex flex-col gap-1">
         <p className="text-sm text-muted-foreground tabular-nums">{t("title", { code })}</p>
         <h1 className="text-3xl font-semibold tracking-tight" aria-live="polite">
@@ -245,22 +387,17 @@ function RequestLiveView({
         ) : null}
       </header>
       {notice ? <Alert tone="success" title={notice} /> : null}
-      {active ? (
-        <Stepper
-          label={t("tracking.steps")}
-          current={Math.max(0, STEP_ORDER.indexOf(stage))}
-          steps={STEP_ORDER.map((s) => t(`stages.${s}`))}
-        />
-      ) : null}
 
       {stage === "searching" ? (
         <section className={`${card} flex flex-col items-center gap-4 text-center`}>
-          <CountdownRing
-            startsAt={createdAt}
-            endsAt={createdAt + 180_000}
-            label={t("searching.timeLeft")}
-            srLabel={() => t("searching.timeLeft")}
-          />
+          {isDemo ? null : (
+            <CountdownRing
+              startsAt={createdAt}
+              endsAt={createdAt + 180_000}
+              label={t("searching.timeLeft")}
+              srLabel={() => t("searching.timeLeft")}
+            />
+          )}
           <p>{t("searching.body")}</p>
           {supportPhone ? (
             <Button asChild variant="outline">
@@ -270,6 +407,7 @@ function RequestLiveView({
               </a>
             </Button>
           ) : null}
+          {skipNext}
         </section>
       ) : null}
 
@@ -305,10 +443,14 @@ function RequestLiveView({
             />
             {t("quotes.autoPick")}
           </label>
+          <p className="text-sm text-muted-foreground">{t("quotes.tapHint")}</p>
           <ul className="flex flex-col gap-4">
-            {quotes.map((q, i) => (
+            {quotes.map((q) => (
               <li key={q.id} className="animate-slide-up">
                 <QuoteCard
+                  labels={cardLabels}
+                  selected={compare.includes(q.id)}
+                  onSelect={() => setProfile(q)}
                   quote={{
                     id: q.id,
                     provider: {
@@ -316,18 +458,33 @@ function RequestLiveView({
                       rating: q.provider.rating,
                       reviewCount: q.provider.reviews,
                       insured: true,
-                      licensed: q.provider.marketSlug !== "las-vegas",
+                      licensed: licensed(q),
+                      logo: q.provider.logo,
+                      yearsInBusiness: q.provider.years,
+                      trucks: q.provider.trucks,
                     },
                     priceCents: q.priceCents,
                     etaMinutes: q.etaMinutes,
-                    tag: i === 0 ? (sort === "fastest" ? "fastest" : "best-price") : null,
+                    tag: tags.get(q.id) ?? null,
+                    distanceMiles: milesTo(q),
                   }}
                   action={
-                    <div className="flex gap-2">
-                      <Button type="button" size="sm" variant="ghost" onClick={() => setProfile(q)}>
-                        {t("quotes.viewProfile")}
-                      </Button>
-                      <Button type="button" size="sm" onClick={() => setConfirming(q)}>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <label className="inline-flex min-h-touch cursor-pointer items-center gap-2 text-sm font-medium">
+                        <input
+                          type="checkbox"
+                          checked={compare.includes(q.id)}
+                          onChange={() => toggleCompare(q.id)}
+                          className="size-5 accent-[var(--primary)]"
+                        />
+                        {t("compare.add")}
+                      </label>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setConfirming(q)}
+                      >
                         {t("quotes.choose")}
                       </Button>
                     </div>
@@ -336,7 +493,18 @@ function RequestLiveView({
               </li>
             ))}
           </ul>
+          {compare.length >= 2 ? (
+            <Button
+              type="button"
+              variant="outline"
+              className="sticky bottom-4 self-center bg-background"
+              onClick={() => setComparing(true)}
+            >
+              {t("compare.open", { count: compare.length })}
+            </Button>
+          ) : null}
           <p className="text-sm text-muted-foreground">{t("quotes.waiting")}</p>
+          {skipNext}
         </section>
       ) : null}
 
@@ -374,9 +542,14 @@ function RequestLiveView({
           />
           <div className={`${card} flex flex-col gap-3`}>
             <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-lg font-semibold">{picked.provider.name}</p>
-                <p className="text-sm text-muted-foreground">{money(picked.priceCents)}</p>
+              <div className="flex min-w-0 items-center gap-3">
+                <ProviderLogo logo={picked.provider.logo} size={44} />
+                <div className="min-w-0">
+                  <p className="text-lg font-semibold">{picked.provider.name}</p>
+                  <p className="font-mono text-sm text-muted-foreground tabular-nums">
+                    {money(picked.priceCents)}
+                  </p>
+                </div>
               </div>
               <div className="text-right" aria-live="polite">
                 {stage === "on_site" ? (
@@ -384,7 +557,7 @@ function RequestLiveView({
                 ) : (
                   <>
                     <p className="text-sm text-muted-foreground">{t("tracking.etaLabel")}</p>
-                    <p className="text-2xl font-semibold tabular-nums">
+                    <p className="font-mono text-2xl font-semibold tabular-nums">
                       {t("tracking.minutes", { minutes: sim?.etaMinutes ?? picked.etaMinutes })}
                     </p>
                   </>
@@ -393,13 +566,13 @@ function RequestLiveView({
             </div>
             <div className="flex flex-wrap gap-2">
               <Button asChild variant="outline" size="sm">
-                <a href="tel:+15555550100">
+                <a href={`tel:${demoMaskedNumber}`}>
                   <Phone aria-hidden="true" />
                   {t("tracking.call")}
                 </a>
               </Button>
               <Button asChild variant="outline" size="sm">
-                <a href="sms:+15555550100">
+                <a href={`sms:${demoMaskedNumber}`}>
                   <MessageSquare aria-hidden="true" />
                   {t("tracking.text")}
                 </a>
@@ -410,6 +583,7 @@ function RequestLiveView({
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">{t("tracking.masked")}</p>
+            {skipNext}
           </div>
           <section className={card} aria-labelledby="safety-h">
             <h2 id="safety-h" className="mb-2 font-semibold">
@@ -544,7 +718,14 @@ function RequestLiveView({
               <li>{t("confirm.extrasWait")}</li>
             </ul>
             <p className="mt-3 font-medium">{t("confirm.payDirect")}</p>
-            <p className="text-sm text-muted-foreground">{t("confirm.methods")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("confirm.methods", {
+                methods: f.list(
+                  confirming.provider.payments.map((m) => t(`profile.methods.${m}`)),
+                  { type: "conjunction" },
+                ),
+              })}
+            </p>
             <div className="mt-4 flex flex-col gap-2">
               <Button type="button" onClick={() => choose(confirming)}>
                 {t("confirm.confirm")}
@@ -557,32 +738,19 @@ function RequestLiveView({
         ) : null}
       </Sheet>
 
-      <Sheet open={profile !== null} onOpenChange={(o) => (o ? null : setProfile(null))}>
-        {profile ? (
-          <SheetContent title={profile.provider.name}>
-            <ul className="flex flex-col gap-2">
-              <li>
-                {profile.provider.rating
-                  ? t("profile.rating", {
-                      rating: profile.provider.rating.toFixed(1),
-                      count: profile.provider.reviews,
-                    })
-                  : t("profile.newProvider")}
-              </li>
-              <li>{t("profile.trucks", { count: profile.provider.trucks })}</li>
-              <li>{t("profile.based", { area: profile.provider.area })}</li>
-              <li>{t("profile.verified")}</li>
-            </ul>
-            <Button
-              type="button"
-              className="mt-4 w-full"
-              onClick={() => (setProfile(null), setConfirming(profile))}
-            >
-              {t("quotes.choose")}
-            </Button>
-          </SheetContent>
-        ) : null}
-      </Sheet>
+      <ProviderProfilePanel
+        quote={profile}
+        licensed={profile ? licensed(profile) : false}
+        onClose={() => setProfile(null)}
+        onChoose={(q) => (setProfile(null), setConfirming(q))}
+      />
+      <CompareView
+        open={comparing}
+        quotes={(sim?.quotes ?? []).filter((q) => compare.includes(q.id))}
+        milesTo={milesTo}
+        onClose={() => setComparing(false)}
+        onChoose={(q) => (setComparing(false), setConfirming(q))}
+      />
 
       <Sheet open={sheet !== null} onOpenChange={(o) => (o ? null : setSheet(null))}>
         {sheet === "cancel" ? (

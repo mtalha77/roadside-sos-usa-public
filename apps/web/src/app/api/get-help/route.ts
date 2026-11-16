@@ -90,7 +90,9 @@ export async function POST(request: NextRequest) {
         form.get("lat") !== "" &&
         form.get("lat") !== null &&
         Number.isFinite(lat) &&
-        Number.isFinite(lng);
+        Number.isFinite(lng) &&
+        // A saved fix (shown again after Back) gives way to an address the driver types now.
+        !(form.get("fix") === "saved" && str("address").length >= 3);
       const chosen = markets.find((m) => m.slug === str("market"));
       let market: string | null;
       let point: { lat: number; lng: number };

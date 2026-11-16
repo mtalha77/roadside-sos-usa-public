@@ -15,6 +15,7 @@ import { IconButton } from "../components/icon-button";
 import { KeyValue } from "../components/key-value";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/popover";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../components/sheet";
+import { SidePanel, SidePanelContent } from "../components/side-panel";
 import { Tooltip, TooltipProvider } from "../components/tooltip";
 import { State, States } from "./_helpers";
 
@@ -44,6 +45,35 @@ export const SheetBottom: Story = {
             </div>
           </SheetContent>
         </Sheet>
+      </State>
+    </States>
+  ),
+};
+
+export const SidePanelStory: Story = {
+  name: "SidePanel",
+  render: () => (
+    <States>
+      <State label="Full-height sheet on phones, right side panel on desktop, sticky footer">
+        <SidePanel>
+          <DialogTrigger asChild>
+            <Button>View profile</Button>
+          </DialogTrigger>
+          <SidePanelContent
+            title="Test Towing Co"
+            description="Rated 4.8 from 126 reviews"
+            closeLabel="Close"
+            footer={<Button className="w-full">Choose this provider</Button>}
+          >
+            <div className="flex flex-col gap-3">
+              {Array.from({ length: 12 }, (_, i) => (
+                <p key={i} className="rounded-xl border p-3">
+                  Section {i + 1}
+                </p>
+              ))}
+            </div>
+          </SidePanelContent>
+        </SidePanel>
       </State>
     </States>
   ),

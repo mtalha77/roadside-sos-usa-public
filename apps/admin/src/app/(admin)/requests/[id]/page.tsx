@@ -1,6 +1,7 @@
 import { formatCurrency, type Locale } from "@rsos/i18n";
 import { Badge } from "@rsos/ui/badge";
 import { LiteMap } from "@rsos/ui/lite-map";
+import { ProviderLogo } from "@rsos/ui/provider-logo";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { RequestActions } from "@/components/requests/request-actions";
@@ -93,7 +94,8 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
               <ul className="divide-y text-sm">
                 {r.quotes.map((q) => (
                   <li key={q.provider + q.at} className="flex flex-wrap justify-between gap-2 py-2">
-                    <span className="font-medium">
+                    <span className="inline-flex items-center gap-2 font-medium">
+                      {q.logo ? <ProviderLogo logo={q.logo} size={24} /> : null}
                       {q.provider}{" "}
                       {r.chosen === q.provider ? <Badge tone="success">{t("chosen")}</Badge> : null}
                     </span>

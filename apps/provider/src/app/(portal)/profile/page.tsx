@@ -23,6 +23,7 @@ export default async function ProfilePage() {
       <PageHead title={t("title")} subtitle={t("subtitle")} />
       <ProfileEditor
         company={ctx.company || provider.name}
+        logo={ctx.companyLogo ?? provider.logo}
         rating={provider.rating}
         reviews={provider.reviews}
         trucks={provider.trucks}

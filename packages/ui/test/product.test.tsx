@@ -97,6 +97,42 @@ describe("product components", () => {
     expect(screen.getByText("$128.50")).toBeInTheDocument();
   });
 
+  it("QuoteCard: logo, years, trucks, distance and tag; extra controls sit outside the button", async () => {
+    render(
+      <QuoteCard
+        selected
+        onSelect={() => {}}
+        action={<button type="button">Compare</button>}
+        quote={{
+          id: "q2",
+          priceCents: 12000,
+          etaMinutes: 9,
+          tag: "top-rated",
+          distanceMiles: 4.2,
+          provider: {
+            name: "Test Towing Co",
+            rating: 4.9,
+            reviewCount: 88,
+            insured: true,
+            licensed: true,
+            logo: { monogram: "TT", shape: "shield", tone: 2 },
+            yearsInBusiness: 11,
+            trucks: 3,
+          },
+        }}
+      />,
+    );
+    const card = screen.getByRole("button", { name: "Test Towing Co, $120. View profile" });
+    expect(card).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Top rated")).toBeInTheDocument();
+    expect(screen.getByText("11 yrs in business")).toBeInTheDocument();
+    expect(screen.getByText("3 trucks")).toBeInTheDocument();
+    expect(screen.getByText("4.2 mi away")).toBeInTheDocument();
+    const compare = screen.getByRole("button", { name: "Compare" });
+    expect(card.contains(compare)).toBe(false);
+    await expectNoAxeViolations();
+  });
+
   it("QuoteCard is a single choice button with an informative name; no fake rating for new providers", async () => {
     const onSelect = vi.fn();
     render(
@@ -117,7 +153,7 @@ describe("product components", () => {
         }}
       />,
     );
-    const card = screen.getByRole("button", { name: "Choose New Test Provider for $95.00" });
+    const card = screen.getByRole("button", { name: "New Test Provider, $95. View profile" });
     expect(screen.getByText("New provider")).toBeInTheDocument();
     expect(screen.getByText("Fastest")).toBeInTheDocument();
     await userEvent.click(card);

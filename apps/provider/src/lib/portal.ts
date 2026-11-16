@@ -24,9 +24,12 @@ export async function getPortalContext() {
   const marketSlug =
     Object.entries(demoMarkets).find(([, m]) => m.providers.some((p) => p.name === company))?.[0] ??
     "san-antonio";
-  const providerSlug = demoMarkets[marketSlug]?.providers.find((p) => p.name === company)?.slug;
+  const fixture = demoMarkets[marketSlug]?.providers.find((p) => p.name === company);
+  const providerSlug = fixture?.slug;
   return {
     company,
+    /** Demo companies only: the monogram logo drivers see on quotes. */
+    companyLogo: fixture?.logo ?? null,
     role: row?.role ?? "operator",
     status: row?.status ?? "active",
     providerId: row?.provider_id ?? null,

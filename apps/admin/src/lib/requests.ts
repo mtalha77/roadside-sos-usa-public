@@ -1,4 +1,5 @@
 import "server-only";
+import type { ProviderLogoData } from "@rsos/ui/provider-logo";
 import { demoMarkets } from "@rsos/config/demo-fixtures";
 import { demoRequestFromToken, demoState, demoStream } from "@rsos/core/demo";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -21,7 +22,13 @@ export type RequestDetail = RequestRow & {
   lng: number | null;
   vehicle: string;
   safety: string[];
-  quotes: { provider: string; priceCents: number; etaMinutes: number; at: number }[];
+  quotes: {
+    provider: string;
+    logo: ProviderLogoData | null;
+    priceCents: number;
+    etaMinutes: number;
+    at: number;
+  }[];
   chosen: string | null;
   timeline: TimelineItem[];
   attribution: Record<string, string>;
@@ -118,6 +125,7 @@ export async function getRequestDetail(
       ],
       quotes: s.quotes.map((q) => ({
         provider: q.provider.name,
+        logo: q.provider.logo,
         priceCents: q.priceCents,
         etaMinutes: q.etaMinutes,
         at: r.createdAt + q.arrivesAtSec * 1000,

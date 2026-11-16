@@ -1758,7 +1758,9 @@
       "note": "Landmark, exit or mile marker (optional)",
       "notePlaceholderHint": "For example: northbound past exit 160, white pickup on the shoulder",
       "found": "Near {place}",
-      "approx": "We'll use the address you typed; the provider will confirm the exact spot."
+      "approx": "We'll use the address you typed; the provider will confirm the exact spot.",
+      "saved": "Using your location near {place}. Tap “Use my location” again to update it.",
+      "savedNoPlace": "Using the location you shared. Tap “Use my location” again to update it."
     },
     "problem": {
       "title": "What happened?",
@@ -1886,7 +1888,8 @@
       "newQuote": "New quote from {provider}: {price}, about {minutes} minutes",
       "choose": "Choose",
       "viewProfile": "View profile",
-      "waiting": "Waiting for more providers…"
+      "waiting": "Waiting for more providers…",
+      "tapHint": "Tap a quote to see the full profile."
     },
     "confirm": {
       "title": "Confirm {provider}",
@@ -1899,7 +1902,7 @@
       "extrasTow": "Towing beyond the miles in your request is charged per mile, as quoted.",
       "extrasWait": "Waiting more than 15 minutes after arrival can be charged.",
       "payDirect": "You pay the provider directly when the job is done.",
-      "methods": "Accepted: card, cash, Apple Pay, Google Pay",
+      "methods": "Accepted: {methods}",
       "confirm": "Confirm and request",
       "cancel": "Back to quotes"
     },
@@ -1908,7 +1911,49 @@
       "newProvider": "New provider",
       "trucks": "{count, plural, one {# truck} other {# trucks}}",
       "based": "Based in {area}",
-      "verified": "Insurance verified"
+      "verified": "Insurance verified",
+      "close": "Close profile",
+      "choose": "Choose this provider: {price}, {minutes} min",
+      "insured": "Insured",
+      "licensed": "Licensed",
+      "years": "{count, plural, one {# year in business} other {# years in business}}",
+      "response": "Typical response",
+      "seconds": "{s} s",
+      "etaAccuracy": "Arrives on time",
+      "services": "Services and prices",
+      "from": "from {price}",
+      "reviews": "Reviews",
+      "noReviews": "No reviews yet.",
+      "starReviews": "{stars}-star reviews",
+      "daysAgo": "{count, plural, one {# day ago} other {# days ago}}",
+      "stars": "{count, plural, one {# star} other {# stars}}",
+      "photos": "Recent jobs",
+      "photoKinds": {
+        "tow": "Tow",
+        "tire": "Tire change",
+        "jump": "Jump start",
+        "lockout": "Lockout"
+      },
+      "area": "Service area",
+      "areaMap": "Map of the service area, about {miles} miles around the provider's base",
+      "payments": "Payment methods",
+      "methods": {
+        "card": "Card",
+        "cash": "Cash",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "zelle": "Zelle"
+      },
+      "reviewSamples": [
+        "Showed up earlier than quoted and had me back on the road in minutes.",
+        "Friendly driver, clear price, no surprises at the end.",
+        "Called ahead to say where he was. Felt safe the whole time.",
+        "Careful with my car and explained everything before starting.",
+        "Late at night and still quick. Would use again.",
+        "The price matched the quote exactly. Easy to pay by card.",
+        "Truck was clean and the driver checked my tire pressure too.",
+        "A little slower than the ETA, but kept me updated."
+      ]
     },
     "tracking": {
       "etaLabel": "Arrives in",
@@ -1988,6 +2033,60 @@
       "title": "We couldn't find that request",
       "body": "The link may be old or mistyped. If you need help now, start a new request or call us.",
       "again": "Start a new request"
+    },
+    "steps": {
+      "searching": "Finding",
+      "quoting": "Quotes",
+      "picked": "Confirm",
+      "en_route": "On the way",
+      "on_site": "Arrived",
+      "completed": "Completed"
+    },
+    "demo": {
+      "title": "Demo controls",
+      "back": "Back",
+      "next": "Next",
+      "speed": "Demo speed",
+      "skipArrival": "Skip to arrival",
+      "skipNext": "Skip to next stage",
+      "goTo": "Go back to {stage}",
+      "speedValue": "{x}x"
+    },
+    "card": {
+      "insured": "Insured",
+      "licensed": "Licensed",
+      "rating": "Rated {rating} out of 5 from {count} reviews",
+      "noRatings": "New provider",
+      "fastest": "Fastest",
+      "bestPrice": "Best price",
+      "topRated": "Top rated",
+      "allIn": "All-in price",
+      "arrives": "Arrives in",
+      "eta": "{minutes} min",
+      "etaSr": "{minutes} minutes",
+      "open": "{provider}, {price}. View profile",
+      "reviews": "{count, plural, one {# review} other {# reviews}}",
+      "years": "{count, plural, one {# year in business} other {# years in business}}",
+      "trucks": "{count, plural, one {# truck} other {# trucks}}",
+      "distance": "{miles} mi away",
+      "selected": "Selected to compare"
+    },
+    "compare": {
+      "add": "Compare",
+      "open": "Compare {count} quotes",
+      "title": "Compare quotes",
+      "close": "Close",
+      "eta": "Arrives in",
+      "price": "All-in price",
+      "rating": "Rating",
+      "ratingValue": "{rating} ({count})",
+      "new": "New",
+      "years": "Years in business",
+      "trucks": "Trucks",
+      "distance": "Distance",
+      "minutes": "{minutes} min",
+      "miles": "{miles} mi",
+      "choose": "Choose"
     }
   },
   "lp": {

@@ -1758,7 +1758,9 @@
       "note": "Referencia, salida o marcador de milla (opcional)",
       "notePlaceholderHint": "Por ejemplo: dirección norte pasando la salida 160, camioneta blanca en el acotamiento",
       "found": "Cerca de {place}",
-      "approx": "Usaremos la dirección que escribiste; el proveedor confirmará el lugar exacto."
+      "approx": "Usaremos la dirección que escribiste; el proveedor confirmará el lugar exacto.",
+      "saved": "Usando tu ubicación cerca de {place}. Toca “Usar mi ubicación” otra vez para actualizarla.",
+      "savedNoPlace": "Usando la ubicación que compartiste. Toca “Usar mi ubicación” otra vez para actualizarla."
     },
     "problem": {
       "title": "¿Qué pasó?",
@@ -1886,7 +1888,8 @@
       "newQuote": "Nueva cotización de {provider}: {price}, unos {minutes} minutos",
       "choose": "Elegir",
       "viewProfile": "Ver perfil",
-      "waiting": "Esperando más proveedores…"
+      "waiting": "Esperando más proveedores…",
+      "tapHint": "Toca una cotización para ver el perfil completo."
     },
     "confirm": {
       "title": "Confirmar a {provider}",
@@ -1899,7 +1902,7 @@
       "extrasTow": "El remolque más allá de las millas de tu solicitud se cobra por milla, según la cotización.",
       "extrasWait": "Esperar más de 15 minutos después de la llegada puede tener costo.",
       "payDirect": "Le pagas directamente al proveedor al terminar.",
-      "methods": "Aceptan: tarjeta, efectivo, Apple Pay, Google Pay",
+      "methods": "Acepta: {methods}",
       "confirm": "Confirmar y solicitar",
       "cancel": "Volver a las cotizaciones"
     },
@@ -1908,7 +1911,49 @@
       "newProvider": "Proveedor nuevo",
       "trucks": "{count, plural, one {# grúa} other {# grúas}}",
       "based": "Con base en {area}",
-      "verified": "Seguro verificado"
+      "verified": "Seguro verificado",
+      "close": "Cerrar perfil",
+      "choose": "Elegir este proveedor: {price}, {minutes} min",
+      "insured": "Asegurado",
+      "licensed": "Con licencia",
+      "years": "{count, plural, one {# año en el negocio} other {# años en el negocio}}",
+      "response": "Respuesta típica",
+      "seconds": "{s} s",
+      "etaAccuracy": "Llega a tiempo",
+      "services": "Servicios y precios",
+      "from": "desde {price}",
+      "reviews": "Reseñas",
+      "noReviews": "Todavía no hay reseñas.",
+      "starReviews": "reseñas de {stars} estrellas",
+      "daysAgo": "{count, plural, one {hace # día} other {hace # días}}",
+      "stars": "{count, plural, one {# estrella} other {# estrellas}}",
+      "photos": "Trabajos recientes",
+      "photoKinds": {
+        "tow": "Remolque",
+        "tire": "Cambio de llanta",
+        "jump": "Paso de corriente",
+        "lockout": "Llaves adentro"
+      },
+      "area": "Zona de servicio",
+      "areaMap": "Mapa de la zona de servicio, unas {miles} millas alrededor de la base del proveedor",
+      "payments": "Formas de pago",
+      "methods": {
+        "card": "Tarjeta",
+        "cash": "Efectivo",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "zelle": "Zelle"
+      },
+      "reviewSamples": [
+        "Llegó antes de lo cotizado y en minutos ya estaba de nuevo en camino.",
+        "Conductor amable, precio claro, sin sorpresas al final.",
+        "Llamó para avisar dónde estaba. Me sentí seguro todo el tiempo.",
+        "Cuidadoso con mi carro y explicó todo antes de empezar.",
+        "Muy tarde en la noche y aun así rápido. Lo usaría otra vez.",
+        "El precio fue exactamente el de la cotización. Fácil pagar con tarjeta.",
+        "La grúa estaba limpia y también revisó la presión de mis llantas.",
+        "Un poco más lento que el tiempo estimado, pero me mantuvo informado."
+      ]
     },
     "tracking": {
       "etaLabel": "Llega en",
@@ -1988,6 +2033,60 @@
       "title": "No encontramos esa solicitud",
       "body": "El enlace puede ser antiguo o estar mal escrito. Si necesitas ayuda ahora, empieza una nueva solicitud o llámanos.",
       "again": "Empezar una nueva solicitud"
+    },
+    "steps": {
+      "searching": "Buscando",
+      "quoting": "Cotizaciones",
+      "picked": "Confirmar",
+      "en_route": "En camino",
+      "on_site": "Llegó",
+      "completed": "Terminado"
+    },
+    "demo": {
+      "title": "Controles de demo",
+      "back": "Atrás",
+      "next": "Siguiente",
+      "speed": "Velocidad de la demo",
+      "skipArrival": "Saltar a la llegada",
+      "skipNext": "Saltar a la siguiente etapa",
+      "goTo": "Volver a {stage}",
+      "speedValue": "{x}x"
+    },
+    "card": {
+      "insured": "Asegurado",
+      "licensed": "Con licencia",
+      "rating": "Calificación {rating} de 5 con {count} reseñas",
+      "noRatings": "Proveedor nuevo",
+      "fastest": "Más rápido",
+      "bestPrice": "Mejor precio",
+      "topRated": "Mejor calificado",
+      "allIn": "Precio total",
+      "arrives": "Llega en",
+      "eta": "{minutes} min",
+      "etaSr": "{minutes} minutos",
+      "open": "{provider}, {price}. Ver perfil",
+      "reviews": "{count, plural, one {# reseña} other {# reseñas}}",
+      "years": "{count, plural, one {# año en el negocio} other {# años en el negocio}}",
+      "trucks": "{count, plural, one {# grúa} other {# grúas}}",
+      "distance": "a {miles} mi",
+      "selected": "Seleccionado para comparar"
+    },
+    "compare": {
+      "add": "Comparar",
+      "open": "Comparar {count} cotizaciones",
+      "title": "Comparar cotizaciones",
+      "close": "Cerrar",
+      "eta": "Llega en",
+      "price": "Precio total",
+      "rating": "Calificación",
+      "ratingValue": "{rating} ({count})",
+      "new": "Nuevo",
+      "years": "Años en el negocio",
+      "trucks": "Grúas",
+      "distance": "Distancia",
+      "minutes": "{minutes} min",
+      "miles": "{miles} mi",
+      "choose": "Elegir"
     }
   },
   "lp": {

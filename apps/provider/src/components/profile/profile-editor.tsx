@@ -5,6 +5,7 @@ import { Button } from "@rsos/ui/button";
 import { Checkbox } from "@rsos/ui/checkbox";
 import { inputClass } from "@rsos/ui/input";
 import { Progress } from "@rsos/ui/progress";
+import { ProviderLogo, type ProviderLogoData } from "@rsos/ui/provider-logo";
 import { Camera, Check, ShieldCheck, Star } from "lucide-react";
 import { useId, useState } from "react";
 
@@ -13,6 +14,7 @@ const card = "rounded-2xl border bg-card p-4 sm:p-5";
 /** Profile fields with a live preview and a strength meter (kept on this device in demo mode). */
 export function ProfileEditor({
   company,
+  logo,
   rating,
   trucks,
   labels,
@@ -20,6 +22,7 @@ export function ProfileEditor({
   ratingLabel,
 }: {
   company: string;
+  logo?: ProviderLogoData | null;
   rating: number | null;
   reviews: number;
   trucks: number;
@@ -177,7 +180,10 @@ export function ProfileEditor({
           <h2 id="pc-h" className="mb-3 text-sm font-medium text-muted-foreground">
             {labels.profileCard}
           </h2>
-          <p className="text-lg font-semibold">{company}</p>
+          <p className="flex items-center gap-3 text-lg font-semibold">
+            {logo ? <ProviderLogo logo={logo} size={44} /> : null}
+            {company}
+          </p>
           <p className="flex items-center gap-1 text-sm">
             {rating !== null ? (
               <Star aria-hidden="true" className="size-4 fill-current text-warning" />
@@ -202,9 +208,12 @@ export function ProfileEditor({
             {labels.quoteCard}
           </h2>
           <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="font-semibold">{company}</p>
-              <p className="text-sm text-muted-foreground">{ratingLabel}</p>
+            <div className="flex items-center gap-3">
+              {logo ? <ProviderLogo logo={logo} size={36} /> : null}
+              <div>
+                <p className="font-semibold">{company}</p>
+                <p className="text-sm text-muted-foreground">{ratingLabel}</p>
+              </div>
             </div>
             <p className="text-right text-sm text-muted-foreground">{labels.eta}</p>
           </div>

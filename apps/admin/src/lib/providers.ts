@@ -1,6 +1,7 @@
 import "server-only";
 import { demoMarkets } from "@rsos/config/demo-fixtures";
 import { demoProviders, rng, seedFrom } from "@rsos/core/demo";
+import type { ProviderLogoData } from "@rsos/ui/provider-logo";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 export type ProviderRow = {
@@ -14,6 +15,7 @@ export type ProviderRow = {
   lat: number | null;
   lng: number | null;
   area: string | null;
+  logo: ProviderLogoData | null;
 };
 export type DocItem = {
   kind: "insurance" | "license" | "w9";
@@ -47,6 +49,7 @@ export async function listProviders(opts: {
       lat: null,
       lng: null,
       area: null,
+      logo: null,
     }));
   const demo: ProviderRow[] = opts.demo
     ? opts.markets.flatMap((m) =>
@@ -61,6 +64,7 @@ export async function listProviders(opts: {
           lat: p.home.lat,
           lng: p.home.lng,
           area: p.area,
+          logo: p.logo,
         })),
       )
     : [];

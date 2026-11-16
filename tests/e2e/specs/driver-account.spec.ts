@@ -70,8 +70,8 @@ test.describe("provider profile", () => {
   test("a demo provider's profile shows services, area, hours, payments and reviews", async ({
     page,
   }, info) => {
-    await page.goto(url("/providers/bayou-city-roadside"));
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Bayou City Roadside/);
+    await page.goto(url("/providers/magnolia-heron"));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Magnolia Heron Roadside/);
     for (const h of ["Services and prices", "Hours", "Reviews"])
       await expect(page.getByRole("heading", { name: h })).toBeVisible();
     await expect(page.getByRole("img", { name: /Service area/ })).toBeVisible();
