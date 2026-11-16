@@ -85,7 +85,9 @@ export async function SiteFooter({
           <p>
             <a
               className="font-semibold text-foreground tabular-nums underline-offset-4 hover:underline"
+              data-dni-text
               href={`tel:${market.phone}`}
+              data-dni={market.slug}
             >
               {formatPhone(market.phone)}
             </a>{" "}

@@ -68,10 +68,13 @@ export async function SiteHeader({ markets, services, market }: Props) {
           <Button asChild variant="outline" className="hidden sm:inline-flex">
             <a
               href={`tel:${market.phone}`}
+              data-dni={market.slug}
               aria-label={t("nav.callMarket", { phone: formatPhone(market.phone) })}
             >
               <Phone aria-hidden="true" className="size-5" />
-              <span className="tabular-nums">{formatPhone(market.phone)}</span>
+              <span className="tabular-nums" data-dni-text>
+                {formatPhone(market.phone)}
+              </span>
             </a>
           </Button>
         ) : null}

@@ -299,3 +299,41 @@ export function chooseLookup(env: Env = process.env): LookupAdapter {
     ? createTwilioLookup({ accountSid: env.TWILIO_ACCOUNT_SID, authToken: env.TWILIO_AUTH_TOKEN })
     : fakeLookup;
 }
+
+// ---------------------------------------------------------------------------------------------
+// Numbers on the Twilio account (admin "Sync from Twilio")
+// ---------------------------------------------------------------------------------------------
+export type TwilioNumber = { sid: string; phone: string; friendlyName: string };
+const NumbersResponse = z.object({
+  incoming_phone_numbers: z.array(
+    z.object({ sid: z.string(), phone_number: z.string(), friendly_name: z.string() }),
+  ),
+});
+
+/** Lists the account's numbers (read-only). Null without keys or on error. */
+export async function listTwilioNumbers(
+  env: Env = process.env,
+  fetchImpl: typeof fetch = fetch,
+): Promise<TwilioNumber[] | null> {
+  const sid = env.TWILIO_ACCOUNT_SID;
+  const token = env.TWILIO_AUTH_TOKEN;
+  if (!sid || !token) return null;
+  try {
+    const res = await fetchImpl(
+      `https://api.twilio.com/2010-04-01/Accounts/${sid}/IncomingPhoneNumbers.json?PageSize=200`,
+      {
+        headers: { Authorization: `Basic ${btoa(`${sid}:${token}`)}` },
+        signal: AbortSignal.timeout(8000),
+      },
+    );
+    if (!res.ok) return null;
+    const parsed = NumbersResponse.safeParse(await res.json());
+    return parsed.success
+      ? parsed.data.incoming_phone_numbers
+          .filter((n) => E164.safeParse(n.phone_number).success)
+          .map((n) => ({ sid: n.sid, phone: n.phone_number, friendlyName: n.friendly_name }))
+      : null;
+  } catch {
+    return null;
+  }
+}

@@ -509,7 +509,9 @@
         "rules": "Reglas del negocio",
         "flags": "Funciones",
         "integrations": "Integraciones",
-        "system": "Estado del sistema"
+        "system": "Estado del sistema",
+        "phones": "Números",
+        "duty": "Turnos"
       },
       "onlyYou": "Solo los superadministradores ven a todos; tú te ves a ti.",
       "inactive": "Inactivo",
@@ -671,6 +673,81 @@
         "usedOf": "{used} de {limit}",
         "threshold": "Umbral diario de alerta",
         "save": "Guardar"
+      },
+      "phones": {
+        "intro": "Cada número de seguimiento pertenece a un mercado y una fuente, así cada llamada queda atribuida. Los números se compran en Twilio; agrégalos aquí para empezar a medir.",
+        "title": "Números de seguimiento",
+        "empty": "Aún no hay números. Cómpralos en Twilio y agrégalos aquí.",
+        "number": "Número",
+        "market": "Mercado",
+        "source": "Fuente",
+        "status": "Estado",
+        "actions": "Acciones",
+        "label": "Etiqueta (opcional)",
+        "active": "Activo",
+        "inactive": "Apagado",
+        "inTwilio": "En Twilio",
+        "activate": "Encender",
+        "deactivate": "Apagar",
+        "add": "Agregar un número",
+        "addButton": "Agregar número",
+        "added": "Se agregó {phone}.",
+        "sync": "Sincronizar con Twilio",
+        "synced": "{count, plural, one {# número encontrado} other {# números encontrados}} en Twilio.",
+        "sources": {
+          "website": "Sitio web",
+          "google_ads": "Google Ads",
+          "gmb": "Perfil de Google Business",
+          "meta": "Meta (Facebook, Instagram)",
+          "bing": "Microsoft Ads (Bing)",
+          "organic": "Orgánico",
+          "provider_line": "Línea de proveedores",
+          "staging_test": "Prueba de staging"
+        },
+        "setupTitle": "Configuración de Twilio para cada número",
+        "setupBody": "En Twilio, configura el webhook de voz del número en /api/twilio/voice del dominio de admin (POST) y el aviso de estado de llamada en /api/twilio/voice/status. Los números de staging usan el dominio de admin de staging. Consulta docs/runbooks/twilio.md.",
+        "errors": {
+          "forbidden": "Solo los superadministradores y gerentes de operaciones pueden cambiar números.",
+          "invalid": "Escribe un número de EE. UU., mercado y fuente válidos.",
+          "exists": "Ese número ya está registrado.",
+          "generic": "Algo salió mal. Inténtalo de nuevo.",
+          "noTwilio": "Twilio aún no está conectado."
+        }
+      },
+      "duty": {
+        "you": "Tú",
+        "presence": "Disponibilidad",
+        "presences": {
+          "available": "Disponible",
+          "busy": "Ocupado",
+          "away": "Ausente"
+        },
+        "onDutyNow": "Estoy de turno ahora",
+        "save": "Guardar",
+        "mobile": "Tu número de celular",
+        "mobileHint": "Te llamamos si nadie contesta en el navegador, y te avisamos por texto de llamadas perdidas y mensajes de voz.",
+        "nowTitle": "De turno ahora",
+        "nobody": "Nadie está de turno. Las llamadas van al buzón de voz.",
+        "weekTitle": "Horario semanal",
+        "uncovered": "Sin cubrir",
+        "shift": "{name}, de {start} a {end}",
+        "remove": "Quitar el turno de {name}",
+        "removeShort": "Quitar",
+        "who": "Despachador",
+        "day": "Día",
+        "start": "Inicio",
+        "end": "Fin",
+        "zone": "Zona horaria",
+        "addShift": "Agregar turno",
+        "days": {
+          "0": "Domingo",
+          "1": "Lunes",
+          "2": "Martes",
+          "3": "Miércoles",
+          "4": "Jueves",
+          "5": "Viernes",
+          "6": "Sábado"
+        }
       }
     },
     "walkthrough": {

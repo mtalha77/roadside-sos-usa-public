@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { DniSwap } from "./dni-swap";
 import type { ReactNode } from "react";
 import { getMarkets, getServices } from "@/lib/site-data";
 import { getVisitorMarket } from "@/lib/visitor";
@@ -38,6 +39,7 @@ export async function SitePage({
         {children}
       </main>
       <SiteFooter markets={markets} services={services} market={market} />
+      <DniSwap />
       <div aria-hidden="true" className="pb-32 sm:pb-6" />
       <MobileBar market={market} />
       <MenuCloser />

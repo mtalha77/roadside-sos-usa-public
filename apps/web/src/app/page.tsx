@@ -75,7 +75,7 @@ export default async function HomePage() {
           </Button>
           {market?.phone ? (
             <Button asChild size="lg" variant="outline">
-              <a href={`tel:${market.phone}`}>
+              <a href={`tel:${market.phone}`} data-dni={market.slug}>
                 <Phone aria-hidden="true" className="size-5" />
                 <span className="tabular-nums">
                   {t("callNow", { phone: formatPhone(market.phone) })}

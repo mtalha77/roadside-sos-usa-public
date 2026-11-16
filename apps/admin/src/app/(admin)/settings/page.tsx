@@ -2,6 +2,8 @@ import { Badge } from "@rsos/ui/badge";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { FlagsPanel } from "@/components/settings/flags-panel";
+import { OnDuty } from "@/components/settings/on-duty";
+import { PhoneNumbers } from "@/components/settings/phone-numbers";
 import { SystemStatus } from "@/components/settings/system-status";
 import { TemplateEditor } from "@/components/settings/template-editor";
 import { getAdminContext } from "@/lib/admin";
@@ -9,7 +11,17 @@ import { getServerSupabase } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-const TABS = ["users", "audit", "templates", "rules", "flags", "integrations", "system"] as const;
+const TABS = [
+  "users",
+  "audit",
+  "templates",
+  "rules",
+  "flags",
+  "integrations",
+  "phones",
+  "duty",
+  "system",
+] as const;
 const INTEGRATIONS = [
   "google_ads",
   "meta",
@@ -221,6 +233,8 @@ export default async function SettingsPage({
           ))}
         </ul>
       ) : null}
+      {tab === "phones" ? <PhoneNumbers /> : null}
+      {tab === "duty" ? <OnDuty /> : null}
       {tab === "system" ? <SystemStatus /> : null}
     </main>
   );
