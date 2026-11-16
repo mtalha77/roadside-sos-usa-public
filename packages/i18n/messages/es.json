@@ -1719,6 +1719,24 @@
       "noJobs": "No hay trabajos activos ahora.",
       "onlyMine": "Solo ves los trabajos asignados a ti.",
       "assigned": "Asignado a"
+    },
+    "insights": {
+      "title": "Estadísticas",
+      "subtitle": "Las últimas 8 semanas.",
+      "quoteRate": "Tasa de cotización",
+      "winRate": "Tasa de trabajos ganados",
+      "reply": "Tiempo promedio de respuesta",
+      "seconds": "{s} s",
+      "eta": "Precisión de llegada",
+      "rating": "Calificación",
+      "noRating": "Aún sin reseñas",
+      "cancellations": "Cancelaciones",
+      "roi": "Retorno de los cargos por semana",
+      "roiSummary": "Ganaste {value} en trabajos y pagaste {fees} en cargos: {ratio}× de retorno.",
+      "value": "Valor de trabajos ganados",
+      "fees": "Cargos pagados",
+      "week": "Semana del",
+      "demo": "Datos de demostración: las estadísticas son simuladas."
     }
   }
 }

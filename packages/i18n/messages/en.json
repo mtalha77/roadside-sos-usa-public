@@ -1719,6 +1719,24 @@
       "noJobs": "No active jobs right now.",
       "onlyMine": "You see only the jobs assigned to you.",
       "assigned": "Assigned to"
+    },
+    "insights": {
+      "title": "Insights",
+      "subtitle": "The last 8 weeks.",
+      "quoteRate": "Quote rate",
+      "winRate": "Win rate",
+      "reply": "Average reply time",
+      "seconds": "{s} s",
+      "eta": "ETA accuracy",
+      "rating": "Rating",
+      "noRating": "No reviews yet",
+      "cancellations": "Cancellations",
+      "roi": "Return on fees by week",
+      "roiSummary": "You won {value} in jobs and paid {fees} in fees: {ratio}× back.",
+      "value": "Job value won",
+      "fees": "Fees paid",
+      "week": "Week of",
+      "demo": "Demo data: insights are simulated."
     }
   }
 }
