@@ -2083,7 +2083,8 @@
       "help": "Help",
       "account": "Account and security",
       "install": "Install the app",
-      "onboarding": "Setup"
+      "onboarding": "Setup",
+      "theme": "Day or night mode"
     },
     "shell": {
       "offline": "You're offline. New requests will appear when you're back online.",

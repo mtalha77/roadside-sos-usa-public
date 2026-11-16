@@ -7,6 +7,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { FaqList } from "@/components/site/faq-list";
 import { LocateButton } from "@/components/get-help/locate-button";
+import { LightThemeToggle } from "@/components/site/light-controls";
 import { serviceName } from "@/components/site/service-label";
 import { ServiceLinks } from "@/components/site/service-links";
 import { cityLabel, formatPhone } from "@/lib/market";
@@ -54,9 +55,10 @@ export default async function LandingPage({ params, searchParams }: Params) {
   if (!data) notFound();
   const sp = await searchParams;
   const { m, svc, services } = data;
-  const [t, ts, locale] = await Promise.all([
+  const [t, ts, tc, locale] = await Promise.all([
     getTranslations("lp"),
     getTranslations("site"),
+    getTranslations("common"),
     getLocale(),
   ]);
   const name = serviceName(ts, { slug: svc.service_slug, name: svc.service_name });
@@ -81,7 +83,8 @@ export default async function LandingPage({ params, searchParams }: Params) {
   return (
     <main id="main" className="min-h-dvh bg-background pb-28">
       <header className="flex items-center justify-between gap-3 border-b px-4 py-3">
-        <span className="text-lg font-bold">{brand.name}</span>
+        <span className="mr-auto text-lg font-bold">{brand.name}</span>
+        <LightThemeToggle label={tc("toggleTheme")} />
         {m.phone ? (
           <a href={`tel:${m.phone}`} className={`${ui.button.outline} px-3`}>
             <Phone aria-hidden="true" className="size-5" />

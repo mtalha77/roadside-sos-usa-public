@@ -2,6 +2,7 @@ import { ChevronRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { pageMain } from "@/components/shell/page-head";
+import { ThemeSwitch } from "@/components/shell/theme-switch";
 import { isBuilt } from "@/lib/routes";
 
 /** Phones: everything not in the bottom tabs. */
@@ -33,6 +34,12 @@ export default async function MorePage() {
             </Link>
           </li>
         ))}
+        <li>
+          <ThemeSwitch
+            label={t("theme")}
+            className="flex min-h-14 w-full items-center gap-3 px-4 text-left font-medium"
+          />
+        </li>
       </ul>
     </main>
   );

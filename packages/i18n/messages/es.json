@@ -2083,7 +2083,8 @@
       "help": "Ayuda",
       "account": "Cuenta y seguridad",
       "install": "Instalar la app",
-      "onboarding": "Configuración"
+      "onboarding": "Configuración",
+      "theme": "Modo día o noche"
     },
     "shell": {
       "offline": "Estás sin conexión. Las solicitudes nuevas aparecerán cuando vuelvas a conectarte.",

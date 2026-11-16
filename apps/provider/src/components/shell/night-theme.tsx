@@ -3,7 +3,9 @@
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 
-const AUTO = "rsos_night_auto";
+/** Set while the portal is dark only because it is night (not by the provider's choice). */
+export const NIGHT_AUTO_KEY = "rsos_night_auto";
+const AUTO = NIGHT_AUTO_KEY;
 
 /**
  * Dark mode by default at night (7 pm to 7 am, local time) unless the provider chose a theme.
