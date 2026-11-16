@@ -1,8 +1,8 @@
 /**
  * Fixed-window rate limiting per key (IP address, phone number, ...).
  * Uses Upstash Redis over REST when UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are
- * set; otherwise falls back to an in-memory store (per server instance) so limits still
- * apply, more loosely, until Upstash is configured.
+ * set; otherwise a Postgres counter (`rate_limit_hit`, RSOS-021b) shared by every instance;
+ * otherwise an in-memory store (per server instance).
  */
 export interface RateLimitStore {
   /** Increments the counter for `key` and returns the new count; the window starts on first hit. */
@@ -55,13 +55,32 @@ export function createUpstashStore(
 
 let defaultStore: RateLimitStore | undefined;
 
-/** Upstash when configured, otherwise the in-memory fallback. */
+/** Uses `primary`, and the in-memory store if it fails (a limiter outage never blocks drivers). */
+export function withMemoryFallback(primary: RateLimitStore): RateLimitStore {
+  return {
+    async increment(key, windowSeconds) {
+      try {
+        return await primary.increment(key, windowSeconds);
+      } catch {
+        defaultStore ??= createMemoryStore();
+        return defaultStore.increment(key, windowSeconds);
+      }
+    },
+  };
+}
+
+/**
+ * Upstash when configured; otherwise the durable store passed in (Postgres, shared by every
+ * server instance); otherwise the in-memory fallback.
+ */
 export function getRateLimitStore(
   env: Record<string, string | undefined> = process.env,
+  durable?: RateLimitStore | null,
 ): RateLimitStore {
   if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
     return createUpstashStore(env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN);
   }
+  if (durable) return withMemoryFallback(durable);
   defaultStore ??= createMemoryStore();
   return defaultStore;
 }

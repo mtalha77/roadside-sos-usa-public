@@ -12,7 +12,8 @@
     "./cookies": "./src/cookies.ts",
     "./public": "./src/public.ts",
     "./key-check": "./src/key-check.ts",
-    "./health": "./src/health.ts"
+    "./health": "./src/health.ts",
+    "./usage": "./src/usage.ts"
   },
   "scripts": {
     "lint": "eslint .",

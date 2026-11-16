@@ -8,6 +8,7 @@ import Link from "next/link";
 import nextDynamic from "next/dynamic";
 import { Choice } from "@/components/get-help/choice";
 import { LocateButton } from "@/components/get-help/locate-button";
+import { AddressAutocomplete } from "@/components/get-help/address-autocomplete";
 import { StepShell } from "@/components/get-help/step-shell";
 import { OutsideArea } from "@/components/site/outside-area";
 import { serviceName } from "@/components/site/service-label";
@@ -141,12 +142,13 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         <p className="text-sm font-medium text-muted-foreground">{t("location.or")}</p>
         <label className={label}>
           {t("location.address")}
-          <input
+          <AddressAutocomplete
             id="gh-address"
             name="address"
-            defaultValue={draft.approx ? draft.address : ""}
+            defaultValue={draft.approx ? (draft.address ?? "") : ""}
             autoComplete="street-address"
             className={inputClass}
+            listLabel={t("location.suggestions")}
           />
         </label>
         <label className={label}>
