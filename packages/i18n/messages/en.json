@@ -1737,6 +1737,82 @@
       "fees": "Fees paid",
       "week": "Week of",
       "demo": "Demo data: insights are simulated."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "How new requests reach you, even when the app is closed.",
+      "channels": "Alert channels",
+      "push": "Push notifications",
+      "pushHint": "Instant alerts on this phone.",
+      "sms": "Text messages",
+      "smsHint": "A text for every new request.",
+      "voice": "Voice call backup",
+      "voiceHint": "We call you if a request isn't opened within 30 seconds.",
+      "sound": "Alert sound",
+      "sounds": {
+        "siren": "Siren",
+        "chime": "Chime",
+        "horn": "Horn"
+      },
+      "test": "Send a test alert",
+      "testSent": "Test alert played on this device.",
+      "quiet": "Quiet hours",
+      "quietHint": "No alerts during these hours. You stay offline.",
+      "from": "From",
+      "to": "To",
+      "save": "Save settings",
+      "saved": "Saved on this device. Saving to your account comes with the next update."
+    },
+    "help": {
+      "title": "Help center",
+      "chat": "Chat with dispatch",
+      "search": "Search help",
+      "go": "Search",
+      "none": "No articles match. Try other words or chat with dispatch.",
+      "chatTitle": "Chat with dispatch",
+      "chatSubtitle": "We're here around the clock.",
+      "job": "About a job",
+      "noJob": "Not about a job",
+      "message": "Message",
+      "send": "Send",
+      "you": "You",
+      "dispatch": "Dispatch",
+      "reply": "Thanks, we're on it. Dispatch replies here (simulated in demo mode).",
+      "empty": "No messages yet.",
+      "articles": {
+        "quotes": {
+          "title": "How quotes work",
+          "body": "When a driver near you asks for help, you get an offer. Send your price and arrival time; the driver picks one provider."
+        },
+        "fees": {
+          "title": "Our fee",
+          "body": "You pay a fee only when a driver picks you. It's shown before you send a quote."
+        },
+        "wallet": {
+          "title": "Wallet and top-ups",
+          "body": "Fees come from your wallet balance. Turn on auto-recharge so you never miss a job."
+        },
+        "online": {
+          "title": "Going online",
+          "body": "Turn on Go Online on Home. You receive requests inside your service area while online."
+        },
+        "photos": {
+          "title": "Before and after photos",
+          "body": "Add photos in the job flow. They protect you if a driver reports damage."
+        },
+        "disputes": {
+          "title": "Disputing a fee",
+          "body": "Open the job and choose Dispute the fee. Our team replies within one business day."
+        },
+        "team": {
+          "title": "Adding operators",
+          "body": "Invite operators from Team. Operators see only the jobs assigned to them."
+        },
+        "documents": {
+          "title": "Insurance and licenses",
+          "body": "Keep your documents current. An expired document pauses new requests."
+        }
+      }
     }
   }
 }
