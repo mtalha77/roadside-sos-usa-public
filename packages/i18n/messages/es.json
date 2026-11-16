@@ -356,6 +356,41 @@
       },
       "done": "(hecho)",
       "todo": "(pendiente)"
+    },
+    "pricing": {
+      "title": "Precios y cargos",
+      "none": "No hay precios para estos mercados.",
+      "current": "Precios actuales en {market}",
+      "cols": {
+        "service": "Servicio",
+        "range": "Rango de precio para el conductor",
+        "fee": "Nuestro cargo",
+        "proFee": "Cargo Pro",
+        "featured": "Lugar destacado",
+        "since": "Desde"
+      },
+      "rangeValue": "{min} a {max}",
+      "historyRow": "{min} a {max} · cargo {fee} · desde {date}",
+      "off": "Apagado",
+      "perMonth": "{price}/mes",
+      "scheduledCount": "{count, plural, one {# cambio programado} other {# cambios programados}}",
+      "history": "{count, plural, one {# precio anterior} other {# precios anteriores}}",
+      "plansNote": "El descuento Pro y el precio del lugar destacado son provisionales hasta decidir los precios de los planes.",
+      "change": {
+        "schedule": "Programar un cambio",
+        "service": "Servicio",
+        "min": "Precio más bajo",
+        "max": "Precio más alto",
+        "fee": "Nuestro cargo",
+        "effective": "Vigente desde",
+        "submit": "Enviar para aprobación",
+        "pending": "Esperando aprobación",
+        "approve": "Aprobar",
+        "approved": "Aprobado (se aplica en la fecha)",
+        "needsApproval": "Requiere un superadministrador",
+        "invalid": "Completa todos los montos y una fecha; el precio más bajo no puede superar al más alto.",
+        "to": "a"
+      }
     }
   },
   "emails": {

@@ -271,6 +271,12 @@ Real: markets, boundaries (`admin_market_shapes`, migration `20261115010000_admi
 
 - Market list and detail with the boundary on a map, settings, phone numbers by source, rules and a launch checklist. Drawing a new boundary needs the Google Maps key (BLOCKER).
 
+## RSOS-078: Pricing and fees
+
+Real: ranges, fees and price history from `market_services`. Placeholders: Pro discount and featured slot price (decision), the scheduled-change approval (kept on the page until writes are wired).
+
+- Per market and service: driver price range, our fee, Pro fee, featured slot, effective date; history of earlier prices; schedule a change with an effective date and a super admin approval step.
+
 ## BLOCKERS
 
 New in batch 3 (keys):
