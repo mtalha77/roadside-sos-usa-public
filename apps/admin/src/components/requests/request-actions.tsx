@@ -47,13 +47,15 @@ export function RequestActions({ labels }: { labels: Record<string, string> }) {
       <h3 className="mt-4 text-sm font-semibold">{labels.review}</h3>
       <p className="text-sm text-muted-foreground">{labels.noReview}</p>
       {log.length ? (
-        <ul role="log" aria-label={labels.logged} className="mt-3 flex flex-col gap-1 text-sm">
-          {log.map((x, i) => (
-            <li key={i}>
-              <span className="tabular-nums text-muted-foreground">{x.at}</span> {x.text}
-            </li>
-          ))}
-        </ul>
+        <div role="log" aria-label={labels.logged} className="mt-3">
+          <ul className="flex flex-col gap-1 text-sm">
+            {log.map((x, i) => (
+              <li key={i}>
+                <span className="tabular-nums text-muted-foreground">{x.at}</span> {x.text}
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : null}
     </section>
   );

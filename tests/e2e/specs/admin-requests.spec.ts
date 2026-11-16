@@ -23,7 +23,7 @@ test.describe("admin requests", () => {
     const first = page.getByRole("rowheader").getByRole("link").first();
     const code = (await first.textContent())!.trim();
     await page.getByLabel("Code, phone or name").fill(code);
-    await page.getByRole("button", { name: "Search" }).click();
+    await page.getByRole("button", { name: "Search", exact: true }).click();
     await page.getByRole("link", { name: code }).first().click();
     await expect(page.getByRole("heading", { name: `Request ${code}`, level: 1 })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Timeline" })).toBeVisible();

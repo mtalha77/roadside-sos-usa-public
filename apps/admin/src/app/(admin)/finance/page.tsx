@@ -75,7 +75,7 @@ export default async function FinancePage({
         </Button>
       </header>
       {ctx.demo ? <p className="text-sm text-muted-foreground">{t("demo")}</p> : null}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label={t("kinds.fee")} value={money(sum("fee"))} />
         <StatCard label={t("kinds.top_up")} value={money(sum("top_up"))} />
         <StatCard label={t("kinds.credit")} value={money(sum("credit"))} />
@@ -107,7 +107,12 @@ export default async function FinancePage({
               </Link>
             ))}
           </nav>
-          <div className="overflow-x-auto rounded-2xl border bg-card">
+          <div
+            tabIndex={0}
+            role="region"
+            aria-label={t("tabs.ledger")}
+            className="overflow-x-auto rounded-2xl border bg-card"
+          >
             <table className="w-full min-w-[44rem] text-sm">
               <caption className="sr-only">{t("tabs.ledger")}</caption>
               <thead className="border-b text-left text-muted-foreground">

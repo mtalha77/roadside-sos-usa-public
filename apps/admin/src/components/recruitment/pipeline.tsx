@@ -121,7 +121,7 @@ export function Pipeline({
       {leads.length === 0 ? (
         <p className="text-muted-foreground">{l.empty}</p>
       ) : view === "board" ? (
-        <div className="grid gap-3 overflow-x-auto md:grid-flow-col md:auto-cols-[minmax(15rem,1fr)]">
+        <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
           {stages.map((s) => {
             const list = leads.filter((x) => x.stage === s.id);
             return (
@@ -137,7 +137,11 @@ export function Pipeline({
                   {s.label}{" "}
                   <span className="tabular-nums text-muted-foreground">{list.length}</span>
                 </h2>
-                <ul className="flex max-h-[60vh] flex-col gap-2 overflow-y-auto">
+                <ul
+                  tabIndex={0}
+                  aria-labelledby={`${id}-${s.id}`}
+                  className="flex max-h-[32rem] flex-col gap-2 overflow-y-auto"
+                >
                   {list.map((x) => (
                     <li key={x.id} className="rounded-xl border bg-card p-3 text-sm">
                       <p className="font-semibold">{x.company}</p>
@@ -165,7 +169,12 @@ export function Pipeline({
           })}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border bg-card">
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label={l.table}
+          className="overflow-x-auto rounded-2xl border bg-card"
+        >
           <table className="w-full min-w-[48rem] text-sm">
             <thead className="border-b text-left text-muted-foreground">
               <tr>

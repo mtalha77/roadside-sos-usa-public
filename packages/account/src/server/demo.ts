@@ -136,23 +136,34 @@ export async function demoSignInAction(form: FormData): Promise<void> {
       };
       upsert: (row: object) => Promise<unknown>;
     };
-    const { data: row } = await demoTable.select("totp_secret").eq("user_id", userId).maybeSingle();
-    const { data: factors } = await supabase.auth.mfa.listFactors();
-    let factor = factors?.totp.find((f) => f.status === "verified");
-    let secret = row?.totp_secret ?? null;
-    if (!factor || !secret) {
-      for (const f of factors?.all ?? []) await supabase.auth.mfa.unenroll({ factorId: f.id });
-      const enrolled = await supabase.auth.mfa.enroll({ factorType: "totp", friendlyName: "demo" });
-      if (!enrolled.data) throw new Error("Demo authenticator setup failed");
-      secret = enrolled.data.totp.secret;
-      await demoTable.upsert({ user_id: userId, role, totp_secret: secret });
-      factor = { id: enrolled.data.id } as typeof factor;
+    // Demo accounts are shared, so two sign-ins can set up the authenticator at the same moment
+    // and undo each other. Retry with a short random pause, reusing what the other one set up.
+    let passed = false;
+    for (let attempt = 0; attempt < 6 && !passed; attempt++) {
+      if (attempt > 0) await new Promise((r) => setTimeout(r, 300 + Math.random() * 700));
+      const { data: row } = await demoTable
+        .select("totp_secret")
+        .eq("user_id", userId)
+        .maybeSingle();
+      const { data: factors } = await supabase.auth.mfa.listFactors();
+      let factorId = factors?.totp.find((f) => f.status === "verified")?.id;
+      let secret = row?.totp_secret ?? null;
+      // Set up a new authenticator only when none is usable (or a reused one keeps failing).
+      if (!factorId || !secret || attempt >= 3) {
+        for (const f of factors?.all ?? []) await supabase.auth.mfa.unenroll({ factorId: f.id });
+        const enrolled = await supabase.auth.mfa.enroll({
+          factorType: "totp",
+          friendlyName: `demo-${Date.now()}`,
+        });
+        if (!enrolled.data) continue;
+        secret = enrolled.data.totp.secret;
+        factorId = enrolled.data.id;
+        await demoTable.upsert({ user_id: userId, role, totp_secret: secret });
+      }
+      const verify = await supabase.auth.mfa.challengeAndVerify({ factorId, code: totp(secret) });
+      passed = !verify.error;
     }
-    const verify = await supabase.auth.mfa.challengeAndVerify({
-      factorId: factor!.id,
-      code: totp(secret),
-    });
-    if (verify.error) throw new Error("Demo second step failed");
+    if (!passed) throw new Error("Demo second step failed");
   }
   redirect("/");
 }
