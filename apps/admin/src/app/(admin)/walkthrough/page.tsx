@@ -1,5 +1,5 @@
-import { brand } from "@rsos/config/brand";
 import { demoMarkets } from "@rsos/config/demo-fixtures";
+import { appUrl } from "@rsos/config/site";
 import { demoStream } from "@rsos/core/demo";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -74,7 +74,7 @@ export default async function WalkthroughPage() {
     ? `/roadside-assistance/${demoMarket.stateCode.toLowerCase()}/${demoMarket.slug}`
     : "/";
   const href = (s: Step) =>
-    `${brand.urls[s.app]}${s.path.replace("{token}", encodeURIComponent(token)).replace("{city}", city)}`;
+    `${appUrl(s.app)}${s.path.replace("{token}", encodeURIComponent(token)).replace("{city}", city)}`;
   return (
     <main id="main" className="mx-auto flex max-w-4xl flex-col gap-6 px-4 py-6">
       <header>

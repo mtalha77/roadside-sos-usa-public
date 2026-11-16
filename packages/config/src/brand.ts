@@ -22,7 +22,10 @@ export const brand = {
   description:
     "Stranded? Share your location and problem, get quotes with price and arrival time from verified roadside providers nearby, and pick one.",
   domain,
-  /** Production URLs. Each can be overridden per environment (staging, previews) by env vars. */
+  /**
+   * PRODUCTION URLs of the three apps. Never build links from these: links must follow the
+   * current environment, so use `appUrl()` from `@rsos/config/site` (a test enforces this).
+   */
   urls: {
     web: process.env.NEXT_PUBLIC_WEB_URL || `https://${domain}`,
     provider: process.env.NEXT_PUBLIC_PROVIDER_URL || `https://pro.${domain}`,

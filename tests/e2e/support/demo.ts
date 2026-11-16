@@ -8,6 +8,7 @@ export async function signInAsDemo(
 ) {
   await page.goto(new URL("/sign-in", base).toString());
   await page.getByRole("button", { name: role }).click();
-  await page.waitForURL((u) => !u.pathname.startsWith("/sign-in"), { timeout: 30_000 });
+  // Parallel admin sign-ins can wait for the next 30 s authenticator window (shared demo account).
+  await page.waitForURL((u) => !u.pathname.startsWith("/sign-in"), { timeout: 75_000 });
   await page.waitForLoadState("load");
 }

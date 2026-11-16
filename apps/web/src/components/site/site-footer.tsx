@@ -4,6 +4,7 @@ import Link from "next/link";
 import { cityLabel, formatPhone, marketPath, type SiteMarket } from "@/lib/market";
 import type { SiteService } from "@/lib/site-data";
 import { serviceName } from "./service-label";
+import { appUrl } from "@rsos/config/site";
 
 /** Footer: cities, services, company, legal and provider links, and the visitor's market number. */
 export async function SiteFooter({
@@ -45,7 +46,7 @@ export async function SiteFooter({
       items: [
         { href: "/for-providers", label: t("nav.forProviders") },
         { href: "/for-providers/apply", label: t("footer.apply") },
-        { href: `${brand.urls.provider}/sign-in`, label: t("footer.providerSignIn") },
+        { href: `${appUrl("provider")}/sign-in`, label: t("footer.providerSignIn") },
       ],
     },
     {

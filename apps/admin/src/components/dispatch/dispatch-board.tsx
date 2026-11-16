@@ -41,9 +41,10 @@ export function DispatchBoard({
   useEffect(() => {
     offset.current = initial.now - Date.now();
     let stop = false;
+    const controller = new AbortController();
     const tick = async () => {
       try {
-        const res = await fetch("/api/board", { cache: "no-store" });
+        const res = await fetch("/api/board", { cache: "no-store", signal: controller.signal });
         if (!res.ok) throw new Error(String(res.status));
         const next = (await res.json()) as Board;
         if (stop) return;
@@ -58,6 +59,8 @@ export function DispatchBoard({
     return () => {
       stop = true;
       clearInterval(id);
+      // Cancel a poll still in flight when leaving the page (no error after navigation).
+      controller.abort();
     };
   }, [initial.now]);
   const [clock, setClock] = useState(initial.now);
