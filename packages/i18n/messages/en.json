@@ -356,6 +356,41 @@
       },
       "done": "(done)",
       "todo": "(to do)"
+    },
+    "pricing": {
+      "title": "Pricing and fees",
+      "none": "No prices set for these markets.",
+      "current": "Current prices in {market}",
+      "cols": {
+        "service": "Service",
+        "range": "Driver price range",
+        "fee": "Our fee",
+        "proFee": "Pro fee",
+        "featured": "Featured slot",
+        "since": "Since"
+      },
+      "rangeValue": "{min} to {max}",
+      "historyRow": "{min} to {max} · fee {fee} · from {date}",
+      "off": "Off",
+      "perMonth": "{price}/mo",
+      "scheduledCount": "{count, plural, one {# scheduled change} other {# scheduled changes}}",
+      "history": "{count, plural, one {# earlier price} other {# earlier prices}}",
+      "plansNote": "Pro discount and featured slot price are placeholders until plan pricing is decided.",
+      "change": {
+        "schedule": "Schedule a change",
+        "service": "Service",
+        "min": "Lowest price",
+        "max": "Highest price",
+        "fee": "Our fee",
+        "effective": "Effective from",
+        "submit": "Submit for approval",
+        "pending": "Waiting for approval",
+        "approve": "Approve",
+        "approved": "Approved (applies on the date)",
+        "needsApproval": "Needs a super admin",
+        "invalid": "Fill every amount and a date; the lowest price must not be above the highest.",
+        "to": "to"
+      }
     }
   },
   "emails": {
