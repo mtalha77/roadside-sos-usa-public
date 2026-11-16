@@ -12,6 +12,8 @@ const PUBLIC = [
   /^\/reset-password$/,
   /^\/auth\/callback$/,
   /^\/api\/health$/,
+  // Twilio webhooks: no session; every handler checks the X-Twilio-Signature instead.
+  /^\/api\/twilio\//,
   /^\/robots\.txt$/,
   /^\/(icon|apple-icon|logo\.svg)/,
 ];
