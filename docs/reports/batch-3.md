@@ -277,6 +277,12 @@ Real: ranges, fees and price history from `market_services`. Placeholders: Pro d
 
 - Per market and service: driver price range, our fee, Pro fee, featured slot, effective date; history of earlier prices; schedule a change with an effective date and a super admin approval step.
 
+## RSOS-079: Finance (UI)
+
+Demo data (no billing yet). Placeholder: Stripe reconciliation (needs Stripe).
+
+- Totals for fees, top-ups, credits and subscriptions; ledger explorer with type filter; revenue by market, service and source; disputes queue; CSV export (finance and super admins).
+
 ## BLOCKERS
 
 New in batch 3 (keys):
