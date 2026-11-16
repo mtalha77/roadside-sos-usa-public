@@ -14,5 +14,5 @@ export const SECTIONS = [
 ] as const;
 export type SectionKey = (typeof SECTIONS)[number]["key"];
 
-export const BUILT: ReadonlySet<string> = new Set(["/", "/dispatch"]);
+export const BUILT: ReadonlySet<string> = new Set(["/", "/dispatch", "/requests"]);
 export const builtSections = () => SECTIONS.filter((s) => BUILT.has(s.href));
