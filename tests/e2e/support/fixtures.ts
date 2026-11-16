@@ -65,6 +65,21 @@ export { expect };
 
 /** Fails on any serious or critical axe violation (WCAG 2.2 AA rule set). */
 export async function expectNoA11yViolations(page: Page) {
+  // Measure the settled page: entry animations (fades, slides) blend colours mid-way, and a tap
+  // can leave a hover style behind on touch devices.
+  await page.mouse.move(0, 0).catch(() => undefined);
+  await page
+    .waitForFunction(
+      () =>
+        document
+          .getAnimations()
+          .every(
+            (a) => a.playState !== "running" || a.effect?.getTiming().iterations === Infinity,
+          ),
+      undefined,
+      { timeout: 5000 },
+    )
+    .catch(() => undefined);
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
     .analyze();
