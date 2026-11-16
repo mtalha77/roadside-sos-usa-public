@@ -342,6 +342,16 @@ Real: city page intros (edit, preview and publish through `admin_update_market_i
 | --- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Following the walkthrough, the owner sees a full job from request to review in all three apps | PARTLY BLOCKED: the website and provider portal parts work on staging; the admin part needs admin "Sign in as demo", which is blocked by the admin server key (BLOCKERS, keys). The walkthrough e2e is written and skips until then |
 
+## Performance on staging (mobile Lighthouse, 3 runs each)
+
+| Page                              | LCP            | Total blocking time | Score     | Target                         |
+| --------------------------------- | -------------- | ------------------- | --------- | ------------------------------ |
+| `/get-help`                       | 1.18 to 1.20 s | 54 to 66 ms         | 99 to 100 | LCP under 1.2 s: PASS (barely) |
+| Ad landing page `/lp/houston/tow` | 1.55 to 1.63 s | 12 to 32 ms         | 97 to 99  | LCP under 1.2 s: FAIL          |
+| Home, city page, service page     | 1.17 to 1.44 s | 24 to 65 ms         | 97 to 100 | no LCP target                  |
+
+The landing page's LCP is its first text paint (first contentful paint is also about 1.6 s; server response 100 ms), so render-blocking CSS and the web font decide it. Suggested fix for the next batch: inline the landing page's critical CSS, preload or subset its font, and check its CSS size against the Get Help page.
+
 ## BLOCKERS
 
 New in batch 3 (keys):
