@@ -9,6 +9,7 @@ export const BUILT_ROUTES: ReadonlySet<string> = new Set([
   "/install",
   "/jobs",
   "/wallet",
+  "/services",
 ]);
 
 export const isBuilt = (href: string) => BUILT_ROUTES.has(href);
