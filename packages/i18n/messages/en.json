@@ -1695,6 +1695,30 @@
       "newProvider": "New provider",
       "rating": "{rating} out of 5 from {count} reviews",
       "eta": "Price and arrival time appear here on each quote."
+    },
+    "team": {
+      "title": "Team",
+      "subtitle": "Your operators, their trucks and who takes which job.",
+      "map": "Team map",
+      "online": "Online",
+      "offline": "Offline",
+      "members": "Members",
+      "invite": "Invite by text",
+      "phone": "Mobile number",
+      "name": "Name",
+      "role": "Role",
+      "send": "Send invite",
+      "sent": "Invite sent to",
+      "roles": {
+        "owner": "Owner",
+        "manager": "Manager",
+        "operator": "Operator"
+      },
+      "jobs": "Active jobs",
+      "assign": "Assign to",
+      "noJobs": "No active jobs right now.",
+      "onlyMine": "You see only the jobs assigned to you.",
+      "assigned": "Assigned to"
     }
   }
 }
