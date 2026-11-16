@@ -431,6 +431,24 @@
       },
       "noDisputes": "No hay disputas abiertas.",
       "stripe": "La conciliación con Stripe aparece aquí cuando se conecte Stripe (pagos, cargos y libro cotejados a diario)."
+    },
+    "reviews": {
+      "title": "Reseñas y calidad",
+      "demo": "Datos de demostración: aún no hay tabla de reseñas.",
+      "none": "Aún no hay reseñas.",
+      "queue": "Cola de moderación (más bajas primero)",
+      "approve": "Aprobar",
+      "hide": "Ocultar",
+      "followUp": "Dar seguimiento al conductor",
+      "approved": "Publicada.",
+      "hidden": "Oculta del perfil.",
+      "followed": "Tarea de seguimiento creada.",
+      "stars": "{n} de 5",
+      "low": "Calificación baja",
+      "quality": "Puntaje de calidad de proveedores",
+      "thresholds": "Se marca con calificación menor a {rating} o más de {cancel}% de cancelaciones.",
+      "score": "Puntaje {score}",
+      "flag": "Requiere atención"
     }
   },
   "emails": {

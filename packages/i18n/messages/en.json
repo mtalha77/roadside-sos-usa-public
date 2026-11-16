@@ -431,6 +431,24 @@
       },
       "noDisputes": "No open disputes.",
       "stripe": "Stripe reconciliation appears here once Stripe is connected (payouts, charges and ledger matched daily)."
+    },
+    "reviews": {
+      "title": "Reviews and quality",
+      "demo": "Demo data: there is no reviews table yet.",
+      "none": "No reviews yet.",
+      "queue": "Moderation queue (lowest first)",
+      "approve": "Approve",
+      "hide": "Hide",
+      "followUp": "Follow up with the driver",
+      "approved": "Published.",
+      "hidden": "Hidden from the profile.",
+      "followed": "Follow-up task created.",
+      "stars": "{n} of 5",
+      "low": "Low rating",
+      "quality": "Provider quality scores",
+      "thresholds": "Flagged below a {rating} rating or above {cancel}% cancellations.",
+      "score": "Score {score}",
+      "flag": "Needs attention"
     }
   },
   "emails": {
