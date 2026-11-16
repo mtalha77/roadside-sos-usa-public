@@ -2084,7 +2084,8 @@
       "account": "Account and security",
       "install": "Install the app",
       "onboarding": "Setup",
-      "theme": "Day or night mode"
+      "theme": "Day or night mode",
+      "signOut": "Sign out"
     },
     "shell": {
       "offline": "You're offline. New requests will appear when you're back online.",

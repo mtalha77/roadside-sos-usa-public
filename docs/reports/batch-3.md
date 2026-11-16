@@ -6,42 +6,42 @@
 
 ## Summary
 
-| Ticket                                                                 | Status                                                     | Pull request                                                         |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
-| Demo foundation (part of RSOS-098)                                     | Done                                                       | [#134](https://github.com/mtalha77/roadside-sos-usa-public/pull/134) |
-| RSOS-021 Get Help request flow                                         | Done                                                       | [#135](https://github.com/mtalha77/roadside-sos-usa-public/pull/135) |
-| RSOS-022 + 065 to 069 Request status, quotes, tracking, cancel, review | Done                                                       | [#136](https://github.com/mtalha77/roadside-sos-usa-public/pull/136) |
-| RSOS-029 Ad landing pages                                              | Done                                                       | [#137](https://github.com/mtalha77/roadside-sos-usa-public/pull/137) |
-| RSOS-070 Driver account (UI)                                           | Done                                                       | [#138](https://github.com/mtalha77/roadside-sos-usa-public/pull/138) |
-| RSOS-019b Provider public profile page                                 | Done                                                       | [#139](https://github.com/mtalha77/roadside-sos-usa-public/pull/139) |
-| RSOS-051 Provider app shell                                            | Done                                                       | [#140](https://github.com/mtalha77/roadside-sos-usa-public/pull/140) |
-| RSOS-052 Sign-up and onboarding wizard                                 | Done                                                       | [#141](https://github.com/mtalha77/roadside-sos-usa-public/pull/141) |
-| RSOS-053 Home: go online                                               | Done                                                       | [#142](https://github.com/mtalha77/roadside-sos-usa-public/pull/142) |
-| RSOS-054 Incoming request and one-tap quote                            | Done                                                       | [#143](https://github.com/mtalha77/roadside-sos-usa-public/pull/143) |
-| RSOS-055 Active job flow                                               | Done                                                       | [#145](https://github.com/mtalha77/roadside-sos-usa-public/pull/145) |
-| RSOS-056 Jobs history and detail                                       | Done                                                       | [#144](https://github.com/mtalha77/roadside-sos-usa-public/pull/144) |
-| RSOS-057 Wallet and billing (UI)                                       | Done                                                       | [#146](https://github.com/mtalha77/roadside-sos-usa-public/pull/146) |
-| RSOS-058 Services, prices and service area editor                      | Done                                                       | [#147](https://github.com/mtalha77/roadside-sos-usa-public/pull/147) |
-| RSOS-059 Public profile editor                                         | Done                                                       | [#148](https://github.com/mtalha77/roadside-sos-usa-public/pull/148) |
-| RSOS-060 Team and multi-truck dispatch                                 | Done                                                       | [#151](https://github.com/mtalha77/roadside-sos-usa-public/pull/151) |
-| RSOS-061 Performance insights                                          | Done                                                       | [#152](https://github.com/mtalha77/roadside-sos-usa-public/pull/152) |
-| RSOS-062 and 063 Notifications, help center and chat                   | Done                                                       | [#153](https://github.com/mtalha77/roadside-sos-usa-public/pull/153) |
-| RSOS-093 Account and security in the provider shell                    | Done                                                       | [#154](https://github.com/mtalha77/roadside-sos-usa-public/pull/154) |
-| RSOS-071 Admin shell                                                   | Done                                                       | [#155](https://github.com/mtalha77/roadside-sos-usa-public/pull/155) |
-| RSOS-034 + 072 Live dispatch board                                     | Done; load test not yet run (admin demo sign-in blocked)   | [#156](https://github.com/mtalha77/roadside-sos-usa-public/pull/156) |
-| RSOS-073 Request detail                                                | Done                                                       | [#157](https://github.com/mtalha77/roadside-sos-usa-public/pull/157) |
-| RSOS-074 Phone intake console (UI)                                     | Done; timing test not yet run (admin demo sign-in blocked) | [#158](https://github.com/mtalha77/roadside-sos-usa-public/pull/158) |
-| RSOS-075 Providers and document review                                 | Done                                                       | [#159](https://github.com/mtalha77/roadside-sos-usa-public/pull/159) |
-| RSOS-076 Recruitment pipeline                                          | Done                                                       | [#160](https://github.com/mtalha77/roadside-sos-usa-public/pull/160) |
-| RSOS-077 Markets                                                       | Done                                                       | [#161](https://github.com/mtalha77/roadside-sos-usa-public/pull/161) |
-| RSOS-078 Pricing and fees                                              | Done                                                       | [#162](https://github.com/mtalha77/roadside-sos-usa-public/pull/162) |
-| RSOS-079 Finance (UI)                                                  | Done                                                       | [#163](https://github.com/mtalha77/roadside-sos-usa-public/pull/163) |
-| RSOS-080 Reviews and quality                                           | Done                                                       | [#164](https://github.com/mtalha77/roadside-sos-usa-public/pull/164) |
-| RSOS-081 Analytics                                                     | Done                                                       | [#165](https://github.com/mtalha77/roadside-sos-usa-public/pull/165) |
-| RSOS-082, 083, 084, 094 Content, users, settings, integrations         | Done                                                       | [#166](https://github.com/mtalha77/roadside-sos-usa-public/pull/166) |
-| RSOS-098 Walkthrough page and guide                                    | Done; admin part blocked by admin demo sign-in             | (this PR)                                                            |
+| Ticket                                                                 | Status | Pull request                                                         |
+| ---------------------------------------------------------------------- | ------ | -------------------------------------------------------------------- |
+| Demo foundation (part of RSOS-098)                                     | Done   | [#134](https://github.com/mtalha77/roadside-sos-usa-public/pull/134) |
+| RSOS-021 Get Help request flow                                         | Done   | [#135](https://github.com/mtalha77/roadside-sos-usa-public/pull/135) |
+| RSOS-022 + 065 to 069 Request status, quotes, tracking, cancel, review | Done   | [#136](https://github.com/mtalha77/roadside-sos-usa-public/pull/136) |
+| RSOS-029 Ad landing pages                                              | Done   | [#137](https://github.com/mtalha77/roadside-sos-usa-public/pull/137) |
+| RSOS-070 Driver account (UI)                                           | Done   | [#138](https://github.com/mtalha77/roadside-sos-usa-public/pull/138) |
+| RSOS-019b Provider public profile page                                 | Done   | [#139](https://github.com/mtalha77/roadside-sos-usa-public/pull/139) |
+| RSOS-051 Provider app shell                                            | Done   | [#140](https://github.com/mtalha77/roadside-sos-usa-public/pull/140) |
+| RSOS-052 Sign-up and onboarding wizard                                 | Done   | [#141](https://github.com/mtalha77/roadside-sos-usa-public/pull/141) |
+| RSOS-053 Home: go online                                               | Done   | [#142](https://github.com/mtalha77/roadside-sos-usa-public/pull/142) |
+| RSOS-054 Incoming request and one-tap quote                            | Done   | [#143](https://github.com/mtalha77/roadside-sos-usa-public/pull/143) |
+| RSOS-055 Active job flow                                               | Done   | [#145](https://github.com/mtalha77/roadside-sos-usa-public/pull/145) |
+| RSOS-056 Jobs history and detail                                       | Done   | [#144](https://github.com/mtalha77/roadside-sos-usa-public/pull/144) |
+| RSOS-057 Wallet and billing (UI)                                       | Done   | [#146](https://github.com/mtalha77/roadside-sos-usa-public/pull/146) |
+| RSOS-058 Services, prices and service area editor                      | Done   | [#147](https://github.com/mtalha77/roadside-sos-usa-public/pull/147) |
+| RSOS-059 Public profile editor                                         | Done   | [#148](https://github.com/mtalha77/roadside-sos-usa-public/pull/148) |
+| RSOS-060 Team and multi-truck dispatch                                 | Done   | [#151](https://github.com/mtalha77/roadside-sos-usa-public/pull/151) |
+| RSOS-061 Performance insights                                          | Done   | [#152](https://github.com/mtalha77/roadside-sos-usa-public/pull/152) |
+| RSOS-062 and 063 Notifications, help center and chat                   | Done   | [#153](https://github.com/mtalha77/roadside-sos-usa-public/pull/153) |
+| RSOS-093 Account and security in the provider shell                    | Done   | [#154](https://github.com/mtalha77/roadside-sos-usa-public/pull/154) |
+| RSOS-071 Admin shell                                                   | Done   | [#155](https://github.com/mtalha77/roadside-sos-usa-public/pull/155) |
+| RSOS-034 + 072 Live dispatch board                                     | Done   | [#156](https://github.com/mtalha77/roadside-sos-usa-public/pull/156) |
+| RSOS-073 Request detail                                                | Done   | [#157](https://github.com/mtalha77/roadside-sos-usa-public/pull/157) |
+| RSOS-074 Phone intake console (UI)                                     | Done   | [#158](https://github.com/mtalha77/roadside-sos-usa-public/pull/158) |
+| RSOS-075 Providers and document review                                 | Done   | [#159](https://github.com/mtalha77/roadside-sos-usa-public/pull/159) |
+| RSOS-076 Recruitment pipeline                                          | Done   | [#160](https://github.com/mtalha77/roadside-sos-usa-public/pull/160) |
+| RSOS-077 Markets                                                       | Done   | [#161](https://github.com/mtalha77/roadside-sos-usa-public/pull/161) |
+| RSOS-078 Pricing and fees                                              | Done   | [#162](https://github.com/mtalha77/roadside-sos-usa-public/pull/162) |
+| RSOS-079 Finance (UI)                                                  | Done   | [#163](https://github.com/mtalha77/roadside-sos-usa-public/pull/163) |
+| RSOS-080 Reviews and quality                                           | Done   | [#164](https://github.com/mtalha77/roadside-sos-usa-public/pull/164) |
+| RSOS-081 Analytics                                                     | Done   | [#165](https://github.com/mtalha77/roadside-sos-usa-public/pull/165) |
+| RSOS-082, 083, 084, 094 Content, users, settings, integrations         | Done   | [#166](https://github.com/mtalha77/roadside-sos-usa-public/pull/166) |
+| RSOS-098 Walkthrough page and guide                                    | Done   | (this PR)                                                            |
 
-Admin end-to-end tests are written for every admin screen and run in CI, but they skip while admin "Sign in as demo" is blocked (see BLOCKERS, keys); everything else passes on every pull request.
+Admin end-to-end tests now run on every pull request (they skipped until the admin key was fixed on 2026-11-16).
 
 ## Demo mode foundation
 
@@ -357,6 +357,6 @@ These are CI's own measurements of the release (`lighthouse` job, run on every p
 
 New in batch 3 (keys):
 
-- Admin "Sign in as demo" cannot reach Supabase on previews and staging: the admin project's server key (`SUPABASE_SERVICE_ROLE_KEY` in Vercel project rsos-admin, Preview, plus its staging-branch override) is rejected before it reaches Supabase Auth, so the demo staff account cannot be created. The provider project's key works. `/api/health` on the admin now reports `demoSignIn: "unavailable"` while this is wrong, and the admin end-to-end tests skip with a note instead of failing. Replacing the key was blocked by this session's safety settings.
+- RESOLVED 2026-11-16: admin "Sign in as demo" failed because rsos-admin held a new-format `sb_secret_` key, which Supabase's auth admin API rejected (401). `SUPABASE_SERVICE_ROLE_KEY` is now each project's `service_role` key: rsos-dev for Preview and rsos-staging for the staging branch in rsos-provider and rsos-admin, and rsos-prod for Production in rsos-admin (rsos-web does not use the key and does not hold it). All four demo roles sign in on staging, and Release QA now runs a demo sign-in smoke test that fails instead of skipping.
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

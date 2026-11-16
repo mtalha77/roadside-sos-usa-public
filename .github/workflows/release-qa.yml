@@ -35,6 +35,9 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Install browsers
         run: pnpm --filter @rsos/e2e exec playwright install --with-deps chromium webkit
+      - name: Demo sign-in smoke test on staging (all four demo roles)
+        # Fails (never skips) if "Sign in as demo" is broken, e.g. a wrong SUPABASE_SERVICE_ROLE_KEY.
+        run: pnpm --filter @rsos/e2e exec playwright test specs/demo-sign-in.spec.ts --project=desktop-chrome
       - name: Full regression suite against staging
         run: pnpm --filter @rsos/e2e test:e2e
       - name: Lighthouse budgets on staging
@@ -58,6 +61,7 @@ jobs:
           - [ ] Website home on a real phone (375px) and desktop (1440px), light and dark: https://staging.${DOMAIN}
           - [ ] Provider portal loads and sign-in page works: https://staging-pro.${DOMAIN}
           - [ ] Admin dashboard loads and sign-in page works: https://staging-admin.${DOMAIN}
+          - [ ] "Sign in as demo" works for super admin, dispatcher, provider owner and operator (automated above; spot-check one)
           - [ ] New features from this release work end to end (list them in a comment)
           - [ ] No console errors in the browser
           - [ ] Database migrations in this release applied to staging (Database deploy workflow green)

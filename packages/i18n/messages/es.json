@@ -2084,7 +2084,8 @@
       "account": "Cuenta y seguridad",
       "install": "Instalar la app",
       "onboarding": "Configuración",
-      "theme": "Modo día o noche"
+      "theme": "Modo día o noche",
+      "signOut": "Cerrar sesión"
     },
     "shell": {
       "offline": "Estás sin conexión. Las solicitudes nuevas aparecerán cuando vuelvas a conectarte.",
