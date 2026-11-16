@@ -230,7 +230,8 @@
     "passwordRule": "Use at least 12 characters.",
     "toSignIn": "Go to sign in",
     "account": "Account",
-    "signedOutNotice": "You were signed out from another device. Sign in again."
+    "signedOutNotice": "You were signed out from another device. Sign in again.",
+    "moreDevices": "{count, plural, one {# more signed-in device} other {# more signed-in devices}} not shown."
   },
   "site": {
     "nav": {

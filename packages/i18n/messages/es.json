@@ -230,7 +230,8 @@
     "passwordRule": "Usa al menos 12 caracteres.",
     "toSignIn": "Ir a iniciar sesión",
     "account": "Cuenta",
-    "signedOutNotice": "Se cerró tu sesión desde otro dispositivo. Inicia sesión de nuevo."
+    "signedOutNotice": "Se cerró tu sesión desde otro dispositivo. Inicia sesión de nuevo.",
+    "moreDevices": "{count, plural, one {# dispositivo más con sesión} other {# dispositivos más con sesión}} sin mostrar."
   },
   "site": {
     "nav": {
