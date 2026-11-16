@@ -197,6 +197,16 @@ Demo data (settings are kept on the device; dispatch replies are simulated).
 
 - Alert channels (push, text, voice backup), sound choice with a test alert (sound and vibration), quiet hours; searchable help articles (plain form, works without JavaScript); chat with dispatch linked to a job.
 
+## RSOS-093: Account and security inside the provider shell
+
+Real data (batch 2 account and security).
+
+- The page now uses the portal's page layout and heading, sits inside the shell with the navigation, and passes axe in light and dark at phone and desktop widths with no horizontal scroll (new e2e with screenshots in both themes).
+
+| #   | Criterion                                 | Result                                                                                                                                  |
+| --- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Fits the shell and passes the quality bar | PASS: e2e on iPhone, Pixel and desktop: navigation present, zero serious or critical axe issues in light and dark, no horizontal scroll |
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
