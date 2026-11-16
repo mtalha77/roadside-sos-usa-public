@@ -1551,6 +1551,40 @@
         "expired": "Vencido"
       },
       "activeFlow": "Abrir el flujo del trabajo"
+    },
+    "active": {
+      "title": "Trabajo en curso",
+      "steps": {
+        "start": "Empezar a manejar",
+        "arrived": "Ya llegué",
+        "working": "Empezar el trabajo",
+        "completed": "Trabajo terminado"
+      },
+      "navigate": "Navegar con",
+      "maps": {
+        "google": "Google Maps",
+        "apple": "Apple Maps",
+        "waze": "Waze"
+      },
+      "call": "Llamar al conductor",
+      "text": "Enviar texto al conductor",
+      "masked": "Las llamadas y textos usan un número privado.",
+      "photosBefore": "Fotos de antes",
+      "photosAfter": "Fotos de después",
+      "addPhoto": "Agregar foto",
+      "issue": "Reportar un problema",
+      "cancel": "Cancelar trabajo",
+      "cancelReason": "Motivo",
+      "cancelReasons": {
+        "driver_no_show": "El conductor no está",
+        "vehicle_not_found": "No encuentro el vehículo",
+        "unsafe": "Lugar inseguro",
+        "equipment": "Problema de equipo"
+      },
+      "assign": "Asignar a",
+      "done": "Trabajo terminado. El conductor ya puede calificarte.",
+      "addressLine": "Dirección: {address}",
+      "photoAlt": "Foto {n}"
     }
   }
 }
