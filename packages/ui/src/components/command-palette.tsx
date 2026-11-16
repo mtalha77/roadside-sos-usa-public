@@ -21,6 +21,8 @@ export type CommandPaletteProps = {
   label?: string;
   placeholder?: string;
   emptyText?: string;
+  /** Called with the typed text, e.g. to offer "find request by code" for whatever was typed. */
+  onQueryChange?: (query: string) => void;
 };
 
 /** Cmd+K / Ctrl+K command palette for the admin dashboard. */
@@ -31,6 +33,7 @@ export function CommandPalette({
   label = "Command palette",
   placeholder = "Type a command or search",
   emptyText = "No results",
+  onQueryChange,
 }: CommandPaletteProps) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -57,6 +60,7 @@ export function CommandPalette({
             <Command.Input
               autoFocus
               placeholder={placeholder}
+              onValueChange={onQueryChange}
               className="min-h-14 w-full border-b bg-transparent px-5 text-lg outline-none placeholder:text-muted-foreground"
             />
             <Command.List className="max-h-[60vh] overflow-y-auto p-2">

@@ -20,7 +20,67 @@
     "label": "Panel de administración",
     "headline": "Administra todos los mercados desde un solo lugar.",
     "body": "Lanza mercados, verifica proveedores y gestiona precios, tarifas y planes.",
-    "cta": "Iniciar sesión"
+    "cta": "Iniciar sesión",
+    "sections": {
+      "dispatch": "Despacho",
+      "requests": "Solicitudes",
+      "providers": "Proveedores",
+      "recruitment": "Reclutamiento",
+      "markets": "Mercados",
+      "pricing": "Precios",
+      "finance": "Finanzas",
+      "reviews": "Reseñas",
+      "analytics": "Analítica",
+      "content": "Contenido",
+      "settings": "Ajustes",
+      "walkthrough": "Recorrido"
+    },
+    "shell": {
+      "nav": "Administración",
+      "navMobile": "Secciones",
+      "skip": "Saltar al contenido",
+      "overview": "Resumen",
+      "account": "Cuenta y seguridad",
+      "collapse": "Contraer barra lateral",
+      "search": "Buscar o ir a…",
+      "palette": "Paleta de comandos",
+      "paletteHint": "Escribe una página, un código de solicitud, un teléfono o un proveedor",
+      "empty": "Sin resultados",
+      "pages": "Páginas",
+      "find": "Buscar",
+      "findRequest": "Buscar solicitud",
+      "findProvider": "Buscar proveedor",
+      "actions": "Acciones",
+      "toggleTheme": "Cambiar a claro u oscuro",
+      "shortcuts": "Atajos de teclado",
+      "close": "Cerrar",
+      "allMarkets": "Todos los mercados",
+      "marketsCount": "mercados",
+      "marketLabel": "Mercados a la vista"
+    },
+    "demoControls": {
+      "title": "Controles de demo",
+      "hint": "Controla las solicitudes simuladas en las pantallas de administración. Los datos reales nunca cambian.",
+      "close": "Cerrar",
+      "paused": "Escenario en pausa",
+      "running": "Escenario en tiempo real",
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "skip": "Adelantar 5 minutos",
+      "reset": "Volver a ahora"
+    },
+    "overview": {
+      "markets": "Mercados a la vista",
+      "sections": "Secciones",
+      "shortcut": "Atajo: {keys}",
+      "tip": "Pulsa ⌘K (Ctrl K) para buscar en cualquier lugar y ? para ver los atajos.",
+      "status": {
+        "draft": "Borrador",
+        "test": "En prueba",
+        "active": "Activo",
+        "paused": "En pausa"
+      }
+    }
   },
   "emails": {
     "welcome": {

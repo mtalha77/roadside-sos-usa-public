@@ -20,7 +20,67 @@
     "label": "Admin dashboard",
     "headline": "Run every market from one place.",
     "body": "Launch markets, verify providers, and manage pricing, fees and plans.",
-    "cta": "Sign in"
+    "cta": "Sign in",
+    "sections": {
+      "dispatch": "Dispatch",
+      "requests": "Requests",
+      "providers": "Providers",
+      "recruitment": "Recruitment",
+      "markets": "Markets",
+      "pricing": "Pricing",
+      "finance": "Finance",
+      "reviews": "Reviews",
+      "analytics": "Analytics",
+      "content": "Content",
+      "settings": "Settings",
+      "walkthrough": "Walkthrough"
+    },
+    "shell": {
+      "nav": "Admin",
+      "navMobile": "Sections",
+      "skip": "Skip to content",
+      "overview": "Overview",
+      "account": "Account and security",
+      "collapse": "Collapse sidebar",
+      "search": "Search or jump to…",
+      "palette": "Command palette",
+      "paletteHint": "Type a page, a request code, a phone or a provider",
+      "empty": "Nothing found",
+      "pages": "Pages",
+      "find": "Find",
+      "findRequest": "Find request",
+      "findProvider": "Find provider",
+      "actions": "Actions",
+      "toggleTheme": "Switch light or dark",
+      "shortcuts": "Keyboard shortcuts",
+      "close": "Close",
+      "allMarkets": "All markets",
+      "marketsCount": "markets",
+      "marketLabel": "Markets in view"
+    },
+    "demoControls": {
+      "title": "Demo controls",
+      "hint": "Control the simulated requests on admin screens. Real data is never changed.",
+      "close": "Close",
+      "paused": "Scenario paused",
+      "running": "Scenario running in real time",
+      "pause": "Pause",
+      "resume": "Resume",
+      "skip": "Skip ahead 5 minutes",
+      "reset": "Reset to now"
+    },
+    "overview": {
+      "markets": "Markets in view",
+      "sections": "Sections",
+      "shortcut": "Shortcut: {keys}",
+      "tip": "Press ⌘K (Ctrl K) to search anywhere, ? for all shortcuts.",
+      "status": {
+        "draft": "Draft",
+        "test": "Testing",
+        "active": "Live",
+        "paused": "Paused"
+      }
+    }
   },
   "emails": {
     "welcome": {
