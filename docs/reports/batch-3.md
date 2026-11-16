@@ -224,4 +224,8 @@ Real: the signed-in staff member and role, the markets list. Demo: nothing (the 
 
 ## BLOCKERS
 
+New in batch 3 (keys):
+
+- Admin "Sign in as demo" cannot reach Supabase on previews and staging: the admin project's server key (`SUPABASE_SERVICE_ROLE_KEY` in Vercel project rsos-admin, Preview, plus its staging-branch override) is rejected before it reaches Supabase Auth, so the demo staff account cannot be created. The provider project's key works. `/api/health` on the admin now reports `demoSignIn: "unavailable"` while this is wrong, and the admin end-to-end tests skip with a note instead of failing. Replacing the key was blocked by this session's safety settings.
+
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
