@@ -286,6 +286,40 @@
         "note": "Nota",
         "addNote": "Agregar nota"
       }
+    },
+    "recruitment": {
+      "title": "Reclutamiento",
+      "coverage": "Cobertura",
+      "coverageOf": "{live} de {target} proveedores activos",
+      "stages": {
+        "lead": "Prospecto",
+        "contacted": "Contactado",
+        "interested": "Interesado",
+        "onboarding": "Incorporación",
+        "live": "Activo",
+        "lost": "Perdido"
+      },
+      "board": "Tablero",
+      "table": "Tabla",
+      "view": "Vista",
+      "company": "Empresa",
+      "contact": "Contacto",
+      "market": "Mercado",
+      "stage": "Etapa",
+      "trucks": "Grúas",
+      "source": "Origen",
+      "task": "Tarea",
+      "followUp": "Dar seguimiento",
+      "remind": "Recordarme mañana",
+      "reminded": "Recordatorio para",
+      "import": "Importar prospectos (CSV)",
+      "importHint": "Columnas: company, contact, phone, market, trucks",
+      "imported": "Prospectos importados: {count}.",
+      "importError": "El archivo necesita una columna \"company\".",
+      "demo": "Demo",
+      "real": "Real",
+      "moveTo": "Mover",
+      "empty": "Aún no hay prospectos."
     }
   },
   "emails": {

@@ -286,6 +286,40 @@
         "note": "Note",
         "addNote": "Add note"
       }
+    },
+    "recruitment": {
+      "title": "Recruitment",
+      "coverage": "Coverage",
+      "coverageOf": "{live} of {target} live providers",
+      "stages": {
+        "lead": "Lead",
+        "contacted": "Contacted",
+        "interested": "Interested",
+        "onboarding": "Onboarding",
+        "live": "Live",
+        "lost": "Lost"
+      },
+      "board": "Board",
+      "table": "Table",
+      "view": "View",
+      "company": "Company",
+      "contact": "Contact",
+      "market": "Market",
+      "stage": "Stage",
+      "trucks": "Trucks",
+      "source": "Source",
+      "task": "Task",
+      "followUp": "Follow up",
+      "remind": "Remind me tomorrow",
+      "reminded": "Reminder set for",
+      "import": "Import leads (CSV)",
+      "importHint": "Columns: company, contact, phone, market, trucks",
+      "imported": "Leads imported: {count}.",
+      "importError": "The file needs a \"company\" column.",
+      "demo": "Demo",
+      "real": "Real",
+      "moveTo": "Move",
+      "empty": "No leads yet."
     }
   },
   "emails": {
