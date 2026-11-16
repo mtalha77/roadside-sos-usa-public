@@ -39,7 +39,12 @@ export default async function PortalLayout({ children }: { children: ReactNode }
       >
         {tc("skipToContent")}
       </a>
-      <PortalNav labels={labels} company={ctx.company} canSeeMoney={ctx.canSeeMoney} />
+      <PortalNav
+        labels={labels}
+        company={ctx.company}
+        companyLogo={ctx.companyLogo}
+        canSeeMoney={ctx.canSeeMoney}
+      />
       <div className="min-w-0 flex-1 pb-24 md:pb-8">{children}</div>
       <AppRuntime
         offlineLabel={t("shell.offline")}

@@ -80,7 +80,10 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
   const order = stepsFor(draft);
   const n = order.indexOf(step) + 1;
   const back = previousStep(draft, step);
-  const backHref = back ? `/get-help?step=${back}` : null;
+  // Every step has a Back: the first one goes back home. Answers live in the saved draft, so
+  // Back (and the browser's back button) shows each step filled in.
+  const backHref = back ? `/get-help?step=${back}` : "/";
+  const savedFix = draft.lat !== undefined && draft.lng !== undefined && !draft.approx;
   const error = sp.error ?? null;
   const market =
     markets.find(
@@ -103,8 +106,16 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
     ) : (
       <form method="post" action="/api/get-help" className="flex flex-col gap-5">
         {hidden("step", "location")}
-        <input type="hidden" name="lat" defaultValue="" />
-        <input type="hidden" name="lng" defaultValue="" />
+        <input type="hidden" name="lat" defaultValue={savedFix ? String(draft.lat) : ""} />
+        <input type="hidden" name="lng" defaultValue={savedFix ? String(draft.lng) : ""} />
+        {savedFix ? hidden("fix", "saved") : null}
+        {savedFix ? (
+          <p className="rounded-xl border bg-muted/40 p-3 text-sm font-medium">
+            {draft.address
+              ? t("location.saved", { place: draft.address })
+              : t("location.savedNoPlace")}
+          </p>
+        ) : null}
         {hidden(
           "service",
           sp.service && /^[a-z-]{2,40}$/.test(sp.service) ? sp.service : undefined,

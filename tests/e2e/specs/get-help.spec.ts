@@ -92,6 +92,62 @@ test.describe("get help flow", () => {
   });
 });
 
+// Owner feedback (RSOS-022 polish): Back on every step, and the browser's back button keeps answers.
+test.describe("get help: going back", () => {
+  test.skip(!web, "No website URL");
+
+  test("every step has a working Back, and browser back keeps the answers", async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.goto(url("/get-help"));
+    // Step 1 goes back home.
+    await expect(page.getByRole("link", { name: "Back" })).toHaveAttribute("href", "/");
+    await page.getByLabel("Street address or cross streets").fill("700 Market St");
+    await page.getByLabel("City").selectOption({ index: 1 });
+    await page.getByRole("button", { name: "Continue" }).click();
+
+    await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
+    await page.locator("label").filter({ hasText: "Flat tire" }).click();
+    await page.getByRole("radio", { name: "Yes" }).check();
+    await page.getByRole("button", { name: "Continue" }).click();
+
+    await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
+    await page.getByLabel("Make").fill("Honda");
+    await page.getByLabel("Model").fill("Civic");
+    await page.getByRole("button", { name: "Continue" }).click();
+
+    await expect(page.getByRole("heading", { name: "Are you safe?" })).toBeVisible();
+    await page
+      .getByRole("group", { name: /safe place/ })
+      .getByRole("radio", { name: "Yes" })
+      .check();
+    await page
+      .getByRole("group", { name: /highway/ })
+      .getByRole("radio", { name: "No" })
+      .check();
+    await page.getByRole("button", { name: "Continue" }).click();
+    await expect(page.getByRole("heading", { name: /reach you/ })).toBeVisible();
+
+    // The browser's back button: previous step, answers kept.
+    await page.goBack();
+    await expect(page.getByRole("heading", { name: "Are you safe?" })).toBeVisible();
+    await expect(
+      page.getByRole("group", { name: /safe place/ }).getByRole("radio", { name: "Yes" }),
+    ).toBeChecked();
+    await page.goBack();
+    await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
+    await expect(page.getByLabel("Make")).toHaveValue("Honda");
+
+    // The in-page Back link, step by step to the start.
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
+    await expect(page.getByRole("radio", { name: "Yes" })).toBeChecked();
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page.getByLabel("Street address or cross streets")).toHaveValue("700 Market St");
+    await page.getByRole("link", { name: "Back" }).click();
+    await page.waitForURL((u) => u.pathname === "/");
+  });
+});
+
 // RSOS-029: ad landing pages.
 test.describe("ad landing pages", () => {
   test.skip(!web, "No website URL");

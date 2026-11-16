@@ -3,6 +3,7 @@ import { Button } from "@rsos/ui/button";
 import { EmptyState } from "@rsos/ui/empty-state";
 import { inputClass } from "@rsos/ui/input";
 import { LiteMap } from "@rsos/ui/lite-map";
+import { ProviderLogo } from "@rsos/ui/provider-logo";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { DocumentReview } from "@/components/providers/document-review";
@@ -172,8 +173,9 @@ export default async function ProvidersPage({
                         <Link
                           href={`/providers/${encodeURIComponent(r.id)}`}
                           prefetch={false}
-                          className="inline-flex min-h-12 items-center underline-offset-2 hover:underline"
+                          className="inline-flex min-h-12 items-center gap-2 underline-offset-2 hover:underline"
                         >
+                          {r.logo ? <ProviderLogo logo={r.logo} size={28} /> : null}
                           {r.name}
                         </Link>{" "}
                         {r.demo ? null : <Badge tone="info">{t("real")}</Badge>}

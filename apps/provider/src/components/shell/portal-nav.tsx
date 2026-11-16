@@ -1,5 +1,6 @@
 "use client";
 
+import { ProviderLogo, type ProviderLogoData } from "@rsos/ui/provider-logo";
 import {
   Bell,
   Briefcase,
@@ -50,10 +51,12 @@ const isActive = (path: string, href: string) =>
 export function PortalNav({
   labels,
   company,
+  companyLogo,
   canSeeMoney,
 }: {
   labels: NavLabels;
   company: string;
+  companyLogo?: ProviderLogoData | null;
   canSeeMoney: boolean;
 }) {
   const path = usePathname();
@@ -82,7 +85,10 @@ export function PortalNav({
         aria-label={labels.label}
         className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-1 border-r bg-surface p-3 md:flex"
       >
-        <p className="mb-3 truncate px-3 pt-2 font-semibold">{company}</p>
+        <p className="mb-3 flex items-center gap-2 px-3 pt-2 font-semibold">
+          {companyLogo ? <ProviderLogo logo={companyLogo} size={32} /> : null}
+          <span className="truncate">{company}</span>
+        </p>
         {side.map((t) => (
           <Link
             key={t.href}

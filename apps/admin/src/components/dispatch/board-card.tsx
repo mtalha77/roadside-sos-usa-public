@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@rsos/ui/dropdown-menu";
+import { ProviderLogo } from "@rsos/ui/provider-logo";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -114,7 +115,12 @@ export function BoardCardView({
             {labels.quotes?.replace("{count}", String(c.quotes))}
           </span>
         ) : null}
-        {c.provider ? <span className="truncate text-muted-foreground">{c.provider}</span> : null}
+        {c.provider ? (
+          <span className="inline-flex min-w-0 items-center gap-1.5 text-muted-foreground">
+            {c.providerLogo ? <ProviderLogo logo={c.providerLogo} size={20} /> : null}
+            <span className="truncate">{c.provider}</span>
+          </span>
+        ) : null}
         {waiting ? (
           <span
             role="timer"

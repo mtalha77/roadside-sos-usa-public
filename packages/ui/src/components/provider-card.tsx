@@ -2,6 +2,7 @@ import { BadgeCheck, ShieldCheck, Star } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "../lib/cn";
 import { Avatar } from "./avatar";
+import { ProviderLogo, type ProviderLogoData } from "./provider-logo";
 
 export type ProviderBadgeLabels = {
   insured: string;
@@ -20,6 +21,10 @@ export const defaultProviderBadgeLabels: ProviderBadgeLabels = {
 export type ProviderSummary = {
   name: string;
   photoUrl?: string | null;
+  /** Original monogram logo; shown instead of the initials avatar when present. */
+  logo?: ProviderLogoData | null;
+  yearsInBusiness?: number | null;
+  trucks?: number | null;
   rating: number | null;
   reviewCount: number;
   insured: boolean;
@@ -82,10 +87,12 @@ export function ProviderCard({
   className?: string;
 }) {
   return (
-    <div
-      className={cn("flex items-center gap-4 rounded-2xl border bg-card p-4 shadow-sm", className)}
-    >
-      <Avatar name={provider.name} src={provider.photoUrl} size="lg" />
+    <div className={cn("flex items-center gap-4 rounded-2xl border bg-card p-4", className)}>
+      {provider.logo ? (
+        <ProviderLogo logo={provider.logo} size={56} />
+      ) : (
+        <Avatar name={provider.name} src={provider.photoUrl} size="lg" />
+      )}
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <p className="truncate text-lg font-semibold">{provider.name}</p>
         <ProviderBadgeRow provider={provider} labels={labels} />

@@ -1,4 +1,10 @@
-import { demoColors, demoMarkets, demoPeople, demoVehicles } from "@rsos/config/demo-fixtures";
+import {
+  type DemoMarketFixture,
+  demoColors,
+  demoMarkets,
+  demoPeople,
+  demoVehicles,
+} from "@rsos/config/demo-fixtures";
 
 /** Seeded pseudo-random numbers (mulberry32): same seed, same demo, in every app. */
 export function rng(seed: number) {
@@ -43,6 +49,9 @@ export type DemoProvider = {
   reviews: number;
   home: LatLng;
   marketSlug: string;
+  logo: DemoMarketFixture["providers"][number]["logo"];
+  years: number;
+  payments: DemoMarketFixture["providers"][number]["payments"];
 };
 export type DemoQuote = {
   id: string;
@@ -199,7 +208,27 @@ export type DemoPick = { quoteId: string; atSec: number };
  * Where a demo request is at `now` (ms). Pure: every app computes the same answer. `pick` is the
  * driver's own choice (which quote, and when); without it the fastest quote is picked at 190 s.
  */
-export function demoState(req: DemoRequest, now: number, pick?: DemoPick | null): DemoState {
+export type DemoStateOptions = {
+  /** Shorter timing for the driver's own demo (see DRIVER_DEMO_TIMING). */
+  timing?: Partial<typeof TIMING>;
+  /**
+   * The driver drives the demo: nothing is picked for them (it waits on the quotes until they
+   * choose) and the job always completes (no simulated cancel or expiry).
+   */
+  driverControlled?: boolean;
+};
+
+/** The driver's demo on the status page: about 20 s on the way and 20 s on site. */
+export const DRIVER_DEMO_TIMING = { travelSec: 20, workSec: 20 } as const;
+
+export function demoState(
+  req: DemoRequest,
+  now: number,
+  pick?: DemoPick | null,
+  opts: DemoStateOptions = {},
+): DemoState {
+  const T = { ...TIMING, ...opts.timing };
+  if (opts.driverControlled) req = { ...req, outcome: "completed" };
   const t = Math.max(0, (now - req.createdAt) / 1000);
   const arrived = req.quotes.filter((q) => q.arrivesAtSec <= t);
   const timeline: DemoState["timeline"] = [{ stage: "searching", atSec: 0 }];
@@ -214,25 +243,25 @@ export function demoState(req: DemoRequest, now: number, pick?: DemoPick | null)
     etaMinutes: null,
   };
   if (req.outcome === "expired") {
-    if (t >= TIMING.expireAt)
+    if (t >= T.expireAt)
       return {
         ...base,
         stage: "expired",
-        timeline: [...timeline, { stage: "expired", atSec: TIMING.expireAt }],
+        timeline: [...timeline, { stage: "expired", atSec: T.expireAt }],
       };
     return { ...base, stage: "searching", timeline };
   }
-  if (req.outcome === "cancelled" && t >= TIMING.cancelAt) {
+  if (req.outcome === "cancelled" && t >= T.cancelAt) {
     return {
       ...base,
       stage: "cancelled",
       timeline: [
-        ...timeline.filter((x) => x.atSec <= TIMING.cancelAt),
-        { stage: "cancelled", atSec: TIMING.cancelAt },
+        ...timeline.filter((x) => x.atSec <= T.cancelAt),
+        { stage: "cancelled", atSec: T.cancelAt },
       ],
     };
   }
-  const pickAt = pick ? pick.atSec : TIMING.pickAt;
+  const pickAt = pick ? pick.atSec : opts.driverControlled ? Infinity : T.pickAt;
   if (t < pickAt)
     return {
       ...base,
@@ -243,10 +272,10 @@ export function demoState(req: DemoRequest, now: number, pick?: DemoPick | null)
     req.quotes.find((q) => q.id === pick?.quoteId) ??
     [...req.quotes].sort((a, b) => a.etaMinutes - b.etaMinutes)[0]!;
   const drive = pickAt + 10;
-  const arrive = drive + TIMING.travelSec;
-  const done = arrive + TIMING.workSec;
+  const arrive = drive + T.travelSec;
+  const done = arrive + T.workSec;
   timeline.push({ stage: "picked", atSec: pickAt });
-  const progress = Math.min(1, Math.max(0, (t - drive) / TIMING.travelSec));
+  const progress = Math.min(1, Math.max(0, (t - drive) / T.travelSec));
   const truck = {
     lat: picked.provider.home.lat + (req.location.lat - picked.provider.home.lat) * progress,
     lng: picked.provider.home.lng + (req.location.lng - picked.provider.home.lng) * progress,
@@ -265,6 +294,47 @@ export function demoState(req: DemoRequest, now: number, pick?: DemoPick | null)
   if (t < done) return { ...common, stage: "on_site", etaMinutes: 0, timeline };
   timeline.push({ stage: "completed", atSec: done });
   return { ...common, stage: "completed", etaMinutes: 0, timeline };
+}
+
+/** Stages the driver's stepper shows, in order. */
+export const DRIVER_STAGES = [
+  "searching",
+  "quoting",
+  "picked",
+  "en_route",
+  "on_site",
+  "completed",
+] as const satisfies readonly DemoStage[];
+
+/**
+ * When each stage starts (seconds after the request), for the driver's demo: going back to a
+ * stage or skipping ahead sets the demo clock to its start. Stages after "quoting" need a pick.
+ */
+export function driverStageStarts(
+  req: DemoRequest,
+  pick: DemoPick | null,
+  timing: Partial<typeof TIMING> = DRIVER_DEMO_TIMING,
+): Record<(typeof DRIVER_STAGES)[number], number | null> {
+  const T = { ...TIMING, ...timing };
+  const first = req.quotes[0]?.arrivesAtSec ?? null;
+  if (!pick)
+    return {
+      searching: 0,
+      quoting: first,
+      picked: null,
+      en_route: null,
+      on_site: null,
+      completed: null,
+    };
+  const drive = pick.atSec + 10;
+  return {
+    searching: 0,
+    quoting: first,
+    picked: pick.atSec,
+    en_route: drive,
+    on_site: drive + T.travelSec,
+    completed: drive + T.travelSec + T.workSec,
+  };
 }
 
 /** Lifetime of a demo request in the live stream (seconds). */
