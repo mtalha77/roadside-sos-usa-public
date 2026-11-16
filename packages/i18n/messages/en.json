@@ -1585,6 +1585,51 @@
       "done": "Job completed. The driver can now rate you.",
       "addressLine": "Address: {address}",
       "photoAlt": "Photo {n}"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "balance": "Balance",
+      "noWallet": "No wallet yet",
+      "statement": "Download statement",
+      "topUp": "Top up",
+      "topUpTitle": "Add money to your wallet",
+      "custom": "Other amount",
+      "stripe": "Card payments open once billing is connected. Nothing is charged yet.",
+      "continue": "Continue to payment",
+      "close": "Close",
+      "auto": "Auto-recharge",
+      "autoHint": "Top up automatically so you never miss a job.",
+      "below": "When balance falls below",
+      "amount": "Add this amount",
+      "saved": "Saved on this device.",
+      "methods": "Payment methods",
+      "demoCard": "Demo card ending 0000 (demo)",
+      "noMethods": "No payment method yet.",
+      "transactions": "Transactions",
+      "noTxns": "No transactions yet.",
+      "kinds": {
+        "fee": "Job fee",
+        "top_up": "Top-up",
+        "credit": "Credit",
+        "plan": "Plan"
+      },
+      "forJob": "Job {code}",
+      "disputeHint": "To dispute a fee, open the job and choose Dispute the fee.",
+      "plans": "Plans",
+      "plan": {
+        "basic": "Basic",
+        "pro": "Pro",
+        "featured": "Featured"
+      },
+      "perMonth": "{price} a month",
+      "free": "Free",
+      "discount": "{pct}% off job fees",
+      "standardFee": "Standard job fees",
+      "priority": "Priority on new requests",
+      "featured": "Featured spot on city pages",
+      "current": "Your plan",
+      "soon": "Coming soon",
+      "ownersOnly": "Only owners and managers can see the wallet."
     }
   }
 }

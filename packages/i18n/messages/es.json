@@ -1585,6 +1585,51 @@
       "done": "Trabajo terminado. El conductor ya puede calificarte.",
       "addressLine": "Dirección: {address}",
       "photoAlt": "Foto {n}"
+    },
+    "wallet": {
+      "title": "Billetera",
+      "balance": "Saldo",
+      "noWallet": "Aún no hay billetera",
+      "statement": "Descargar estado de cuenta",
+      "topUp": "Recargar",
+      "topUpTitle": "Agrega dinero a tu billetera",
+      "custom": "Otro monto",
+      "stripe": "Los pagos con tarjeta se abren cuando se conecte la facturación. Aún no se cobra nada.",
+      "continue": "Continuar al pago",
+      "close": "Cerrar",
+      "auto": "Recarga automática",
+      "autoHint": "Recarga automáticamente para no perder trabajos.",
+      "below": "Cuando el saldo baje de",
+      "amount": "Agregar este monto",
+      "saved": "Guardado en este dispositivo.",
+      "methods": "Métodos de pago",
+      "demoCard": "Tarjeta de demostración terminada en 0000 (demo)",
+      "noMethods": "Aún no hay método de pago.",
+      "transactions": "Movimientos",
+      "noTxns": "Aún no hay movimientos.",
+      "kinds": {
+        "fee": "Cargo por trabajo",
+        "top_up": "Recarga",
+        "credit": "Crédito",
+        "plan": "Plan"
+      },
+      "forJob": "Trabajo {code}",
+      "disputeHint": "Para disputar un cargo, abre el trabajo y elige Disputar el cargo.",
+      "plans": "Planes",
+      "plan": {
+        "basic": "Básico",
+        "pro": "Pro",
+        "featured": "Destacado"
+      },
+      "perMonth": "{price} al mes",
+      "free": "Gratis",
+      "discount": "{pct}% menos en cargos por trabajo",
+      "standardFee": "Cargos estándar por trabajo",
+      "priority": "Prioridad en solicitudes nuevas",
+      "featured": "Lugar destacado en páginas de ciudad",
+      "current": "Tu plan",
+      "soon": "Próximamente",
+      "ownersOnly": "Solo los dueños y gerentes pueden ver la billetera."
     }
   }
 }
