@@ -216,6 +216,76 @@
       "created": "Request {code} created.",
       "required": "Fill in the required fields.",
       "timer": "Time from answering: {time}."
+    },
+    "providers": {
+      "title": "Providers",
+      "views": "Views",
+      "tabs": {
+        "table": "Table",
+        "map": "Map",
+        "review": "Review queue"
+      },
+      "search": "Company name",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "filter": "Filter",
+      "none": "No providers match.",
+      "queueEmpty": "No documents waiting for review.",
+      "name": "Company",
+      "market": "Market",
+      "trucks": "Trucks",
+      "rating": "Rating",
+      "real": "Real",
+      "demo": "Demo",
+      "statuses": {
+        "applied": "Applied",
+        "onboarding": "Onboarding",
+        "active": "Active",
+        "paused": "Paused",
+        "suspended": "Suspended",
+        "closed": "Closed"
+      },
+      "docs": {
+        "insurance": "Insurance certificate",
+        "license": "Towing license",
+        "w9": "W-9"
+      },
+      "states": {
+        "ok": "Approved",
+        "pending": "Waiting for review",
+        "expiring": "Expires soon"
+      },
+      "approve": "Approve",
+      "changes": "Request changes",
+      "approved": "Approved.",
+      "requested": "Changes requested:",
+      "expires": "Expires",
+      "preview": "Document preview",
+      "reason": "What needs to change?",
+      "jobsWon": "Jobs won (60 days)",
+      "feesPaid": "Fees paid (60 days)",
+      "team": "Team and trucks",
+      "roles": {
+        "owner": "Owner",
+        "manager": "Manager",
+        "operator": "Operator"
+      },
+      "area": "Service area",
+      "documents": "Documents",
+      "recent": "Recent jobs and reviews",
+      "realPending": "Detailed performance, wallet and documents for real companies arrive with the backend batch.",
+      "act": {
+        "actions": "Actions",
+        "approve": "Approve",
+        "pause": "Pause",
+        "suspend": "Suspend",
+        "credit": "Credit",
+        "message": "Message",
+        "viewAs": "View as provider",
+        "done": "recorded (simulated)",
+        "note": "Note",
+        "addNote": "Add note"
+      }
     }
   },
   "emails": {

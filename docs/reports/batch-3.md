@@ -253,6 +253,12 @@ Demo: the incoming call, caller history, the created request (simulated until ph
 | --- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Phone request created in under 90 seconds | WRITTEN, NOT YET RUN: the e2e answers a demo call, fills the form and creates the request, asserting under 90 s; it skips until admin demo sign-in works (BLOCKERS, keys) |
 
+## RSOS-075: Providers and document review
+
+Real: provider companies (name, status, markets). Demo: the demo directory, trucks, ratings, documents, performance, team and actions (simulated, logged on the page).
+
+- Table with search and status filter, map view, review queue with each company's documents side by side (approve or request changes with a reason), provider detail with stats, team, area, documents, recent jobs and reviews, and actions (approve, pause, suspend, credit, message, view as provider) plus notes.
+
 ## BLOCKERS
 
 New in batch 3 (keys):
