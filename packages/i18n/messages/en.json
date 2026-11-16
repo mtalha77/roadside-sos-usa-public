@@ -80,6 +80,44 @@
         "active": "Live",
         "paused": "Paused"
       }
+    },
+    "dispatch": {
+      "title": "Live dispatch",
+      "map": "Live map of requests and trucks",
+      "supply": "Supply by area",
+      "gap": "No one online",
+      "online": "online",
+      "lanes": {
+        "new": "New",
+        "quoting": "Quoting",
+        "picked": "Picked",
+        "en_route": "En route",
+        "on_site": "On site"
+      },
+      "demo": "Demo",
+      "real": "Real",
+      "quotes": "{count} quotes",
+      "waiting": "No quote",
+      "call": "Call driver or provider",
+      "push": "Push to more providers",
+      "assign": "Assign manually",
+      "note": "Add a note",
+      "cancel": "Cancel request",
+      "open": "Open",
+      "empty": "Supply appears here once providers are online.",
+      "count": "{count} open requests",
+      "live": "Live, updates every 2 seconds",
+      "paused": "Paused",
+      "pushed": "Sent to more providers (simulated).",
+      "noted": "Note saved.",
+      "cancelled": "Request cancelled.",
+      "assigned": "Assignment started (simulated).",
+      "softphone": "Softphone opens here once phone service is connected.",
+      "actions": "Actions for",
+      "load": "Load test: 200 demo requests",
+      "loadOn": "Load test on",
+      "error": "Connection lost. Retrying…",
+      "more": "+{count} more"
     }
   },
   "emails": {

@@ -80,6 +80,44 @@
         "active": "Activo",
         "paused": "En pausa"
       }
+    },
+    "dispatch": {
+      "title": "Despacho en vivo",
+      "map": "Mapa en vivo de solicitudes y grúas",
+      "supply": "Proveedores por zona",
+      "gap": "Nadie en línea",
+      "online": "en línea",
+      "lanes": {
+        "new": "Nuevas",
+        "quoting": "Cotizando",
+        "picked": "Elegidas",
+        "en_route": "En camino",
+        "on_site": "En el lugar"
+      },
+      "demo": "Demo",
+      "real": "Real",
+      "quotes": "{count} cotizaciones",
+      "waiting": "Sin cotización",
+      "call": "Llamar al conductor o proveedor",
+      "push": "Enviar a más proveedores",
+      "assign": "Asignar manualmente",
+      "note": "Agregar una nota",
+      "cancel": "Cancelar solicitud",
+      "open": "Abrir",
+      "empty": "Los proveedores aparecen aquí cuando están en línea.",
+      "count": "{count} solicitudes abiertas",
+      "live": "En vivo, se actualiza cada 2 segundos",
+      "paused": "En pausa",
+      "pushed": "Enviada a más proveedores (simulado).",
+      "noted": "Nota guardada.",
+      "cancelled": "Solicitud cancelada.",
+      "assigned": "Asignación iniciada (simulado).",
+      "softphone": "El softphone se abre aquí cuando se conecte el servicio telefónico.",
+      "actions": "Acciones para",
+      "load": "Prueba de carga: 200 solicitudes demo",
+      "loadOn": "Prueba de carga activa",
+      "error": "Se perdió la conexión. Reintentando…",
+      "more": "+{count} más"
     }
   },
   "emails": {
