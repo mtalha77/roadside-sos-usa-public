@@ -319,7 +319,8 @@
       "demo": "Demo",
       "real": "Real",
       "moveTo": "Move",
-      "empty": "No leads yet."
+      "empty": "No leads yet.",
+      "more": "+{count} more in the table view"
     },
     "markets": {
       "title": "Markets",

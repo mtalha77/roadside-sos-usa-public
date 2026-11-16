@@ -5,6 +5,9 @@ import { Button } from "@rsos/ui/button";
 import { inputClass } from "@rsos/ui/input";
 import { useId, useState } from "react";
 
+/** Cards shown per lane on the board; the table view lists every lead. */
+const LANE_LIMIT = 25;
+
 type Lead = {
   id: string;
   company: string;
@@ -142,7 +145,7 @@ export function Pipeline({
                   aria-labelledby={`${id}-${s.id}`}
                   className="flex max-h-[32rem] flex-col gap-2 overflow-y-auto"
                 >
-                  {list.map((x) => (
+                  {list.slice(0, LANE_LIMIT).map((x) => (
                     <li key={x.id} className="rounded-xl border bg-card p-3 text-sm">
                       <p className="font-semibold">{x.company}</p>
                       <p className="text-muted-foreground">
@@ -163,6 +166,11 @@ export function Pipeline({
                       </div>
                     </li>
                   ))}
+                  {list.length > LANE_LIMIT ? (
+                    <li className="px-2 py-1 text-sm text-muted-foreground">
+                      {l.more?.replace("{count}", String(list.length - LANE_LIMIT))}
+                    </li>
+                  ) : null}
                 </ul>
               </section>
             );

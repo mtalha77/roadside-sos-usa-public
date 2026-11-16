@@ -319,7 +319,8 @@
       "demo": "Demo",
       "real": "Real",
       "moveTo": "Mover",
-      "empty": "Aún no hay prospectos."
+      "empty": "Aún no hay prospectos.",
+      "more": "+{count} más en la vista de tabla"
     },
     "markets": {
       "title": "Mercados",
