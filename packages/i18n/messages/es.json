@@ -611,6 +611,123 @@
           "es": "¡Listo! Pagaste '{price}'. ¿Cómo lo hizo '{provider}'?"
         }
       }
+    },
+    "walkthrough": {
+      "title": "Recorrido de staging",
+      "subtitle": "Cada pantalla de las tres apps, en el orden en que ocurre un trabajo real. Los enlaces se abren en pestañas nuevas.",
+      "run": "Ejecutar demo completa",
+      "runHint": "Abre un trabajo demo nuevo en el sitio, el portal del proveedor y aquí, lado a lado. Dura unos 18 minutos; usa Controles de demo para adelantar.",
+      "openWeb": "Abrir la vista del conductor",
+      "openProvider": "Abrir la vista del proveedor",
+      "openAdmin": "Abrir la vista de administración",
+      "started": "Iniciada. Si tu navegador bloqueó las pestañas extra, usa los tres enlaces.",
+      "groups": {
+        "driver": "1. Conductor",
+        "provider": "2. Proveedor",
+        "admin": "3. Administración"
+      },
+      "steps": {
+        "home": {
+          "title": "Inicio del sitio",
+          "hint": "Donde llega un conductor varado."
+        },
+        "city": {
+          "title": "Página de ciudad",
+          "hint": "Proveedores locales, precios y prueba en vivo de un mercado."
+        },
+        "getHelp": {
+          "title": "Solicitud de ayuda",
+          "hint": "Una pregunta por pantalla; termina en la página de estado."
+        },
+        "tracking": {
+          "title": "Cotizaciones, elección y seguimiento",
+          "hint": "El mismo trabajo demo que ven el proveedor y la administración: llegan cotizaciones, el conductor elige, la grúa avanza y luego la reseña."
+        },
+        "account": {
+          "title": "Cuenta del conductor",
+          "hint": "Historial, vehículos guardados y solicitudes rápidas (acceso demo con código)."
+        },
+        "signIn": {
+          "title": "Acceso de proveedor",
+          "hint": "Elige \"Entrar como demo\" y luego \"Dueño del proveedor\"."
+        },
+        "onboarding": {
+          "title": "Incorporación",
+          "hint": "Nueve pasos cortos, se pueden retomar."
+        },
+        "goOnline": {
+          "title": "Conectarse",
+          "hint": "Inicio con el interruptor grande, números del día y la billetera."
+        },
+        "offer": {
+          "title": "Oferta entrante",
+          "hint": "Envía la cotización precargada con un toque."
+        },
+        "jobs": {
+          "title": "Trabajo activo",
+          "hint": "Abre el trabajo y luego el flujo: manejar, llegar, trabajar, completar."
+        },
+        "wallet": {
+          "title": "Billetera",
+          "hint": "Saldo (real), recarga, movimientos y planes."
+        },
+        "prices": {
+          "title": "Servicios y precios",
+          "hint": "Precios dentro del rango, área y horario."
+        },
+        "profile": {
+          "title": "Perfil público",
+          "hint": "Vista previa en vivo y medidor de fuerza."
+        },
+        "insights": {
+          "title": "Estadísticas",
+          "hint": "Tasa de trabajos ganados y retorno de los cargos."
+        },
+        "adminSignIn": {
+          "title": "Acceso de administración",
+          "hint": "Elige \"Entrar como demo\" y luego \"Superadministrador\"."
+        },
+        "dispatch": {
+          "title": "Tablero de despacho",
+          "hint": "Carriles, tiempos de servicio, mapa y oferta; las solicitudes reales aparecen en 2 segundos."
+        },
+        "request": {
+          "title": "Detalle de solicitud",
+          "hint": "El mismo trabajo demo, con cotizaciones y línea de tiempo."
+        },
+        "intake": {
+          "title": "Recepción telefónica",
+          "hint": "Simula una llamada y crea una solicitud."
+        },
+        "providers": {
+          "title": "Proveedores",
+          "hint": "Tabla, mapa, cola de revisión y detalle."
+        },
+        "recruitment": {
+          "title": "Reclutamiento",
+          "hint": "Embudo con solicitudes reales y prospectos demo."
+        },
+        "markets": {
+          "title": "Mercados",
+          "hint": "Mercados reales, límites y lista de lanzamiento."
+        },
+        "pricing": {
+          "title": "Precios",
+          "hint": "Rangos y cargos reales; programa un cambio."
+        },
+        "finance": {
+          "title": "Finanzas",
+          "hint": "Libro, ingresos y exportación."
+        },
+        "analytics": {
+          "title": "Analítica",
+          "hint": "Embudo, orígenes y economía."
+        },
+        "settings": {
+          "title": "Ajustes",
+          "hint": "Usuarios, auditoría, plantillas, funciones e integraciones."
+        }
+      }
     }
   },
   "emails": {

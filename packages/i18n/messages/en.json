@@ -611,6 +611,123 @@
           "es": "¡Listo! Pagaste '{price}'. ¿Cómo lo hizo '{provider}'?"
         }
       }
+    },
+    "walkthrough": {
+      "title": "Staging walkthrough",
+      "subtitle": "Every screen of the three apps, in the order a real job happens. Links open in new tabs.",
+      "run": "Run full demo",
+      "runHint": "Opens one fresh demo job in the website, the provider portal and here, side by side. It plays out over about 18 minutes; use Demo controls to skip ahead.",
+      "openWeb": "Open the driver's view",
+      "openProvider": "Open the provider's view",
+      "openAdmin": "Open the admin view",
+      "started": "Started. If your browser blocked the extra tabs, use the three links.",
+      "groups": {
+        "driver": "1. Driver",
+        "provider": "2. Provider",
+        "admin": "3. Admin"
+      },
+      "steps": {
+        "home": {
+          "title": "Website home",
+          "hint": "Where a stranded driver lands."
+        },
+        "city": {
+          "title": "City page",
+          "hint": "Local providers, prices and live proof for one market."
+        },
+        "getHelp": {
+          "title": "Get Help request",
+          "hint": "One question per screen; ends on the request's status page."
+        },
+        "tracking": {
+          "title": "Quotes, pick and tracking",
+          "hint": "The same demo job the provider and admin see: quotes arrive, the driver picks, the truck moves, then the review."
+        },
+        "account": {
+          "title": "Driver account",
+          "hint": "History, saved vehicles and quick requests (demo sign-in by phone code)."
+        },
+        "signIn": {
+          "title": "Provider sign-in",
+          "hint": "Choose \"Sign in as demo\" then \"Provider owner\"."
+        },
+        "onboarding": {
+          "title": "Onboarding",
+          "hint": "Nine short steps, resumable."
+        },
+        "goOnline": {
+          "title": "Go online",
+          "hint": "Home with the big toggle, today's numbers and the wallet."
+        },
+        "offer": {
+          "title": "Incoming offer",
+          "hint": "Send the pre-filled quote in one tap."
+        },
+        "jobs": {
+          "title": "Active job",
+          "hint": "Open the job, then the job flow: drive, arrive, work, complete."
+        },
+        "wallet": {
+          "title": "Wallet",
+          "hint": "Balance (real), top-up sheet, ledger and plans."
+        },
+        "prices": {
+          "title": "Services and prices",
+          "hint": "Prices within the market range, area and hours."
+        },
+        "profile": {
+          "title": "Public profile",
+          "hint": "Live preview and strength meter."
+        },
+        "insights": {
+          "title": "Insights",
+          "hint": "Win rate and return on fees."
+        },
+        "adminSignIn": {
+          "title": "Admin sign-in",
+          "hint": "Choose \"Sign in as demo\" then \"Super admin\"."
+        },
+        "dispatch": {
+          "title": "Dispatch board",
+          "hint": "Lanes, SLA timers, map and supply; real requests appear within 2 seconds."
+        },
+        "request": {
+          "title": "Request detail",
+          "hint": "The same demo job, with quotes and timeline."
+        },
+        "intake": {
+          "title": "Phone intake",
+          "hint": "Simulate a call and create a request."
+        },
+        "providers": {
+          "title": "Providers",
+          "hint": "Table, map, review queue and detail."
+        },
+        "recruitment": {
+          "title": "Recruitment",
+          "hint": "Pipeline from real applications plus demo leads."
+        },
+        "markets": {
+          "title": "Markets",
+          "hint": "Real markets, boundaries and launch checklist."
+        },
+        "pricing": {
+          "title": "Pricing",
+          "hint": "Real ranges and fees; schedule a change."
+        },
+        "finance": {
+          "title": "Finance",
+          "hint": "Ledger, revenue and export."
+        },
+        "analytics": {
+          "title": "Analytics",
+          "hint": "Funnel, sources and economics."
+        },
+        "settings": {
+          "title": "Settings",
+          "hint": "Users, audit log, templates, flags and integrations."
+        }
+      }
     }
   },
   "emails": {
