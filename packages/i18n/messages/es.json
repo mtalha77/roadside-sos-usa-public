@@ -391,6 +391,46 @@
         "invalid": "Completa todos los montos y una fecha; el precio más bajo no puede superar al más alto.",
         "to": "a"
       }
+    },
+    "finance": {
+      "title": "Finanzas",
+      "export": "Exportar libro (CSV)",
+      "demo": "Datos de demostración: finanzas muestra un libro simulado hasta conectar la facturación.",
+      "views": "Vistas",
+      "filter": "Tipo",
+      "all": "Todos",
+      "tabs": {
+        "ledger": "Libro",
+        "revenue": "Ingresos",
+        "disputes": "Disputas",
+        "stripe": "Conciliación con Stripe"
+      },
+      "kinds": {
+        "fee": "Cargos por trabajo",
+        "top_up": "Recargas",
+        "credit": "Créditos",
+        "plan": "Suscripciones"
+      },
+      "cols": {
+        "date": "Fecha",
+        "provider": "Proveedor",
+        "market": "Mercado",
+        "type": "Tipo",
+        "job": "Trabajo",
+        "amount": "Monto"
+      },
+      "byMarket": "Ingresos por cargos por mercado (30 días)",
+      "byService": "Ingresos por cargos por servicio (30 días)",
+      "bySource": "Ingresos por cargos por origen (30 días)",
+      "sources": {
+        "web": "Sitio web",
+        "phone": "Teléfono",
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "organic": "Orgánico"
+      },
+      "noDisputes": "No hay disputas abiertas.",
+      "stripe": "La conciliación con Stripe aparece aquí cuando se conecte Stripe (pagos, cargos y libro cotejados a diario)."
     }
   },
   "emails": {

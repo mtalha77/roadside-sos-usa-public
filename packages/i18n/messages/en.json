@@ -391,6 +391,46 @@
         "invalid": "Fill every amount and a date; the lowest price must not be above the highest.",
         "to": "to"
       }
+    },
+    "finance": {
+      "title": "Finance",
+      "export": "Export ledger (CSV)",
+      "demo": "Demo data: finance shows a simulated ledger until billing is connected.",
+      "views": "Views",
+      "filter": "Type",
+      "all": "All",
+      "tabs": {
+        "ledger": "Ledger",
+        "revenue": "Revenue",
+        "disputes": "Disputes",
+        "stripe": "Stripe reconciliation"
+      },
+      "kinds": {
+        "fee": "Job fees",
+        "top_up": "Top-ups",
+        "credit": "Credits",
+        "plan": "Subscriptions"
+      },
+      "cols": {
+        "date": "Date",
+        "provider": "Provider",
+        "market": "Market",
+        "type": "Type",
+        "job": "Job",
+        "amount": "Amount"
+      },
+      "byMarket": "Fee revenue by market (30 days)",
+      "byService": "Fee revenue by service (30 days)",
+      "bySource": "Fee revenue by source (30 days)",
+      "sources": {
+        "web": "Website",
+        "phone": "Phone",
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "organic": "Organic"
+      },
+      "noDisputes": "No open disputes.",
+      "stripe": "Stripe reconciliation appears here once Stripe is connected (payouts, charges and ledger matched daily)."
     }
   },
   "emails": {
