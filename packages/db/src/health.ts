@@ -30,13 +30,14 @@ async function demoSignInStatus(): Promise<"ok" | "unavailable"> {
   }
 }
 
-/** Is the database reachable with the public key? (A head request: no rows are read.) */
+/** Is the database reachable with the public key? (A public function for a slug that never exists.) */
 async function databaseStatus(): Promise<Health["database"]> {
   const supabase = createPublicSupabase();
   if (!supabase) return "not-configured";
   try {
     const { error } = await Promise.race([
-      supabase.from("markets").select("id", { head: true, count: "exact" }).limit(1),
+      // A public read function (anonymous visitors cannot select tables directly).
+      supabase.rpc("get_market_services", { p_market_slug: "health-check" }),
       new Promise<{ error: Error }>((resolve) =>
         setTimeout(() => resolve({ error: new Error("timeout") }), 4000),
       ),

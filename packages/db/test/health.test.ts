@@ -6,9 +6,7 @@ const probe = vi.fn();
 const listUsers = vi.fn();
 vi.mock("../src/public", () => ({
   createPublicSupabase: () =>
-    process.env.NEXT_PUBLIC_SUPABASE_URL
-      ? { from: () => ({ select: () => ({ limit: () => probe() }) }) }
-      : null,
+    process.env.NEXT_PUBLIC_SUPABASE_URL ? { rpc: () => probe() } : null,
 }));
 vi.mock("../src/admin", () => ({
   createAdminSupabase: () => ({ auth: { admin: { listUsers } } }),
