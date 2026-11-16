@@ -319,7 +319,8 @@
       "demo": "Demo",
       "real": "Real",
       "moveTo": "Move",
-      "empty": "No leads yet."
+      "empty": "No leads yet.",
+      "more": "+{count} more in the table view"
     },
     "markets": {
       "title": "Markets",
@@ -2084,7 +2085,8 @@
       "account": "Account and security",
       "install": "Install the app",
       "onboarding": "Setup",
-      "theme": "Day or night mode"
+      "theme": "Day or night mode",
+      "signOut": "Sign out"
     },
     "shell": {
       "offline": "You're offline. New requests will appear when you're back online.",

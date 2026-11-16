@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { pageMain } from "@/components/shell/page-head";
 import { ThemeSwitch } from "@/components/shell/theme-switch";
+import { signOutAction } from "@/lib/auth-actions";
 import { isBuilt } from "@/lib/routes";
 
 /** Phones: everything not in the bottom tabs. */
@@ -39,6 +40,16 @@ export default async function MorePage() {
             label={t("theme")}
             className="flex min-h-14 w-full items-center gap-3 px-4 text-left font-medium"
           />
+        </li>
+        <li>
+          <form action={signOutAction}>
+            <button
+              type="submit"
+              className="flex min-h-14 w-full items-center px-4 text-left font-medium"
+            >
+              {t("signOut")}
+            </button>
+          </form>
         </li>
       </ul>
     </main>

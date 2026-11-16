@@ -161,7 +161,11 @@ export function DispatchBoard({
           {board.supply.length === 0 ? (
             <p className="text-sm text-muted-foreground">{labels.empty}</p>
           ) : (
-            <ul className="flex max-h-72 flex-col gap-1 overflow-y-auto text-sm">
+            <ul
+              tabIndex={0}
+              aria-labelledby="sup-h"
+              className="flex max-h-72 flex-col gap-1 overflow-y-auto text-sm"
+            >
               {board.supply.map((s) => (
                 <li
                   key={`${s.market}-${s.area}`}
@@ -183,7 +187,7 @@ export function DispatchBoard({
           )}
         </section>
       </div>
-      <div className="grid gap-3 overflow-x-auto pb-2 md:grid-flow-col md:auto-cols-[minmax(16rem,1fr)]">
+      <div className="grid gap-3 pb-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
         {LANES.map((lane) => {
           const list = byLane.get(lane)!;
           return (
@@ -199,7 +203,11 @@ export function DispatchBoard({
                 {labels[`lanes.${lane}`]}
                 <span className="tabular-nums text-muted-foreground">{list.length}</span>
               </h2>
-              <ul className="flex max-h-[60vh] flex-col gap-2 overflow-y-auto">
+              <ul
+                tabIndex={0}
+                aria-labelledby={`lane-${lane}`}
+                className="flex max-h-[32rem] flex-col gap-2 overflow-y-auto"
+              >
                 {list.slice(0, 80).map((c) => (
                   <li key={c.id}>
                     <BoardCardView

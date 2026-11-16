@@ -44,11 +44,13 @@ export function ProviderActions({ labels: l }: { labels: Record<string, string> 
         </Button>
       </form>
       {log.length ? (
-        <ul role="log" aria-label={l.actions} className="mt-3 flex flex-col gap-1 text-sm">
-          {log.map((x, i) => (
-            <li key={i}>{x}</li>
-          ))}
-        </ul>
+        <div role="log" aria-label={l.actions} className="mt-3">
+          <ul className="flex flex-col gap-1 text-sm">
+            {log.map((x, i) => (
+              <li key={i}>{x}</li>
+            ))}
+          </ul>
+        </div>
       ) : null}
     </section>
   );

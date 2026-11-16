@@ -5,6 +5,9 @@ import { Button } from "@rsos/ui/button";
 import { inputClass } from "@rsos/ui/input";
 import { useId, useState } from "react";
 
+/** Cards shown per lane on the board; the table view lists every lead. */
+const LANE_LIMIT = 25;
+
 type Lead = {
   id: string;
   company: string;
@@ -121,7 +124,7 @@ export function Pipeline({
       {leads.length === 0 ? (
         <p className="text-muted-foreground">{l.empty}</p>
       ) : view === "board" ? (
-        <div className="grid gap-3 overflow-x-auto md:grid-flow-col md:auto-cols-[minmax(15rem,1fr)]">
+        <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
           {stages.map((s) => {
             const list = leads.filter((x) => x.stage === s.id);
             return (
@@ -137,8 +140,12 @@ export function Pipeline({
                   {s.label}{" "}
                   <span className="tabular-nums text-muted-foreground">{list.length}</span>
                 </h2>
-                <ul className="flex max-h-[60vh] flex-col gap-2 overflow-y-auto">
-                  {list.map((x) => (
+                <ul
+                  tabIndex={0}
+                  aria-labelledby={`${id}-${s.id}`}
+                  className="flex max-h-[32rem] flex-col gap-2 overflow-y-auto"
+                >
+                  {list.slice(0, LANE_LIMIT).map((x) => (
                     <li key={x.id} className="rounded-xl border bg-card p-3 text-sm">
                       <p className="font-semibold">{x.company}</p>
                       <p className="text-muted-foreground">
@@ -159,13 +166,23 @@ export function Pipeline({
                       </div>
                     </li>
                   ))}
+                  {list.length > LANE_LIMIT ? (
+                    <li className="px-2 py-1 text-sm text-muted-foreground">
+                      {l.more?.replace("{count}", String(list.length - LANE_LIMIT))}
+                    </li>
+                  ) : null}
                 </ul>
               </section>
             );
           })}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border bg-card">
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label={l.table}
+          className="overflow-x-auto rounded-2xl border bg-card"
+        >
           <table className="w-full min-w-[48rem] text-sm">
             <thead className="border-b text-left text-muted-foreground">
               <tr>

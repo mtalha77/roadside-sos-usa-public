@@ -26,7 +26,7 @@ test.describe("admin pricing", () => {
     await change.locator("summary").click();
     await change.getByLabel("Lowest price").fill("75");
     await change.getByLabel("Highest price").fill("150");
-    await change.getByLabel("Our fee", { exact: true }).fill("15");
+    await change.getByLabel("Our fee").fill("15");
     await change.getByLabel("Effective from").fill("2027-01-01");
     await change.getByRole("button", { name: "Submit for approval" }).click();
     await change.getByRole("button", { name: "Approve" }).click();

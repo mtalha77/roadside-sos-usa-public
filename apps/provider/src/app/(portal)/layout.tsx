@@ -20,6 +20,7 @@ const NAV_KEYS = [
   "account",
   "install",
   "theme",
+  "signOut",
 ] as const;
 
 /** Provider portal shell (RSOS-051): side navigation on desktop, bottom tabs on phones. */

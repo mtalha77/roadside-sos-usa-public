@@ -1,22 +1,24 @@
 "use client";
 
 import {
+  Bell,
   Briefcase,
   Home,
   LifeBuoy,
   LineChart,
+  LogOut,
   Menu,
   Settings2,
   Smartphone,
+  Tag,
   User,
   Users,
   Wallet,
-  Bell,
-  Tag,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { isBuilt } from "@/lib/routes";
+import { signOutAction } from "@/lib/auth-actions";
 import { ThemeSwitch } from "./theme-switch";
 
 export type NavLabels = Record<
@@ -33,7 +35,8 @@ export type NavLabels = Record<
   | "help"
   | "account"
   | "install"
-  | "theme",
+  | "theme"
+  | "signOut",
   string
 >;
 
@@ -93,6 +96,12 @@ export function PortalNav({
           </Link>
         ))}
         <ThemeSwitch label={labels.theme} className={`${item} mt-auto text-left`} />
+        <form action={signOutAction}>
+          <button type="submit" className={`${item} w-full text-left`}>
+            <LogOut aria-hidden="true" className="size-5 text-muted-foreground" />
+            {labels.signOut}
+          </button>
+        </form>
       </nav>
       <nav
         aria-label={labels.label}

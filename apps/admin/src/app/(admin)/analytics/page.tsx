@@ -106,7 +106,7 @@ export default async function AnalyticsPage({
       {ctx.demo ? (
         <p className="text-sm text-muted-foreground">{t("demo", { real: realRequests })}</p>
       ) : null}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label={t("realRequests")} value={String(realRequests)} />
         <StatCard label={t("firstQuote")} value={t("seconds", { s: avgFirst })} />
         <StatCard

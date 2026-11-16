@@ -83,7 +83,12 @@ export default async function PricingPage() {
             <h2 id={`m-${m.slug}`} className="text-lg font-semibold">
               {m.name}
             </h2>
-            <div className="overflow-x-auto rounded-2xl border bg-card">
+            <div
+              tabIndex={0}
+              role="region"
+              aria-label={t("current", { market: m.name })}
+              className="overflow-x-auto rounded-2xl border bg-card"
+            >
               <table className="w-full min-w-[44rem] text-sm">
                 <caption className="sr-only">{t("current", { market: m.name })}</caption>
                 <thead className="border-b text-left text-muted-foreground">

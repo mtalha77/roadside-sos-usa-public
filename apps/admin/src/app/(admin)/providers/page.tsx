@@ -138,7 +138,12 @@ export default async function ProvidersPage({
                 }))}
             />
           ) : (
-            <div className="overflow-x-auto rounded-2xl border bg-card">
+            <div
+              tabIndex={0}
+              role="region"
+              aria-label={t("title")}
+              className="overflow-x-auto rounded-2xl border bg-card"
+            >
               <table className="w-full min-w-[36rem] text-sm">
                 <caption className="sr-only">{t("title")}</caption>
                 <thead className="border-b text-left text-muted-foreground">

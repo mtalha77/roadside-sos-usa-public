@@ -56,7 +56,12 @@ export default async function RequestsPage({
       {rows.length === 0 ? (
         <EmptyState title={t("none")} />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border bg-card">
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label={t("title")}
+          className="overflow-x-auto rounded-2xl border bg-card"
+        >
           <table className="w-full min-w-[40rem] text-sm">
             <caption className="sr-only">{t("title")}</caption>
             <thead className="border-b text-left text-muted-foreground">
