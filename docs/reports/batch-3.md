@@ -295,6 +295,10 @@ Real: the request count in the range. Demo: the funnel, sources and speed, scale
 
 - Date ranges (today, 7 and 30 days); funnel (visits, started, submitted, quoted, picked, completed) with step conversion; requests by source; time to first quote; economics (ad spend, cost per paid request, fee revenue, contribution).
 
+## RSOS-082, 083, 084, 094: Content, users, settings, integrations
+
+Real: city page intros (edit, preview and publish through `admin_update_market_intro`, super admins and operations managers only, audited; migration `20261115020000_content.sql`, pgTAP `019`), staff list and roles, the audit log (super admins). Demo or placeholders: message templates (English and Spanish, with a filled-in preview), business rules, feature flags, integrations (not connected until accounts exist).
+
 ## BLOCKERS
 
 New in batch 3 (keys):

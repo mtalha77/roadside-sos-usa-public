@@ -481,6 +481,136 @@
       "adSpend": "Ad spend",
       "feeRevenue": "Fee revenue",
       "assumptions": "Uses placeholder assumptions (cost per click, conversion rates, fee share) in packages/config until the unit economics model is shared."
+    },
+    "content": {
+      "title": "Content",
+      "subtitle": "City page intros are live on the website as soon as you publish.",
+      "intro": "{name} city page intro",
+      "count": "{n} of 1200 characters",
+      "publish": "Publish",
+      "readOnly": "Only super admins and operations managers can publish.",
+      "saved": "Published. The city page shows the new intro.",
+      "invalid": "Write 40 to 1200 characters.",
+      "forbidden": "You don't have permission to publish content.",
+      "error": "Couldn't publish. Try again.",
+      "preview": "Preview",
+      "previewTitle": "Roadside help in {name}",
+      "other": "FAQs, service copy and banners",
+      "otherHint": "These live in the message files (English and Spanish) and change with a release; moving them here comes with the content tables."
+    },
+    "settings": {
+      "title": "Settings",
+      "sections": "Settings sections",
+      "tabs": {
+        "users": "Users and roles",
+        "audit": "Audit log",
+        "templates": "Message templates",
+        "rules": "Business rules",
+        "flags": "Feature flags",
+        "integrations": "Integrations"
+      },
+      "onlyYou": "Only super admins see everyone; you see yourself.",
+      "inactive": "Inactive",
+      "viewAs": "View-as sessions open a provider's portal read-only; they arrive with the backend batch.",
+      "manageStaff": "Manage staff and second steps",
+      "superOnly": "Only super admins can read the audit log.",
+      "noAudit": "No audit entries yet.",
+      "channels": {
+        "sms": "Text message",
+        "email": "Email",
+        "push": "Push"
+      },
+      "tpl": {
+        "template": "Template",
+        "channel": "Channel",
+        "english": "English",
+        "spanish": "Spanish",
+        "preview": "Preview with sample values",
+        "save": "Save template",
+        "saved": "Saved on this page. Sending uses these once messaging is connected.",
+        "variables": "Variables: '{code}', '{provider}', '{eta}', '{price}'"
+      },
+      "rules": {
+        "quoteWindow": {
+          "label": "Quote window",
+          "value": "3 minutes"
+        },
+        "radiusSteps": {
+          "label": "Search radius steps",
+          "value": "10, 20, then 35 miles"
+        },
+        "maxQuotes": {
+          "label": "Most quotes shown to a driver",
+          "value": "5"
+        },
+        "autoExpire": {
+          "label": "Request expires without quotes after",
+          "value": "15 minutes"
+        },
+        "cancelFee": {
+          "label": "Fee when the driver cancels after pick",
+          "value": "None (decision pending)"
+        }
+      },
+      "rulesHint": "Rules are the same for every market today; per-market editing arrives with the rules table.",
+      "flags": {
+        "spanish_site": {
+          "label": "Spanish website",
+          "hint": "Show the language switch on the website."
+        },
+        "phone_intake": {
+          "label": "Phone intake",
+          "hint": "Dispatchers can create requests from calls."
+        },
+        "auto_pick": {
+          "label": "Get help fastest",
+          "hint": "Drivers can let us pick the fastest quote."
+        },
+        "featured_slots": {
+          "label": "Featured slots",
+          "hint": "Featured providers on city pages."
+        },
+        "driver_accounts": {
+          "label": "Driver accounts",
+          "hint": "Drivers can sign in to see history."
+        }
+      },
+      "flagSaved": "{flag} updated on this page.",
+      "integrations": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads",
+        "twilio": "Twilio",
+        "stripe": "Stripe",
+        "google_maps": "Google Maps",
+        "resend": "Resend"
+      },
+      "notConnected": "Not connected",
+      "lastSync": "Last sync: {when}",
+      "never": "never",
+      "connect": "Connect (needs an account)",
+      "templates": {
+        "request_received": {
+          "name": "Request received",
+          "en": "We got your request '{code}'. Providers are sending quotes now.",
+          "es": "Recibimos tu solicitud '{code}'. Los proveedores están enviando cotizaciones."
+        },
+        "provider_picked": {
+          "name": "Provider confirmed",
+          "en": "'{provider}' is on the way. Arrival in about '{eta}'.",
+          "es": "'{provider}' va en camino. Llega en unos '{eta}'."
+        },
+        "provider_arriving": {
+          "name": "Provider arriving",
+          "en": "'{provider}' is almost there. Stay in a safe place.",
+          "es": "'{provider}' está por llegar. Quédate en un lugar seguro."
+        },
+        "job_completed": {
+          "name": "Job completed",
+          "en": "Done! You paid '{price}'. How did '{provider}' do?",
+          "es": "¡Listo! Pagaste '{price}'. ¿Cómo lo hizo '{provider}'?"
+        }
+      }
     }
   },
   "emails": {
