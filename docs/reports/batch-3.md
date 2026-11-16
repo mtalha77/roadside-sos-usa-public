@@ -6,9 +6,42 @@
 
 ## Summary
 
-| Ticket                             | Status    | Pull request |
-| ---------------------------------- | --------- | ------------ |
-| Demo foundation (part of RSOS-098) | In review | (this PR)    |
+| Ticket                                                                 | Status                                                     | Pull request                                                         |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
+| Demo foundation (part of RSOS-098)                                     | Done                                                       | [#134](https://github.com/mtalha77/roadside-sos-usa-public/pull/134) |
+| RSOS-021 Get Help request flow                                         | Done                                                       | [#135](https://github.com/mtalha77/roadside-sos-usa-public/pull/135) |
+| RSOS-022 + 065 to 069 Request status, quotes, tracking, cancel, review | Done                                                       | [#136](https://github.com/mtalha77/roadside-sos-usa-public/pull/136) |
+| RSOS-029 Ad landing pages                                              | Done                                                       | [#137](https://github.com/mtalha77/roadside-sos-usa-public/pull/137) |
+| RSOS-070 Driver account (UI)                                           | Done                                                       | [#138](https://github.com/mtalha77/roadside-sos-usa-public/pull/138) |
+| RSOS-019b Provider public profile page                                 | Done                                                       | [#139](https://github.com/mtalha77/roadside-sos-usa-public/pull/139) |
+| RSOS-051 Provider app shell                                            | Done                                                       | [#140](https://github.com/mtalha77/roadside-sos-usa-public/pull/140) |
+| RSOS-052 Sign-up and onboarding wizard                                 | Done                                                       | [#141](https://github.com/mtalha77/roadside-sos-usa-public/pull/141) |
+| RSOS-053 Home: go online                                               | Done                                                       | [#142](https://github.com/mtalha77/roadside-sos-usa-public/pull/142) |
+| RSOS-054 Incoming request and one-tap quote                            | Done                                                       | [#143](https://github.com/mtalha77/roadside-sos-usa-public/pull/143) |
+| RSOS-055 Active job flow                                               | Done                                                       | [#145](https://github.com/mtalha77/roadside-sos-usa-public/pull/145) |
+| RSOS-056 Jobs history and detail                                       | Done                                                       | [#144](https://github.com/mtalha77/roadside-sos-usa-public/pull/144) |
+| RSOS-057 Wallet and billing (UI)                                       | Done                                                       | [#146](https://github.com/mtalha77/roadside-sos-usa-public/pull/146) |
+| RSOS-058 Services, prices and service area editor                      | Done                                                       | [#147](https://github.com/mtalha77/roadside-sos-usa-public/pull/147) |
+| RSOS-059 Public profile editor                                         | Done                                                       | [#148](https://github.com/mtalha77/roadside-sos-usa-public/pull/148) |
+| RSOS-060 Team and multi-truck dispatch                                 | Done                                                       | [#151](https://github.com/mtalha77/roadside-sos-usa-public/pull/151) |
+| RSOS-061 Performance insights                                          | Done                                                       | [#152](https://github.com/mtalha77/roadside-sos-usa-public/pull/152) |
+| RSOS-062 and 063 Notifications, help center and chat                   | Done                                                       | [#153](https://github.com/mtalha77/roadside-sos-usa-public/pull/153) |
+| RSOS-093 Account and security in the provider shell                    | Done                                                       | [#154](https://github.com/mtalha77/roadside-sos-usa-public/pull/154) |
+| RSOS-071 Admin shell                                                   | Done                                                       | [#155](https://github.com/mtalha77/roadside-sos-usa-public/pull/155) |
+| RSOS-034 + 072 Live dispatch board                                     | Done; load test not yet run (admin demo sign-in blocked)   | [#156](https://github.com/mtalha77/roadside-sos-usa-public/pull/156) |
+| RSOS-073 Request detail                                                | Done                                                       | [#157](https://github.com/mtalha77/roadside-sos-usa-public/pull/157) |
+| RSOS-074 Phone intake console (UI)                                     | Done; timing test not yet run (admin demo sign-in blocked) | [#158](https://github.com/mtalha77/roadside-sos-usa-public/pull/158) |
+| RSOS-075 Providers and document review                                 | Done                                                       | [#159](https://github.com/mtalha77/roadside-sos-usa-public/pull/159) |
+| RSOS-076 Recruitment pipeline                                          | Done                                                       | [#160](https://github.com/mtalha77/roadside-sos-usa-public/pull/160) |
+| RSOS-077 Markets                                                       | Done                                                       | [#161](https://github.com/mtalha77/roadside-sos-usa-public/pull/161) |
+| RSOS-078 Pricing and fees                                              | Done                                                       | [#162](https://github.com/mtalha77/roadside-sos-usa-public/pull/162) |
+| RSOS-079 Finance (UI)                                                  | Done                                                       | [#163](https://github.com/mtalha77/roadside-sos-usa-public/pull/163) |
+| RSOS-080 Reviews and quality                                           | Done                                                       | [#164](https://github.com/mtalha77/roadside-sos-usa-public/pull/164) |
+| RSOS-081 Analytics                                                     | Done                                                       | [#165](https://github.com/mtalha77/roadside-sos-usa-public/pull/165) |
+| RSOS-082, 083, 084, 094 Content, users, settings, integrations         | Done                                                       | [#166](https://github.com/mtalha77/roadside-sos-usa-public/pull/166) |
+| RSOS-098 Walkthrough page and guide                                    | Done; admin part blocked by admin demo sign-in             | (this PR)                                                            |
+
+Admin end-to-end tests are written for every admin screen and run in CI, but they skip while admin "Sign in as demo" is blocked (see BLOCKERS, keys); everything else passes on every pull request.
 
 ## Demo mode foundation
 
@@ -298,6 +331,26 @@ Real: the request count in the range. Demo: the funnel, sources and speed, scale
 ## RSOS-082, 083, 084, 094: Content, users, settings, integrations
 
 Real: city page intros (edit, preview and publish through `admin_update_market_intro`, super admins and operations managers only, audited; migration `20261115020000_content.sql`, pgTAP `019`), staff list and roles, the audit log (super admins). Demo or placeholders: message templates (English and Spanish, with a filled-in preview), business rules, feature flags, integrations (not connected until accounts exist).
+
+## RSOS-098: Staging walkthrough page and guide
+
+- `docs/WALKTHROUGH.md`: how to sign in as demo, every screen of the three apps in the order a real job happens, and what is real or demo.
+- Admin `/walkthrough` (demo mode only; 404 in production), linked from the admin sidebar next to Demo controls: driver, provider and admin steps with direct links to the staging apps (addresses come from the app URL settings, the city link from the database).
+- "Run full demo": resets the admin scenario clock and opens one fresh demo job in the driver's view, the provider portal and the admin request page at once (with the three links as a fallback if the browser blocks extra tabs). The job plays out over about 18 minutes; Demo controls can pause or skip ahead.
+
+| #   | Criterion                                                                                     | Result                                                                                                                                                                                                                              |
+| --- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Following the walkthrough, the owner sees a full job from request to review in all three apps | PARTLY BLOCKED: the website and provider portal parts work on staging; the admin part needs admin "Sign in as demo", which is blocked by the admin server key (BLOCKERS, keys). The walkthrough e2e is written and skips until then |
+
+## Performance on staging (mobile Lighthouse, 3 runs each)
+
+| Page                              | LCP            | Total blocking time | Score     | Target                         |
+| --------------------------------- | -------------- | ------------------- | --------- | ------------------------------ |
+| `/get-help`                       | 1.18 to 1.20 s | 54 to 66 ms         | 99 to 100 | LCP under 1.2 s: PASS (barely) |
+| Ad landing page `/lp/houston/tow` | 1.55 to 1.63 s | 12 to 32 ms         | 97 to 99  | LCP under 1.2 s: FAIL          |
+| Home, city page, service page     | 1.17 to 1.44 s | 24 to 65 ms         | 97 to 100 | no LCP target                  |
+
+The landing page's LCP is its first text paint (first contentful paint is also about 1.6 s; server response 100 ms), so render-blocking CSS and the web font decide it. Suggested fix for the next batch: inline the landing page's critical CSS, preload or subset its font, and check its CSS size against the Get Help page.
 
 ## BLOCKERS
 

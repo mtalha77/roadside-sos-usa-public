@@ -29,5 +29,6 @@ export const BUILT: ReadonlySet<string> = new Set([
   "/analytics",
   "/content",
   "/settings",
+  "/walkthrough",
 ]);
 export const builtSections = () => SECTIONS.filter((s) => BUILT.has(s.href));
