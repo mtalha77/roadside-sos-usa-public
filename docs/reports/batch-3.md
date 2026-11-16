@@ -167,6 +167,12 @@ Real: the balance (`provider_wallets`). Demo: transactions, payment method. Plac
 
 - Big balance, top-up sheet (presets 100, 250, 500 and other amount), auto-recharge settings, payment methods, transactions grouped by day linked to their jobs, statement download (CSV), Pro and Featured plan cards with comparison. Owners and managers only.
 
+## RSOS-058: Services, prices and service area editor
+
+Real: market ranges and fees. The company's own prices, radius, hours and budget are kept on the device until saving is wired.
+
+- Price per service with the market range and what the driver sees; prices outside the range are flagged and block saving; radius slider on the map; working hours; daily request budget with a hard limit.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)

@@ -1631,6 +1631,31 @@
       "soon": "Coming soon",
       "ownersOnly": "Only owners and managers can see the wallet.",
       "more": "Show earlier transactions"
+    },
+    "services": {
+      "title": "Services and prices",
+      "subtitle": "Set what you offer, where and when. Prices stay within the market's range.",
+      "none": "No services are open in your market yet.",
+      "range": "Market range {min} to {max}",
+      "prices": "Your prices",
+      "offer": "your price",
+      "preview": "Driver sees",
+      "fee": "fee if picked",
+      "outside": "Outside the market range",
+      "area": "Service area",
+      "radius": "Radius",
+      "miles": "miles",
+      "map": "Your service area",
+      "home": "Your base",
+      "hours": "Working hours",
+      "always": "Open 24 hours, 7 days",
+      "from": "From",
+      "to": "To",
+      "budget": "Daily request budget",
+      "budgetHint": "The most requests you want each day. You stop receiving new ones once it's reached.",
+      "save": "Save changes",
+      "saved": "Saved on this device. Saving to your account comes with the next update.",
+      "fix": "Fix the prices marked in red before saving."
     }
   }
 }

@@ -1631,6 +1631,31 @@
       "soon": "Próximamente",
       "ownersOnly": "Solo los dueños y gerentes pueden ver la billetera.",
       "more": "Ver movimientos anteriores"
+    },
+    "services": {
+      "title": "Servicios y precios",
+      "subtitle": "Define qué ofreces, dónde y cuándo. Los precios se mantienen dentro del rango del mercado.",
+      "none": "Aún no hay servicios abiertos en tu mercado.",
+      "range": "Rango del mercado {min} a {max}",
+      "prices": "Tus precios",
+      "offer": "tu precio",
+      "preview": "El conductor ve",
+      "fee": "cargo si te eligen",
+      "outside": "Fuera del rango del mercado",
+      "area": "Área de servicio",
+      "radius": "Radio",
+      "miles": "millas",
+      "map": "Tu área de servicio",
+      "home": "Tu base",
+      "hours": "Horario",
+      "always": "Abierto 24 horas, 7 días",
+      "from": "Desde",
+      "to": "Hasta",
+      "budget": "Límite diario de solicitudes",
+      "budgetHint": "El máximo de solicitudes que quieres por día. Dejas de recibir nuevas al alcanzarlo.",
+      "save": "Guardar cambios",
+      "saved": "Guardado en este dispositivo. Guardar en tu cuenta llega con la próxima actualización.",
+      "fix": "Corrige los precios marcados en rojo antes de guardar."
     }
   }
 }
