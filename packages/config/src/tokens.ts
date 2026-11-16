@@ -31,11 +31,28 @@ export const amber = {
   800: "oklch(0.5 0.12 55)",
 } as const;
 
+/**
+ * Provider logo colours: muted, mid-dark hues for monogram marks (never amber: that is the signal
+ * colour). Text on them is `mark-foreground`. Same in both themes so a logo looks the same.
+ */
+export const marks = {
+  "mark-1": "oklch(0.46 0.07 25)",
+  "mark-2": "oklch(0.46 0.06 145)",
+  "mark-3": "oklch(0.46 0.07 230)",
+  "mark-4": "oklch(0.46 0.07 290)",
+  "mark-5": "oklch(0.46 0.06 190)",
+  "mark-6": "oklch(0.46 0.06 335)",
+  "mark-7": "oklch(0.44 0.05 110)",
+  "mark-8": "oklch(0.46 0.03 262)",
+  "mark-foreground": "oklch(0.985 0.003 262)",
+} as const;
+
 type ThemeTokens = Record<string, string>;
 
 /** Semantic colours per theme. Names follow shadcn/ui so components restyle automatically. */
 export const themes: { light: ThemeTokens; dark: ThemeTokens } = {
   light: {
+    ...marks,
     background: ink[50],
     foreground: ink[950],
     surface: "oklch(1 0 0)",
@@ -80,6 +97,7 @@ export const themes: { light: ThemeTokens; dark: ThemeTokens } = {
     "info-strong": "oklch(0.45 0.15 255)",
   },
   dark: {
+    ...marks,
     background: ink[950],
     foreground: ink[50],
     surface: ink[900],
@@ -150,6 +168,11 @@ export const contrastPairs: { fg: string; bg: string; min: number }[] = [
     { fg: `${s}-strong`, bg: "background", min: 4.5 },
     { fg: `${s}-strong`, bg: "surface", min: 4.5 },
   ]),
+  ...Array.from({ length: 8 }, (_, i) => ({
+    fg: "mark-foreground",
+    bg: `mark-${i + 1}`,
+    min: 4.5,
+  })),
   { fg: "input", bg: "background", min: 3 },
   { fg: "input", bg: "surface", min: 3 },
   { fg: "ring", bg: "background", min: 3 },

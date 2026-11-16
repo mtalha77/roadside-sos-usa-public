@@ -1,7 +1,7 @@
 "use server";
 
 import { isDemoMode } from "@rsos/config/demo";
-import { demoMarkets } from "@rsos/config/demo-fixtures";
+import { demoMarkets, legacyDemoProviderNames } from "@rsos/config/demo-fixtures";
 import { createAdminSupabase, demoAccountPassword } from "@rsos/db/admin";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -60,11 +60,17 @@ export async function demoSignInAction(form: FormData): Promise<void> {
       .select("id, slug")
       .in("status", ["test", "active"]);
     const first = Object.values(demoMarkets)[0]!.providers[0]!;
+    // Find the demo company by its current or a former demo name, and rename it in place.
     let { data: company } = await admin
       .from("providers")
-      .select("id")
-      .eq("name", first.name)
+      .select("id, name")
+      .eq("is_demo", true)
+      .in("name", [first.name, ...legacyDemoProviderNames])
+      .order("created_at")
+      .limit(1)
       .maybeSingle();
+    if (company && company.name !== first.name)
+      await admin.from("providers").update({ name: first.name }).eq("id", company.id);
     if (!company) {
       const ins = await admin
         .from("providers")
@@ -74,7 +80,7 @@ export async function demoSignInAction(form: FormData): Promise<void> {
           is_demo: true,
           market_ids: (markets ?? []).map((m) => m.id),
         })
-        .select("id")
+        .select("id, name")
         .single();
       company = ins.data;
     }

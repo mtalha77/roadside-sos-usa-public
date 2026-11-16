@@ -8,6 +8,7 @@ import { Icon, serviceIcons } from "../components/icon";
 import { UpdatedAgo } from "../components/live-dot";
 import { PriceTag } from "../components/price-tag";
 import { ProviderCard } from "../components/provider-card";
+import { ProviderLogo, type ProviderLogoData } from "../components/provider-logo";
 import { type Quote, QuoteCard, QuoteCardError, QuoteCardSkeleton } from "../components/quote-card";
 import { ServiceTile } from "../components/service-tile";
 import { REQUEST_STATUSES, StatusPill } from "../components/status-pill";
@@ -111,9 +112,12 @@ const provider = {
   reviewCount: 126,
   insured: true,
   licensed: true,
+  logo: { monogram: "TT", shape: "circle", tone: 1 } as ProviderLogoData,
+  yearsInBusiness: 12,
+  trucks: 4,
 };
 const quotes: Quote[] = [
-  { id: "1", provider, priceCents: 9500, etaMinutes: 12, tag: "fastest" },
+  { id: "1", provider, priceCents: 9500, etaMinutes: 12, tag: "fastest", distanceMiles: 3.4 },
   {
     id: "2",
     provider: {
@@ -122,10 +126,14 @@ const quotes: Quote[] = [
       reviewCount: 41,
       insured: true,
       licensed: false,
+      logo: { monogram: "SR", shape: "shield", tone: 3 },
+      yearsInBusiness: 6,
+      trucks: 2,
     },
     priceCents: 8500,
     etaMinutes: 25,
     tag: "best-price",
+    distanceMiles: 8.1,
   },
   {
     id: "3",
@@ -135,11 +143,39 @@ const quotes: Quote[] = [
       reviewCount: 0,
       insured: true,
       licensed: true,
+      logo: { monogram: "NT", shape: "hex", tone: 6 },
+      yearsInBusiness: 1,
+      trucks: 1,
     },
     priceCents: 11000,
     etaMinutes: 18,
+    distanceMiles: 5.6,
   },
 ];
+
+const logoSamples: ProviderLogoData[] = (["circle", "shield", "hex", "square"] as const).flatMap(
+  (shape, i) => [
+    { monogram: "AB", shape, tone: i * 2 + 1 },
+    { monogram: "CD", shape, tone: i * 2 + 2 },
+  ],
+);
+
+export const ProviderLogos: Story = {
+  render: () => (
+    <States>
+      <State label="ProviderLogo: four shapes, eight muted tones (48 px and 24 px)">
+        <div className="flex flex-wrap items-end gap-3">
+          {logoSamples.map((l) => (
+            <ProviderLogo key={`${l.shape}-${l.tone}`} logo={l} />
+          ))}
+          {logoSamples.map((l) => (
+            <ProviderLogo key={`s-${l.shape}-${l.tone}`} logo={l} size={24} />
+          ))}
+        </div>
+      </State>
+    </States>
+  ),
+};
 
 export const Quotes: Story = {
   render: function Render() {

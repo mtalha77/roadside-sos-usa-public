@@ -1,4 +1,5 @@
 import "server-only";
+import type { ProviderLogoData } from "@rsos/ui/provider-logo";
 import { demoMarkets } from "@rsos/config/demo-fixtures";
 import { demoProviders, demoState, demoStream, rng, seedFrom } from "@rsos/core/demo";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -19,6 +20,8 @@ export type BoardCard = {
   lat: number | null;
   lng: number | null;
   provider: string | null;
+  /** Demo providers only: their monogram logo. */
+  providerLogo?: ProviderLogoData | null;
   truck: { lat: number; lng: number } | null;
   token: string | null;
 };
@@ -103,6 +106,7 @@ function demoCards(now: number, markets: string[], load: boolean): BoardCard[] {
         lat: r.location.lat,
         lng: r.location.lng,
         provider: s.picked?.provider.name ?? null,
+        providerLogo: s.picked?.provider.logo ?? null,
         truck: s.truck,
         token: load ? null : r.token,
       };

@@ -2,6 +2,7 @@ import { demoPortal } from "@rsos/core/demo";
 import { formatCurrency, type Locale } from "@rsos/i18n";
 import { Badge } from "@rsos/ui/badge";
 import { LiteMap } from "@rsos/ui/lite-map";
+import { ProviderLogo } from "@rsos/ui/provider-logo";
 import { StatCard } from "@rsos/ui/stat-card";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -88,6 +89,7 @@ export default async function ProviderDetailPage({ params }: { params: Promise<{
   return (
     <main id="main" className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6">
       <header className="flex flex-wrap items-center gap-3">
+        {data.demo ? <ProviderLogo logo={data.demo.logo} size={48} /> : null}
         <h1 className="text-2xl font-semibold">{name}</h1>
         <Badge tone="success">{t(`statuses.${status}`)}</Badge>
         <Badge tone="outline">{t("demo")}</Badge>

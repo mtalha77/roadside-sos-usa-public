@@ -89,6 +89,62 @@ export const OfflineArt = createIllustration(
   </>,
 );
 
+/** Job photo: a car loaded on a flatbed tow truck. */
+export const TowJobArt = createIllustration(
+  "TowJobArt",
+  <>
+    <path d="M16 86h92l10-12h26v24H16z" {...surface} />
+    <path d="M118 74V58h18l8 16" {...surface} />
+    <path d="M124 62h8l4 10h-12z" {...muted} />
+    <path d="M28 74l10-14h30l12 14z" {...muted} />
+    <path d="M40 66h14M58 66h12" />
+    <circle cx="36" cy="98" r="8" {...surface} />
+    <circle cx="96" cy="98" r="8" {...surface} />
+    <circle cx="130" cy="98" r="8" {...surface} />
+  </>,
+);
+
+/** Job photo: a spare tire going onto a jacked-up car. */
+export const TireJobArt = createIllustration(
+  "TireJobArt",
+  <>
+    <path d="M24 78l14-22h46l20 22v14H24z" {...surface} />
+    <path d="M44 60h18v14H40zM68 60h12l12 14H68z" {...muted} />
+    <circle cx="44" cy="94" r="10" {...surface} />
+    <path d="M86 92h14v10H86z" {...muted} />
+    <circle cx="124" cy="84" r="16" {...surface} />
+    <circle cx="124" cy="84" r="6" {...muted} />
+    <path d="M124 68v-6M140 84h6" />
+  </>,
+);
+
+/** Job photo: jump-starting a battery with cables from a service truck. */
+export const JumpJobArt = createIllustration(
+  "JumpJobArt",
+  <>
+    <rect x="22" y="58" width="44" height="34" rx="6" {...surface} />
+    <rect x="94" y="58" width="44" height="34" rx="6" {...surface} />
+    <path d="M32 58v-6h8v6M48 58v-6h8v6M104 58v-6h8v6M120 58v-6h8v6" />
+    <path d="M36 52c0-22 88-22 88 0" />
+    <path d="M52 52c0-14 56-14 56 0" strokeDasharray="4 5" />
+    <path d="M78 68l-6 10h8l-6 10" />
+  </>,
+);
+
+/** Job photo: opening a locked car door with a wedge and reach tool. */
+export const LockoutJobArt = createIllustration(
+  "LockoutJobArt",
+  <>
+    <path d="M30 96V44a8 8 0 0 1 8-8h60l24 30v30z" {...surface} />
+    <path d="M44 46h46l16 20H44z" {...muted} />
+    <path d="M96 76h10" />
+    <rect x="58" y="74" width="20" height="16" rx="3" {...surface} />
+    <path d="M62 74v-5a6 6 0 0 1 12 0v5" />
+    <path d="M110 30l-26 44" />
+    <path d="M104 26l12 8" />
+  </>,
+);
+
 export const illustrations = {
   "share-location": ShareLocationArt,
   "compare-quotes": CompareQuotesArt,
@@ -97,5 +153,9 @@ export const illustrations = {
   waiting: WaitingArt,
   "not-in-area": NotInAreaArt,
   offline: OfflineArt,
+  "job-tow": TowJobArt,
+  "job-tire": TireJobArt,
+  "job-jump": JumpJobArt,
+  "job-lockout": LockoutJobArt,
 } as const;
 export type IllustrationKey = keyof typeof illustrations;

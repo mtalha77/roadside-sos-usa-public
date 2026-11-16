@@ -1,6 +1,7 @@
 import { isDemoMode } from "@rsos/config/demo";
 import { type DemoRequest, demoRequestFromToken, makeDemoRequest, seedFrom } from "@rsos/core/demo";
 import { Button } from "@rsos/ui/button";
+import { GeistMono } from "geist/font/mono";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
@@ -103,19 +104,27 @@ export default async function RequestPage({ params }: Params) {
   return (
     <SitePage marketSlug={marketSlug}>
       <NextIntlClientProvider
-        messages={{ track: (messages as Record<string, unknown>).track as Record<string, unknown> }}
+        messages={{
+          track: (messages as Record<string, unknown>).track as Record<string, unknown>,
+          site: {
+            services: (messages as { site: { services: Record<string, unknown> } }).site.services,
+          },
+        }}
       >
-        <RequestLive
-          token={token}
-          code={real?.short_code ?? simulation!.code}
-          serviceName={service}
-          createdAt={
-            real ? Date.parse(real.submitted_at ?? real.created_at) : simulation!.createdAt
-          }
-          realStatus={real?.status ?? null}
-          simulation={simulation}
-          supportPhone={phone ? formatPhone(phone) : null}
-        />
+        {/* Geist Mono only on this page: the quote numbers, ETA and prices. */}
+        <div className={GeistMono.variable}>
+          <RequestLive
+            token={token}
+            code={real?.short_code ?? simulation!.code}
+            serviceName={service}
+            createdAt={
+              real ? Date.parse(real.submitted_at ?? real.created_at) : simulation!.createdAt
+            }
+            realStatus={real?.status ?? null}
+            simulation={simulation}
+            supportPhone={phone ? formatPhone(phone) : null}
+          />
+        </div>
       </NextIntlClientProvider>
     </SitePage>
   );
