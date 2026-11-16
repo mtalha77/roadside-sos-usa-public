@@ -481,6 +481,136 @@
       "adSpend": "Gasto en anuncios",
       "feeRevenue": "Ingresos por cargos",
       "assumptions": "Usa supuestos provisionales (costo por clic, tasas de conversión, parte del cargo) en packages/config hasta recibir el modelo de economía unitaria."
+    },
+    "content": {
+      "title": "Contenido",
+      "subtitle": "Las introducciones de ciudad aparecen en el sitio en cuanto publicas.",
+      "intro": "Introducción de la página de {name}",
+      "count": "{n} de 1200 caracteres",
+      "publish": "Publicar",
+      "readOnly": "Solo superadministradores y gerentes de operaciones pueden publicar.",
+      "saved": "Publicado. La página de la ciudad muestra la nueva introducción.",
+      "invalid": "Escribe de 40 a 1200 caracteres.",
+      "forbidden": "No tienes permiso para publicar contenido.",
+      "error": "No se pudo publicar. Inténtalo de nuevo.",
+      "preview": "Vista previa",
+      "previewTitle": "Ayuda en carretera en {name}",
+      "other": "Preguntas frecuentes, textos de servicios y avisos",
+      "otherHint": "Están en los archivos de mensajes (inglés y español) y cambian con cada versión; pasarlos aquí llega con las tablas de contenido."
+    },
+    "settings": {
+      "title": "Ajustes",
+      "sections": "Secciones de ajustes",
+      "tabs": {
+        "users": "Usuarios y roles",
+        "audit": "Registro de auditoría",
+        "templates": "Plantillas de mensajes",
+        "rules": "Reglas del negocio",
+        "flags": "Funciones",
+        "integrations": "Integraciones"
+      },
+      "onlyYou": "Solo los superadministradores ven a todos; tú te ves a ti.",
+      "inactive": "Inactivo",
+      "viewAs": "Las sesiones para ver como proveedor abren su portal en solo lectura; llegan con la etapa de backend.",
+      "manageStaff": "Administrar personal y segundo paso",
+      "superOnly": "Solo los superadministradores pueden leer el registro de auditoría.",
+      "noAudit": "Aún no hay registros.",
+      "channels": {
+        "sms": "Mensaje de texto",
+        "email": "Correo",
+        "push": "Push"
+      },
+      "tpl": {
+        "template": "Plantilla",
+        "channel": "Canal",
+        "english": "Inglés",
+        "spanish": "Español",
+        "preview": "Vista previa con valores de ejemplo",
+        "save": "Guardar plantilla",
+        "saved": "Guardada en esta página. Los envíos la usarán cuando se conecte la mensajería.",
+        "variables": "Variables: '{code}', '{provider}', '{eta}', '{price}'"
+      },
+      "rules": {
+        "quoteWindow": {
+          "label": "Ventana de cotización",
+          "value": "3 minutos"
+        },
+        "radiusSteps": {
+          "label": "Pasos del radio de búsqueda",
+          "value": "10, 20 y luego 35 millas"
+        },
+        "maxQuotes": {
+          "label": "Máximo de cotizaciones para el conductor",
+          "value": "5"
+        },
+        "autoExpire": {
+          "label": "La solicitud vence sin cotizaciones después de",
+          "value": "15 minutos"
+        },
+        "cancelFee": {
+          "label": "Cargo si el conductor cancela tras elegir",
+          "value": "Ninguno (decisión pendiente)"
+        }
+      },
+      "rulesHint": "Hoy las reglas son iguales en todos los mercados; la edición por mercado llega con la tabla de reglas.",
+      "flags": {
+        "spanish_site": {
+          "label": "Sitio en español",
+          "hint": "Mostrar el selector de idioma en el sitio."
+        },
+        "phone_intake": {
+          "label": "Recepción telefónica",
+          "hint": "Los despachadores pueden crear solicitudes desde llamadas."
+        },
+        "auto_pick": {
+          "label": "Ayuda más rápida",
+          "hint": "Los conductores pueden dejarnos elegir la cotización más rápida."
+        },
+        "featured_slots": {
+          "label": "Lugares destacados",
+          "hint": "Proveedores destacados en páginas de ciudad."
+        },
+        "driver_accounts": {
+          "label": "Cuentas de conductor",
+          "hint": "Los conductores pueden entrar para ver su historial."
+        }
+      },
+      "flagSaved": "{flag} actualizado en esta página.",
+      "integrations": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads",
+        "twilio": "Twilio",
+        "stripe": "Stripe",
+        "google_maps": "Google Maps",
+        "resend": "Resend"
+      },
+      "notConnected": "Sin conectar",
+      "lastSync": "Última sincronización: {when}",
+      "never": "nunca",
+      "connect": "Conectar (requiere una cuenta)",
+      "templates": {
+        "request_received": {
+          "name": "Solicitud recibida",
+          "en": "We got your request '{code}'. Providers are sending quotes now.",
+          "es": "Recibimos tu solicitud '{code}'. Los proveedores están enviando cotizaciones."
+        },
+        "provider_picked": {
+          "name": "Proveedor confirmado",
+          "en": "'{provider}' is on the way. Arrival in about '{eta}'.",
+          "es": "'{provider}' va en camino. Llega en unos '{eta}'."
+        },
+        "provider_arriving": {
+          "name": "Proveedor llegando",
+          "en": "'{provider}' is almost there. Stay in a safe place.",
+          "es": "'{provider}' está por llegar. Quédate en un lugar seguro."
+        },
+        "job_completed": {
+          "name": "Trabajo completado",
+          "en": "Done! You paid '{price}'. How did '{provider}' do?",
+          "es": "¡Listo! Pagaste '{price}'. ¿Cómo lo hizo '{provider}'?"
+        }
+      }
     }
   },
   "emails": {
