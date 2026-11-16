@@ -449,6 +449,38 @@
       "thresholds": "Flagged below a {rating} rating or above {cancel}% cancellations.",
       "score": "Score {score}",
       "flag": "Needs attention"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "range": "Date range",
+      "days": "{count, plural, one {Today} other {Last # days}}",
+      "demo": "Demo data, scaled from the live demo stream; {real} real requests in this range.",
+      "realRequests": "Real requests",
+      "firstQuote": "Time to first quote",
+      "seconds": "{s} s",
+      "costPerRequest": "Cost per paid request",
+      "contribution": "Contribution",
+      "funnel": "Funnel",
+      "steps": {
+        "visits": "Visits",
+        "started": "Started",
+        "submitted": "Submitted",
+        "quoted": "Quoted",
+        "picked": "Picked",
+        "completed": "Completed"
+      },
+      "bySource": "Requests by source",
+      "sources": {
+        "web": "Website",
+        "phone": "Phone",
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "organic": "Organic"
+      },
+      "economics": "Economics",
+      "adSpend": "Ad spend",
+      "feeRevenue": "Fee revenue",
+      "assumptions": "Uses placeholder assumptions (cost per click, conversion rates, fee share) in packages/config until the unit economics model is shared."
     }
   },
   "emails": {

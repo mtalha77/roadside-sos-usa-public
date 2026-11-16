@@ -289,6 +289,12 @@ Demo data (no reviews table yet).
 
 - Moderation queue with the lowest ratings first (approve, hide, follow up with the driver), provider quality scores with thresholds (rating below 4.3 or cancellations above 8% are flagged).
 
+## RSOS-081: Analytics
+
+Real: the request count in the range. Demo: the funnel, sources and speed, scaled from the live demo stream. Placeholder: unit economics assumptions in `packages/config` (cost per click, conversion rates, fee share) until the owner's model is shared (BLOCKER, decisions).
+
+- Date ranges (today, 7 and 30 days); funnel (visits, started, submitted, quoted, picked, completed) with step conversion; requests by source; time to first quote; economics (ad spend, cost per paid request, fee revenue, contribution).
+
 ## BLOCKERS
 
 New in batch 3 (keys):
