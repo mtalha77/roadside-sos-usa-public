@@ -449,6 +449,38 @@
       "thresholds": "Se marca con calificación menor a {rating} o más de {cancel}% de cancelaciones.",
       "score": "Puntaje {score}",
       "flag": "Requiere atención"
+    },
+    "analytics": {
+      "title": "Analítica",
+      "range": "Rango de fechas",
+      "days": "{count, plural, one {Hoy} other {Últimos # días}}",
+      "demo": "Datos de demostración, escalados desde el flujo demo en vivo; {real} solicitudes reales en este rango.",
+      "realRequests": "Solicitudes reales",
+      "firstQuote": "Tiempo a la primera cotización",
+      "seconds": "{s} s",
+      "costPerRequest": "Costo por solicitud pagada",
+      "contribution": "Contribución",
+      "funnel": "Embudo",
+      "steps": {
+        "visits": "Visitas",
+        "started": "Iniciadas",
+        "submitted": "Enviadas",
+        "quoted": "Cotizadas",
+        "picked": "Elegidas",
+        "completed": "Completadas"
+      },
+      "bySource": "Solicitudes por origen",
+      "sources": {
+        "web": "Sitio web",
+        "phone": "Teléfono",
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "organic": "Orgánico"
+      },
+      "economics": "Economía",
+      "adSpend": "Gasto en anuncios",
+      "feeRevenue": "Ingresos por cargos",
+      "assumptions": "Usa supuestos provisionales (costo por clic, tasas de conversión, parte del cargo) en packages/config hasta recibir el modelo de economía unitaria."
     }
   },
   "emails": {
