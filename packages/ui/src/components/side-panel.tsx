@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 import { cn } from "../lib/cn";
 
 export const SidePanel = DialogPrimitive.Root;
@@ -30,6 +30,7 @@ export function SidePanelContent({
   children: ReactNode;
   className?: string;
 }) {
+  const titleId = useId();
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="fixed inset-0 z-50 animate-fade-in bg-foreground/40" />
@@ -45,7 +46,10 @@ export function SidePanelContent({
           <div className="flex min-w-0 flex-1 items-center gap-3">
             {header}
             <div className="min-w-0">
-              <DialogPrimitive.Title className="truncate text-xl font-semibold">
+              <DialogPrimitive.Title
+                id={titleId}
+                className="text-xl leading-tight font-semibold text-balance"
+              >
                 {title}
               </DialogPrimitive.Title>
               {description ? (
@@ -62,7 +66,15 @@ export function SidePanelContent({
             <X aria-hidden="true" className="size-5" />
           </DialogPrimitive.Close>
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6">{children}</div>
+        {/* Focusable so keyboard users can scroll it (axe: scrollable-region-focusable). */}
+        <div
+          tabIndex={0}
+          role="region"
+          aria-labelledby={titleId}
+          className="min-h-0 flex-1 overflow-y-auto px-4 py-5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring sm:px-6"
+        >
+          {children}
+        </div>
         {footer ? (
           <div className="border-t bg-popover px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6">
             {footer}

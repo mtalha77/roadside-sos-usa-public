@@ -34,6 +34,9 @@ export function useDemoClock(token: string, enabled: boolean) {
   const save = useCallback(
     (next: Saved) => {
       setState(next);
+      // Move "now" with the jump, so the page shows the target stage at once (not up to one tick
+      // before it, which would leave a quick second Next acting on the previous stage).
+      setNow(next.anchor);
       try {
         localStorage.setItem(key(token), JSON.stringify(next));
       } catch {
@@ -43,7 +46,7 @@ export function useDemoClock(token: string, enabled: boolean) {
     [token],
   );
 
-  const elapsed = state.base + ((now - state.anchor) / 1000) * state.speed;
+  const elapsed = state.base + (Math.max(0, now - state.anchor) / 1000) * state.speed;
 
   /** Jump to a point in the demo (seconds), keeping the speed. */
   const jumpTo = useCallback(
