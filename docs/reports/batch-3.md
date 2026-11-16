@@ -185,6 +185,12 @@ Real: the member's role. Demo: team members, truck positions, assignments.
 
 - Live team map, members with roles and online state, invite by text (name, number, role), managers assign active jobs; operators see only jobs assigned to them.
 
+## RSOS-061: Performance insights
+
+Demo data.
+
+- Quote rate, win rate, reply time, ETA accuracy, rating, cancellations; return on fees by week (job value won against fees paid) as a server-rendered SVG chart with an equivalent data table for screen readers.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
