@@ -283,6 +283,12 @@ Demo data (no billing yet). Placeholder: Stripe reconciliation (needs Stripe).
 
 - Totals for fees, top-ups, credits and subscriptions; ledger explorer with type filter; revenue by market, service and source; disputes queue; CSV export (finance and super admins).
 
+## RSOS-080: Reviews and quality
+
+Demo data (no reviews table yet).
+
+- Moderation queue with the lowest ratings first (approve, hide, follow up with the driver), provider quality scores with thresholds (rating below 4.3 or cancellations above 8% are flagged).
+
 ## BLOCKERS
 
 New in batch 3 (keys):
