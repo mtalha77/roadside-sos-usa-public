@@ -44,6 +44,11 @@ describe("Supabase service role key stays on the server", () => {
     const readers = files
       .filter((f) => !f.path.includes("/test/") && f.content.includes("SUPABASE_SERVICE_ROLE_KEY"))
       .map((f) => f.path);
-    expect(readers.sort()).toEqual(["packages/db/src/admin.ts", "packages/db/src/env.ts"]);
+    // key-check.ts decodes only the project ref claim and never returns or logs the key.
+    expect(readers.sort()).toEqual([
+      "packages/db/src/admin.ts",
+      "packages/db/src/env.ts",
+      "packages/db/src/key-check.ts",
+    ]);
   });
 });
