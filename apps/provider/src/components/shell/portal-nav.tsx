@@ -17,6 +17,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { isBuilt } from "@/lib/routes";
+import { ThemeSwitch } from "./theme-switch";
 
 export type NavLabels = Record<
   | "label"
@@ -31,7 +32,8 @@ export type NavLabels = Record<
   | "notifications"
   | "help"
   | "account"
-  | "install",
+  | "install"
+  | "theme",
   string
 >;
 
@@ -90,6 +92,7 @@ export function PortalNav({
             {t.label}
           </Link>
         ))}
+        <ThemeSwitch label={labels.theme} className={`${item} mt-auto text-left`} />
       </nav>
       <nav
         aria-label={labels.label}

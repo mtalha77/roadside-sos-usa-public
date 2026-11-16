@@ -111,8 +111,21 @@ export async function demoSignInAction(form: FormData): Promise<void> {
 
   // 4. Second step on the server.
   if (isProvider) {
-    const { data: code } = await supabase.rpc("issue_email_code");
-    await supabase.rpc("verify_email_code", { p_code: String(code) });
+    // Demo accounts are shared: a sign-in happening at the same moment can replace this code
+    // (one pending code per account), so retry with a short random pause. A lock caused by such
+    // collisions is cleared, since the demo account's code is always known to the server.
+    for (let attempt = 0; attempt < 6; attempt++) {
+      if (attempt > 0) await new Promise((r) => setTimeout(r, 150 + Math.random() * 450));
+      const { data: code, error } = await supabase.rpc("issue_email_code");
+      if (error || !code) {
+        await admin.from("email_second_step_codes").delete().eq("user_id", userId);
+        continue;
+      }
+      const { data: result } = await supabase.rpc("verify_email_code", { p_code: String(code) });
+      if (result === "ok") break;
+      if (result === "locked")
+        await admin.from("email_second_step_codes").delete().eq("user_id", userId);
+    }
   } else {
     const demoTable = admin.from("demo_accounts" as never) as unknown as {
       select: (c: string) => {

@@ -2,7 +2,6 @@ import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { getMarkets, getServices } from "@/lib/site-data";
 import { getVisitorMarket } from "@/lib/visitor";
-import { LightThemeToggle } from "./light-controls";
 import { MenuCloser } from "./menu-closer";
 import { MobileBar } from "./mobile-bar";
 import { SiteFooter } from "./site-footer";
@@ -39,9 +38,7 @@ export async function SitePage({
         {children}
       </main>
       <SiteFooter markets={markets} services={services} market={market} />
-      <div className="mx-auto flex max-w-6xl justify-end px-4 pb-32 sm:pb-6">
-        <LightThemeToggle label={t("toggleTheme")} />
-      </div>
+      <div aria-hidden="true" className="pb-32 sm:pb-6" />
       <MobileBar market={market} />
       <MenuCloser />
     </>

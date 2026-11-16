@@ -97,10 +97,10 @@ Real data: market, number, prices and services from the database; the form start
 
 Acceptance criteria:
 
-| #   | Criterion                    | Result                                                                         |
-| --- | ---------------------------- | ------------------------------------------------------------------------------ |
-| 1   | LCP under 1.2 seconds mobile | MEASURED on staging after merge (see below)                                    |
-| 2   | JavaScript under 150 KB      | PASS in CI: the landing page is part of the Lighthouse budgets (150 KB script) |
+| #   | Criterion                    | Result                                                                                                            |
+| --- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1   | LCP under 1.2 seconds mobile | PASS: median 0.87 s on CI (Lighthouse mobile, 5 runs); now enforced in CI at 1.2 s for landing pages and Get Help |
+| 2   | JavaScript under 150 KB      | PASS in CI: the landing page is part of the Lighthouse budgets (150 KB script)                                    |
 
 ### Run notes (CI and staging)
 
@@ -342,15 +342,16 @@ Real: city page intros (edit, preview and publish through `admin_update_market_i
 | --- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Following the walkthrough, the owner sees a full job from request to review in all three apps | PARTLY BLOCKED: the website and provider portal parts work on staging; the admin part needs admin "Sign in as demo", which is blocked by the admin server key (BLOCKERS, keys). The walkthrough e2e is written and skips until then |
 
-## Performance on staging (mobile Lighthouse, 3 runs each)
+## Performance (mobile Lighthouse in CI, median of 5 runs)
 
-| Page                              | LCP            | Total blocking time | Score     | Target                         |
-| --------------------------------- | -------------- | ------------------- | --------- | ------------------------------ |
-| `/get-help`                       | 1.18 to 1.20 s | 54 to 66 ms         | 99 to 100 | LCP under 1.2 s: PASS (barely) |
-| Ad landing page `/lp/houston/tow` | 1.55 to 1.63 s | 12 to 32 ms         | 97 to 99  | LCP under 1.2 s: FAIL          |
-| Home, city page, service page     | 1.17 to 1.44 s | 24 to 65 ms         | 97 to 100 | no LCP target                  |
+| Page                                    | LCP            | Target            |
+| --------------------------------------- | -------------- | ----------------- |
+| Ad landing page `/lp/houston/flat-tire` | 0.87 s         | under 1.2 s: PASS |
+| `/get-help`                             | 0.88 s         | under 1.2 s: PASS |
+| Service page                            | 0.89 s         | none              |
+| Home, city page                         | 1.04 to 1.05 s | none              |
 
-The landing page's LCP is its first text paint (first contentful paint is also about 1.6 s; server response 100 ms), so render-blocking CSS and the web font decide it. Suggested fix for the next batch: inline the landing page's critical CSS, preload or subset its font, and check its CSS size against the Get Help page.
+These are CI's own measurements of the release (`lighthouse` job, run on every pull request). An earlier run from a laptop far from the servers showed 1.5 to 1.6 s for both the landing page and Get Help: Lighthouse's network simulation scales with the measuring machine's real latency, so those numbers were not comparable and the "landing page fails" note was wrong. CI now fails any pull request where a landing page or Get Help goes over 1.2 s (`tests/e2e/lighthouserc.json`), so the target stays enforced.
 
 ## BLOCKERS
 

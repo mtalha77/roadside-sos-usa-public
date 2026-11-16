@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { cityLabel, formatPhone, marketPath, type SiteMarket } from "@/lib/market";
 import type { SiteService } from "@/lib/site-data";
+import { LightThemeToggle } from "./light-controls";
 import { serviceName } from "./service-label";
 
 type Props = { markets: SiteMarket[]; services: SiteService[]; market: SiteMarket | null };
@@ -14,7 +15,7 @@ type Props = { markets: SiteMarket[]; services: SiteService[]; market: SiteMarke
  * market number, and Get help now. Menus are native disclosures (no JavaScript needed).
  */
 export async function SiteHeader({ markets, services, market }: Props) {
-  const t = await getTranslations("site");
+  const [t, tc] = await Promise.all([getTranslations("site"), getTranslations("common")]);
   const offered = services.filter((s) => s.market_count > 0);
   const menuItem = "flex min-h-touch items-center rounded-lg px-3 hover:bg-accent";
   const disclosure =
@@ -74,6 +75,7 @@ export async function SiteHeader({ markets, services, market }: Props) {
             </a>
           </Button>
         ) : null}
+        <LightThemeToggle label={tc("toggleTheme")} />
         <Button asChild className="hidden sm:inline-flex">
           <Link href="/get-help">{t("nav.getHelp")}</Link>
         </Button>
