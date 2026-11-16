@@ -35,9 +35,9 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Install browsers
         run: pnpm --filter @rsos/e2e exec playwright install --with-deps chromium webkit
-      - name: Demo sign-in smoke test on staging (all four demo roles)
+      - name: Staging smoke (health, demo sign-in for all four roles, Get Help to quotes)
         # Fails (never skips) if "Sign in as demo" is broken, e.g. a wrong SUPABASE_SERVICE_ROLE_KEY.
-        run: pnpm --filter @rsos/e2e exec playwright test specs/demo-sign-in.spec.ts --project=desktop-chrome
+        run: pnpm --filter @rsos/e2e exec playwright test specs/demo-sign-in.spec.ts specs/staging-smoke.spec.ts --project=desktop-chrome
       - name: Full regression suite against staging
         run: pnpm --filter @rsos/e2e test:e2e
       - name: Lighthouse budgets on staging

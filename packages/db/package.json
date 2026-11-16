@@ -10,7 +10,9 @@
     "./claims": "./src/claims.ts",
     "./session": "./src/session.ts",
     "./cookies": "./src/cookies.ts",
-    "./public": "./src/public.ts"
+    "./public": "./src/public.ts",
+    "./key-check": "./src/key-check.ts",
+    "./health": "./src/health.ts"
   },
   "scripts": {
     "lint": "eslint .",

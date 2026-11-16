@@ -22,7 +22,8 @@
     "./theme-colors": "./src/theme-colors.ts",
     "./legal": "./src/legal.ts",
     "./demo": "./src/demo.ts",
-    "./demo-fixtures": "./src/demo-fixtures.ts"
+    "./demo-fixtures": "./src/demo-fixtures.ts",
+    "./adapters": "./src/adapters.ts"
   },
   "scripts": {
     "lint": "eslint .",

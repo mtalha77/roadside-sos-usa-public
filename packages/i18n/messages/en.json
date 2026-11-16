@@ -508,7 +508,8 @@
         "templates": "Message templates",
         "rules": "Business rules",
         "flags": "Feature flags",
-        "integrations": "Integrations"
+        "integrations": "Integrations",
+        "system": "System status"
       },
       "onlyYou": "Only super admins see everyone; you see yourself.",
       "inactive": "Inactive",
@@ -611,6 +612,56 @@
           "en": "Done! You paid '{price}'. How did '{provider}' do?",
           "es": "¡Listo! Pagaste '{price}'. ¿Cómo lo hizo '{provider}'?"
         }
+      },
+      "system": {
+        "intro": "Live health of the three apps in this environment. Only states are shown, never keys or values.",
+        "apps": {
+          "web": "Website",
+          "provider": "Provider app",
+          "admin": "Admin"
+        },
+        "healthy": "Healthy",
+        "unhealthy": "Needs attention",
+        "unreachable": "Not reachable",
+        "unreachableBody": "This app's health check could not be reached from here (for example a protected preview).",
+        "environment": "Environment",
+        "commit": "Commit",
+        "database": "Database",
+        "serviceKey": "Server key",
+        "demoMode": "Demo mode",
+        "on": "On",
+        "off": "Off",
+        "none": "—",
+        "db": {
+          "ok": "Reachable",
+          "error": "Error",
+          "not-configured": "Not configured"
+        },
+        "key": {
+          "match": "Matches project",
+          "mismatch": "Wrong project",
+          "unverifiable": "Set (not verifiable)",
+          "missing": "Missing",
+          "not-used": "Not used"
+        },
+        "adapters": "Third-party services",
+        "adapter": "Service",
+        "adapterNames": {
+          "twilio": "Twilio texts and calls",
+          "twilioVerify": "Twilio Verify codes",
+          "softphone": "Browser softphone",
+          "maps": "Google Maps",
+          "email": "Email (Resend)",
+          "turnstile": "Bot protection (Turnstile)",
+          "rateLimit": "Rate limits (Upstash)",
+          "analytics": "Ad tracking (GTM)"
+        },
+        "state": {
+          "real": "Real",
+          "fake": "Fake",
+          "missing": "Missing"
+        },
+        "legend": "Real: live keys are set. Fake: keys are missing outside production, so a safe stand-in is used and nothing is sent. Missing: keys are missing in production and the feature is off."
       }
     },
     "walkthrough": {

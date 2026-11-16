@@ -508,7 +508,8 @@
         "templates": "Plantillas de mensajes",
         "rules": "Reglas del negocio",
         "flags": "Funciones",
-        "integrations": "Integraciones"
+        "integrations": "Integraciones",
+        "system": "Estado del sistema"
       },
       "onlyYou": "Solo los superadministradores ven a todos; tú te ves a ti.",
       "inactive": "Inactivo",
@@ -611,6 +612,56 @@
           "en": "Done! You paid '{price}'. How did '{provider}' do?",
           "es": "¡Listo! Pagaste '{price}'. ¿Cómo lo hizo '{provider}'?"
         }
+      },
+      "system": {
+        "intro": "Estado en vivo de las tres apps en este entorno. Solo se muestran estados, nunca claves ni valores.",
+        "apps": {
+          "web": "Sitio web",
+          "provider": "App de proveedores",
+          "admin": "Admin"
+        },
+        "healthy": "Bien",
+        "unhealthy": "Requiere atención",
+        "unreachable": "No disponible",
+        "unreachableBody": "No se pudo consultar el estado de esta app desde aquí (por ejemplo, una vista previa protegida).",
+        "environment": "Entorno",
+        "commit": "Commit",
+        "database": "Base de datos",
+        "serviceKey": "Clave del servidor",
+        "demoMode": "Modo demo",
+        "on": "Activado",
+        "off": "Desactivado",
+        "none": "—",
+        "db": {
+          "ok": "Disponible",
+          "error": "Error",
+          "not-configured": "Sin configurar"
+        },
+        "key": {
+          "match": "Coincide con el proyecto",
+          "mismatch": "Proyecto equivocado",
+          "unverifiable": "Configurada (no verificable)",
+          "missing": "Falta",
+          "not-used": "No se usa"
+        },
+        "adapters": "Servicios externos",
+        "adapter": "Servicio",
+        "adapterNames": {
+          "twilio": "Textos y llamadas de Twilio",
+          "twilioVerify": "Códigos de Twilio Verify",
+          "softphone": "Teléfono en el navegador",
+          "maps": "Google Maps",
+          "email": "Correo (Resend)",
+          "turnstile": "Protección contra bots (Turnstile)",
+          "rateLimit": "Límites de uso (Upstash)",
+          "analytics": "Seguimiento de anuncios (GTM)"
+        },
+        "state": {
+          "real": "Real",
+          "fake": "Simulado",
+          "missing": "Falta"
+        },
+        "legend": "Real: las claves están configuradas. Simulado: faltan claves fuera de producción, así que se usa un sustituto seguro y no se envía nada. Falta: faltan claves en producción y la función está apagada."
       }
     },
     "walkthrough": {

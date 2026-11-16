@@ -1,20 +1,16 @@
-import { PublicSupabaseEnvSchema } from "@rsos/db";
+import { getHealth } from "@rsos/db/health";
 import { NextResponse } from "next/server";
-import { getServerSupabase } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-/** Liveness check. Reports whether Supabase is configured for this deployment, never any values. */
+/**
+ * Health check (RSOS-099): environment, commit, database, the service key's project, and each
+ * third-party adapter as real, fake or missing. Never any values.
+ */
 export async function GET() {
-  const configured = PublicSupabaseEnvSchema.safeParse(process.env).success;
-  let auth: "not-configured" | "ok" | "error" = "not-configured";
-  if (configured) {
-    const supabase = await getServerSupabase();
-    const { error } = await supabase.auth.getSession();
-    auth = error ? "error" : "ok";
-  }
-  return NextResponse.json(
-    { ok: true, supabase: auth },
-    { headers: { "Cache-Control": "no-store" } },
-  );
+  const health = await getHealth("provider");
+  return NextResponse.json(health, {
+    status: health.ok ? 200 : 503,
+    headers: { "Cache-Control": "no-store" },
+  });
 }
