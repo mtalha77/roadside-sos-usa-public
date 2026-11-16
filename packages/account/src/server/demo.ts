@@ -44,8 +44,12 @@ export async function demoSignInAction(form: FormData): Promise<void> {
   });
   let userId = created.data.user?.id;
   if (!userId) {
-    const { data } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
-    userId = data.users.find((u) => u.email === email)?.id;
+    // The account exists already: find it (test runs create many users, so page through them).
+    for (let page = 1; page <= 50 && !userId; page++) {
+      const { data } = await admin.auth.admin.listUsers({ page, perPage: 1000 });
+      userId = data.users.find((u) => u.email === email)?.id;
+      if (data.users.length < 1000) break;
+    }
     if (!userId) throw new Error("Demo account could not be created");
   }
 
