@@ -1629,7 +1629,8 @@
       "featured": "Featured spot on city pages",
       "current": "Your plan",
       "soon": "Coming soon",
-      "ownersOnly": "Only owners and managers can see the wallet."
+      "ownersOnly": "Only owners and managers can see the wallet.",
+      "more": "Show earlier transactions"
     }
   }
 }

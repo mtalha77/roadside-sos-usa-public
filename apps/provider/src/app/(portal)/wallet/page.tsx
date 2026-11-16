@@ -26,7 +26,14 @@ async function load() {
  * Stripe keys), payment methods, transactions by day linked to jobs, statements and plans.
  * Owners and managers only.
  */
-export default async function WalletPage() {
+const DAY = 86_400_000;
+
+export default async function WalletPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}) {
+  const days = Math.min(60, Math.max(14, Number((await searchParams).days) || 14));
   const [t, locale, { ctx, data, balance }] = await Promise.all([
     getTranslations("portal.wallet"),
     getLocale(),
@@ -42,7 +49,9 @@ export default async function WalletPage() {
   const money = (c: number) => formatCurrency(c, locale as Locale);
   const day = new Intl.DateTimeFormat(locale === "es" ? "es-US" : "en-US", { dateStyle: "full" });
   const groups = new Map<string, typeof data.txns>();
-  for (const x of data.txns) {
+  const newest = data.txns[0]?.at ?? 0;
+  const shown = data.txns.filter((x) => x.at > newest - days * DAY);
+  for (const x of shown) {
     const k = day.format(x.at);
     groups.set(k, [...(groups.get(k) ?? []), x]);
   }
@@ -132,6 +141,13 @@ export default async function WalletPage() {
             </div>
           ))
         )}
+        {shown.length < data.txns.length ? (
+          <Button asChild variant="outline" className="self-start">
+            <Link href={`/wallet?days=${days + 14}`} scroll={false}>
+              {t("more")}
+            </Link>
+          </Button>
+        ) : null}
         <p className="text-sm text-muted-foreground">{t("disputeHint")}</p>
       </section>
       <section aria-labelledby="plans-h" className="flex flex-col gap-3">
