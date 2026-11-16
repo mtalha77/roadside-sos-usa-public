@@ -28,6 +28,12 @@ const attrs = (a: Record<string, string | number | boolean | undefined>) =>
     .join("");
 export const twiml = (inner: string) =>
   `<?xml version="1.0" encoding="UTF-8"?><Response>${inner}</Response>`;
+/** Adds query parameters to an absolute URL (keeps any already there, e.g. a bypass token). */
+export const withQuery = (url: string, q: Record<string, string>) => {
+  const u = new URL(url);
+  for (const [k, v] of Object.entries(q)) u.searchParams.set(k, v);
+  return u.toString();
+};
 const say = (text: string) => `<Say voice="Polly.Joanna">${esc(text)}</Say>`;
 
 export type CallFlowText = {
@@ -59,10 +65,10 @@ export function incomingCallTwiml(o: {
     (o.record && o.text.recordingNotice ? say(o.text.recordingNotice) : "");
   if (o.clients.length === 0)
     return twiml(
-      `${intro}<Redirect method="POST">${esc(o.action)}?leg=clients&amp;none=1</Redirect>`,
+      `${intro}<Redirect method="POST">${esc(withQuery(o.action, { leg: "clients", none: "1" }))}</Redirect>`,
     );
   const dial = `<Dial${attrs({
-    action: `${o.action}?leg=clients`,
+    action: withQuery(o.action, { leg: "clients" }),
     method: "POST",
     timeout: o.timeoutSec ?? 15,
     answerOnBridge: true,
@@ -81,10 +87,12 @@ export function fallbackCallTwiml(o: {
   recordingStatusCallback?: string;
 }): string {
   if (o.numbers.length === 0)
-    return twiml(`<Redirect method="POST">${esc(o.action)}?leg=numbers&amp;none=1</Redirect>`);
+    return twiml(
+      `<Redirect method="POST">${esc(withQuery(o.action, { leg: "numbers", none: "1" }))}</Redirect>`,
+    );
   return twiml(
     `<Dial${attrs({
-      action: `${o.action}?leg=numbers`,
+      action: withQuery(o.action, { leg: "numbers" }),
       method: "POST",
       timeout: 20,
       callerId: o.callerId,

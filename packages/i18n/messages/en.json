@@ -2714,5 +2714,19 @@
         }
       }
     }
+  },
+  "voice": {
+    "greeting": "Thanks for calling {brand}. We're connecting you to a dispatcher now.",
+    "safety": "If you are in danger, hang up and call 9 1 1.",
+    "recordingNotice": "This call may be recorded for quality and safety.",
+    "voicemail": "All our dispatchers are busy. Please leave your name, where you are, and what happened after the tone. We will call you right back.",
+    "goodbye": "Thank you. We'll call you back shortly.",
+    "callerName": "Phone caller",
+    "autoText": "Thanks for calling {brand}. Share your exact location here: {link}",
+    "missedAlert": "Missed call from {caller}. Call them back from the admin inbox.",
+    "voicemailAlert": "New voicemail from {caller}. Listen in the admin inbox."
+  },
+  "texts": {
+    "stopNotice": "Reply STOP to opt out."
   }
 }

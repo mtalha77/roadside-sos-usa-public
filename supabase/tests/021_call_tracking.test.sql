@@ -52,13 +52,15 @@ values ((select id from public.markets where slug = 'houston'), '00000000-0000-4
 insert into public.sms_opt_outs (phone, opted_out, source) values ('+12105550104', true, 'STOP');
 
 -- Visitors read none of it.
+select set_config('test.houston', (select id::text from public.markets where slug = 'houston'), true);
+select set_config('test.houston_web', coalesce(public.market_website_phone((select id from public.markets where slug = 'houston')), ''), true);
 set local role anon;
 select throws_ok($$ select * from public.calls $$, '42501', null, 'visitors cannot read calls');
 select throws_ok($$ select * from public.sms_messages $$, '42501', null, 'visitors cannot read texts');
 select throws_ok($$ select * from public.webhook_events $$, '42501', null, 'visitors cannot read webhook events');
 select throws_ok($$ select * from public.on_duty_dispatchers() $$, '42501', null, 'visitors cannot see who is on duty');
-select ok(public.market_phone_for_source((select id from public.markets where slug = 'houston'), 'google_ads') is not distinct from
-          public.market_website_phone((select id from public.markets where slug = 'houston')),
+select is(coalesce(public.market_phone_for_source(current_setting('test.houston')::uuid, 'google_ads'), ''),
+          current_setting('test.houston_web'),
   'without a google_ads number the website number is shown');
 reset role;
 

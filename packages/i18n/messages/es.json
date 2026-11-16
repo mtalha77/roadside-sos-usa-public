@@ -2714,5 +2714,19 @@
         }
       }
     }
+  },
+  "voice": {
+    "greeting": "Gracias por llamar a {brand}. Te estamos comunicando con un despachador.",
+    "safety": "Si estás en peligro, cuelga y llama al 9 1 1.",
+    "recordingNotice": "Esta llamada puede ser grabada por calidad y seguridad.",
+    "voicemail": "Todos nuestros despachadores están ocupados. Deja tu nombre, dónde estás y qué pasó después del tono. Te llamaremos enseguida.",
+    "goodbye": "Gracias. Te llamaremos pronto.",
+    "callerName": "Persona que llamó",
+    "autoText": "Gracias por llamar a {brand}. Comparte tu ubicación exacta aquí: {link}",
+    "missedAlert": "Llamada perdida de {caller}. Devuélvele la llamada desde la bandeja de admin.",
+    "voicemailAlert": "Nuevo mensaje de voz de {caller}. Escúchalo en la bandeja de admin."
+  },
+  "texts": {
+    "stopNotice": "Responde STOP para no recibir más mensajes."
   }
 }
