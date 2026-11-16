@@ -207,6 +207,21 @@ Real data (batch 2 account and security).
 | --- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Fits the shell and passes the quality bar | PASS: e2e on iPhone, Pixel and desktop: navigation present, zero serious or critical axe issues in light and dark, no horizontal scroll |
 
+Fixed while shipping RSOS-093: the account page listed every signed-in device, and shared demo accounts collect many; it now lists the current device and the 9 most recent, with a count of the rest.
+
+## Part C: admin dashboard
+
+Sign in on staging: open the admin sign-in page and choose "Sign in as demo" (Super admin or Dispatcher). The second step is passed on the server for demo accounts.
+
+## RSOS-071: Admin shell
+
+Real: the signed-in staff member and role, the markets list. Demo: nothing (the shell itself).
+
+- Collapsible sidebar (only sections that exist are listed; each ticket adds its own), market switcher (one, several or all; remembered in a cookie and applied by every screen), Cmd+K / Ctrl+K command palette (jump to a page; find a request by code, phone or name; find a provider; switch theme; show shortcuts), "g then a letter" shortcuts with a "?" cheat sheet, light and dark, skip link, section links on phones.
+- Hidden Demo controls (demo mode only) in the sidebar: pause, resume, skip ahead 5 minutes and reset the scenario clock that drives the simulated requests on admin screens. Real data is never touched.
+- Saved views on tables use `useSavedViews` from the UI kit where tables use DataTable; the admin tables in this batch are server-rendered with URL filters, so a filtered view is saved by bookmarking its link.
+- The shared command palette gained an optional `onQueryChange` so actions can use what was typed.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
