@@ -175,7 +175,8 @@
       "dispute": "Abrir una disputa",
       "logged": "Registro de acciones",
       "review": "Reseña",
-      "noReview": "Aún no hay reseña."
+      "noReview": "Aún no hay reseña.",
+      "callDriver": "Llamar al conductor"
     },
     "intake": {
       "title": "Recepción telefónica",
@@ -867,6 +868,47 @@
           "hint": "Usuarios, auditoría, plantillas, funciones e integraciones."
         }
       }
+    },
+    "softphone": {
+      "title": "Teléfono",
+      "minimise": "Ocultar",
+      "pill": "Teléfono · {presence}",
+      "ringing": "Llamada entrante",
+      "incomingFrom": "Llamada entrante de {caller}",
+      "unknownCaller": "Número desconocido",
+      "presenceLabel": "Tu estado",
+      "presence": {
+        "available": "Disponible",
+        "busy": "Ocupado",
+        "away": "Ausente"
+      },
+      "demoMode": "Teléfono de demostración: Twilio no está conectado, así que aquí no se hacen ni reciben llamadas.",
+      "unsupported": "Este navegador no puede hacer llamadas. Usa la versión más reciente de Chrome, Safari o Edge en una computadora.",
+      "setupError": "El teléfono no pudo conectarse. Recarga la página; si sigue fallando, revisa Configuración > Estado del sistema.",
+      "notConnected": "El teléfono no está conectado, así que esta llamada no se puede hacer desde el navegador.",
+      "busyAlready": "Termina primero la llamada actual.",
+      "micWhy": "Para contestar y hacer llamadas en este navegador, permite el micrófono. Solo se usa durante las llamadas.",
+      "micAllow": "Permitir micrófono",
+      "micDenied": "El micrófono está bloqueado. Permítelo en la configuración del sitio del navegador y recarga.",
+      "market": "Mercado",
+      "source": "Fuente",
+      "request": "Solicitud",
+      "answer": "Contestar",
+      "decline": "Rechazar",
+      "calling": "Llamando a {who}…",
+      "onCall": "En llamada con {who}",
+      "onHold": "{who} está en espera",
+      "mute": "Silenciar",
+      "unmute": "Activar sonido",
+      "hold": "Espera",
+      "resume": "Reanudar",
+      "transfer": "Transferir",
+      "transferTo": "Transferir a {name}",
+      "noTargets": "No hay otro despachador disponible.",
+      "transferred": "Llamada transferida.",
+      "transferFailed": "No se pudo transferir la llamada.",
+      "holdFailed": "La espera no funcionó. Inténtalo de nuevo.",
+      "hangUp": "Colgar"
     }
   },
   "emails": {

@@ -175,7 +175,8 @@
       "dispute": "Open a dispute",
       "logged": "Action log",
       "review": "Review",
-      "noReview": "No review yet."
+      "noReview": "No review yet.",
+      "callDriver": "Call driver"
     },
     "intake": {
       "title": "Phone intake",
@@ -867,6 +868,47 @@
           "hint": "Users, audit log, templates, flags and integrations."
         }
       }
+    },
+    "softphone": {
+      "title": "Phone",
+      "minimise": "Hide",
+      "pill": "Phone · {presence}",
+      "ringing": "Incoming call",
+      "incomingFrom": "Incoming call from {caller}",
+      "unknownCaller": "Unknown caller",
+      "presenceLabel": "Your status",
+      "presence": {
+        "available": "Available",
+        "busy": "Busy",
+        "away": "Away"
+      },
+      "demoMode": "Demo phone: Twilio is not connected, so calls are not placed or received here.",
+      "unsupported": "This browser can't make calls. Use the latest Chrome, Safari or Edge on a computer.",
+      "setupError": "The phone could not connect. Reload the page; if it keeps failing, check Settings > System status.",
+      "notConnected": "The phone is not connected, so this call can't be placed from the browser.",
+      "busyAlready": "Finish the current call first.",
+      "micWhy": "To answer and make calls in this browser, allow the microphone. It's used only during calls.",
+      "micAllow": "Allow microphone",
+      "micDenied": "The microphone is blocked. Allow it in the browser's site settings, then reload.",
+      "market": "Market",
+      "source": "Source",
+      "request": "Request",
+      "answer": "Answer",
+      "decline": "Decline",
+      "calling": "Calling {who}…",
+      "onCall": "On a call with {who}",
+      "onHold": "{who} is on hold",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "hold": "Hold",
+      "resume": "Resume",
+      "transfer": "Transfer",
+      "transferTo": "Transfer to {name}",
+      "noTargets": "No other dispatcher is available.",
+      "transferred": "Call transferred.",
+      "transferFailed": "The call could not be transferred.",
+      "holdFailed": "Hold didn't work. Try again.",
+      "hangUp": "Hang up"
     }
   },
   "emails": {

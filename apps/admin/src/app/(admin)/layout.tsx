@@ -4,6 +4,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { AdminShell } from "@/components/shell/admin-shell";
 import { DemoControls } from "@/components/shell/demo-controls";
+import { SoftphoneDock } from "@/components/softphone/softphone-dock";
+import { getServerSupabase } from "@/lib/supabase/server";
 import { getAdminContext } from "@/lib/admin";
 import { readDemoClock } from "@/lib/demo-clock";
 import { BUILT, builtSections } from "@/lib/nav";
@@ -53,6 +55,17 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     readDemoClock(),
   ]);
   const labels = Object.fromEntries(SHELL_KEYS.map((k) => [k, t(`shell.${k}`)]));
+  // Everyone who answers calls gets the softphone dock (RSOS-074b).
+  const dispatches = ["super_admin", "ops_manager", "dispatcher"].includes(ctx.role);
+  const { data: myStatus } = dispatches
+    ? await (
+        await getServerSupabase()
+      )
+        .from("dispatcher_status")
+        .select("presence")
+        .eq("user_id", ctx.userId)
+        .maybeSingle()
+    : { data: null };
   return (
     <AdminShell
       sections={builtSections().map((s) => ({ ...s, label: t(`sections.${s.key}`) }))}
@@ -80,6 +93,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
       }
     >
       {children}
+      {dispatches ? <SoftphoneDock initialPresence={myStatus?.presence ?? "away"} /> : null}
     </AdminShell>
   );
 }
