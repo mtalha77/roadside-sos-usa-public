@@ -222,6 +222,21 @@ Real: the signed-in staff member and role, the markets list. Demo: nothing (the 
 - Saved views on tables use `useSavedViews` from the UI kit where tables use DataTable; the admin tables in this batch are server-rendered with URL filters, so a filtered view is saved by bookmarking its link.
 - The shared command palette gained an optional `onQueryChange` so actions can use what was typed.
 
+## RSOS-034 + RSOS-072: Live dispatch board
+
+Real: requests from the Get Help form (`admin_live_requests`, a security-invoker function, so staff market policies apply; migration `20261115000000_admin_board.sql`, pgTAP `017_admin_board.test.sql`). Demo: requests from the shared scenario stream (labelled "Demo"), truck positions, supply.
+
+- Split view: live map (requests coloured by SLA, trucks en route) and lanes (new, quoting, picked, en route, on site), polling every 2 seconds.
+- SLA timers on cards: amber after 2 minutes without a quote, red after 3, with a short sound when a card turns red.
+- Card actions: call driver or provider (softphone placeholder), push to more providers, assign manually, note, cancel; each card opens the request page.
+- Supply panel: online providers per market and area, gaps highlighted.
+- Demo controls' scenario clock applies here; a "Load test: 200 demo requests" switch packs the stream.
+
+| #   | Criterion                                      | Result                                                                                                                                                                                                                    |
+| --- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Real Get Help requests appear within 2 seconds | PASS by design: the board polls `/api/board` every 2 s and reads real requests on every poll (RSOS-021 criterion 3). Not yet exercised end to end on CI: admin demo sign-in is blocked (BLOCKERS, keys)                   |
+| 2   | Handles 200 live demo requests without lag     | WRITTEN, NOT YET RUN: the e2e turns on the load test, expects at least 150 open requests and under 600 ms of blocking time over 6 s of live updates on Chromium; it skips until admin demo sign-in works (BLOCKERS, keys) |
+
 ## BLOCKERS
 
 New in batch 3 (keys):

@@ -77,7 +77,7 @@ export default async function OnboardingPage() {
           next: t("next"),
           submit: t("submit"),
           saved: t("saved"),
-          stepOf: t("stepOf"),
+          stepOf: String(t.raw("stepOf")),
           required: t("required"),
           outside: t("outside"),
           miles: t("miles"),
