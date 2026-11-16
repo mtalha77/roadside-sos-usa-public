@@ -265,6 +265,12 @@ Real: leads from `provider_applications` (the For Providers form). Demo: demo le
 
 - Board and table (lead, contacted, interested, onboarding, live, lost) per market, stage changes, follow-up reminders, CSV import with a preview count, coverage progress per market.
 
+## RSOS-077: Markets
+
+Real: markets, boundaries (`admin_market_shapes`, migration `20261115010000_admin_markets.sql`, pgTAP `018`), time zone, coverage hours, phone numbers, services count. Demo: the coverage heatmap.
+
+- Market list and detail with the boundary on a map, settings, phone numbers by source, rules and a launch checklist. Drawing a new boundary needs the Google Maps key (BLOCKER).
+
 ## BLOCKERS
 
 New in batch 3 (keys):

@@ -320,6 +320,42 @@
       "real": "Real",
       "moveTo": "Mover",
       "empty": "Aún no hay prospectos."
+    },
+    "markets": {
+      "title": "Mercados",
+      "status": {
+        "draft": "Borrador",
+        "test": "En prueba",
+        "active": "Activo",
+        "paused": "En pausa"
+      },
+      "boundary": "Límite",
+      "boundaryOf": "Límite de {name}",
+      "noBoundary": "Aún no hay límite.",
+      "drawHint": "Dibujar un límite nuevo en el mapa llega con la clave de Google Maps; por ahora los límites se definen en la base de datos.",
+      "heatmap": "Cobertura por hora",
+      "heatmapDemo": "Datos de demostración: parte de la hora con un proveedor en línea, por zona.",
+      "settings": "Ajustes",
+      "timeZone": "Zona horaria",
+      "hours": "Horario de cobertura",
+      "always": "24 horas, 7 días",
+      "custom": "Horario personalizado",
+      "quoteWindow": "Ventana de cotización",
+      "quoteWindowValue": "3 minutos",
+      "radius": "Pasos del radio de búsqueda",
+      "radiusValue": "10, 20 y luego 35 millas",
+      "phones": "Números por origen",
+      "noPhones": "Aún no hay números (requiere Twilio).",
+      "checklist": "Lista para lanzar",
+      "checks": {
+        "boundary": "Límite definido",
+        "services": "Servicios y precios definidos",
+        "phone": "Número telefónico activo",
+        "providers": "Meta de cobertura alcanzada",
+        "content": "Página de ciudad escrita"
+      },
+      "done": "(hecho)",
+      "todo": "(pendiente)"
     }
   },
   "emails": {
