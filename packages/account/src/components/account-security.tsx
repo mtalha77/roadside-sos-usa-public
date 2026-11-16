@@ -25,6 +25,9 @@ import {
 } from "../server/actions";
 import { deviceLabel, when } from "./when";
 
+/** Long lists of devices are capped; "sign out everywhere else" covers the rest. */
+const MAX_LISTED = 10;
+
 type Props = {
   data: AccountData;
   /** Providers choose their second step; admins always use the authenticator. */
@@ -317,28 +320,36 @@ export function AccountSecurity({ data, audience, smsAvailable = false, phoneHre
 
       <Section title={t("devices")}>
         <ul className="flex flex-col divide-y">
-          {data.sessions.map((s) => (
-            <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
-              <div>
-                <p className="font-medium">
-                  {deviceLabel(s.user_agent) ?? t("unknownDevice")}{" "}
-                  {s.is_current ? <Badge>{t("thisDevice")}</Badge> : null}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {t("lastActive", { time: when(s.refreshed_at ?? s.created_at, locale) })}
-                </p>
-              </div>
-              {s.is_current ? null : (
-                <form action={revokeSessionAction}>
-                  <input type="hidden" name="session" value={s.id} />
-                  <Button type="submit" variant="outline" size="sm">
-                    {t("signOutDevice")}
-                  </Button>
-                </form>
-              )}
-            </li>
-          ))}
+          {[...data.sessions]
+            .sort((a, b) => Number(b.is_current) - Number(a.is_current))
+            .slice(0, MAX_LISTED)
+            .map((s) => (
+              <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                <div>
+                  <p className="font-medium">
+                    {deviceLabel(s.user_agent) ?? t("unknownDevice")}{" "}
+                    {s.is_current ? <Badge>{t("thisDevice")}</Badge> : null}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {t("lastActive", { time: when(s.refreshed_at ?? s.created_at, locale) })}
+                  </p>
+                </div>
+                {s.is_current ? null : (
+                  <form action={revokeSessionAction}>
+                    <input type="hidden" name="session" value={s.id} />
+                    <Button type="submit" variant="outline" size="sm">
+                      {t("signOutDevice")}
+                    </Button>
+                  </form>
+                )}
+              </li>
+            ))}
         </ul>
+        {data.sessions.length > MAX_LISTED ? (
+          <p className="text-sm text-muted-foreground">
+            {t("moreDevices", { count: data.sessions.length - MAX_LISTED })}
+          </p>
+        ) : null}
         {audience === "provider" ? (
           <>
             <h3 className="font-semibold">{t("trusted")}</h3>
@@ -347,7 +358,7 @@ export function AccountSecurity({ data, audience, smsAvailable = false, phoneHre
               <p>{t("noTrusted")}</p>
             ) : (
               <ul className="flex flex-col divide-y">
-                {data.devices.map((d) => (
+                {data.devices.slice(0, MAX_LISTED).map((d) => (
                   <li key={d.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                     <div>
                       <p className="font-medium">
