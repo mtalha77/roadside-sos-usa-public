@@ -1656,6 +1656,45 @@
       "save": "Guardar cambios",
       "saved": "Guardado en este dispositivo. Guardar en tu cuenta llega con la próxima actualización.",
       "fix": "Corrige los precios marcados en rojo antes de guardar."
+    },
+    "profile": {
+      "title": "Perfil público",
+      "subtitle": "Lo que ven los conductores al comparar cotizaciones.",
+      "photos": "Fotos",
+      "addPhoto": "Agregar fotos",
+      "photoAlt": "Foto de la empresa",
+      "description": "Sobre tu empresa",
+      "descriptionHint": "Dos o tres frases: experiencia, equipo, por qué eres confiable.",
+      "hours": "Horario que ven los conductores",
+      "payments": "Métodos de pago que aceptas",
+      "methods": {
+        "card": "Tarjeta",
+        "cash": "Efectivo",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "zelle": "Zelle"
+      },
+      "trucksShown": "Grúas que se muestran",
+      "preview": "Vista previa en vivo",
+      "profileCard": "Tarjeta de perfil",
+      "quoteCard": "Cotización que ven los conductores",
+      "strength": "Fuerza del perfil",
+      "tips": "Consejos",
+      "tipPhoto": "Agrega una foto de tu grúa",
+      "tipDescription": "Escribe al menos 80 caracteres sobre tu empresa",
+      "tipHours": "Muestra tu horario",
+      "tipPayments": "Acepta al menos dos métodos de pago",
+      "done": "Listo",
+      "save": "Guardar perfil",
+      "saved": "Guardado en este dispositivo. Guardar en tu cuenta llega con la próxima actualización.",
+      "documents": "Documentos",
+      "documentsHint": "Nuestro equipo revisa seguros y licencias. Sube nuevos desde la incorporación.",
+      "allIn": "total",
+      "insured": "Asegurado",
+      "licensed": "Con licencia",
+      "newProvider": "Proveedor nuevo",
+      "rating": "{rating} de 5 en {count} reseñas",
+      "eta": "El precio y la hora de llegada aparecen aquí en cada cotización."
     }
   }
 }

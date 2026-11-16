@@ -1656,6 +1656,45 @@
       "save": "Save changes",
       "saved": "Saved on this device. Saving to your account comes with the next update.",
       "fix": "Fix the prices marked in red before saving."
+    },
+    "profile": {
+      "title": "Public profile",
+      "subtitle": "What drivers see when they compare quotes.",
+      "photos": "Photos",
+      "addPhoto": "Add photos",
+      "photoAlt": "Company photo",
+      "description": "About your company",
+      "descriptionHint": "Two or three sentences: experience, equipment, what makes you reliable.",
+      "hours": "Hours shown to drivers",
+      "payments": "Payment methods you accept",
+      "methods": {
+        "card": "Card",
+        "cash": "Cash",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "zelle": "Zelle"
+      },
+      "trucksShown": "Trucks shown",
+      "preview": "Live preview",
+      "profileCard": "Profile card",
+      "quoteCard": "Quote drivers see",
+      "strength": "Profile strength",
+      "tips": "Tips",
+      "tipPhoto": "Add a photo of your truck",
+      "tipDescription": "Write at least 80 characters about your company",
+      "tipHours": "Show your hours",
+      "tipPayments": "Accept at least two payment methods",
+      "done": "Done",
+      "save": "Save profile",
+      "saved": "Saved on this device. Saving to your account comes with the next update.",
+      "documents": "Documents",
+      "documentsHint": "Insurance and licenses are checked by our team. Upload new ones from onboarding.",
+      "allIn": "all-in",
+      "insured": "Insured",
+      "licensed": "Licensed",
+      "newProvider": "New provider",
+      "rating": "{rating} out of 5 from {count} reviews",
+      "eta": "Price and arrival time appear here on each quote."
     }
   }
 }
