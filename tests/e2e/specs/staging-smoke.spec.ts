@@ -41,7 +41,8 @@ test.describe("staging smoke @staging", () => {
     await page.getByLabel("City").selectOption({ index: 1 });
     await page.getByRole("button", { name: "Continue" }).click();
     await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
-    await page.locator("label").filter({ hasText: "Won't start" }).click();
+    await page.locator("label").filter({ hasText: "Flat tire" }).click();
+    await page.getByRole("radio", { name: "Yes" }).check();
     await page.getByRole("button", { name: "Continue" }).click();
     await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
     await page.getByLabel("Make").fill("Toyota");
