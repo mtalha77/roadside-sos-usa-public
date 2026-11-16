@@ -12,6 +12,7 @@ import {
   Gauge,
   Inbox,
   Map as MapIcon,
+  Phone,
   Radio,
   Search,
   Settings,
@@ -28,6 +29,7 @@ import { MarketSwitcher } from "./market-switcher";
 const ICONS = {
   dispatch: Radio,
   requests: Inbox,
+  intake: Phone,
   providers: Truck,
   recruitment: UserPlus,
   markets: MapIcon,

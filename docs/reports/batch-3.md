@@ -243,6 +243,16 @@ Real: requests, their timeline (`request_events`), attribution and fee, searchab
 
 - `/requests` search and table; `/requests/[id]` full page with driver inputs, map, quotes, chosen provider, timeline, attribution, fee, notes and actions with an action log. The dispatch board's cards link here; the side panel is the board card itself.
 
+## RSOS-074: Phone intake console (UI)
+
+Demo: the incoming call, caller history, the created request (simulated until phone service exists; real phone requests need Twilio, BLOCKER).
+
+- Softphone panel (answer, decline, hold, mute, transfer, hang up, availability), screen pop with the caller's past requests, guided intake form, "Text a location link", and a timer from answering to the created request.
+
+| #   | Criterion                                 | Result                                                                                                                                                                    |
+| --- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Phone request created in under 90 seconds | WRITTEN, NOT YET RUN: the e2e answers a demo call, fills the form and creates the request, asserting under 90 s; it skips until admin demo sign-in works (BLOCKERS, keys) |
+
 ## BLOCKERS
 
 New in batch 3 (keys):
