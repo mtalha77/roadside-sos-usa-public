@@ -216,6 +216,76 @@
       "created": "Solicitud {code} creada.",
       "required": "Completa los campos obligatorios.",
       "timer": "Tiempo desde que contestaste: {time}."
+    },
+    "providers": {
+      "title": "Proveedores",
+      "views": "Vistas",
+      "tabs": {
+        "table": "Tabla",
+        "map": "Mapa",
+        "review": "Cola de revisión"
+      },
+      "search": "Nombre de la empresa",
+      "status": "Estado",
+      "allStatuses": "Todos los estados",
+      "filter": "Filtrar",
+      "none": "Ningún proveedor coincide.",
+      "queueEmpty": "No hay documentos esperando revisión.",
+      "name": "Empresa",
+      "market": "Mercado",
+      "trucks": "Grúas",
+      "rating": "Calificación",
+      "real": "Real",
+      "demo": "Demo",
+      "statuses": {
+        "applied": "Solicitó",
+        "onboarding": "Incorporación",
+        "active": "Activo",
+        "paused": "En pausa",
+        "suspended": "Suspendido",
+        "closed": "Cerrado"
+      },
+      "docs": {
+        "insurance": "Certificado de seguro",
+        "license": "Licencia de grúa",
+        "w9": "W-9"
+      },
+      "states": {
+        "ok": "Aprobado",
+        "pending": "Esperando revisión",
+        "expiring": "Vence pronto"
+      },
+      "approve": "Aprobar",
+      "changes": "Pedir cambios",
+      "approved": "Aprobado.",
+      "requested": "Cambios pedidos:",
+      "expires": "Vence",
+      "preview": "Vista previa del documento",
+      "reason": "¿Qué debe cambiar?",
+      "jobsWon": "Trabajos ganados (60 días)",
+      "feesPaid": "Cargos pagados (60 días)",
+      "team": "Equipo y grúas",
+      "roles": {
+        "owner": "Dueño",
+        "manager": "Gerente",
+        "operator": "Operador"
+      },
+      "area": "Área de servicio",
+      "documents": "Documentos",
+      "recent": "Trabajos y reseñas recientes",
+      "realPending": "El detalle de rendimiento, billetera y documentos de empresas reales llega con la etapa de backend.",
+      "act": {
+        "actions": "Acciones",
+        "approve": "Aprobar",
+        "pause": "Pausar",
+        "suspend": "Suspender",
+        "credit": "Acreditar",
+        "message": "Mensaje",
+        "viewAs": "Ver como proveedor",
+        "done": "registrado (simulado)",
+        "note": "Nota",
+        "addNote": "Agregar nota"
+      }
     }
   },
   "emails": {
