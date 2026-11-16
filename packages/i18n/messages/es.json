@@ -1737,6 +1737,82 @@
       "fees": "Cargos pagados",
       "week": "Semana del",
       "demo": "Datos de demostración: las estadísticas son simuladas."
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "subtitle": "Cómo te llegan las solicitudes nuevas, incluso con la app cerrada.",
+      "channels": "Canales de alerta",
+      "push": "Notificaciones push",
+      "pushHint": "Alertas al instante en este teléfono.",
+      "sms": "Mensajes de texto",
+      "smsHint": "Un mensaje por cada solicitud nueva.",
+      "voice": "Llamada de respaldo",
+      "voiceHint": "Te llamamos si no abres una solicitud en 30 segundos.",
+      "sound": "Sonido de alerta",
+      "sounds": {
+        "siren": "Sirena",
+        "chime": "Campana",
+        "horn": "Bocina"
+      },
+      "test": "Enviar una alerta de prueba",
+      "testSent": "Alerta de prueba reproducida en este dispositivo.",
+      "quiet": "Horas de silencio",
+      "quietHint": "Sin alertas en estas horas. Quedas desconectado.",
+      "from": "Desde",
+      "to": "Hasta",
+      "save": "Guardar ajustes",
+      "saved": "Guardado en este dispositivo. Guardar en tu cuenta llega con la próxima actualización."
+    },
+    "help": {
+      "title": "Centro de ayuda",
+      "chat": "Chatear con despacho",
+      "search": "Buscar ayuda",
+      "go": "Buscar",
+      "none": "Ningún artículo coincide. Prueba otras palabras o chatea con despacho.",
+      "chatTitle": "Chatear con despacho",
+      "chatSubtitle": "Estamos a toda hora.",
+      "job": "Sobre un trabajo",
+      "noJob": "No es sobre un trabajo",
+      "message": "Mensaje",
+      "send": "Enviar",
+      "you": "Tú",
+      "dispatch": "Despacho",
+      "reply": "Gracias, ya lo vemos. Despacho responde aquí (simulado en modo demo).",
+      "empty": "Aún no hay mensajes.",
+      "articles": {
+        "quotes": {
+          "title": "Cómo funcionan las cotizaciones",
+          "body": "Cuando un conductor cerca pide ayuda, recibes una oferta. Envía tu precio y hora de llegada; el conductor elige un proveedor."
+        },
+        "fees": {
+          "title": "Nuestro cargo",
+          "body": "Solo pagas un cargo cuando un conductor te elige. Se muestra antes de enviar la cotización."
+        },
+        "wallet": {
+          "title": "Billetera y recargas",
+          "body": "Los cargos salen del saldo de tu billetera. Activa la recarga automática para no perder trabajos."
+        },
+        "online": {
+          "title": "Conectarte",
+          "body": "Activa En línea en Inicio. Recibes solicitudes dentro de tu área mientras estás en línea."
+        },
+        "photos": {
+          "title": "Fotos de antes y después",
+          "body": "Agrega fotos en el flujo del trabajo. Te protegen si un conductor reporta daños."
+        },
+        "disputes": {
+          "title": "Disputar un cargo",
+          "body": "Abre el trabajo y elige Disputar el cargo. Nuestro equipo responde en un día hábil."
+        },
+        "team": {
+          "title": "Agregar operadores",
+          "body": "Invita operadores desde Equipo. Los operadores solo ven sus trabajos asignados."
+        },
+        "documents": {
+          "title": "Seguros y licencias",
+          "body": "Mantén tus documentos al día. Un documento vencido pausa las solicitudes nuevas."
+        }
+      }
     }
   }
 }

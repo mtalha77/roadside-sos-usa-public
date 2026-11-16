@@ -191,6 +191,12 @@ Demo data.
 
 - Quote rate, win rate, reply time, ETA accuracy, rating, cancellations; return on fees by week (job value won against fees paid) as a server-rendered SVG chart with an equivalent data table for screen readers.
 
+## RSOS-062 and 063: Notification settings, help center and chat
+
+Demo data (settings are kept on the device; dispatch replies are simulated).
+
+- Alert channels (push, text, voice backup), sound choice with a test alert (sound and vibration), quiet hours; searchable help articles (plain form, works without JavaScript); chat with dispatch linked to a job.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
