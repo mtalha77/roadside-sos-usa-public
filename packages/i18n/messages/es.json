@@ -1695,6 +1695,30 @@
       "newProvider": "Proveedor nuevo",
       "rating": "{rating} de 5 en {count} reseñas",
       "eta": "El precio y la hora de llegada aparecen aquí en cada cotización."
+    },
+    "team": {
+      "title": "Equipo",
+      "subtitle": "Tus operadores, sus grúas y quién toma cada trabajo.",
+      "map": "Mapa del equipo",
+      "online": "En línea",
+      "offline": "Desconectado",
+      "members": "Miembros",
+      "invite": "Invitar por mensaje",
+      "phone": "Número de celular",
+      "name": "Nombre",
+      "role": "Rol",
+      "send": "Enviar invitación",
+      "sent": "Invitación enviada a",
+      "roles": {
+        "owner": "Dueño",
+        "manager": "Gerente",
+        "operator": "Operador"
+      },
+      "jobs": "Trabajos activos",
+      "assign": "Asignar a",
+      "noJobs": "No hay trabajos activos ahora.",
+      "onlyMine": "Solo ves los trabajos asignados a ti.",
+      "assigned": "Asignado a"
     }
   }
 }

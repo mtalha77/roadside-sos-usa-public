@@ -179,6 +179,12 @@ Demo data (company name and rating from the demo company).
 
 - Photos, description, hours, payment methods and trucks shown; live preview of the profile card and the quote drivers see; profile strength meter with tips.
 
+## RSOS-060: Team and multi-truck dispatch
+
+Real: the member's role. Demo: team members, truck positions, assignments.
+
+- Live team map, members with roles and online state, invite by text (name, number, role), managers assign active jobs; operators see only jobs assigned to them.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
