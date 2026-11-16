@@ -259,6 +259,12 @@ Real: provider companies (name, status, markets). Demo: the demo directory, truc
 
 - Table with search and status filter, map view, review queue with each company's documents side by side (approve or request changes with a reason), provider detail with stats, team, area, documents, recent jobs and reviews, and actions (approve, pause, suspend, credit, message, view as provider) plus notes.
 
+## RSOS-076: Recruitment pipeline
+
+Real: leads from `provider_applications` (the For Providers form). Demo: demo leads. Placeholder: the coverage target (12 live providers per market, in `packages/config`).
+
+- Board and table (lead, contacted, interested, onboarding, live, lost) per market, stage changes, follow-up reminders, CSV import with a preview count, coverage progress per market.
+
 ## BLOCKERS
 
 New in batch 3 (keys):

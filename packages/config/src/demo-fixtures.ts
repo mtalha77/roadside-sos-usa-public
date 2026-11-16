@@ -212,3 +212,19 @@ export const demoPlans = [
 
 /** Top-up presets in cents (RSOS-057). */
 export const topUpPresets = [10000, 25000, 50000] as const;
+
+/** Live providers wanted per market before launch (RSOS-076 coverage target; a placeholder). */
+export const coverageTarget = 12;
+
+/**
+ * Unit economics assumptions for the analytics screen (RSOS-081). Placeholders until the owner's
+ * model is shared: cost per ad click, click-to-request rate, and the funnel rates after a request.
+ */
+export const unitEconomics = {
+  costPerClickCents: 450,
+  clickToRequest: 0.12,
+  visitToStart: 0.35,
+  startToSubmit: 0.6,
+  paidShare: 0.6,
+  feeShareOfPrice: 0.12,
+} as const;
