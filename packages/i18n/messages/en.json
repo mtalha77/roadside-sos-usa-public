@@ -320,6 +320,42 @@
       "real": "Real",
       "moveTo": "Move",
       "empty": "No leads yet."
+    },
+    "markets": {
+      "title": "Markets",
+      "status": {
+        "draft": "Draft",
+        "test": "Testing",
+        "active": "Live",
+        "paused": "Paused"
+      },
+      "boundary": "Boundary",
+      "boundaryOf": "Boundary of {name}",
+      "noBoundary": "No boundary yet.",
+      "drawHint": "Drawing a new boundary on the map comes with the Google Maps key; boundaries are set in the database for now.",
+      "heatmap": "Coverage by hour",
+      "heatmapDemo": "Demo data: share of the hour with a provider online, by area.",
+      "settings": "Settings",
+      "timeZone": "Time zone",
+      "hours": "Coverage hours",
+      "always": "24 hours, 7 days",
+      "custom": "Custom hours",
+      "quoteWindow": "Quote window",
+      "quoteWindowValue": "3 minutes",
+      "radius": "Search radius steps",
+      "radiusValue": "10, 20, then 35 miles",
+      "phones": "Phone numbers by source",
+      "noPhones": "No numbers yet (needs Twilio).",
+      "checklist": "Launch checklist",
+      "checks": {
+        "boundary": "Boundary set",
+        "services": "Services and prices set",
+        "phone": "Phone number active",
+        "providers": "Coverage target reached",
+        "content": "City page written"
+      },
+      "done": "(done)",
+      "todo": "(to do)"
     }
   },
   "emails": {
