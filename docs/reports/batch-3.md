@@ -161,6 +161,12 @@ Demo data (job progress and photos are kept on the device).
 
 - One large button per step (Start driving, I've arrived, Start the work, Job completed), deep links to Google Maps, Apple Maps and Waze, masked call and text (demo number from `packages/config`), before and after photos with the camera, report an issue, cancel with a reason, assign to an operator.
 
+## RSOS-057: Wallet and billing (UI)
+
+Real: the balance (`provider_wallets`). Demo: transactions, payment method. Placeholders: card payment (needs Stripe keys), plan prices (need a pricing decision).
+
+- Big balance, top-up sheet (presets 100, 250, 500 and other amount), auto-recharge settings, payment methods, transactions grouped by day linked to their jobs, statement download (CSV), Pro and Featured plan cards with comparison. Owners and managers only.
+
 ## BLOCKERS
 
 (carried from batch 2; see `docs/reports/batch-2.md`, items 1 to 15)
