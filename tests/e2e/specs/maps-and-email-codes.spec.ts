@@ -15,7 +15,9 @@ test.describe("typed addresses", () => {
     await page.getByLabel("City").selectOption({ index: 1 });
     const field = page.getByLabel("Street address or cross streets");
     await field.fill("somewhere");
-    await expect(page.getByRole("combobox")).toHaveCount(0);
+    await expect(
+      page.getByRole("combobox", { name: "Street address or cross streets" }),
+    ).toHaveCount(0);
     await page.getByRole("button", { name: "Continue" }).click();
     await expect(page.getByText(/Type a street address with a number/)).toBeVisible();
     await expectNoA11yViolations(page);
