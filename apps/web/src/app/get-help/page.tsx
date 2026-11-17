@@ -10,6 +10,7 @@ import { Choice } from "@/components/get-help/choice";
 import { LocateButton } from "@/components/get-help/locate-button";
 import { AddressAutocomplete } from "@/components/get-help/address-autocomplete";
 import { StepShell } from "@/components/get-help/step-shell";
+import { MapView } from "@/components/site/map-view";
 import { OutsideArea } from "@/components/site/outside-area";
 import { serviceName } from "@/components/site/service-label";
 import { SitePage } from "@/components/site/site-page";
@@ -110,6 +111,20 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         <input type="hidden" name="lat" defaultValue={savedFix ? String(draft.lat) : ""} />
         <input type="hidden" name="lng" defaultValue={savedFix ? String(draft.lng) : ""} />
         {savedFix ? hidden("fix", "saved") : null}
+        {savedFix ? (
+          <MapView
+            label={t("location.mapLabel")}
+            points={[
+              {
+                id: "me",
+                kind: "request",
+                lat: draft.lat!,
+                lng: draft.lng!,
+                label: draft.address || t("location.mapLabel"),
+              },
+            ]}
+          />
+        ) : null}
         {savedFix ? (
           <p className="rounded-xl border bg-muted/40 p-3 text-sm font-medium">
             {draft.address
