@@ -64,9 +64,10 @@ test.describe("sign in with a text code", () => {
     await page.getByRole("button", { name: "Sign in" }).click();
     // Signed in: the home screen, or the account's second step on a new device (the text code is
     // the first factor only).
-    await expect(
-      page.getByRole("heading", { level: 1, name: /^(Today|Confirm it's you)$/ }),
-    ).toBeVisible({ timeout: 30_000 });
+    await page.waitForURL(
+      (u) => u.pathname === "/" || u.pathname.startsWith("/sign-in/second-step"),
+      { timeout: 30_000 },
+    );
     await ctx.close();
   });
 
