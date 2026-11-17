@@ -3,13 +3,39 @@
 import { Badge } from "@rsos/ui/badge";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { InboxItem } from "@/lib/inbox";
 import { inboxItemsAction } from "@/lib/inbox-actions";
 import { getBrowserSupabase } from "@/lib/supabase/client";
 
 type Data = { items: InboxItem[]; unread: number; unassigned: number };
 const PREF = "rsos_inbox_alerts";
+
+/** The saved sound-and-notification preference (per browser; off when storage is blocked). */
+const readAlertsPref = () => {
+  try {
+    return localStorage.getItem(PREF) === "on";
+  } catch {
+    return false;
+  }
+};
+const noSubscription = () => () => undefined;
+
+/** A short sound and a browser notification for a new item (both optional). */
+function notify(title: string, item: InboxItem) {
+  try {
+    const ctx = new AudioContext();
+    const o = ctx.createOscillator();
+    o.frequency.value = 880;
+    o.connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + 0.25);
+  } catch {
+    // No audio: the browser notification and the list still show it.
+  }
+  if ("Notification" in window && Notification.permission === "granted")
+    new Notification(title, { body: `${item.code} · ${item.phone}` });
+}
 
 const waited = (ms: number) => {
   const m = Math.max(0, Math.round(ms / 60_000));
@@ -32,16 +58,13 @@ export function InboxLive({
 }) {
   const t = useTranslations("admin.inbox");
   const [data, setData] = useState(initial);
-  const [alerts, setAlerts] = useState(false);
+  const savedAlerts = useSyncExternalStore(noSubscription, readAlertsPref, () => false);
+  const [chosenAlerts, setAlerts] = useState<boolean | null>(null);
+  const alerts = chosenAlerts ?? savedAlerts;
   const [now, setNow] = useState(() => Date.now());
   const known = useRef(new Set(initial.items.map((i) => i.id)));
 
   useEffect(() => {
-    try {
-      setAlerts(localStorage.getItem(PREF) === "on");
-    } catch {
-      // Storage blocked: alerts stay off.
-    }
     const tick = setInterval(() => setNow(Date.now()), 30_000);
     return () => clearInterval(tick);
   }, []);
@@ -56,7 +79,7 @@ export function InboxLive({
         const fresh = next.items.filter((i) => !known.current.has(i.id));
         for (const i of next.items) known.current.add(i.id);
         setData(next);
-        if (fresh.length && alerts) notify(fresh[0]!);
+        if (fresh.length && alerts) notify(t("newItem"), fresh[0]!);
       }, 300);
     };
     const channel = supabase.channel("inbox");
@@ -72,21 +95,6 @@ export function InboxLive({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alerts]);
-
-  const notify = (item: InboxItem) => {
-    try {
-      const ctx = new AudioContext();
-      const o = ctx.createOscillator();
-      o.frequency.value = 880;
-      o.connect(ctx.destination);
-      o.start();
-      o.stop(ctx.currentTime + 0.25);
-    } catch {
-      // No audio: the browser notification and the list still show it.
-    }
-    if ("Notification" in window && Notification.permission === "granted")
-      new Notification(t("newItem"), { body: `${item.code} · ${item.phone}` });
-  };
 
   const toggleAlerts = async () => {
     const next = !alerts;

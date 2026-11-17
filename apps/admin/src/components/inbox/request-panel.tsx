@@ -21,6 +21,11 @@ const card = "rounded-2xl border bg-card p-4";
  * steps, intake details for phone requests, nearby providers to call and assign, and telling
  * the driver (email, or read on the call: no SMS in batch 4).
  */
+/** A claim lapses after CLAIM_MINUTES without action (checked when the panel is rendered). */
+function claimIsFresh(claimedAt: string | null): boolean {
+  return claimedAt !== null && Date.now() - Date.parse(claimedAt) < CLAIM_MINUTES * 60_000;
+}
+
 export async function RequestPanel({ data, userId }: { data: InboxRequest; userId: string }) {
   const [t, locale] = [await getTranslations("admin.inbox"), "en-US"];
   const r = data.request;
@@ -32,10 +37,7 @@ export async function RequestPanel({ data, userId }: { data: InboxRequest; userI
     c === null
       ? "—"
       : new Intl.NumberFormat(locale, { style: "currency", currency: "USD" }).format(c / 100);
-  const fresh =
-    r.assigned_dispatcher_id &&
-    r.claimed_at &&
-    Date.now() - Date.parse(r.claimed_at) < CLAIM_MINUTES * 60_000;
+  const fresh = Boolean(r.assigned_dispatcher_id && claimIsFresh(r.claimed_at));
   const mine = Boolean(fresh && r.assigned_dispatcher_id === userId);
   const closed = ["completed", "cancelled", "no_provider", "expired"].includes(r.status);
   const at = STEPS.indexOf(r.status as (typeof STEPS)[number]);

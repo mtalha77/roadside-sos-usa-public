@@ -14,8 +14,8 @@
 | RSOS-021b Real maps and SMS codes                   | Done (real keys BLOCKED) | [#175](https://github.com/mtalha77/roadside-sos-usa-public/pull/175) |
 | RSOS-030 Call tracking and the phone flow (IVR)     | Done (real keys BLOCKED) | [#173](https://github.com/mtalha77/roadside-sos-usa-public/pull/173) |
 | RSOS-021c Owner scope change: email codes, no Maps  | Done                     | [#176](https://github.com/mtalha77/roadside-sos-usa-public/pull/176) |
-| RSOS-074b Real browser softphone                    | Done (real keys BLOCKED) | (this PR)                                                            |
-| RSOS-034b Real inbox and manual dispatch            | Not started              |                                                                      |
+| RSOS-074b Real browser softphone                    | Done (real keys BLOCKED) | [#177](https://github.com/mtalha77/roadside-sos-usa-public/pull/177) |
+| RSOS-034b Real inbox and manual dispatch            | Done                     | (this PR)                                                            |
 | RSOS-023 Location link                              | Not started              |                                                                      |
 | RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Not started              |                                                                      |
 | RSOS-031 Ad tracking and attribution                | Not started              |                                                                      |
@@ -175,6 +175,38 @@ Applies the "Scope changes from the owner" section of the updated batch file (co
   Owner: buy numbers and point their webhooks per `docs/runbooks/twilio.md`, add the numbers in
   Admin > Settings > Phone numbers, set the on-duty schedule and mobiles.
 - **BLOCKED (keys missing)**: ringing the admin softphone from the staging number.
+
+### RSOS-034b: Real inbox and manual dispatch
+
+- **Live inbox** (`/inbox`, new nav item): new web requests, phone intakes, calls, missed calls
+  and voicemails in one list, newest first, urgent items on top, unread and unassigned counts, a
+  market filter. It updates live through Supabase Realtime (requests, request events, calls,
+  dispatch attempts), with RLS so dispatchers see only their markets.
+- **Claiming**: one dispatcher owns a request; a claim lapses after 10 minutes without action;
+  others see who has it and can take over.
+- **Request panel**:
+  - the manual steps: Contacted, Location confirmed, Provider assigned, On the way, Arrived,
+    Completed, plus Cancelled and No provider found, each needing a reason;
+  - the intake form for phone requests: name, service, address, vehicle and notes. The typed
+    address is checked for format only; with Google Maps off, the dummy places it at the market
+    centre;
+  - nearby active providers for that service, nearest first, with price, last response time and
+    acceptance rate;
+  - provider call outcomes: no answer, declined, quoted;
+  - Assign, which writes a `manual_test` fee row (nobody is charged);
+  - notes, the timeline, and the softphone Call buttons.
+- **Telling the driver, with no SMS (owner scope change):**
+  - Assigning, or pressing **Location link**, emails the driver when the request has an email
+    (product email through the Resend fake). Each email is logged on the timeline.
+  - Without an email, the panel shows the words to read on the call, and **I read it to the
+    driver** logs it on the timeline.
+  - No texts are sent. Incoming texts are handled in RSOS-035 behind a flag that is off.
+- Real or demo: real. Keys: none beyond Supabase. Tested:
+  - pgTAP `022_manual_dispatch` (RLS per role, claim lapses, forward-only steps, reasons, the fee
+    row);
+  - e2e `inbox-dispatch.spec.ts`: a signed missed call becomes an urgent item; the dispatcher
+    claims it, records the intake, reads the location link and ends it with a reason.
+- Owner: nothing.
 
 ### RSOS-074b: Real browser softphone for dispatchers
 
