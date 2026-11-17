@@ -599,6 +599,7 @@ export type Database = {
       }
       location_links: {
         Row: {
+          code: string | null
           created_at: string
           expires_at: string
           request_id: string
@@ -606,6 +607,7 @@ export type Database = {
           used_at: string | null
         }
         Insert: {
+          code?: string | null
           created_at?: string
           expires_at?: string
           request_id: string
@@ -613,6 +615,7 @@ export type Database = {
           used_at?: string | null
         }
         Update: {
+          code?: string | null
           created_at?: string
           expires_at?: string
           request_id?: string
@@ -1997,6 +2000,17 @@ export type Database = {
       forget_trusted_device: { Args: { p_id: string }; Returns: undefined }
       generate_recovery_codes: { Args: never; Returns: string[] }
       generate_short_code: { Args: never; Returns: string }
+      get_location_link: {
+        Args: { p_token: string }
+        Returns: {
+          center_lat: number
+          center_lng: number
+          current_address: string
+          market_slug: string
+          used: boolean
+          valid: boolean
+        }[]
+      }
       get_market_page: {
         Args: { p_locale?: string; p_market_slug: string }
         Returns: {
@@ -2139,6 +2153,8 @@ export type Database = {
           time_zone: string
         }[]
       }
+      location_link_for_code: { Args: { p_code: string }; Returns: string }
+      location_link_valid: { Args: { p_token: string }; Returns: boolean }
       log_security_event: {
         Args: { p_action: string; p_data?: Json; p_ip?: string }
         Returns: undefined
@@ -2272,6 +2288,17 @@ export type Database = {
         Returns: boolean
       }
       submit_contact_message: { Args: { p: Json }; Returns: string }
+      submit_location: {
+        Args: {
+          p_address: string
+          p_lat: number
+          p_lng: number
+          p_note?: string
+          p_photo_path?: string
+          p_token: string
+        }
+        Returns: boolean
+      }
       submit_provider_application: { Args: { p: Json }; Returns: string }
       submit_web_request: {
         Args: {

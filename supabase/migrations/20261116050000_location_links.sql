@@ -1,8 +1,9 @@
--- RSOS-023: the driver's location link (/l/<token>), plus a 6-digit code the dispatcher can read on
--- the call (no SMS in batch 4): the driver opens /l on the website and types it. The website has no service key, so the page
--- reads and submits through definer functions that check the token: unguessable (22+ characters),
--- 2 hours, one request. The optional vehicle photo goes to the private job-photos bucket under
--- loc/<token>/, which anonymous visitors may write only while the token is valid.
+-- RSOS-023: the driver's location link (/l/<token>), plus a 6-digit code the dispatcher can read
+-- on the call (no SMS in batch 4): the driver opens /l on the website and types it. The website
+-- has no service key, so the page reads and submits through definer functions that check the
+-- token: unguessable (22+ characters), 2 hours, one request. The optional vehicle photo goes to the
+-- private job-photos bucket under loc/<token>/, which anonymous visitors may write only while the
+-- token is valid.
 
 create function public.location_link_valid(p_token text) returns boolean
 language sql stable security definer set search_path = '' as $$
