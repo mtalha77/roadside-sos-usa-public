@@ -654,15 +654,14 @@
         "adapters": "Servicios externos",
         "adapter": "Servicio",
         "adapterNames": {
-          "twilio": "Textos y llamadas de Twilio",
+          "twilio": "Llamadas de Twilio (voz)",
           "texting": "Mensajes de Twilio (apagado)",
           "softphone": "Teléfono en el navegador",
-          "maps": "Google Maps",
-          "email": "Correo (Resend)",
+          "maps": "Google Maps (apagado)",
+          "email": "Email (Resend)",
           "turnstile": "Protección contra bots (Turnstile)",
           "rateLimit": "Límites de uso (Upstash)",
-          "analytics": "Seguimiento de anuncios (GTM)",
-          "twilioVerify": "Códigos de Twilio Verify"
+          "analytics": "Seguimiento de anuncios (GTM)"
         },
         "state": {
           "real": "Real",
@@ -670,7 +669,7 @@
           "deferred": "Pospuesto",
           "missing": "Falta"
         },
-        "legend": "Real: las claves están configuradas. Simulado: faltan claves fuera de producción, así que se usa un sustituto seguro y no se envía nada. Falta: faltan claves en producción y la función está apagada.",
+        "legend": "Real: hay claves activas (y está encendido). Simulado: faltan claves fuera de producción, así que se usa un sustituto seguro y no se envía nada. Pospuesto: apagado por el dueño por ahora (sin SMS, sin Google Maps, proveedor de email después del dominio final); se usa el sustituto en todas partes. Falta: faltan claves en producción y la función está apagada.",
         "usage": "Uso de APIs de pago hoy",
         "usageIntro": "Llamadas a Google Maps y Twilio contadas por nuestros servidores. El dueño recibe un correo al día cuando un servicio pasa su umbral.",
         "groups": {
@@ -1107,7 +1106,7 @@
           "location": "Guarda primero el servicio y la ubicación.",
           "step": "Ese paso no es posible desde aquí.",
           "service": "Ese servicio no se ofrece en este mercado.",
-          "address": "No encontramos esa dirección.",
+          "address": "Escribe una dirección con número, un cruce de calles o una carretera con salida.",
           "quote": "Agrega el precio y el tiempo de llegada.",
           "generic": "Algo salió mal. Inténtalo de nuevo."
         }
@@ -1280,24 +1279,6 @@
         "email": "Escribe un email válido.",
         "limit": "Demasiados códigos. Espera unos minutos e inténtalo de nuevo.",
         "code": "Ese código no funcionó. Revísalo e inténtalo de nuevo.",
-        "generic": "Algo salió mal. Inténtalo de nuevo."
-      }
-    },
-    "sms": {
-      "tab": "Código por texto",
-      "phone": "Número de celular",
-      "phoneHint": "El número de tu cuenta. Te enviamos un código de 6 dígitos.",
-      "send": "Envíame un código",
-      "sent": "Te enviamos un código. Vence en 10 minutos.",
-      "demoCode": "Entorno de prueba: no se envía ningún texto. Usa el código {code}.",
-      "code": "Código de 6 dígitos",
-      "verify": "Iniciar sesión",
-      "errors": {
-        "phone": "Escribe un número de celular válido de EE. UU.",
-        "limit": "Demasiados códigos. Espera unos minutos y vuelve a intentarlo.",
-        "code": "Ese código no funcionó. Revísalo y vuelve a intentarlo.",
-        "unavailable": "Los códigos por texto aún no están disponibles. Usa tu correo.",
-        "noAccount": "Ninguna cuenta usa este número. Inicia sesión con tu correo.",
         "generic": "Algo salió mal. Inténtalo de nuevo."
       }
     }
@@ -2264,23 +2245,22 @@
     "contact": {
       "title": "¿Cómo te contacta el proveedor?",
       "name": "Tu nombre",
-      "phone": "Número de celular",
-      "sendCode": "Envíame un código",
-      "consent": "Al continuar aceptas los <terms>Términos para conductores</terms> y la <privacy>Política de privacidad</privacy>, y recibir mensajes de texto sobre esta solicitud (pueden aplicar tarifas de mensajes y datos; responde STOP para cancelar).",
+      "phone": "Número de celular (para la llamada del proveedor)",
+      "sendCode": "Continuar",
+      "consent": "Al continuar aceptas los <terms>Términos para conductores</terms> y la <privacy>Política de privacidad</privacy>. Nosotros y el proveedor podemos llamarte sobre esta solicitud.",
       "terms": "Términos para conductores",
       "privacy": "Política de privacidad",
       "email": "Email (opcional)",
       "emailHint": "Te enviamos por email un código de 6 dígitos y el enlace de tu solicitud. ¿Sin email? Confirmamos tu solicitud en la llamada."
     },
     "verify": {
-      "title": "Escribe el código de 6 dígitos",
-      "body": "Enviamos un código al {phone}.",
+      "title": "Revisa y envía",
+      "body": "Enviamos un código de 6 dígitos a {email}.",
       "code": "Código",
-      "demoCode": "Modo demostración: no se envió ningún texto. Tu código es {code}.",
+      "demoCode": "Modo demo: no se envió ningún email. Tu código es {code}.",
       "submit": "Enviar mi solicitud",
-      "resend": "Cambiar número",
-      "noCode": "Confirmaremos tu solicitud en la llamada.",
-      "noSms": "Aquí todavía no hay mensajes de texto, así que confirmaremos tu número por teléfono."
+      "resend": "Cambiar datos de contacto",
+      "noCode": "Confirmaremos tu solicitud en la llamada."
     },
     "errors": {
       "required": "Responde esta pregunta.",
@@ -2288,7 +2268,7 @@
       "outside": "Esa ubicación está fuera de las zonas donde estamos.",
       "phone": "Escribe un celular válido de EE. UU.",
       "code": "Ese código no es correcto. Revísalo e inténtalo de nuevo.",
-      "locked": "Demasiados intentos. Empieza de nuevo con tu número.",
+      "locked": "Demasiados intentos. Escribe tu email otra vez para recibir un código nuevo.",
       "turnstile": "La verificación de seguridad no pasó. Inténtalo de nuevo.",
       "limit": "Demasiadas solicitudes desde esta conexión. Llámanos, por favor.",
       "generic": "Algo salió mal. Inténtalo de nuevo o llámanos.",
@@ -2566,16 +2546,15 @@
   "driverAccount": {
     "title": "Tu cuenta",
     "signIn": {
-      "title": "Entra con tu teléfono",
-      "body": "Te enviaremos un código por texto. Sin contraseña.",
+      "title": "Inicia sesión con tu email",
+      "body": "Te enviaremos un código por email. Sin contraseña.",
       "send": "Envíame un código",
       "code": "Código de 6 dígitos",
       "demoCode": "Modo demostración: tu código es {code}.",
       "verify": "Entrar",
       "wrong": "Ese código no es correcto.",
       "email": "Email",
-      "badEmail": "Escribe un email válido.",
-      "phone": "Número de celular"
+      "badEmail": "Escribe un email válido."
     },
     "tabs": "Secciones de la cuenta",
     "requests": "Solicitudes",
@@ -3150,14 +3129,14 @@
     "send": "Enviar mi ubicación",
     "safety": "Si estás en peligro o en el tráfico, llama primero al 911.",
     "doneTitle": "Gracias, ya tenemos tu ubicación",
-    "doneBody": "El despachador ya la ve. Mantente seguro y con el teléfono encendido; te escribiremos o llamaremos.",
+    "doneBody": "El despachador ya la puede ver. Mantente a salvo y con el teléfono encendido; te llamaremos.",
     "expiredTitle": "Este enlace venció",
-    "expiredBody": "Los enlaces de ubicación duran 2 horas. Responde a nuestro texto o llámanos y te enviaremos uno nuevo.",
+    "expiredBody": "Los enlaces de ubicación funcionan 2 horas. Llámanos y te daremos uno nuevo.",
     "errorTitle": "Algo salió mal",
-    "errorBody": "Inténtalo de nuevo o responde a nuestro texto.",
+    "errorBody": "Inténtalo de nuevo o llámanos.",
     "errors": {
       "location": "Comparte tu ubicación o escribe una dirección.",
-      "address": "No encontramos esa dirección. Agrega la ciudad o el cruce de calles.",
+      "address": "Escribe una dirección con número, un cruce de calles o una carretera con salida.",
       "photo": "No se pudo agregar esa foto (usa JPEG, PNG o HEIC de menos de 8 MB).",
       "limit": "Demasiados intentos. Espera unos minutos.",
       "generic": "Algo salió mal. Inténtalo de nuevo.",
