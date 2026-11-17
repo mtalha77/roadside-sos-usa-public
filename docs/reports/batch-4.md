@@ -16,11 +16,11 @@
 | RSOS-021c Owner scope change: email codes, no Maps  | Done                     | [#176](https://github.com/mtalha77/roadside-sos-usa-public/pull/176) |
 | RSOS-074b Real browser softphone                    | Ready, merge BLOCKED     | [#177](https://github.com/mtalha77/roadside-sos-usa-public/pull/177) |
 | RSOS-034b Real inbox and manual dispatch            | Built, merge BLOCKED     | branch `rsos-034b-inbox-dispatch`                                    |
-| RSOS-023 Location link                              | Not started              |                                                                      |
-| RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Not started              |                                                                      |
-| RSOS-031 Ad tracking and attribution                | Not started              |                                                                      |
-| RSOS-089-prep Test campaign kit                     | Not started              |                                                                      |
-| RSOS-036 Release QA and first production release    | Not started              |                                                                      |
+| RSOS-023 Location link                              | Built, merge BLOCKED     | branch `rsos-023-location-link`                                      |
+| RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Built, merge BLOCKED     | branch `rsos-035-texts-emails`                                       |
+| RSOS-031 Ad tracking and attribution                | Built, merge BLOCKED     | branch `rsos-031-ad-tracking`                                        |
+| RSOS-089-prep Test campaign kit                     | Built, merge BLOCKED     | branch `rsos-089-campaign-kit`                                       |
+| RSOS-036 Release QA and first production release    | Not released (see below) | `docs/reports/release-1.md`                                          |
 
 ## Run blocker: a new security advisory stops every merge (2026-11-17)
 
