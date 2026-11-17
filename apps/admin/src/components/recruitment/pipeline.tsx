@@ -170,7 +170,9 @@ export function Pipeline({
                             onClick={async () => {
                               const r = await approveApplicationAction(x.id);
                               setMsg(
-                                r === "ok" ? `${l.approvedNotice} ${x.company}` : l.approveFailed,
+                                r === "ok"
+                                  ? `${l.approvedNotice} ${x.company}`
+                                  : (l.approveFailed ?? null),
                               );
                               if (r === "ok")
                                 setLeads((all) =>
