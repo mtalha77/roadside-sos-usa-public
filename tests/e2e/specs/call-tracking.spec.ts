@@ -70,7 +70,7 @@ test.describe("Twilio voice webhooks", () => {
     // A super admin adds a staging test number for the first market.
     await signInAsDemo(page, appUrls.admin!, "Super admin");
     await page.goto(new URL("/settings?tab=phones", appUrls.admin).toString());
-    await page.getByLabel("Number").fill(trackingNumber);
+    await page.getByRole("textbox", { name: "Number", exact: true }).fill(trackingNumber);
     await page.getByLabel("Source").selectOption("staging_test");
     await page.getByRole("button", { name: "Add number" }).click();
     await expect(page.getByText(`Added ${trackingNumber}.`)).toBeVisible();
