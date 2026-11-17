@@ -7,33 +7,32 @@ import { Input } from "@rsos/ui/input";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import {
-  checkSignInCodeAction,
-  sendSignInCodeAction,
-  type SmsSignInState,
-} from "../server/sms-sign-in";
+  checkEmailCodeAction,
+  type EmailSignInState,
+  sendEmailCodeAction,
+} from "../server/email-sign-in";
 
-/** Sign in with a code texted to the account's mobile number (RSOS-021b, Twilio Verify). */
-export function SmsSignIn() {
-  const t = useTranslations("auth.sms");
-  const [sent, send, sending] = useActionState<SmsSignInState, FormData>(sendSignInCodeAction, {});
-  const [checked, check, checking] = useActionState<SmsSignInState, FormData>(
-    checkSignInCodeAction,
+/** Sign in with a 6-digit code emailed to the account's address (Supabase Auth email OTP). */
+export function EmailCodeSignIn() {
+  const t = useTranslations("auth.emailCode");
+  const [sent, send, sending] = useActionState<EmailSignInState, FormData>(sendEmailCodeAction, {});
+  const [checked, check, checking] = useActionState<EmailSignInState, FormData>(
+    checkEmailCodeAction,
     {},
   );
   const error = checked.error ?? sent.error;
-  if (!sent.phone)
+  if (!sent.email)
     return (
       <form action={send} className="flex flex-col gap-4" noValidate>
         {error ? <Alert tone="critical" title={t(`errors.${error}`)} /> : null}
-        <Field label={t("phone")} description={t("phoneHint")}>
+        <Field label={t("email")} description={t("emailHint")}>
           {({ id, describedBy }) => (
             <Input
               id={id}
               aria-describedby={describedBy}
-              name="phone"
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel-national"
+              name="email"
+              type="email"
+              autoComplete="email"
               required
             />
           )}
@@ -52,7 +51,7 @@ export function SmsSignIn() {
         </p>
       ) : null}
       {checked.error ? <Alert tone="critical" title={t(`errors.${checked.error}`)} /> : null}
-      <input type="hidden" name="phone" value={sent.phone} />
+      <input type="hidden" name="email" value={sent.email} />
       <Field label={t("code")}>
         {({ id }) => (
           <Input

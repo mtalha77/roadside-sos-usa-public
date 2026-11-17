@@ -8,7 +8,7 @@
     "./server": "./src/server/index.ts",
     "./components/*": "./src/components/*.tsx",
     "./demo": "./src/server/demo.ts",
-    "./sms-sign-in": "./src/server/sms-sign-in.ts"
+    "./email-sign-in": "./src/server/email-sign-in.ts"
   },
   "scripts": {
     "lint": "eslint .",

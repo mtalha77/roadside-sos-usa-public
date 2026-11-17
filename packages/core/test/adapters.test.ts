@@ -1,93 +1,20 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  FAKE_VERIFY_CODE,
+  averageSpeedMph,
   chooseMaps,
-  chooseVerify,
   createFakeMaps,
-  createFakeVerify,
   createGoogleMaps,
-  createTwilioVerify,
   estimateRoute,
   highwayFrom,
+  isPlausibleAddress,
+  mapsEnabled,
   twilioSignature,
   validateTwilioSignature,
-  verifyAvailable,
 } from "../src/adapters";
 
 const phone = "+12105550123"; // fictional 555-01xx number
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
-
-describe("Twilio Verify adapter", () => {
-  it("fake: fixed code, nothing sent", async () => {
-    const v = createFakeVerify();
-    expect(await v.start(phone)).toEqual({ ok: true, demoCode: FAKE_VERIFY_CODE });
-    expect(await v.start("123")).toEqual({ ok: false, reason: "invalid-phone" });
-    expect(await v.check(phone, FAKE_VERIFY_CODE)).toEqual({ ok: true });
-    expect(await v.check(phone, "111111")).toEqual({ ok: false, reason: "invalid-code" });
-    expect(await v.check("bad", FAKE_VERIFY_CODE)).toEqual({ ok: false, reason: "error" });
-  });
-
-  it("real: calls Verify with form bodies and reads the status", async () => {
-    const calls: { url: string; body: string }[] = [];
-    const fetchImpl = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
-      calls.push({ url: String(url), body: String(init?.body) });
-      if (String(url).endsWith("/Verifications")) return json({ status: "pending" }, 201);
-      return json({ status: String(init?.body).includes("Code=123456") ? "approved" : "pending" });
-    }) as unknown as typeof fetch;
-    const v = createTwilioVerify(
-      { accountSid: "AC1", authToken: "t", serviceSid: "VA1" },
-      fetchImpl,
-    );
-    expect(await v.start(phone)).toEqual({ ok: true });
-    expect(calls[0]!.url).toBe("https://verify.twilio.com/v2/Services/VA1/Verifications");
-    expect(calls[0]!.body).toContain("Channel=sms");
-    expect(await v.check(phone, "123456")).toEqual({ ok: true });
-    expect(await v.check(phone, "654321")).toEqual({ ok: false, reason: "invalid-code" });
-    expect(await v.check(phone, "x")).toEqual({ ok: false, reason: "invalid-code" });
-  });
-
-  it("real: expired checks, HTTP errors and network failures", async () => {
-    const mk = (res: () => Promise<Response>) =>
-      createTwilioVerify({ accountSid: "AC1", authToken: "t", serviceSid: "VA1" }, (async () =>
-        res()) as unknown as typeof fetch);
-    expect(await mk(async () => json({}, 404)).check(phone, "123456")).toEqual({
-      ok: false,
-      reason: "invalid-code",
-    });
-    expect(await mk(async () => json({}, 500)).check(phone, "123456")).toEqual({
-      ok: false,
-      reason: "error",
-    });
-    expect(await mk(async () => json({ nope: 1 })).check(phone, "123456")).toEqual({
-      ok: false,
-      reason: "error",
-    });
-    expect(await mk(async () => json({}, 500)).start(phone)).toEqual({
-      ok: false,
-      reason: "error",
-    });
-    const boom = mk(async () => {
-      throw new Error("down");
-    });
-    expect(await boom.start(phone)).toEqual({ ok: false, reason: "error" });
-    expect(await boom.check(phone, "123456")).toEqual({ ok: false, reason: "error" });
-    expect(await boom.start("bad")).toEqual({ ok: false, reason: "invalid-phone" });
-  });
-
-  it("chooses real only with keys, and production never uses the fake", () => {
-    expect(chooseVerify({}).mode).toBe("fake");
-    expect(
-      chooseVerify({
-        TWILIO_ACCOUNT_SID: "AC",
-        TWILIO_AUTH_TOKEN: "t",
-        TWILIO_VERIFY_SERVICE_SID: "VA",
-      }).mode,
-    ).toBe("real");
-    expect(verifyAvailable(createFakeVerify(), { NEXT_PUBLIC_SITE_ENV: "staging" })).toBe(true);
-    expect(verifyAvailable(createFakeVerify(), { NEXT_PUBLIC_SITE_ENV: "production" })).toBe(false);
-  });
-});
 
 describe("Twilio webhook signatures", () => {
   const url = "https://example.test/api/twilio/voice";
@@ -125,9 +52,40 @@ describe("Maps adapter", () => {
     expect(await m.reverseGeocode({ lat: 1, lng: 1 })).toBeNull();
     const r = await m.route({ lat: 29.4, lng: -98.5 }, { lat: 29.5, lng: -98.5 });
     expect(r).toEqual(estimateRoute({ lat: 29.4, lng: -98.5 }, { lat: 29.5, lng: -98.5 }));
-    expect(r!.meters).toBeGreaterThan(14000);
+    // 0.1 degree of latitude is about 11.1 km straight line; 30 mph default is about 13 minutes.
+    expect(r!.meters).toBeGreaterThan(11000);
+    expect(r!.meters).toBeLessThan(11200);
+    expect(Math.round(r!.seconds / 60)).toBe(14);
+  });
+
+  it("stays the dummy until keys and the flag are both set", () => {
+    const keys = { GOOGLE_MAPS_SERVER_KEY: "k", NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: "b" };
     expect(chooseMaps({}).mode).toBe("fake");
-    expect(chooseMaps({ GOOGLE_MAPS_SERVER_KEY: "k" }).mode).toBe("real");
+    expect(chooseMaps(keys).mode).toBe("fake");
+    expect(chooseMaps({ MAPS_ENABLED: "true", GOOGLE_MAPS_SERVER_KEY: "k" }).mode).toBe("fake");
+    expect(chooseMaps({ ...keys, MAPS_ENABLED: "true" }).mode).toBe("real");
+    expect(mapsEnabled({ ...keys, MAPS_ENABLED: "1" })).toBe(false);
+  });
+
+  it("ETA uses the configured average speed", () => {
+    expect(averageSpeedMph({})).toBe(30);
+    expect(averageSpeedMph({ MAPS_AVG_SPEED_MPH: "45" })).toBe(45);
+    expect(averageSpeedMph({ MAPS_AVG_SPEED_MPH: "500" })).toBe(30);
+    const a = { lat: 29.4, lng: -98.5 };
+    const b = { lat: 29.5, lng: -98.5 };
+    expect(estimateRoute(a, b, 60).seconds * 2).toBeCloseTo(estimateRoute(a, b, 30).seconds, -1);
+  });
+
+  it("checks typed address formats without geocoding", () => {
+    for (const ok of [
+      "1200 Main St",
+      "I-35 mile marker 160",
+      "Main St and 5th St",
+      "Exit 12 on US-90",
+    ])
+      expect(isPlausibleAddress(ok)).toBe(true);
+    for (const bad of ["", "abc", "12345", "hello there"])
+      expect(isPlausibleAddress(bad)).toBe(false);
   });
 
   it("finds highway names", () => {

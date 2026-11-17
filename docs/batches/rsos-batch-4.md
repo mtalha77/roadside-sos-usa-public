@@ -12,6 +12,14 @@ Read this whole file before starting.
 
 ---
 
+## Scope changes from the owner (these override anything below)
+
+1. **No SMS in this batch.** Sign-in for drivers, providers and admins uses email codes only (Supabase Auth email OTP). Twilio Verify and Twilio Messaging are not used. RSOS-035 texting, opt-outs and quiet hours are built behind a feature flag set to OFF, with fakes and tests only; A2P 10DLC runbook is still written. Anywhere a ticket says "text the driver", use email when the driver gave one, otherwise the dispatcher reads or reads out the link on the call, and log it on the timeline.
+2. **No Google Maps in this batch.** Use the maps adapter's dummy implementation everywhere: a styled placeholder map (our tokens, light and dark, grid or simple vector streets, our custom markers, truck animation) that shows pins from latitude and longitude. Address entry is a typed address with format validation; no autocomplete, no geocoding. GPS comes from the free browser Geolocation API and is stored as coordinates. Distance is straight-line (haversine) and ETA is distance divided by an average speed from config. The real Google adapter is written and unit tested against mocks but switched off; switching on later must need only keys and a flag. Never load an interactive map on marketing or city pages.
+3. **Twilio voice stays** (RSOS-030 call tracking and RSOS-074b browser softphone) if `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_API_KEY_SID` and `TWILIO_API_KEY_SECRET` are present. If missing, build on the fake and mark the real wiring BLOCKED. Create the staging and production TwiML Apps through the Twilio API, save their SIDs to Vercel, never print values. Buy phone numbers only if the owner has written "numbers approved" in `docs/owner-approvals.md`.
+4. **Resend comes later** (after the final name and domain). Email sign-in uses Supabase's built-in email sending for now; product emails use the Resend fake.
+5. Step 0 keys for Verify, Messaging, Google Maps and Resend are expected to be missing. Report them as "deferred by owner", not as blockers.
+
 ## Operating rules
 
 1. Copy this file into the repo as `docs/batches/rsos-batch-4.md` in your first pull request.

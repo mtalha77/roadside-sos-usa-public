@@ -139,7 +139,9 @@ export async function SystemStatus() {
                     return (
                       <td key={app} className="py-2 pr-3">
                         {s ? (
-                          <Badge tone={tone(s === "real", s === "fake")}>{t(`state.${s}`)}</Badge>
+                          <Badge tone={tone(s === "real", s === "fake" || s === "deferred")}>
+                            {t(`state.${s}`)}
+                          </Badge>
                         ) : (
                           <span className="text-muted-foreground">{t("none")}</span>
                         )}

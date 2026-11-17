@@ -3,15 +3,21 @@ import { isDemoMode } from "@rsos/config/demo";
 import { demoDriverProfile } from "@rsos/core/demo";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
-import { DRIVER_COOKIE, type DriverSession, readDriverSession } from "@/lib/driver-account";
-import { DRAFT_COOKIE, toE164 } from "@/lib/get-help";
+import { z } from "zod";
+import {
+  demoPhoneFor,
+  DRIVER_COOKIE,
+  type DriverSession,
+  readDriverSession,
+} from "@/lib/driver-account";
+import { DRAFT_COOKIE } from "@/lib/get-help";
 
-const hash = (code: string, phone: string) =>
-  createHash("sha256").update(`${phone}:${code}`).digest("hex");
+const hash = (code: string, email: string) =>
+  createHash("sha256").update(`${email}:${code}`).digest("hex");
 
 /**
- * Driver account actions (RSOS-070, demo mode only): phone-code sign-in (the code is shown on
- * screen), removing saved items, deleting the account, and a quick repeat request that pre-fills
+ * Driver account actions (RSOS-070, demo mode only): email-code sign-in (no SMS; the code is
+ * shown on screen, nothing is sent), removing saved items, deleting the account, and a quick repeat request that pre-fills
  * the Get Help draft with the saved vehicle and number.
  */
 export async function POST(request: NextRequest) {
@@ -34,12 +40,20 @@ export async function POST(request: NextRequest) {
     return res;
   };
   if (action === "send-code") {
-    const phone = toE164(form.get("phone"));
-    if (!phone) return go("/account?error=phone");
+    const email = z
+      .email()
+      .max(254)
+      .safeParse(
+        String(form.get("email") ?? "")
+          .trim()
+          .toLowerCase(),
+      );
+    if (!email.success) return go("/account?error=email");
     const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
     return go(`/account?code=${code}`, {
-      phone,
-      pendingCodeHash: hash(code, phone),
+      email: email.data,
+      phone: demoPhoneFor(email.data),
+      pendingCodeHash: hash(code, email.data),
       signedIn: false,
       removedVehicles: [],
       removedPlaces: [],
@@ -49,7 +63,7 @@ export async function POST(request: NextRequest) {
   if (action === "verify") {
     if (
       !session?.pendingCodeHash ||
-      hash(String(form.get("code") ?? ""), session.phone) !== session.pendingCodeHash
+      hash(String(form.get("code") ?? ""), session.email) !== session.pendingCodeHash
     )
       return go("/account?error=code");
     return go("/account", { ...session, pendingCodeHash: undefined, signedIn: true });
@@ -82,7 +96,7 @@ export async function POST(request: NextRequest) {
       return go("/", null);
     case "quick": {
       // Saved vehicle and number go into a new Get Help draft; the driver confirms location, safety and sends.
-      const profile = demoDriverProfile(session.phone);
+      const profile = demoDriverProfile(session.email || session.phone);
       const vehicle =
         profile.vehicles.find((v) => v.id === (session.defaultVehicle ?? "v0")) ??
         profile.vehicles[0]!;
@@ -104,7 +118,7 @@ export async function POST(request: NextRequest) {
           ev: false,
           name: "Demo driver",
           phone: session.phone,
-          smsAvailable: false,
+          codeSent: false,
           quick: true,
         },
       });

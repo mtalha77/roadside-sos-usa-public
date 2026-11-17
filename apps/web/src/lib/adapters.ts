@@ -1,10 +1,5 @@
 import "server-only";
-import {
-  chooseMaps,
-  chooseVerify,
-  type MapsAdapter,
-  type VerifyAdapter,
-} from "@rsos/core/adapters";
+import { chooseMaps, type MapsAdapter } from "@rsos/core/adapters";
 import { getRateLimitStore } from "@rsos/core/security";
 import { postgresRateLimitStore, recordUsage, type UsageVendor } from "@rsos/db/usage";
 import { chooseEmailSender, sendUsageAlert } from "@rsos/emails";
@@ -24,7 +19,10 @@ export async function countUsage(vendor: UsageVendor, units = 1) {
     }).catch(() => null);
 }
 
-/** Maps with usage counting on every real call (the fake is free and not counted). */
+/**
+ * Maps with usage counting on every real call. The dummy (the default until Google Maps is
+ * switched on with keys and MAPS_ENABLED) is free and not counted.
+ */
 export function maps(): MapsAdapter {
   const m = chooseMaps();
   if (m.mode === "fake") return m;
@@ -34,15 +32,5 @@ export function maps(): MapsAdapter {
     place: async (...a) => (void countUsage("maps_place"), m.place(...a)),
     reverseGeocode: async (...a) => (void countUsage("maps_geocode"), m.reverseGeocode(...a)),
     route: async (...a) => (void countUsage("maps_routes"), m.route(...a)),
-  };
-}
-
-export function verify(): VerifyAdapter {
-  const v = chooseVerify();
-  if (v.mode === "fake") return v;
-  return {
-    mode: v.mode,
-    start: async (p) => (void countUsage("twilio_verify"), v.start(p)),
-    check: v.check,
   };
 }

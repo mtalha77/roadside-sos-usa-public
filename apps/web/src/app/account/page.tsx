@@ -52,6 +52,7 @@ export default async function DriverAccountPage({
         <div className="mx-auto flex max-w-md flex-col gap-4 px-4">
           <p className="text-sm text-muted-foreground">{t("demoOnly")}</p>
           {sp.error === "code" ? <Alert tone="critical" title={t("signIn.wrong")} /> : null}
+          {sp.error === "email" ? <Alert tone="critical" title={t("signIn.badEmail")} /> : null}
           {session && !session.signedIn ? (
             <form method="post" action="/api/account" className="flex flex-col gap-4">
               <input type="hidden" name="action" value="verify" />
@@ -79,12 +80,11 @@ export default async function DriverAccountPage({
             <form method="post" action="/api/account" className="flex flex-col gap-4">
               <input type="hidden" name="action" value="send-code" />
               <label className="flex flex-col gap-2 font-medium">
-                {t("signIn.phone")}
+                {t("signIn.email")}
                 <input
-                  name="phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
                   required
                   className={inputClass}
                 />
@@ -100,7 +100,7 @@ export default async function DriverAccountPage({
   }
 
   const tab = TABS.find((x) => x === sp.tab) ?? "requests";
-  const p = demoDriverProfile(session.phone);
+  const p = demoDriverProfile(session.email || session.phone);
   const vehicles = p.vehicles
     .filter((v) => !session.removedVehicles.includes(v.id))
     .map((v) => ({ ...v, isDefault: v.id === (session.defaultVehicle ?? "v0") }));
@@ -122,7 +122,7 @@ export default async function DriverAccountPage({
   );
   return (
     <SitePage>
-      <PageHero title={t("title")} intro={formatPhone(session.phone)} />
+      <PageHero title={t("title")} intro={session.email || formatPhone(session.phone)} />
       <div className="mx-auto flex max-w-3xl flex-col gap-6 px-4">
         <section className={`${card} flex flex-col gap-3`} aria-labelledby="quick-h">
           <h2 id="quick-h" className="text-xl font-semibold">

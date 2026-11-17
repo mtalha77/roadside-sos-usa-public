@@ -67,8 +67,13 @@ reset role;
 -- A dispatcher sees calls and texts in their market only.
 select pg_temp.as_user(jsonb_build_object('sub', '00000000-0000-4000-8000-0000000003a1', 'role', 'authenticated', 'aal', 'aal2',
   'app_role', 'staff', 'staff_role', 'dispatcher', 'staff_markets', jsonb_build_array((select id from public.markets where slug = 'houston'))));
-select is((select count(*)::int from public.calls), 1, 'the Houston dispatcher reads the Houston call');
-select is((select count(*)::int from public.sms_messages), 1, 'and its text');
+-- (rsos-dev also holds rows from e2e runs: count this test's rows, and nothing outside Houston.)
+select is((select count(*)::int from public.calls where request_id = '00000000-0000-4000-8000-0000000003b1')
+          + (select count(*)::int from public.calls where market_id <> (select id from public.markets where slug = 'houston')),
+  1, 'the Houston dispatcher reads the Houston call, and no other market''s');
+select is((select count(*)::int from public.sms_messages where request_id = '00000000-0000-4000-8000-0000000003b1')
+          + (select count(*)::int from public.sms_messages where market_id <> (select id from public.markets where slug = 'houston')),
+  1, 'and its text');
 select lives_ok($$ insert into public.dispatcher_status (user_id, presence, on_duty_now) values ('00000000-0000-4000-8000-0000000003a1', 'available', true) $$,
   'a dispatcher sets their own presence');
 select throws_ok($$ insert into public.dispatcher_status (user_id, presence) values ('00000000-0000-4000-8000-0000000003a2', 'available') $$,

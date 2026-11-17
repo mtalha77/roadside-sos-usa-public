@@ -8,13 +8,7 @@ import { createPublicSupabase } from "./public";
  */
 
 export type UsageVendor =
-  | "maps_autocomplete"
-  | "maps_place"
-  | "maps_geocode"
-  | "maps_routes"
-  | "maps_js"
-  | "twilio_verify"
-  | "twilio_sms";
+  "maps_autocomplete" | "maps_place" | "maps_geocode" | "maps_routes" | "maps_js" | "twilio_sms";
 
 export type UsageResult = { unitsToday: number; threshold: number | null; alert: boolean };
 

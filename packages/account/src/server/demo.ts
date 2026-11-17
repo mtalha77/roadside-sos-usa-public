@@ -147,7 +147,8 @@ export async function demoSignInAction(form: FormData): Promise<void> {
     // window collide. Reuse the existing authenticator, try the neighbouring codes (one step either
     // side is accepted), and if those are taken too, wait for the next window.
     let passed = false;
-    for (let attempt = 0; attempt < 5 && !passed; attempt++) {
+    // At most one wait (the function must answer within Vercel's time limit); the caller retries.
+    for (let attempt = 0; attempt < 2 && !passed; attempt++) {
       if (attempt > 0) {
         const toNextWindow = 30_000 - (Date.now() % 30_000);
         await new Promise((r) => setTimeout(r, toNextWindow + 200 + Math.random() * 800));

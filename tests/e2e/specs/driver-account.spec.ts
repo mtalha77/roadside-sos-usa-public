@@ -14,12 +14,12 @@ const url = (p: string) => new URL(p, web).toString();
 test.describe("driver account", () => {
   test.skip(!web, "No website URL");
 
-  test("sign in with a phone code; saved vehicles, places, favorites and history", async ({
+  test("sign in with an email code; saved vehicles, places, favorites and history", async ({
     page,
   }, info) => {
     await page.goto(url("/account"));
-    await page.getByLabel("Mobile number").fill("(713) 555-0144");
-    await page.getByRole("button", { name: "Text me a code" }).click();
+    await page.getByLabel("Email", { exact: true }).fill("e2e-driver-44@example.com");
+    await page.getByRole("button", { name: "Email me a code" }).click();
     const code = /code is (\d{6})/.exec(
       (await page.getByText(/your code is/).textContent()) ?? "",
     )?.[1];
@@ -38,8 +38,8 @@ test.describe("driver account", () => {
   test("a returning driver sends a request in 3 taps after location", async ({ page }) => {
     test.skip(readOnly, "Writes to the database");
     await page.goto(url("/account"));
-    await page.getByLabel("Mobile number").fill("(713) 555-0145");
-    await page.getByRole("button", { name: "Text me a code" }).click();
+    await page.getByLabel("Email", { exact: true }).fill("e2e-driver-45@example.com");
+    await page.getByRole("button", { name: "Email me a code" }).click();
     const code = /code is (\d{6})/.exec(
       (await page.getByText(/your code is/).textContent()) ?? "",
     )?.[1];

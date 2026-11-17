@@ -13,6 +13,7 @@
 | RSOS-099 Staging fixes before new work              | Done                     | [#172](https://github.com/mtalha77/roadside-sos-usa-public/pull/172) |
 | RSOS-021b Real maps and SMS codes                   | Done (real keys BLOCKED) | [#175](https://github.com/mtalha77/roadside-sos-usa-public/pull/175) |
 | RSOS-030 Call tracking and the phone flow (IVR)     | Done (real keys BLOCKED) | [#173](https://github.com/mtalha77/roadside-sos-usa-public/pull/173) |
+| RSOS-021c Owner scope change: email codes, no Maps  | Done                     | (this PR)                                                            |
 | RSOS-074b Real browser softphone                    | Not started              |                                                                      |
 | RSOS-034b Real inbox and manual dispatch            | Not started              |                                                                      |
 | RSOS-023 Location link                              | Not started              |                                                                      |
@@ -33,17 +34,23 @@ Twilio could not be inspected because no Twilio keys exist anywhere.
 | TWILIO_AUTH_TOKEN                                                                                                           | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
 | TWILIO_API_KEY_SID                                                                                                          | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
 | TWILIO_API_KEY_SECRET                                                                                                       | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
-| TWILIO_VERIFY_SERVICE_SID                                                                                                   | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
-| TWILIO_MESSAGING_SERVICE_SID                                                                                                | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
+| TWILIO_VERIFY_SERVICE_SID                                                                                                   | deferred by owner (missing)               | deferred by owner (missing)                   | deferred by owner (missing)                |
+| TWILIO_MESSAGING_SERVICE_SID                                                                                                | deferred by owner (missing)               | deferred by owner (missing)                   | deferred by owner (missing)                |
 | TWILIO_TWIML_APP_SID                                                                                                        | n/a                                       | n/a                                           | missing / missing / missing                |
-| NEXT_PUBLIC_GOOGLE_MAPS_API_KEY                                                                                             | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
-| GOOGLE_MAPS_SERVER_KEY                                                                                                      | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
-| RESEND_API_KEY                                                                                                              | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
+| NEXT_PUBLIC_GOOGLE_MAPS_API_KEY                                                                                             | deferred by owner (missing)               | deferred by owner (missing)                   | deferred by owner (missing)                |
+| GOOGLE_MAPS_SERVER_KEY                                                                                                      | deferred by owner (missing)               | deferred by owner (missing)                   | deferred by owner (missing)                |
+| RESEND_API_KEY                                                                                                              | deferred by owner (missing)               | deferred by owner (missing)                   | deferred by owner (missing)                |
 | NEXT_PUBLIC_TURNSTILE_SITE_KEY / TURNSTILE_SECRET_KEY                                                                       | present / present (via Preview) / present | n/a                                           | n/a                                        |
 | UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN                                                                           | missing / missing / missing               | missing / missing / missing                   | missing / missing / missing                |
 | NEXT_PUBLIC_GTM_ID, NEXT_PUBLIC_GA4_ID, GOOGLE_ADS_CONVERSION_ID + labels, NEXT_PUBLIC_META_PIXEL_ID, NEXT_PUBLIC_MS_UET_ID | missing / missing / missing               | n/a                                           | n/a                                        |
 | OWNER_TEST_PHONE                                                                                                            | missing (staging)                         | missing (staging)                             | missing (staging)                          |
 | SUPABASE_SERVICE_ROLE_KEY                                                                                                   | not used (by design)                      | present / present / **missing**               | present / present / present                |
+
+**Owner scope change (batch file, "Scope changes from the owner"):** Verify, Messaging, Google
+Maps and Resend keys are expected to be missing and are reported as **deferred by owner**, not as
+blockers. Sign-in uses Supabase email codes, maps use the dummy adapter, product emails use the
+Resend fake. Twilio voice keys (`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_API_KEY_SID`,
+`TWILIO_API_KEY_SECRET`) are still needed and still missing: voice real wiring is BLOCKED.
 
 Twilio phone numbers and Messaging Service attachments: **not checked (BLOCKED)**, no Twilio
 credentials. Consequence, per the batch rules: every Twilio, Maps, email, rate-limit and
@@ -52,6 +59,37 @@ BLOCKED until the owner adds the keys. `rsos-provider` Production has no `SUPABA
 (needed before release: RSOS-036 check 6).
 
 ## Tickets
+
+### RSOS-021c: Owner scope change (email codes, no SMS, no Google Maps)
+
+Applies the "Scope changes from the owner" section of the updated batch file (copied into
+`docs/batches/rsos-batch-4.md`), which overrides the tickets below it.
+
+- **Email codes for everyone.** Providers and admins: an "Email code" sign-in
+  (`@rsos/account` `EmailCodeSignIn`, Supabase Auth email OTP, existing accounts only, the same
+  answer whether or not an account exists, 3 codes per address per 10 minutes and 10 per IP per
+  hour). Drivers: Get Help asks for an optional email; with one, a 6-digit code is emailed
+  (Supabase OTP) and checked on the last step, and the request stores `driver_email` and
+  `driver_email_verified`. Without one, the request goes through and is confirmed on the call.
+  Demo hosts (never production) show the code on screen and email nothing; demo driver accounts
+  sign in by email too. `scripts/supabase-auth-config.sh` sets 6-digit codes, a 10-minute expiry
+  and code-carrying sign-in emails (no brand in the text).
+- **Removed:** Twilio Verify (adapter, usage counter, SMS sign-in, the phone lookup function
+  `auth_user_for_phone`, the texting consent on Get Help).
+- **Maps dummy everywhere.** The Google adapter is on only with both keys **and**
+  `MAPS_ENABLED=true`; otherwise the dummy: typed address with format validation
+  (`isPlausibleAddress`), no autocomplete (`/api/places` answers 404), no geocoding, GPS from the
+  browser stored as coordinates, haversine distance and ETA from `MAPS_AVG_SPEED_MPH` (default
+  30). The placeholder map gained simple vector streets, pin markers and a truck that drives the
+  route (still with reduced motion). No interactive map on marketing or city pages.
+- **Adapter states** gain `deferred` (maps, texting, email): never "missing" in production.
+  System status and `/api/health` show it; Twilio is split into voice (`twilio`) and texts
+  (`texting`, which also needs `TEXTING_ENABLED`).
+- Real or demo: real Supabase email codes in production; dummy maps everywhere. Keys: none new.
+  Tested: unit tests (maps flag, ETA, address format, adapter states), pgTAP (email stored on
+  submit), e2e `maps-and-email-codes.spec.ts`, updated Get Help, staging smoke and driver account
+  specs. Owner: Supabase's built-in email sender allows only a few emails per hour; connect custom
+  SMTP (Resend) before real traffic.
 
 ### RSOS-099: Staging fixes before new work
 
