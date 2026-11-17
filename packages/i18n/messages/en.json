@@ -1063,7 +1063,8 @@
         "sendLink": "Location link",
         "assignedScript": "{provider} is on the way. Quoted price {price}, about {eta} minutes.",
         "linkScript": "Open this link and tap Share my location: {link}",
-        "logged": "Logged on the timeline."
+        "logged": "Logged on the timeline.",
+        "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
       }
     }
   },
@@ -1139,7 +1140,7 @@
       },
       "body": {
         "assigned": "Hi {first_name}, {provider} is on the way. Quoted price {price}, about {eta} minutes.",
-        "locationLink": "Hi {first_name}, please open the link below and share your exact location so we can send help."
+        "locationLink": "Hi {first_name}, please open the link below and share your exact location so we can send help. If the link doesn't open, go to our website's /l page and type the code {code}."
       },
       "open": "Open: {url}",
       "footer": "You get this email because you asked for roadside help. Reply to this email if anything is wrong."
@@ -3034,5 +3035,41 @@
     "help": "{brand}: roadside help dispatch. For support email {support}. Reply STOP to opt out. Msg & data rates may apply.",
     "assigned": "Hi {first_name}, {provider} is on the way. Quoted price {price}, about {eta} min. Track here: {link}",
     "locationLink": "Please share your exact location here so we can send help: {link}"
+  },
+  "locationLink": {
+    "title": "Share your location",
+    "intro": "Tap the button so we know exactly where you are. Only the dispatcher handling your request sees it.",
+    "share": "Share my location",
+    "finding": "Finding you…",
+    "found": "Found you at {lat}, {lng}. Check the pin, then send.",
+    "denied": "We couldn't get your location. Type the address or cross streets instead.",
+    "unsupported": "This phone can't share its location here. Type the address instead.",
+    "mapLabel": "Map with your location pin",
+    "drag": "Drag the pin if it's not exactly where you are.",
+    "address": "Address, cross streets or exit",
+    "addressHint": "Not needed if you shared your location.",
+    "note": "Landmark (optional)",
+    "notePlaceholder": "For example: northbound shoulder after the exit, white pickup",
+    "photo": "Photo of your vehicle (optional)",
+    "send": "Send my location",
+    "safety": "If you are in danger or in traffic, call 911 first.",
+    "doneTitle": "Thanks, we have your location",
+    "doneBody": "The dispatcher can see it now. Stay safe and keep your phone on; we'll call you.",
+    "expiredTitle": "This link has expired",
+    "expiredBody": "Location links work for 2 hours. Call us and we'll give you a new one.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Please try again, or call us.",
+    "errors": {
+      "location": "Share your location or type an address.",
+      "address": "Type a street address with a number, cross streets, or a highway and exit.",
+      "photo": "That photo couldn't be added (use a JPEG, PNG or HEIC under 8 MB).",
+      "limit": "Too many tries. Wait a few minutes.",
+      "generic": "Something went wrong. Please try again.",
+      "code": "That code didn't work. Check it with the dispatcher."
+    },
+    "codeTitle": "Enter your location code",
+    "codeIntro": "Type the 6-digit code the dispatcher read to you.",
+    "code": "6-digit code",
+    "codeSubmit": "Continue"
   }
 }

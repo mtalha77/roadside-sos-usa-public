@@ -1,5 +1,5 @@
 import "server-only";
-import { randomBytes } from "node:crypto";
+import { randomBytes, randomInt } from "node:crypto";
 import { appUrl } from "@rsos/config/site";
 import {
   type CallFlowText,
@@ -271,11 +271,22 @@ async function urgentFollowUp(
       .catch(() => null);
 }
 
-/** A short, unguessable location link for a request (RSOS-023): 2 hours, one request. */
-export async function createLocationLink(requestId: string): Promise<string | null> {
-  const token = randomBytes(18).toString("base64url");
-  const { error } = await createAdminSupabase()
-    .from("location_links")
-    .insert({ token, request_id: requestId });
-  return error ? null : `${appUrl("web")}/l/${token}`;
+/**
+ * A short, unguessable location link for a request (RSOS-023): 2 hours, one request, with a
+ * 6-digit code the dispatcher can read on the call (the driver types it at /l on the website).
+ */
+export async function createLocationLink(
+  requestId: string,
+): Promise<{ url: string; code: string; codeUrl: string } | null> {
+  const admin = createAdminSupabase();
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const token = randomBytes(18).toString("base64url");
+    const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
+    const { error } = await admin
+      .from("location_links")
+      .insert({ token, request_id: requestId, code });
+    if (!error) return { url: `${appUrl("web")}/l/${token}`, code, codeUrl: `${appUrl("web")}/l` };
+    if (error.code !== "23505") return null;
+  }
+  return null;
 }

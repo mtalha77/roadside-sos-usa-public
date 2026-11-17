@@ -25,6 +25,9 @@ export type InboxActionState = {
     price?: string;
     eta?: number;
     link: string;
+    /** Location links: the 6-digit code and the short address to read instead of the link. */
+    code?: string;
+    codeUrl?: string;
   };
 };
 
@@ -315,8 +318,9 @@ export async function assignAction(_: InboxActionState, form: FormData): Promise
 export async function locationLinkAction(id: string): Promise<InboxActionState> {
   const ctx = await dispatcher();
   if (!ctx || !Id.safeParse(id).success) return { error: "forbidden" };
-  const link = await createLocationLink(id);
-  if (!link) return { error: "generic" };
+  const created = await createLocationLink(id);
+  if (!created) return { error: "generic" };
+  const link = created.url;
   const { data: req } = await (
     await getServerSupabase()
   )
@@ -328,11 +332,20 @@ export async function locationLinkAction(id: string): Promise<InboxActionState> 
     kind: "locationLink",
     firstName: req?.driver_name.split(" ")[0] ?? "",
     link,
+    code: created.code,
   });
   revalidatePath("/inbox");
   return how === "emailed"
     ? { ok: "emailed" }
-    : { ok: "link", readAloud: { what: "locationLink", link } };
+    : {
+        ok: "link",
+        readAloud: {
+          what: "locationLink",
+          link,
+          code: created.code,
+          codeUrl: created.codeUrl.replace(/^https?:\/\//, ""),
+        },
+      };
 }
 
 /** The dispatcher read the words on the call: logged on the timeline. */

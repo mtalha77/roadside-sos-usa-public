@@ -15,8 +15,8 @@
 | RSOS-030 Call tracking and the phone flow (IVR)     | Done (real keys BLOCKED) | [#173](https://github.com/mtalha77/roadside-sos-usa-public/pull/173) |
 | RSOS-021c Owner scope change: email codes, no Maps  | Done                     | [#176](https://github.com/mtalha77/roadside-sos-usa-public/pull/176) |
 | RSOS-074b Real browser softphone                    | Done (real keys BLOCKED) | [#177](https://github.com/mtalha77/roadside-sos-usa-public/pull/177) |
-| RSOS-034b Real inbox and manual dispatch            | Done                     | (this PR)                                                            |
-| RSOS-023 Location link                              | Built, merge BLOCKED     | branch `rsos-023-location-link`                                      |
+| RSOS-034b Real inbox and manual dispatch            | Done                     | [#179](https://github.com/mtalha77/roadside-sos-usa-public/pull/179) |
+| RSOS-023 Location link                              | Done                     | (this PR)                                                            |
 | RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Built, merge BLOCKED     | branch `rsos-035-texts-emails`                                       |
 | RSOS-031 Ad tracking and attribution                | Built, merge BLOCKED     | branch `rsos-031-ad-tracking`                                        |
 | RSOS-089-prep Test campaign kit                     | Built, merge BLOCKED     | branch `rsos-089-campaign-kit`                                       |
@@ -231,6 +231,33 @@ Applies the "Scope changes from the owner" section of the updated batch file (co
     row);
   - e2e `inbox-dispatch.spec.ts`: a signed missed call becomes an urgent item; the dispatcher
     claims it, records the intake, reads the location link and ends it with a reason.
+- Owner: nothing.
+
+### RSOS-023: Location link
+
+- **The driver's page** (`/l/<token>` on the website) is one small HTML document. Its CSS comes
+  from our tokens (light and dark), and its script (about 3 KB, CSP nonce) needs no JavaScript
+  bundle, so it works on slow 3G.
+  - **Share my location** uses the browser's GPS and stores the coordinates. With Google Maps off,
+    it shows them as text.
+  - A typed address fallback is checked for format only; no geocoding.
+  - Also: an optional landmark note and an optional vehicle photo (private `job-photos` bucket).
+  - The link lasts 2 hours and covers one request. The token is unguessable, and every read and
+    write goes through definer functions that check it.
+- **No SMS (owner scope change).** Each link comes with a 6-digit code.
+  - When the request has an email, the dispatcher's **Location link** emails the link and the
+    code.
+  - Otherwise the panel shows "Go to {site}/l and type the code 482 917" to read on the call.
+  - The driver types the code at `/l`, which opens their link. Lookups are limited to 10 per IP
+    per 10 minutes, and a used link's code stops working.
+- When the driver shares, the request's pin and address update, it is marked urgent, and the
+  timeline says "Driver shared location"; the inbox sees it live.
+- Real or demo: real. Keys: none. Tested:
+  - pgTAP `023_location_links` (valid, expired and unknown tokens, the code lookup, US-only
+    points);
+  - e2e `location-link.spec.ts`: a missed call, the code read on the call, the driver types it,
+    shares GPS (375 px), and the dispatcher sees it; a made-up token gets the friendly expired
+    page.
 - Owner: nothing.
 
 ### RSOS-074b: Real browser softphone for dispatchers

@@ -13,7 +13,7 @@ export type DriverUpdate =
       eta: number;
       link: string;
     }
-  | { kind: "locationLink"; firstName: string; link: string };
+  | { kind: "locationLink"; firstName: string; link: string; code: string };
 
 export const driverUpdateSubject = (u: DriverUpdate) =>
   fill(getMessages("en").emails.driverUpdate.subject[u.kind], { brand: brand.shortName });
@@ -34,7 +34,7 @@ export function DriverUpdateEmail(u: DriverUpdate) {
           price: u.price,
           eta: String(u.eta),
         })
-      : fill(t.body.locationLink, { first_name: u.firstName });
+      : fill(t.body.locationLink, { first_name: u.firstName, code: u.code });
   return (
     <Html lang="en">
       <Head />

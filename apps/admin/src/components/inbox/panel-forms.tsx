@@ -265,8 +265,13 @@ function ReadAloud({ id, state }: { id: string; state: InboxActionState }) {
               price: r.price ?? "",
               eta: r.eta ?? 0,
             })
-          : t("linkScript", { link: r.link })}
+          : r.code && r.codeUrl
+            ? t("codeScript", { site: r.codeUrl, code: r.code.replace(/(\d{3})(\d{3})/, "$1 $2") })
+            : t("linkScript", { link: r.link })}
       </p>
+      {r.what === "locationLink" && r.code ? (
+        <p className="break-all text-xs text-muted-foreground">{r.link}</p>
+      ) : null}
       {logged.ok ? (
         <p className="text-muted-foreground">{t("logged")}</p>
       ) : (
