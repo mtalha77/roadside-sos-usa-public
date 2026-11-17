@@ -18,3 +18,11 @@ allowBuilds:
 overrides:
   # GHSA-c475-qrg2-pj4r (high) via @lhci/cli > proxy-agent > get-uri; FTP is never used.
   basic-ftp: 6.2.6
+
+# Advisories accepted by the owner (2026-11-17), each with its reason. Remove an entry when a
+# patched version ships.
+auditConfig:
+  ignoreGhsas:
+    # picomatch ReDoS (high), no patched version exists. It only matches globs written in our own
+    # build and dev configuration (eslint, vite, file watchers); no user input reaches it.
+    - GHSA-fc5q-39xc-vjpf
