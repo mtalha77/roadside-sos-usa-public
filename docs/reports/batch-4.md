@@ -7,19 +7,19 @@
 
 ## Summary
 
-| Ticket                                              | Status      | Pull request |
-| --------------------------------------------------- | ----------- | ------------ |
-| Step 0 Key check                                    | Done        | (this file)  |
-| RSOS-099 Staging fixes before new work              | In progress |              |
-| RSOS-021b Real maps and SMS codes                   | Not started |              |
-| RSOS-030 Call tracking and the phone flow (IVR)     | Not started |              |
-| RSOS-074b Real browser softphone                    | Not started |              |
-| RSOS-034b Real inbox and manual dispatch            | Not started |              |
-| RSOS-023 Location link                              | Not started |              |
-| RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Not started |              |
-| RSOS-031 Ad tracking and attribution                | Not started |              |
-| RSOS-089-prep Test campaign kit                     | Not started |              |
-| RSOS-036 Release QA and first production release    | Not started |              |
+| Ticket                                              | Status                   | Pull request                                                         |
+| --------------------------------------------------- | ------------------------ | -------------------------------------------------------------------- |
+| Step 0 Key check                                    | Done                     | (this file)                                                          |
+| RSOS-099 Staging fixes before new work              | Done                     | [#172](https://github.com/mtalha77/roadside-sos-usa-public/pull/172) |
+| RSOS-021b Real maps and SMS codes                   | Done (real keys BLOCKED) | [#175](https://github.com/mtalha77/roadside-sos-usa-public/pull/175) |
+| RSOS-030 Call tracking and the phone flow (IVR)     | Done (real keys BLOCKED) | [#173](https://github.com/mtalha77/roadside-sos-usa-public/pull/173) |
+| RSOS-074b Real browser softphone                    | Not started              |                                                                      |
+| RSOS-034b Real inbox and manual dispatch            | Not started              |                                                                      |
+| RSOS-023 Location link                              | Not started              |                                                                      |
+| RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Not started              |                                                                      |
+| RSOS-031 Ad tracking and attribution                | Not started              |                                                                      |
+| RSOS-089-prep Test campaign kit                     | Not started              |                                                                      |
+| RSOS-036 Release QA and first production release    | Not started              |                                                                      |
 
 ## Step 0: key check (presence only, no values)
 
@@ -103,3 +103,38 @@ BLOCKED until the owner adds the keys. `rsos-provider` Production has no `SUPABA
   (`docs/runbooks/google-maps.md`), create the Verify service, add the keys in Vercel.
 - **BLOCKED (keys missing)**: real map and autocomplete on staging; a Verify code reaching
   `OWNER_TEST_PHONE`.
+
+### RSOS-030: Call tracking and the phone flow (IVR)
+
+- **Tracking numbers**: the existing `market_phone_numbers` table is the tracking-number table
+  (E.164, market, source, active), with new sources `gmb`, `bing` and `staging_test`. Admin >
+  Settings > Phone numbers adds them (market, source, label), turns them on and off, and syncs
+  with Twilio (read-only: stamps the Twilio SID on numbers it finds).
+- **Incoming calls** (`/api/twilio/voice` on the admin host; the admin app holds the server key):
+  signature checked (403 otherwise), idempotent per CallSid (`webhook_events`). Creates the `calls`
+  row and a `phone_intake` request with the dialed number's market and source. Flow: greeting
+  with the brand name, "If you are in danger, hang up and call 9 1 1", recording notice only where
+  the market enables recording, then every Available on-duty dispatcher's browser at once, then
+  the on-duty mobiles, then voicemail with transcription.
+- **Missed calls and voicemails** mark the request urgent, add it to the timeline and text the
+  on-duty dispatchers. **Auto text** to the caller after the call connects or reaches voicemail:
+  a location link, once per call, only to mobile numbers (Twilio Lookup) that have not opted out.
+- **Status callbacks** store duration and outcome; recordings stay in Twilio and play only through
+  `/api/calls/<id>/recording` for signed-in staff who can see that market.
+- **On duty**: weekly shifts per dispatcher (managers edit), "I am on duty now" toggle, presence
+  and mobile number (Admin > Settings > On duty).
+- **Dynamic number insertion**: the proxy remembers each visitor's first-touch source for 90 days
+  (`rsos_src`); tap-to-call links carry `data-dni`, and a tiny script swaps in that source's number
+  from `/api/phone` (cached). Pages stay static; visitors without an ad source run no request.
+- Heavy work after a webhook runs with Next.js `after()` (the response returns at once), with
+  idempotency on every event. A pgmq queue was not added: the work is a few database writes and one
+  text, and retries come from Twilio's own redelivery plus the unique keys.
+- Real or demo: built for real, running on **fakes** (no Twilio keys): webhooks accept the
+  published test token outside production only, texts and lookups are recorded, not sent. Keys:
+  `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_MESSAGING_SERVICE_SID`. Tested: TwiML and
+  source unit tests, pgTAP (`021_call_tracking`: RLS per role, idempotency, intake rules, on-duty),
+  e2e (unsigned 403, the full call flow with signed fake webhooks, idempotent repeat, DNI cookie).
+  Owner: buy numbers and point their webhooks per `docs/runbooks/twilio.md`, add the numbers in
+  Admin > Settings > Phone numbers, set the on-duty schedule and mobiles.
+- **BLOCKED (keys missing)**: ringing the admin softphone from the staging number, the
+  location-link text reaching `OWNER_TEST_PHONE`.
