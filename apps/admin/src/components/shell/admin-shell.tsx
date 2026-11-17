@@ -14,6 +14,7 @@ import {
   MessagesSquare,
   Map as MapIcon,
   Megaphone,
+  Target,
   Phone,
   Radio,
   Search,
@@ -41,6 +42,7 @@ const ICONS = {
   reviews: Star,
   analytics: BarChart3,
   marketing: Megaphone,
+  campaign: Target,
   content: FileText,
   settings: Settings,
 } as const;
