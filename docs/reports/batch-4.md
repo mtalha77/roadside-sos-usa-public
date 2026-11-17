@@ -17,7 +17,7 @@
 | RSOS-074b Real browser softphone                    | Done (real keys BLOCKED) | [#177](https://github.com/mtalha77/roadside-sos-usa-public/pull/177) |
 | RSOS-034b Real inbox and manual dispatch            | Done                     | [#179](https://github.com/mtalha77/roadside-sos-usa-public/pull/179) |
 | RSOS-023 Location link                              | Done                     | [#180](https://github.com/mtalha77/roadside-sos-usa-public/pull/180) |
-| RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Done (texting off)       | (this PR)                                                            |
+| RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Done (texting off)       | [#181](https://github.com/mtalha77/roadside-sos-usa-public/pull/181) |
 | RSOS-031 Ad tracking and attribution                | Done (ad keys missing)   | (this PR)                                                            |
 | RSOS-089-prep Test campaign kit                     | Built, merge BLOCKED     | branch `rsos-089-campaign-kit`                                       |
 | RSOS-036 Release QA and first production release    | Not released (see below) | `docs/reports/release-1.md`                                          |
