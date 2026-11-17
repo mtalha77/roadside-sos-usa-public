@@ -35,6 +35,11 @@ next-intl); no user input reaches it.
 - Accepting the advisory (an `auditConfig.ignoreGhsas` entry in `pnpm-workspace.yaml`) is an owner
   decision, so it was not made unattended. Until then, or until picomatch ships a fix, nothing can
   merge into `staging` or `main`.
+- Found during Release QA: since RSOS-099, every staging database deploy after the staging smoke
+  has failed its "no fake data" check (the smoke's own Get Help request uses a fictional
+  number), and that skipped the Auth configuration step, so staging's sign-in email does not
+  carry the 6-digit code yet. The fix (the check skips the smoke's request; Auth is configured
+  before the check) is on `rsos-034b-inbox-dispatch`, waiting on the same blocker.
 - The remaining tickets are built and pushed as stacked branches, not opened as pull requests (each
   pull request's `db` job writes to rsos-dev, so they go one at a time):
   `rsos-034b-inbox-dispatch`, `rsos-023-location-link`, `rsos-035-texts-emails`,
