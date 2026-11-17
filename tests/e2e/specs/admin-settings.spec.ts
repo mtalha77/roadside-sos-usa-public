@@ -46,8 +46,11 @@ test.describe("admin content and settings", () => {
     await expectNoHorizontalScroll(page);
     await page.getByRole("link", { name: "Audit log" }).click();
     await expect(page.getByRole("heading", { name: "Audit log", level: 2 })).toBeVisible();
-    await page.getByRole("link", { name: "Message templates" }).click();
-    await expect(page.getByText(/Preview with sample values/).first()).toBeVisible();
+    await page.getByRole("link", { name: "Texts and templates" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Carrier registration (A2P 10DLC)" }),
+    ).toBeVisible();
+    await expect(page.getByText(/characters, \d+ segment/).first()).toBeVisible();
     await page.getByRole("link", { name: "Feature flags" }).click();
     await page.getByRole("switch", { name: /Featured slots/ }).click();
     await expect(page.getByText("Featured slots updated on this page.")).toBeVisible();

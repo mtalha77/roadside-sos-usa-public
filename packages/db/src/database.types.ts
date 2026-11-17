@@ -1727,6 +1727,33 @@ export type Database = {
         }
         Relationships: []
       }
+      sms_templates: {
+        Row: {
+          body_en: string
+          body_es: string
+          key: string
+          title: string
+          updated_at: string
+          urgent: boolean
+        }
+        Insert: {
+          body_en: string
+          body_es: string
+          key: string
+          title: string
+          updated_at?: string
+          urgent?: boolean
+        }
+        Update: {
+          body_en?: string
+          body_es?: string
+          key?: string
+          title?: string
+          updated_at?: string
+          urgent?: boolean
+        }
+        Relationships: []
+      }
       staff_members: {
         Row: {
           created_at: string
@@ -1757,6 +1784,27 @@ export type Database = {
           role?: Database["public"]["Enums"]["staff_role"]
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      system_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
         }
         Relationships: []
       }
@@ -2283,6 +2331,21 @@ export type Database = {
         Returns: undefined
       }
       sha256_hex: { Args: { p: string }; Returns: string }
+      sms_delivery_report: {
+        Args: { p_days?: number }
+        Returns: {
+          blocked: number
+          day: string
+          delivered: number
+          failed: number
+          held: number
+          market_id: string
+          received: number
+          sent: number
+          top_errors: number[]
+          undelivered: number
+        }[]
+      }
       staff_can_access_market: {
         Args: { p_market_id: string }
         Returns: boolean

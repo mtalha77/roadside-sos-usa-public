@@ -322,7 +322,10 @@
       "real": "Real",
       "moveTo": "Mover",
       "empty": "Aún no hay prospectos.",
-      "more": "+{count} más en la vista de tabla"
+      "more": "+{count} más en la vista de tabla",
+      "approve": "Aprobar",
+      "approvedNotice": "Aprobado y notificado por correo:",
+      "approveFailed": "No se pudo aprobar. Solo superadministradores y gerentes de operaciones pueden."
     },
     "markets": {
       "title": "Mercados",
@@ -507,7 +510,7 @@
       "tabs": {
         "users": "Usuarios y roles",
         "audit": "Registro de auditoría",
-        "templates": "Plantillas de mensajes",
+        "templates": "Textos y plantillas",
         "rules": "Reglas del negocio",
         "flags": "Funciones",
         "integrations": "Integraciones",
@@ -751,6 +754,61 @@
           "5": "Viernes",
           "6": "Sábado"
         }
+      },
+      "texts": {
+        "a2pTitle": "Registro con operadores (A2P 10DLC)",
+        "a2pBody": "Los operadores de EE. UU. exigen registrar nuestra marca y campaña de textos antes de escribir a conductores a gran escala. Hasta que se apruebe, los textos a cualquiera que no sea un número de prueba (OWNER_TEST_PHONE y celulares del equipo) quedan retenidos, salvo que actives la excepción. Consulta docs/runbooks/a2p-10dlc.md.",
+        "a2p": {
+          "pending": "Registro pendiente",
+          "approved": "Aprobado",
+          "rejected": "Rechazado"
+        },
+        "overrideOn": "Excepción activa",
+        "a2pStatus": "Estado",
+        "override": "Enviar a todos de todos modos (excepción)",
+        "saveA2p": "Guardar",
+        "reportTitle": "Entregas, últimos 14 días",
+        "reportEmpty": "Aún no hay textos.",
+        "cols": {
+          "day": "Día",
+          "market": "Mercado",
+          "sent": "Enviados",
+          "delivered": "Entregados",
+          "failed": "Fallidos",
+          "undelivered": "No entregados",
+          "held": "Retenidos",
+          "blocked": "Bloqueados",
+          "received": "Recibidos",
+          "errors": "Errores principales"
+        },
+        "errorCode": "{code} ({meaning})",
+        "twilioErrors": {
+          "21211": "número no válido",
+          "21610": "el número respondió STOP",
+          "21614": "no es un celular",
+          "30003": "teléfono apagado o fuera de servicio",
+          "30004": "bloqueado por el destinatario",
+          "30005": "número desconocido o inactivo",
+          "30006": "fijo u operador inaccesible",
+          "30007": "filtrado por el operador",
+          "30008": "error desconocido del operador",
+          "30034": "bloqueado: falta el registro A2P 10DLC"
+        },
+        "templatesTitle": "Plantillas de texto",
+        "templatesBody": "Los marcadores entre llaves se completan al enviar: '{first_name}', '{provider}', '{price}', '{eta}', '{link}', '{brand}', '{support}'. Mantén los textos en uno o dos segmentos.",
+        "english": "Inglés",
+        "spanish": "Español",
+        "counter": "{chars} caracteres, {segments} segmento(s)",
+        "urgent": "Urgente: puede enviarse en horario de silencio",
+        "quiet": "No se envía de 9 p. m. a 8 a. m. (hora del mercado)",
+        "save": "Guardar plantilla",
+        "saved": "Plantilla guardada.",
+        "errors": {
+          "forbidden": "No puedes editar plantillas.",
+          "invalid": "Cada idioma necesita de 2 a 640 caracteres.",
+          "generic": "Algo salió mal. Inténtalo de nuevo."
+        },
+        "textingOff": "Los mensajes de texto están apagados por ahora (decisión del dueño): no se envía ni se recibe nada. Las plantillas, las bajas y las horas de silencio están listas para cuando se enciendan con TEXTING_ENABLED y las claves de Twilio Messaging."
       }
     },
     "walkthrough": {
@@ -1066,7 +1124,8 @@
         "logged": "Anotado en el historial.",
         "codeScript": "Entra a {site} y escribe el código {code}, luego toca Compartir mi ubicación."
       }
-    }
+    },
+    "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a conductores quedan retenidos hasta su aprobación."
   },
   "emails": {
     "welcome": {
@@ -1144,6 +1203,18 @@
       },
       "open": "Abrir: {url}",
       "footer": "Recibes este email porque pediste asistencia en carretera. Responde a este email si algo está mal."
+    },
+    "applicationApproved": {
+      "subject": "Fuiste aprobado para unirte a {brand}",
+      "body": "Hola {name}, {company} fue aprobado para recibir trabajos de {brand}.",
+      "next": "Entra a la app de proveedores para completar tu perfil, tus precios y tu zona de servicio: {url}",
+      "help": "¿Preguntas? Escribe a {support}."
+    },
+    "dailySummary": {
+      "subject": "Resumen de despacho de {brand} del {day}",
+      "none": "Ayer no hubo solicitudes.",
+      "line": "{requests} solicitudes, {calls} llamadas ({missed} perdidas), {assigned} asignadas, {completed} terminadas, {noProvider} sin proveedor. Comisiones que se habrían ganado: {fees}.",
+      "footer": "Campaña de prueba: las comisiones se registran como manual_test y no se cobra a nadie."
     }
   },
   "auth": {
@@ -1930,6 +2001,10 @@
           [
             "Con quién la compartimos",
             "Con los proveedores que cotizan o hacen tu trabajo, con empresas que nos ayudan a operar el servicio (alojamiento, mensajes, correo) y cuando la ley lo exige. No vendemos información personal por dinero."
+          ],
+          [
+            "Mensajes de texto",
+            "Cuando pides ayuda o nos llamas, usamos tu número de celular para escribirte sobre esa solicitud: un enlace para compartir tu ubicación, el proveedor asignado con el precio y la hora de llegada, y un enlace de seguimiento. Los proveedores reciben avisos de trabajos. No enviamos textos de publicidad y no compartimos ni vendemos tu número para la publicidad de nadie. Responde STOP para dejar de recibir textos en cualquier momento y START para volver a recibirlos; responde HELP para ayuda. Pueden aplicar tarifas de mensajes y datos. Guardamos un registro de los textos que enviamos y de tu decisión de no recibirlos."
           ],
           [
             "Cookies y tecnologías similares",

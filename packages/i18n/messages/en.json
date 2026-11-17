@@ -322,7 +322,10 @@
       "real": "Real",
       "moveTo": "Move",
       "empty": "No leads yet.",
-      "more": "+{count} more in the table view"
+      "more": "+{count} more in the table view",
+      "approve": "Approve",
+      "approvedNotice": "Approved and emailed:",
+      "approveFailed": "Could not approve. Only super admins and ops managers can."
     },
     "markets": {
       "title": "Markets",
@@ -507,7 +510,7 @@
       "tabs": {
         "users": "Users and roles",
         "audit": "Audit log",
-        "templates": "Message templates",
+        "templates": "Texts and templates",
         "rules": "Business rules",
         "flags": "Feature flags",
         "integrations": "Integrations",
@@ -751,6 +754,61 @@
           "5": "Friday",
           "6": "Saturday"
         }
+      },
+      "texts": {
+        "a2pTitle": "Carrier registration (A2P 10DLC)",
+        "a2pBody": "US carriers require our brand and texting campaign to be registered before we text drivers at scale. Until it is approved, texts to anyone but test numbers (OWNER_TEST_PHONE and staff mobiles) are held, unless you turn on the override. See docs/runbooks/a2p-10dlc.md.",
+        "a2p": {
+          "pending": "Registration pending",
+          "approved": "Approved",
+          "rejected": "Rejected"
+        },
+        "overrideOn": "Override on",
+        "a2pStatus": "Status",
+        "override": "Send to everyone anyway (override)",
+        "saveA2p": "Save",
+        "reportTitle": "Delivery, last 14 days",
+        "reportEmpty": "No texts yet.",
+        "cols": {
+          "day": "Day",
+          "market": "Market",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "failed": "Failed",
+          "undelivered": "Not delivered",
+          "held": "Held",
+          "blocked": "Blocked",
+          "received": "Received",
+          "errors": "Top errors"
+        },
+        "errorCode": "{code} ({meaning})",
+        "twilioErrors": {
+          "21211": "invalid phone number",
+          "21610": "the number replied STOP",
+          "21614": "not a mobile number",
+          "30003": "phone off or unreachable",
+          "30004": "blocked by the recipient",
+          "30005": "unknown or inactive number",
+          "30006": "landline or unreachable carrier",
+          "30007": "filtered by the carrier",
+          "30008": "unknown carrier error",
+          "30034": "blocked: A2P 10DLC registration missing"
+        },
+        "templatesTitle": "Text templates",
+        "templatesBody": "Placeholders in braces are filled in when the text is sent: '{first_name}', '{provider}', '{price}', '{eta}', '{link}', '{brand}', '{support}'. Keep texts to one or two segments.",
+        "english": "English",
+        "spanish": "Spanish",
+        "counter": "{chars} characters, {segments} segment(s)",
+        "urgent": "Urgent: may send during quiet hours",
+        "quiet": "Not sent 9pm to 8am (market time)",
+        "save": "Save template",
+        "saved": "Template saved.",
+        "errors": {
+          "forbidden": "You can't edit templates.",
+          "invalid": "Each language needs 2 to 640 characters.",
+          "generic": "Something went wrong. Try again."
+        },
+        "textingOff": "Texting is off for now (owner decision): nothing is sent or received. Templates, opt-outs and quiet hours are ready for when it is switched on with TEXTING_ENABLED and the Twilio Messaging keys."
       }
     },
     "walkthrough": {
@@ -1066,7 +1124,8 @@
         "logged": "Logged on the timeline.",
         "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
       }
-    }
+    },
+    "textingLimited": "Texting limited: carrier registration pending. Texts to drivers are held until it's approved."
   },
   "emails": {
     "welcome": {
@@ -1144,6 +1203,18 @@
       },
       "open": "Open: {url}",
       "footer": "You get this email because you asked for roadside help. Reply to this email if anything is wrong."
+    },
+    "applicationApproved": {
+      "subject": "You're approved to join {brand}",
+      "body": "Hi {name}, {company} is approved to receive jobs from {brand}.",
+      "next": "Sign in to the provider app to finish your profile, set your prices and service area: {url}",
+      "help": "Questions? Email {support}."
+    },
+    "dailySummary": {
+      "subject": "{brand} dispatch summary for {day}",
+      "none": "No requests yesterday.",
+      "line": "{requests} requests, {calls} calls ({missed} missed), {assigned} assigned, {completed} completed, {noProvider} without a provider. Fees that would have been earned: {fees}.",
+      "footer": "Test campaign: fees are recorded as manual_test and nobody is charged."
     }
   },
   "auth": {
@@ -1933,6 +2004,10 @@
           [
             "Who we share it with",
             "With the providers who quote or do your job, with service companies that help us run the service (hosting, messaging, email), and when the law requires it. We do not sell personal information for money."
+          ],
+          [
+            "Text messages",
+            "When you ask for help or call us, we use your mobile number to text you about that request: a link to share your location, the provider assigned to you with the price and arrival time, and a tracking link. Providers get job alerts. We do not send marketing texts and we do not share or sell your number for anyone else's marketing. Reply STOP to stop texts at any time and START to resume; reply HELP for help. Message and data rates may apply. We keep a record of the texts we send and your opt-out choice."
           ],
           [
             "Cookies and similar technologies",

@@ -14,6 +14,8 @@ const PUBLIC = [
   /^\/api\/health$/,
   // Twilio webhooks: no session; every handler checks the X-Twilio-Signature instead.
   /^\/api\/twilio\//,
+  // Vercel Cron (checks CRON_SECRET itself).
+  /^\/api\/cron\//,
   /^\/robots\.txt$/,
   /^\/(icon|apple-icon|logo\.svg)/,
 ];
