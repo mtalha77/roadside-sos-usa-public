@@ -13,7 +13,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cookies } from "next/headers";
 import { ConsentBanner } from "@/components/site/consent-banner";
-import { CONSENT_COOKIE, CONSENT_HEAD_SCRIPT, parseConsent } from "@/lib/consent";
+import { CONSENT_COOKIE, consentHeadScript, parseConsent } from "@/lib/consent";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -41,7 +41,12 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang={locale} className={GeistSans.variable} suppressHydrationWarning>
       <head>
         {/* Consent Mode defaults run before anything else: Google tags start denied (RSOS-028). */}
-        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: CONSENT_HEAD_SCRIPT }} />
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: consentHeadScript(process.env.NEXT_PUBLIC_GTM_ID ?? null, nonce ?? ""),
+          }}
+        />
       </head>
       <body>
         {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}

@@ -19,6 +19,7 @@ import {
   VEHICLE_TYPES,
 } from "@/lib/get-help";
 import { maps, rateLimitStore } from "@/lib/adapters";
+import { ATTRIBUTION_COOKIE, decodeAttribution } from "@/lib/attribution";
 import { getMarkets, getMarketServices, marketSlugForPoint } from "@/lib/site-data";
 
 type Rpc = (
@@ -170,6 +171,12 @@ export async function POST(request: NextRequest) {
           .map((k) => [k, str(k)])
           .filter(([, v]) => v),
       );
+      // First-touch attribution from the visitor's cookie fills what this page's URL lacks
+      // (RSOS-031: a gclid from the ad click reaches the request even after browsing around).
+      const firstTouch = decodeAttribution(request.cookies.get(ATTRIBUTION_COOKIE)?.value);
+      if (firstTouch)
+        for (const [k, v] of Object.entries(firstTouch))
+          if (v && k !== "market" && !(k in attribution)) attribution[k] = v;
       return save(
         {
           market,

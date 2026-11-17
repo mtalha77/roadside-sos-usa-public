@@ -35,7 +35,8 @@
       "settings": "Settings",
       "walkthrough": "Walkthrough",
       "intake": "Phone intake",
-      "inbox": "Inbox"
+      "inbox": "Inbox",
+      "marketing": "Marketing"
     },
     "shell": {
       "nav": "Admin",
@@ -1125,7 +1126,51 @@
         "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
       }
     },
-    "textingLimited": "Texting limited: carrier registration pending. Texts to drivers are held until it's approved."
+    "textingLimited": "Texting limited: carrier registration pending. Texts to drivers are held until it's approved.",
+    "marketing": {
+      "title": "Marketing",
+      "from": "From",
+      "to": "To",
+      "apply": "Show",
+      "summary": "Spend {spend} · cost per request {perRequest} · cost per completed job {perCompleted}",
+      "bySource": "By market and source",
+      "empty": "No visits, calls or requests in this range yet.",
+      "cols": {
+        "market": "Market",
+        "source": "Source",
+        "visits": "Visits",
+        "calls": "Calls",
+        "qualified": "Qualified calls",
+        "forms": "Forms",
+        "requests": "Requests",
+        "assigned": "Assigned",
+        "completed": "Completed",
+        "spend": "Spend",
+        "perRequest": "Cost per request",
+        "perCompleted": "Cost per completed job"
+      },
+      "spendTitle": "Ad spend",
+      "day": "Day",
+      "channel": "Channel",
+      "amount": "Amount ($)",
+      "channels": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "bing": "Microsoft Ads",
+        "gmb": "Google Business Profile",
+        "other": "Other"
+      },
+      "saveSpend": "Save spend",
+      "saved": "Spend saved.",
+      "offlineTitle": "Google Ads offline conversions",
+      "offlineBody": "Download one day of conversions with a Google click id (forms, qualified calls, assigned and completed jobs) and upload it in Google Ads > Goals > Conversions > Uploads. Needed until the Ads API developer token is approved.",
+      "download": "Download CSV",
+      "errors": {
+        "forbidden": "Only super admins and marketing can enter spend.",
+        "invalid": "Check the day, market, channel and amount.",
+        "generic": "Something went wrong. Try again."
+      }
+    }
   },
   "emails": {
     "welcome": {
