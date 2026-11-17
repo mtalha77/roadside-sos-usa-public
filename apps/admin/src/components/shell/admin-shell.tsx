@@ -13,6 +13,7 @@ import {
   Inbox,
   MessagesSquare,
   Map as MapIcon,
+  Megaphone,
   Phone,
   Radio,
   Search,
@@ -39,6 +40,7 @@ const ICONS = {
   finance: Wallet,
   reviews: Star,
   analytics: BarChart3,
+  marketing: Megaphone,
   content: FileText,
   settings: Settings,
 } as const;

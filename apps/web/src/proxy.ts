@@ -1,5 +1,6 @@
 import { buildCsp, createNonce } from "@rsos/config/security";
 import { SOURCE_COOKIE, SOURCE_COOKIE_MAX_AGE, sourceForVisit } from "@rsos/core/adapters";
+import { ATTRIBUTION_COOKIE, encodeAttribution, firstTouch } from "./lib/attribution";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -27,6 +28,16 @@ async function redirectRules(): Promise<RedirectRule[]> {
   return rules;
 }
 
+/** Counts a first visit (fire and forget: never slows the page). */
+async function countVisit(market: string | null, source: string) {
+  const supabase = createPublicSupabase();
+  if (!supabase) return;
+  await supabase.rpc("record_visit", { p_market_slug: market ?? "", p_source: source }).then(
+    () => undefined,
+    () => undefined,
+  );
+}
+
 /**
  * Permanent redirects (legacy domain after a rename, moved pages), then a per-request Content
  * Security Policy with a nonce. Next.js reads the nonce from the request CSP header and adds it to
@@ -52,20 +63,25 @@ export async function proxy(request: NextRequest) {
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
-  // Call tracking (RSOS-030): remember the first-touch source of a visit with ad or campaign
-  // parameters for 90 days, so the site shows that source's number. First party, no personal data.
-  const q = request.nextUrl.searchParams;
-  if (isPage && !request.cookies.has(SOURCE_COOKIE)) {
-    const visit = Object.fromEntries(
-      ["gclid", "gbraid", "wbraid", "fbclid", "msclkid", "utm_source"].map((k) => [k, q.get(k)]),
-    );
-    if (Object.values(visit).some(Boolean))
-      response.cookies.set(SOURCE_COOKIE, sourceForVisit(visit), {
-        path: "/",
-        maxAge: SOURCE_COOKIE_MAX_AGE,
-        sameSite: "lax",
-        secure: request.nextUrl.protocol === "https:",
-      });
+  // First touch (RSOS-030, 031): on a visitor's first page view, remember for 90 days where they
+  // came from (click ids, campaign, landing page, referrer host, market) in a first-party cookie,
+  // and count the visit. The site shows that source's phone number; requests carry the attribution.
+  if (isPage && !request.cookies.has(ATTRIBUTION_COOKIE)) {
+    const attribution = firstTouch(request);
+    const source = sourceForVisit(attribution);
+    const cookie = {
+      path: "/",
+      maxAge: SOURCE_COOKIE_MAX_AGE,
+      sameSite: "lax" as const,
+      secure: request.nextUrl.protocol === "https:",
+    };
+    response.cookies.set(ATTRIBUTION_COOKIE, encodeAttribution(attribution), {
+      ...cookie,
+      httpOnly: true,
+    });
+    if (!request.cookies.has(SOURCE_COOKIE)) response.cookies.set(SOURCE_COOKIE, source, cookie);
+    if (!/bot|crawl|spider|lighthouse|headless/i.test(request.headers.get("user-agent") ?? ""))
+      void countVisit(attribution.market, source);
   }
   return response;
 }

@@ -8,3 +8,4 @@ export * from "./twilio";
 export * from "./voice";
 export * from "./softphone";
 export * from "./texting";
+export * from "./analytics";

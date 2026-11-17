@@ -52,6 +52,38 @@ export type Database = {
           },
         ]
       }
+      ad_spend: {
+        Row: {
+          amount_cents: number
+          channel: string
+          day: string
+          market_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount_cents: number
+          channel: string
+          day: string
+          market_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          channel?: string
+          day?: string
+          market_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_spend_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_usage: {
         Row: {
           alerted_at: string | null
@@ -379,6 +411,85 @@ export type Database = {
             columns: ["market_id"]
             isOneToOne: false
             referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversion_events: {
+        Row: {
+          call_id: string | null
+          event_id: string
+          fbclid: string | null
+          ga4_sent_at: string | null
+          gbraid: string | null
+          gclid: string | null
+          market_id: string
+          meta_sent_at: string | null
+          msclkid: string | null
+          name: string
+          occurred_at: string
+          request_id: string | null
+          service_slug: string | null
+          source: string | null
+          value_cents: number | null
+          wbraid: string | null
+        }
+        Insert: {
+          call_id?: string | null
+          event_id: string
+          fbclid?: string | null
+          ga4_sent_at?: string | null
+          gbraid?: string | null
+          gclid?: string | null
+          market_id: string
+          meta_sent_at?: string | null
+          msclkid?: string | null
+          name: string
+          occurred_at?: string
+          request_id?: string | null
+          service_slug?: string | null
+          source?: string | null
+          value_cents?: number | null
+          wbraid?: string | null
+        }
+        Update: {
+          call_id?: string | null
+          event_id?: string
+          fbclid?: string | null
+          ga4_sent_at?: string | null
+          gbraid?: string | null
+          gclid?: string | null
+          market_id?: string
+          meta_sent_at?: string | null
+          msclkid?: string | null
+          name?: string
+          occurred_at?: string
+          request_id?: string | null
+          service_slug?: string | null
+          source?: string | null
+          value_cents?: number | null
+          wbraid?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversion_events_call_id_fkey"
+            columns: ["call_id"]
+            isOneToOne: false
+            referencedRelation: "calls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversion_events_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversion_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
             referencedColumns: ["id"]
           },
         ]
@@ -1631,6 +1742,27 @@ export type Database = {
         }
         Relationships: []
       }
+      site_visits: {
+        Row: {
+          day: string
+          market_key: string
+          source: string
+          visits: number
+        }
+        Insert: {
+          day: string
+          market_key?: string
+          source: string
+          visits?: number
+        }
+        Update: {
+          day?: string
+          market_key?: string
+          source?: string
+          visits?: number
+        }
+        Relationships: []
+      }
       sms_messages: {
         Row: {
           body: string
@@ -2233,6 +2365,22 @@ export type Database = {
         }[]
       }
       market_website_phone: { Args: { p_market_id: string }; Returns: string }
+      marketing_report: {
+        Args: { p_from: string; p_to: string }
+        Returns: {
+          assigned: number
+          calls: number
+          completed: number
+          forms: number
+          market_id: string
+          market_slug: string
+          qualified_calls: number
+          requests: number
+          source: string
+          spend_cents: number
+          visits: number
+        }[]
+      }
       my_provider_status: {
         Args: never
         Returns: {
@@ -2304,6 +2452,14 @@ export type Database = {
           p_provider_id: string
           p_request_id: string
         }
+        Returns: undefined
+      }
+      record_request_conversion: {
+        Args: { p_name: string; p_request_id: string }
+        Returns: undefined
+      }
+      record_visit: {
+        Args: { p_market_slug: string; p_source: string }
         Returns: undefined
       }
       request_account_closure: { Args: { p_reason: string }; Returns: string }

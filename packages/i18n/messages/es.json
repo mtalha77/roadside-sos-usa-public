@@ -35,7 +35,8 @@
       "settings": "Ajustes",
       "walkthrough": "Recorrido",
       "intake": "Recepción telefónica",
-      "inbox": "Bandeja"
+      "inbox": "Bandeja",
+      "marketing": "Marketing"
     },
     "shell": {
       "nav": "Administración",
@@ -1125,7 +1126,51 @@
         "codeScript": "Entra a {site} y escribe el código {code}, luego toca Compartir mi ubicación."
       }
     },
-    "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a conductores quedan retenidos hasta su aprobación."
+    "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a conductores quedan retenidos hasta su aprobación.",
+    "marketing": {
+      "title": "Marketing",
+      "from": "Desde",
+      "to": "Hasta",
+      "apply": "Mostrar",
+      "summary": "Gasto {spend} · costo por solicitud {perRequest} · costo por trabajo terminado {perCompleted}",
+      "bySource": "Por mercado y fuente",
+      "empty": "Aún no hay visitas, llamadas ni solicitudes en este rango.",
+      "cols": {
+        "market": "Mercado",
+        "source": "Fuente",
+        "visits": "Visitas",
+        "calls": "Llamadas",
+        "qualified": "Llamadas calificadas",
+        "forms": "Formularios",
+        "requests": "Solicitudes",
+        "assigned": "Asignadas",
+        "completed": "Terminadas",
+        "spend": "Gasto",
+        "perRequest": "Costo por solicitud",
+        "perCompleted": "Costo por trabajo terminado"
+      },
+      "spendTitle": "Gasto en anuncios",
+      "day": "Día",
+      "channel": "Canal",
+      "amount": "Monto ($)",
+      "channels": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "bing": "Microsoft Ads",
+        "gmb": "Perfil de Google Business",
+        "other": "Otro"
+      },
+      "saveSpend": "Guardar gasto",
+      "saved": "Gasto guardado.",
+      "offlineTitle": "Conversiones sin conexión de Google Ads",
+      "offlineBody": "Descarga un día de conversiones con identificador de clic de Google (formularios, llamadas calificadas, trabajos asignados y terminados) y súbelo en Google Ads > Objetivos > Conversiones > Cargas. Hace falta hasta que se apruebe el token de desarrollador de la API de Ads.",
+      "download": "Descargar CSV",
+      "errors": {
+        "forbidden": "Solo superadministradores y marketing pueden registrar gasto.",
+        "invalid": "Revisa el día, mercado, canal y monto.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      }
+    }
   },
   "emails": {
     "welcome": {

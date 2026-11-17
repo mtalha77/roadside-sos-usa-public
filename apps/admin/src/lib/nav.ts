@@ -11,6 +11,7 @@ export const SECTIONS = [
   { href: "/finance", key: "finance", shortcut: "g f" },
   { href: "/reviews", key: "reviews", shortcut: "g v" },
   { href: "/analytics", key: "analytics", shortcut: "g a" },
+  { href: "/marketing", key: "marketing", shortcut: "g k" },
   { href: "/content", key: "content", shortcut: "g c" },
   { href: "/settings", key: "settings", shortcut: "g s" },
 ] as const;
@@ -29,6 +30,7 @@ export const BUILT: ReadonlySet<string> = new Set([
   "/finance",
   "/reviews",
   "/analytics",
+  "/marketing",
   "/content",
   "/settings",
   "/walkthrough",
