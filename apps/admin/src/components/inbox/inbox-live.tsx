@@ -159,7 +159,6 @@ export function InboxLive({
                     </span>
                     <span className="flex flex-wrap gap-2 text-sm text-muted-foreground">
                       {i.lastCall ? <span>{t(`call.${i.lastCall}`)}</span> : null}
-                      {i.lastText === "inbound" ? <span>{t("textIn")}</span> : null}
                       <span>
                         {i.owner
                           ? t("owner", { name: i.owner })

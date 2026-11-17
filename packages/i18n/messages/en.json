@@ -924,7 +924,6 @@
       "owner": "Handled by {name}",
       "unclaimed": "Not claimed",
       "claimLapsed": "Claim lapsed after 10 minutes",
-      "textIn": "New text",
       "newItem": "New in the inbox",
       "pick": "Pick an item to see the request, call the driver and dispatch a provider.",
       "status": {
@@ -1003,7 +1002,6 @@
         "quoted": "Quoted",
         "assigned": "Assigned"
       },
-      "textsTitle": "Texts",
       "timeline": "Timeline",
       "note": "Note",
       "addNote": "Add note",
@@ -1021,7 +1019,9 @@
         "call_inbound": "Incoming call: {outcome}",
         "call_outbound_x": "",
         "text_inbound": "Text from the driver",
-        "text_outbound": "Text to the driver"
+        "text_outbound": "Text to the driver",
+        "driver_told": "Driver told",
+        "driver_emailed": "Driver emailed"
       },
       "intake": {
         "name": "Name",
@@ -1040,14 +1040,6 @@
         "declined": "Declined",
         "assign": "Assign"
       },
-      "texts": {
-        "savedReplies": "Saved replies",
-        "chooseReply": "Choose a saved reply",
-        "message": "Message",
-        "length": "{count} / 640 characters",
-        "send": "Send text",
-        "sendLink": "Send location link"
-      },
       "result": {
         "ok": "Saved.",
         "errors": {
@@ -1057,13 +1049,22 @@
           "location": "Save the service and location first.",
           "step": "That step isn't possible from here.",
           "service": "That service isn't offered in this market.",
-          "address": "We couldn't find that address.",
+          "address": "Type a street address with a number, cross streets, or a highway and exit.",
           "quote": "Add the price and ETA for a quote.",
-          "generic": "Something went wrong. Try again.",
-          "noNumber": "This market has no phone number yet.",
-          "optedOut": "The driver opted out of texts.",
-          "failed": "The text could not be sent."
+          "generic": "Something went wrong. Try again."
         }
+      },
+      "tell": {
+        "title": "Tell the driver",
+        "email": "Email: {email}",
+        "noEmail": "No email on this request: read the words below on the call.",
+        "emailed": "Emailed to the driver and logged on the timeline.",
+        "readAloud": "Read this to the driver, then log it:",
+        "logRead": "I read it to the driver",
+        "sendLink": "Location link",
+        "assignedScript": "{provider} is on the way. Quoted price {price}, about {eta} minutes.",
+        "linkScript": "Open this link and tap Share my location: {link}",
+        "logged": "Logged on the timeline."
       }
     }
   },
@@ -1131,6 +1132,18 @@
       },
       "transcript": "Transcript: {text}",
       "open": "Open the inbox: {url}"
+    },
+    "driverUpdate": {
+      "subject": {
+        "assigned": "{brand}: help is on the way",
+        "locationLink": "{brand}: share your exact location"
+      },
+      "body": {
+        "assigned": "Hi {first_name}, {provider} is on the way. Quoted price {price}, about {eta} minutes.",
+        "locationLink": "Hi {first_name}, please open the link below and share your exact location so we can send help."
+      },
+      "open": "Open: {url}",
+      "footer": "You get this email because you asked for roadside help. Reply to this email if anything is wrong."
     }
   },
   "auth": {

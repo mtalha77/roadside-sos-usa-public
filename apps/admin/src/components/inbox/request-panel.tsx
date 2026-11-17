@@ -4,7 +4,6 @@ import { LiteMap } from "@rsos/ui/lite-map";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { CallButton } from "@/components/softphone/call-button";
-import { appUrl } from "@rsos/config/site";
 import { CLAIM_MINUTES, type InboxRequest, STEPS } from "@/lib/inbox";
 import {
   AttemptForm,
@@ -12,14 +11,15 @@ import {
   IntakeForm,
   NoteForm,
   StepButtons,
-  TextComposer,
+  TellDriver,
 } from "./panel-forms";
 
 const card = "rounded-2xl border bg-card p-4";
 
 /**
  * One request in the inbox (RSOS-034b): who and where, the full timeline, claim, the next manual
- * steps, intake details for phone requests, nearby providers to call and assign, and texting.
+ * steps, intake details for phone requests, nearby providers to call and assign, and telling
+ * the driver (email, or read on the call: no SMS in batch 4).
  */
 export async function RequestPanel({ data, userId }: { data: InboxRequest; userId: string }) {
   const [t, locale] = [await getTranslations("admin.inbox"), "en-US"];
@@ -45,13 +45,7 @@ export async function RequestPanel({ data, userId }: { data: InboxRequest; userI
     .filter(Boolean)
     .join(" ");
   const assigned = data.providers.find((p) => p.provider_id === r.assigned_provider_id);
-  const fill = {
-    first_name: r.driver_name.split(" ")[0] ?? "",
-    provider: assigned?.name ?? "",
-    price: r.quoted_price_cents !== null ? money(r.quoted_price_cents) : "",
-    eta: r.quoted_eta_minutes !== null ? String(r.quoted_eta_minutes) : "",
-    link: `${appUrl("web")}/r/${r.status_token}`,
-  };
+
   return (
     <article aria-labelledby="panel-h" className="flex min-w-0 flex-col gap-4">
       <header className="flex flex-wrap items-center gap-2">
@@ -197,26 +191,11 @@ export async function RequestPanel({ data, userId }: { data: InboxRequest; userI
         )}
       </section>
 
-      <section className={card} aria-labelledby="txt-h">
-        <h3 id="txt-h" className="mb-2 font-semibold">
-          {t("textsTitle")}
+      <section className={card} aria-labelledby="tell-h">
+        <h3 id="tell-h" className="mb-2 font-semibold">
+          {t("tell.title")}
         </h3>
-        <ul className="mb-3 flex flex-col gap-2">
-          {data.texts.map((m) => (
-            <li
-              key={m.id}
-              className={`max-w-[85%] rounded-xl border px-3 py-2 text-sm ${m.direction === "inbound" ? "self-start" : "self-end bg-muted"}`}
-            >
-              <p>{m.body}</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {time.format(Date.parse(m.created_at))} · {t(`textStatus.${m.status}`)}
-              </p>
-            </li>
-          ))}
-        </ul>
-        {!closed ? (
-          <TextComposer id={r.id} replies={data.replies} fill={fill} inputClass={inputClass} />
-        ) : null}
+        {!closed ? <TellDriver id={r.id} email={r.driver_email ?? null} /> : null}
       </section>
 
       <section className={card} aria-labelledby="tl-h">

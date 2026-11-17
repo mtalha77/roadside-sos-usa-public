@@ -1,16 +1,32 @@
 "use server";
 
 import { appUrl } from "@rsos/config/site";
-import { chooseMaps } from "@rsos/core/adapters";
+import { chooseMaps, isPlausibleAddress } from "@rsos/core/adapters";
+import {
+  DriverUpdateEmail,
+  type DriverUpdate,
+  chooseEmailSender,
+  driverUpdateSubject,
+} from "@rsos/emails";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getAdminContext } from "@/lib/admin";
 import { getInbox, type InboxItem } from "@/lib/inbox";
 import { getServerSupabase } from "@/lib/supabase/server";
-import { sendText } from "@/lib/texting";
 import { createLocationLink } from "@/lib/twilio/calls";
 
-export type InboxActionState = { ok?: string; error?: string };
+export type InboxActionState = {
+  ok?: string;
+  error?: string;
+  /** No email on the request: the words for the dispatcher to read on the call. */
+  readAloud?: {
+    what: "assigned" | "locationLink";
+    provider?: string;
+    price?: string;
+    eta?: number;
+    link: string;
+  };
+};
 
 const DISPATCH = new Set(["super_admin", "ops_manager", "dispatcher"]);
 const Id = z.uuid();
@@ -104,6 +120,8 @@ export async function intakeAction(_: InboxActionState, form: FormData): Promise
       ),
     );
   if (!parsed.success) return { error: "invalid" };
+  // Typed address checked for format only (no geocoding while Google Maps is off).
+  if (!isPlausibleAddress(parsed.data.address)) return { error: "address" };
   const supabase = await getServerSupabase();
   const { data: req } = await supabase
     .from("requests")
@@ -195,7 +213,43 @@ export async function attemptAction(
   return error ? { error: "generic" } : { ok: parsed.data.outcome };
 }
 
-/** Assign the job: the step, the fee row (manual_test), and a text to the driver. */
+/**
+ * Tells the driver (batch 4 scope change: no SMS): an email when the request has one, logged on
+ * the timeline; otherwise nothing is sent and the panel shows the words to read on the call.
+ */
+async function tellDriver(
+  requestId: string,
+  staffUserId: string,
+  update: DriverUpdate,
+): Promise<"emailed" | "readAloud"> {
+  const supabase = await getServerSupabase();
+  const { data: req } = await supabase
+    .from("requests")
+    .select("driver_email")
+    .eq("id", requestId)
+    .maybeSingle();
+  const to = req?.driver_email;
+  if (!to) return "readAloud";
+  const sent = await chooseEmailSender()
+    .send({
+      to,
+      subject: driverUpdateSubject(update),
+      react: DriverUpdateEmail(update),
+      tags: { category: `driver_${update.kind}` },
+    })
+    .catch(() => null);
+  if (!sent?.ok) return "readAloud";
+  await supabase.from("request_events").insert({
+    request_id: requestId,
+    event_type: "driver_emailed",
+    actor_type: "staff",
+    actor_id: staffUserId,
+    data: { what: update.kind },
+  });
+  return "emailed";
+}
+
+/** Assign the job: the step, the fee row (manual_test), and the driver told (email or call). */
 export async function assignAction(_: InboxActionState, form: FormData): Promise<InboxActionState> {
   const ctx = await dispatcher();
   if (!ctx) return { error: "forbidden" };
@@ -226,91 +280,75 @@ export async function assignAction(_: InboxActionState, form: FormData): Promise
   const [{ data: req }, { data: provider }] = await Promise.all([
     supabase
       .from("requests")
-      .select("market_id, driver_name, driver_phone, status_token")
+      .select("driver_name, status_token")
       .eq("id", parsed.data.id)
       .maybeSingle(),
     supabase.from("providers").select("name").eq("id", parsed.data.provider).maybeSingle(),
   ]);
-  if (req && provider) {
-    const { data: from } = await supabase.rpc("market_phone_for_source", {
-      p_market_id: req.market_id,
-      p_source: "website",
-    });
-    const { getMessages } = await import("@rsos/i18n");
-    const body = getMessages("en")
-      .texts.assigned.replace("{first_name}", req.driver_name.split(" ")[0] ?? "")
-      .replace("{provider}", provider.name)
-      .replace("{price}", `$${parsed.data.price.toFixed(2)}`)
-      .replace("{eta}", String(parsed.data.eta))
-      .replace("{link}", `${appUrl("web")}/r/${req.status_token}`);
-    if (typeof from === "string")
-      await sendText({
-        marketId: req.market_id,
-        requestId: parsed.data.id,
-        to: req.driver_phone,
-        from,
-        body,
-        urgent: true,
-        templateKey: "provider_assigned",
-        staffUserId: ctx.userId,
-      });
-  }
   revalidatePath("/inbox");
-  return { ok: "assigned" };
+  if (!req || !provider) return { ok: "assigned" };
+  const update = {
+    kind: "assigned" as const,
+    firstName: req.driver_name.split(" ")[0] ?? "",
+    provider: provider.name,
+    price: `$${parsed.data.price.toFixed(2)}`,
+    eta: parsed.data.eta,
+    link: `${appUrl("web")}/r/${req.status_token}`,
+  };
+  const how = await tellDriver(parsed.data.id, ctx.userId, update);
+  return how === "emailed"
+    ? { ok: "emailed" }
+    : {
+        ok: "assigned",
+        readAloud: {
+          what: "assigned",
+          provider: update.provider,
+          price: update.price,
+          eta: update.eta,
+          link: update.link,
+        },
+      };
 }
 
-/** Two-way texting from the request panel, through the market's number. */
-export async function textAction(_: InboxActionState, form: FormData): Promise<InboxActionState> {
-  const ctx = await dispatcher();
-  if (!ctx) return { error: "forbidden" };
-  const parsed = z
-    .object({ id: Id, body: z.string().trim().min(1).max(640) })
-    .safeParse({ id: form.get("id"), body: form.get("body") });
-  if (!parsed.success) return { error: "invalid" };
-  const supabase = await getServerSupabase();
-  const { data: req } = await supabase
-    .from("requests")
-    .select("market_id, driver_phone")
-    .eq("id", parsed.data.id)
-    .maybeSingle();
-  if (!req) return { error: "invalid" };
-  const { data: from } = await supabase.rpc("market_phone_for_source", {
-    p_market_id: req.market_id,
-    p_source: "website",
-  });
-  if (typeof from !== "string") return { error: "noNumber" };
-  const sent = await sendText({
-    marketId: req.market_id,
-    requestId: parsed.data.id,
-    to: req.driver_phone,
-    from,
-    body: parsed.data.body,
-    staffUserId: ctx.userId,
-    templateKey: "manual",
-  });
-  await supabase
-    .from("requests")
-    .update({ claimed_at: new Date().toISOString() })
-    .eq("id", parsed.data.id);
-  revalidatePath("/inbox");
-  return sent.status === "blocked"
-    ? { error: "optedOut" }
-    : sent.status === "failed"
-      ? { error: "failed" }
-      : { ok: "sent" };
-}
-
-/** Texts the driver a fresh location link (RSOS-023). */
+/** A fresh location link (RSOS-023): emailed when there is an email, else read on the call. */
 export async function locationLinkAction(id: string): Promise<InboxActionState> {
   const ctx = await dispatcher();
   if (!ctx || !Id.safeParse(id).success) return { error: "forbidden" };
   const link = await createLocationLink(id);
   if (!link) return { error: "generic" };
-  const form = new FormData();
-  form.set("id", id);
-  const { getMessages } = await import("@rsos/i18n");
-  form.set("body", getMessages("en").texts.locationLink.replace("{link}", link));
-  return textAction({}, form);
+  const { data: req } = await (
+    await getServerSupabase()
+  )
+    .from("requests")
+    .select("driver_name")
+    .eq("id", id)
+    .maybeSingle();
+  const how = await tellDriver(id, ctx.userId, {
+    kind: "locationLink",
+    firstName: req?.driver_name.split(" ")[0] ?? "",
+    link,
+  });
+  revalidatePath("/inbox");
+  return how === "emailed"
+    ? { ok: "emailed" }
+    : { ok: "link", readAloud: { what: "locationLink", link } };
+}
+
+/** The dispatcher read the words on the call: logged on the timeline. */
+export async function toldDriverAction(id: string, what: string): Promise<InboxActionState> {
+  const ctx = await dispatcher();
+  if (!ctx || !Id.safeParse(id).success) return { error: "forbidden" };
+  const parsed = z.enum(["assigned", "locationLink"]).safeParse(what);
+  if (!parsed.success) return { error: "invalid" };
+  const { error } = await (await getServerSupabase()).from("request_events").insert({
+    request_id: id,
+    event_type: "driver_told",
+    actor_type: "staff",
+    actor_id: ctx.userId,
+    data: { what: parsed.data, channel: "call" },
+  });
+  revalidatePath("/inbox");
+  return error ? { error: "generic" } : { ok: "logged" };
 }
 
 /** A note on the request timeline. */

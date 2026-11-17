@@ -924,7 +924,6 @@
       "owner": "Atiende {name}",
       "unclaimed": "Sin tomar",
       "claimLapsed": "Se liberó tras 10 minutos",
-      "textIn": "Texto nuevo",
       "newItem": "Nuevo en la bandeja",
       "pick": "Elige un elemento para ver la solicitud, llamar al conductor y despachar un proveedor.",
       "status": {
@@ -1003,7 +1002,6 @@
         "quoted": "Cotizó",
         "assigned": "Asignado"
       },
-      "textsTitle": "Textos",
       "timeline": "Historial",
       "note": "Nota",
       "addNote": "Agregar nota",
@@ -1021,7 +1019,9 @@
         "call_inbound": "Llamada entrante: {outcome}",
         "call_outbound_x": "",
         "text_inbound": "Texto del conductor",
-        "text_outbound": "Texto al conductor"
+        "text_outbound": "Texto al conductor",
+        "driver_told": "Conductor avisado",
+        "driver_emailed": "Email enviado al conductor"
       },
       "intake": {
         "name": "Nombre",
@@ -1040,14 +1040,6 @@
         "declined": "Rechazó",
         "assign": "Asignar"
       },
-      "texts": {
-        "savedReplies": "Respuestas guardadas",
-        "chooseReply": "Elige una respuesta guardada",
-        "message": "Mensaje",
-        "length": "{count} / 640 caracteres",
-        "send": "Enviar texto",
-        "sendLink": "Enviar enlace de ubicación"
-      },
       "result": {
         "ok": "Guardado.",
         "errors": {
@@ -1057,13 +1049,22 @@
           "location": "Guarda primero el servicio y la ubicación.",
           "step": "Ese paso no es posible desde aquí.",
           "service": "Ese servicio no se ofrece en este mercado.",
-          "address": "No encontramos esa dirección.",
+          "address": "Escribe una dirección con número, un cruce de calles o una carretera con salida.",
           "quote": "Agrega el precio y el tiempo de llegada.",
-          "generic": "Algo salió mal. Inténtalo de nuevo.",
-          "noNumber": "Este mercado aún no tiene número de teléfono.",
-          "optedOut": "El conductor se dio de baja de los textos.",
-          "failed": "No se pudo enviar el texto."
+          "generic": "Algo salió mal. Inténtalo de nuevo."
         }
+      },
+      "tell": {
+        "title": "Avisar al conductor",
+        "email": "Email: {email}",
+        "noEmail": "Esta solicitud no tiene email: lee el texto de abajo en la llamada.",
+        "emailed": "Enviado por email al conductor y anotado en el historial.",
+        "readAloud": "Léele esto al conductor y luego anótalo:",
+        "logRead": "Se lo leí al conductor",
+        "sendLink": "Enlace de ubicación",
+        "assignedScript": "{provider} va en camino. Precio cotizado {price}, unos {eta} minutos.",
+        "linkScript": "Abre este enlace y toca Compartir mi ubicación: {link}",
+        "logged": "Anotado en el historial."
       }
     }
   },
@@ -1131,6 +1132,18 @@
       },
       "transcript": "Transcripción: {text}",
       "open": "Abre la bandeja: {url}"
+    },
+    "driverUpdate": {
+      "subject": {
+        "assigned": "{brand}: la ayuda va en camino",
+        "locationLink": "{brand}: comparte tu ubicación exacta"
+      },
+      "body": {
+        "assigned": "Hola {first_name}, {provider} va en camino. Precio cotizado {price}, unos {eta} minutos.",
+        "locationLink": "Hola {first_name}, abre el enlace de abajo y comparte tu ubicación exacta para enviarte ayuda."
+      },
+      "open": "Abrir: {url}",
+      "footer": "Recibes este email porque pediste asistencia en carretera. Responde a este email si algo está mal."
     }
   },
   "auth": {

@@ -13,7 +13,7 @@ import {
   locationLinkAction,
   noteAction,
   stepAction,
-  textAction,
+  toldDriverAction,
 } from "@/lib/inbox-actions";
 
 const field = "flex flex-col gap-1 text-sm font-medium";
@@ -233,79 +233,80 @@ export function AttemptForm({
           {t("assign")}
         </Button>
       </form>
-      <Result state={assignState.ok || assignState.error ? assignState : state} />
+      {assignState.readAloud || assignState.ok === "emailed" ? (
+        <ReadAloud id={id} state={assignState} />
+      ) : (
+        <Result state={assignState.ok || assignState.error ? assignState : state} />
+      )}
     </div>
   );
 }
 
-export function TextComposer({
-  id,
-  replies,
-  fill,
-  inputClass,
-}: {
-  id: string;
-  replies: { id: string; title: string; body: string }[];
-  fill: Record<string, string>;
-  inputClass: string;
-}) {
-  const t = useTranslations("admin.inbox.texts");
-  const [state, action, pending] = useActionState<InboxActionState, FormData>(textAction, {});
-  const [body, setBody] = useState("");
-  const [linkPending, startLink] = useTransition();
-  const [linkState, setLinkState] = useState<InboxActionState>({});
-  const apply = (template: string) =>
-    setBody(template.replace(/\{(\w+)\}/g, (m, k: string) => fill[k] ?? m));
+/** The words to read on the call when the driver has no email, and a button to log it. */
+function ReadAloud({ id, state }: { id: string; state: InboxActionState }) {
+  const t = useTranslations("admin.inbox.tell");
+  const [pending, start] = useTransition();
+  const [logged, setLogged] = useState<InboxActionState>({});
+  const r = state.readAloud;
+  if (state.ok === "emailed")
+    return (
+      <p role="status" className="text-sm text-muted-foreground">
+        {t("emailed")}
+      </p>
+    );
+  if (!r) return null;
   return (
-    <form action={action} className="flex flex-col gap-2">
-      <input type="hidden" name="id" value={id} />
-      <label className={field}>
-        {t("savedReplies")}
-        <select
-          className={inputClass}
-          defaultValue=""
-          onChange={(e) => {
-            const r = replies.find((x) => x.id === e.target.value);
-            if (r) apply(r.body);
-          }}
-        >
-          <option value="">{t("chooseReply")}</option>
-          {replies.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.title}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className={field}>
-        {t("message")}
-        <textarea
-          name="body"
-          required
-          maxLength={640}
-          rows={3}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          className={`${inputClass} min-h-24 py-2`}
-        />
-      </label>
-      <p className="text-xs text-muted-foreground">{t("length", { count: body.length })}</p>
-      <div className="flex flex-wrap gap-2">
-        <Button type="submit" size="sm" loading={pending}>
-          {t("send")}
-        </Button>
+    <div role="status" className="flex flex-col gap-2 rounded-xl border border-dashed p-3 text-sm">
+      <p className="font-medium">{t("readAloud")}</p>
+      <p className="break-words">
+        {r.what === "assigned"
+          ? t("assignedScript", {
+              provider: r.provider ?? "",
+              price: r.price ?? "",
+              eta: r.eta ?? 0,
+            })
+          : t("linkScript", { link: r.link })}
+      </p>
+      {logged.ok ? (
+        <p className="text-muted-foreground">{t("logged")}</p>
+      ) : (
         <Button
           type="button"
           size="sm"
           variant="outline"
-          loading={linkPending}
-          onClick={() => startLink(async () => setLinkState(await locationLinkAction(id)))}
+          className="self-start"
+          loading={pending}
+          onClick={() => start(async () => setLogged(await toldDriverAction(id, r.what)))}
         >
-          {t("sendLink")}
+          {t("logRead")}
         </Button>
-      </div>
-      <Result state={linkState.ok || linkState.error ? linkState : state} />
-    </form>
+      )}
+    </div>
+  );
+}
+
+/** Tell the driver (no SMS): the location link by email, or read on the call and logged. */
+export function TellDriver({ id, email }: { id: string; email: string | null }) {
+  const t = useTranslations("admin.inbox.tell");
+  const [pending, start] = useTransition();
+  const [state, setState] = useState<InboxActionState>({});
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-sm text-muted-foreground">
+        {email ? t("email", { email }) : t("noEmail")}
+      </p>
+      <Button
+        type="button"
+        size="sm"
+        variant="outline"
+        className="self-start"
+        loading={pending}
+        onClick={() => start(async () => setState(await locationLinkAction(id)))}
+      >
+        {t("sendLink")}
+      </Button>
+      {state.error ? <Result state={state} /> : <ReadAloud id={id} state={state} />}
+    </div>
   );
 }
 
