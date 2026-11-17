@@ -8,7 +8,7 @@ import type { InboxItem } from "@/lib/inbox";
 import { inboxItemsAction } from "@/lib/inbox-actions";
 import { getBrowserSupabase } from "@/lib/supabase/client";
 
-type Data = { items: InboxItem[]; unread: number; unassigned: number };
+type Data = { items: InboxItem[]; unread: number; unassigned: number; at: number };
 const PREF = "rsos_inbox_alerts";
 
 /** The saved sound-and-notification preference (per browser; off when storage is blocked). */
@@ -61,7 +61,7 @@ export function InboxLive({
   const savedAlerts = useSyncExternalStore(noSubscription, readAlertsPref, () => false);
   const [chosenAlerts, setAlerts] = useState<boolean | null>(null);
   const alerts = chosenAlerts ?? savedAlerts;
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState(initial.at);
   const known = useRef(new Set(initial.items.map((i) => i.id)));
 
   useEffect(() => {
@@ -79,6 +79,7 @@ export function InboxLive({
         const fresh = next.items.filter((i) => !known.current.has(i.id));
         for (const i of next.items) known.current.add(i.id);
         setData(next);
+        setNow(next.at);
         if (fresh.length && alerts) notify(t("newItem"), fresh[0]!);
       }, 300);
     };

@@ -54,9 +54,11 @@ export async function getInbox(marketIds: string[]): Promise<{
   items: InboxItem[];
   unread: number;
   unassigned: number;
+  /** The server's clock when the list was read (the first render uses it: no hydration drift). */
+  at: number;
 }> {
   const supabase = await getServerSupabase();
-  if (marketIds.length === 0) return { items: [], unread: 0, unassigned: 0 };
+  if (marketIds.length === 0) return { items: [], unread: 0, unassigned: 0, at: Date.now() };
   const [{ data: rows }, { data: staff }] = await Promise.all([
     supabase
       .from("requests")
@@ -65,7 +67,8 @@ export async function getInbox(marketIds: string[]): Promise<{
       )
       .in("market_id", marketIds)
       .in("status", [...OPEN_STATUSES])
-      .order("created_at", { ascending: true })
+      // The newest 200 open requests (then sorted for display: urgent first, longest wait).
+      .order("created_at", { ascending: false })
       .limit(200),
     supabase.from("staff_members").select("user_id, display_name"),
   ]);
@@ -102,6 +105,7 @@ export async function getInbox(marketIds: string[]): Promise<{
     items,
     unread: items.filter((i) => i.unread).length,
     unassigned: items.filter((i) => !i.owner).length,
+    at: now,
   };
 }
 

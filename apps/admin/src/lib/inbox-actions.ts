@@ -41,6 +41,7 @@ export async function inboxItemsAction(): Promise<{
   items: InboxItem[];
   unread: number;
   unassigned: number;
+  at: number;
 }> {
   const ctx = await getAdminContext();
   const ids = ctx.markets.filter((m) => ctx.selected.includes(m.slug)).map((m) => m.id);
