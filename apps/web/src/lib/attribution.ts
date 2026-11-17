@@ -49,13 +49,14 @@ export function firstTouch(request: {
     const v = q.get(k);
     return v ? v.slice(0, 200) : null;
   };
-  let referrer: string | null = null;
-  try {
-    const r = request.headers.get("referer");
-    referrer = r ? new URL(r).host.slice(0, 200) : null;
-  } catch {
-    referrer = null;
-  }
+  const referrer = (() => {
+    try {
+      const r = request.headers.get("referer");
+      return r ? new URL(r).host.slice(0, 200) : null;
+    } catch {
+      return null;
+    }
+  })();
   return AttributionSchema.parse({
     ...Object.fromEntries(KEYS.map((k) => [k, pick(k)])),
     landing_page: request.nextUrl.pathname.slice(0, 300),
