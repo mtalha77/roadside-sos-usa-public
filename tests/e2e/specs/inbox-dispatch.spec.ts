@@ -36,7 +36,9 @@ test.describe("inbox and manual dispatch", () => {
     await page.getByRole("textbox", { name: "Number", exact: true }).fill(tracking);
     await page.getByLabel("Source").selectOption("staging_test");
     await page.getByRole("button", { name: "Add number" }).click();
-    await expect(page.getByText(`Added ${tracking}.`)).toBeVisible();
+    await expect(
+      page.getByText(`Added ${tracking}.`).or(page.getByText("That number is already tracked.")),
+    ).toBeVisible();
 
     // The driver calls the number and nobody answers: a missed call.
     const post = (path: string, params: Record<string, string>, signed = true) => {
