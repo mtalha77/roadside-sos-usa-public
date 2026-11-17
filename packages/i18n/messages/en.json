@@ -1017,7 +1017,6 @@
         "call_transferred": "Call transferred",
         "location_shared": "Driver shared location",
         "call_inbound": "Incoming call: {outcome}",
-        "call_outbound_x": "",
         "text_inbound": "Text from the driver",
         "text_outbound": "Text to the driver",
         "driver_told": "Driver told",

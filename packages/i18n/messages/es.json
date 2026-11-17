@@ -1017,7 +1017,6 @@
         "call_transferred": "Llamada transferida",
         "location_shared": "El conductor compartió su ubicación",
         "call_inbound": "Llamada entrante: {outcome}",
-        "call_outbound_x": "",
         "text_inbound": "Texto del conductor",
         "text_outbound": "Texto al conductor",
         "driver_told": "Conductor avisado",
