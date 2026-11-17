@@ -5,7 +5,7 @@ import { FlagsPanel } from "@/components/settings/flags-panel";
 import { OnDuty } from "@/components/settings/on-duty";
 import { PhoneNumbers } from "@/components/settings/phone-numbers";
 import { SystemStatus } from "@/components/settings/system-status";
-import { TemplateEditor } from "@/components/settings/template-editor";
+import { TextsPanel } from "@/components/settings/texts-panel";
 import { getAdminContext } from "@/lib/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
 
@@ -145,34 +145,7 @@ export default async function SettingsPage({
           )}
         </section>
       ) : null}
-      {tab === "templates" ? (
-        <TemplateEditor
-          templates={(
-            ["request_received", "provider_picked", "provider_arriving", "job_completed"] as const
-          ).map((k) => ({
-            id: k,
-            name: t(`templates.${k}.name`),
-            en: t(`templates.${k}.en`),
-            es: t(`templates.${k}.es`),
-          }))}
-          labels={Object.fromEntries(
-            [
-              "template",
-              "channel",
-              "english",
-              "spanish",
-              "preview",
-              "save",
-              "saved",
-              "variables",
-            ].map((k) => [k, t(`tpl.${k}`)]),
-          )}
-          channels={(["sms", "email", "push"] as const).map((c) => ({
-            id: c,
-            label: t(`channels.${c}`),
-          }))}
-        />
-      ) : null}
+      {tab === "templates" ? <TextsPanel /> : null}
       {tab === "rules" ? (
         <section className={card} aria-labelledby="r-h">
           <h2 id="r-h" className="mb-3 font-semibold">

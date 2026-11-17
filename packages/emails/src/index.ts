@@ -6,3 +6,4 @@ export * from "./templates/forms";
 export * from "./templates/ops-alert";
 export * from "./templates/dispatch-alert";
 export * from "./templates/driver-update";
+export * from "./templates/operations";

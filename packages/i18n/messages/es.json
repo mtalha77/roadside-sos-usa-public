@@ -322,7 +322,10 @@
       "real": "Real",
       "moveTo": "Mover",
       "empty": "Aún no hay prospectos.",
-      "more": "+{count} más en la vista de tabla"
+      "more": "+{count} más en la vista de tabla",
+      "approve": "Aprobar",
+      "approvedNotice": "Aprobado y notificado por correo:",
+      "approveFailed": "No se pudo aprobar. Solo superadministradores y gerentes de operaciones pueden."
     },
     "markets": {
       "title": "Mercados",
@@ -507,7 +510,7 @@
       "tabs": {
         "users": "Usuarios y roles",
         "audit": "Registro de auditoría",
-        "templates": "Plantillas de mensajes",
+        "templates": "Textos y plantillas",
         "rules": "Reglas del negocio",
         "flags": "Funciones",
         "integrations": "Integraciones",
@@ -651,14 +654,15 @@
         "adapters": "Servicios externos",
         "adapter": "Servicio",
         "adapterNames": {
-          "twilio": "Llamadas de Twilio (voz)",
+          "twilio": "Textos y llamadas de Twilio",
           "texting": "Mensajes de Twilio (apagado)",
           "softphone": "Teléfono en el navegador",
-          "maps": "Google Maps (apagado)",
-          "email": "Email (Resend)",
+          "maps": "Google Maps",
+          "email": "Correo (Resend)",
           "turnstile": "Protección contra bots (Turnstile)",
           "rateLimit": "Límites de uso (Upstash)",
-          "analytics": "Seguimiento de anuncios (GTM)"
+          "analytics": "Seguimiento de anuncios (GTM)",
+          "twilioVerify": "Códigos de Twilio Verify"
         },
         "state": {
           "real": "Real",
@@ -666,7 +670,7 @@
           "deferred": "Pospuesto",
           "missing": "Falta"
         },
-        "legend": "Real: hay claves activas (y está encendido). Simulado: faltan claves fuera de producción, así que se usa un sustituto seguro y no se envía nada. Pospuesto: apagado por el dueño por ahora (sin SMS, sin Google Maps, proveedor de email después del dominio final); se usa el sustituto en todas partes. Falta: faltan claves en producción y la función está apagada.",
+        "legend": "Real: las claves están configuradas. Simulado: faltan claves fuera de producción, así que se usa un sustituto seguro y no se envía nada. Falta: faltan claves en producción y la función está apagada.",
         "usage": "Uso de APIs de pago hoy",
         "usageIntro": "Llamadas a Google Maps y Twilio contadas por nuestros servidores. El dueño recibe un correo al día cuando un servicio pasa su umbral.",
         "groups": {
@@ -750,6 +754,60 @@
           "4": "Jueves",
           "5": "Viernes",
           "6": "Sábado"
+        }
+      },
+      "texts": {
+        "a2pTitle": "Registro con operadores (A2P 10DLC)",
+        "a2pBody": "Los operadores de EE. UU. exigen registrar nuestra marca y campaña de textos antes de escribir a conductores a gran escala. Hasta que se apruebe, los textos a cualquiera que no sea un número de prueba (OWNER_TEST_PHONE y celulares del equipo) quedan retenidos, salvo que actives la excepción. Consulta docs/runbooks/a2p-10dlc.md.",
+        "a2p": {
+          "pending": "Registro pendiente",
+          "approved": "Aprobado",
+          "rejected": "Rechazado"
+        },
+        "overrideOn": "Excepción activa",
+        "a2pStatus": "Estado",
+        "override": "Enviar a todos de todos modos (excepción)",
+        "saveA2p": "Guardar",
+        "reportTitle": "Entregas, últimos 14 días",
+        "reportEmpty": "Aún no hay textos.",
+        "cols": {
+          "day": "Día",
+          "market": "Mercado",
+          "sent": "Enviados",
+          "delivered": "Entregados",
+          "failed": "Fallidos",
+          "undelivered": "No entregados",
+          "held": "Retenidos",
+          "blocked": "Bloqueados",
+          "received": "Recibidos",
+          "errors": "Errores principales"
+        },
+        "errorCode": "{code} ({meaning})",
+        "twilioErrors": {
+          "21211": "número no válido",
+          "21610": "el número respondió STOP",
+          "21614": "no es un celular",
+          "30003": "teléfono apagado o fuera de servicio",
+          "30004": "bloqueado por el destinatario",
+          "30005": "número desconocido o inactivo",
+          "30006": "fijo u operador inaccesible",
+          "30007": "filtrado por el operador",
+          "30008": "error desconocido del operador",
+          "30034": "bloqueado: falta el registro A2P 10DLC"
+        },
+        "templatesTitle": "Plantillas de texto",
+        "templatesBody": "Los marcadores entre llaves se completan al enviar: '{first_name}', '{provider}', '{price}', '{eta}', '{link}', '{brand}', '{support}'. Mantén los textos en uno o dos segmentos.",
+        "english": "Inglés",
+        "spanish": "Español",
+        "counter": "{chars} caracteres, {segments} segmento(s)",
+        "urgent": "Urgente: puede enviarse en horario de silencio",
+        "quiet": "No se envía de 9 p. m. a 8 a. m. (hora del mercado)",
+        "save": "Guardar plantilla",
+        "saved": "Plantilla guardada.",
+        "errors": {
+          "forbidden": "No puedes editar plantillas.",
+          "invalid": "Cada idioma necesita de 2 a 640 caracteres.",
+          "generic": "Algo salió mal. Inténtalo de nuevo."
         }
       }
     },
@@ -1048,9 +1106,13 @@
           "location": "Guarda primero el servicio y la ubicación.",
           "step": "Ese paso no es posible desde aquí.",
           "service": "Ese servicio no se ofrece en este mercado.",
-          "address": "Escribe una dirección con número, un cruce de calles o una carretera con salida.",
+          "address": "No encontramos esa dirección.",
           "quote": "Agrega el precio y el tiempo de llegada.",
-          "generic": "Algo salió mal. Inténtalo de nuevo."
+          "generic": "Algo salió mal. Inténtalo de nuevo.",
+          "noNumber": "Este mercado aún no tiene número de teléfono.",
+          "optedOut": "El conductor se dio de baja de los textos.",
+          "failed": "No se pudo enviar el texto.",
+          "held": "Retenido, no enviado: horario de silencio (9 p. m. a 8 a. m.) o registro con operadores pendiente. Aparece en el historial."
         }
       },
       "tell": {
@@ -1065,8 +1127,19 @@
         "linkScript": "Abre este enlace y toca Compartir mi ubicación: {link}",
         "logged": "Anotado en el historial.",
         "codeScript": "Entra a {site} y escribe el código {code}, luego toca Compartir mi ubicación."
+      },
+      "textIn": "Texto nuevo",
+      "textsTitle": "Textos",
+      "texts": {
+        "savedReplies": "Respuestas guardadas",
+        "chooseReply": "Elige una respuesta guardada",
+        "message": "Mensaje",
+        "length": "{count} / 640 caracteres",
+        "send": "Enviar texto",
+        "sendLink": "Enviar enlace de ubicación"
       }
-    }
+    },
+    "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a conductores quedan retenidos hasta su aprobación."
   },
   "emails": {
     "welcome": {
@@ -1144,6 +1217,18 @@
       },
       "open": "Abrir: {url}",
       "footer": "Recibes este email porque pediste asistencia en carretera. Responde a este email si algo está mal."
+    },
+    "applicationApproved": {
+      "subject": "Fuiste aprobado para unirte a {brand}",
+      "body": "Hola {name}, {company} fue aprobado para recibir trabajos de {brand}.",
+      "next": "Entra a la app de proveedores para completar tu perfil, tus precios y tu zona de servicio: {url}",
+      "help": "¿Preguntas? Escribe a {support}."
+    },
+    "dailySummary": {
+      "subject": "Resumen de despacho de {brand} del {day}",
+      "none": "Ayer no hubo solicitudes.",
+      "line": "{requests} solicitudes, {calls} llamadas ({missed} perdidas), {assigned} asignadas, {completed} terminadas, {noProvider} sin proveedor. Comisiones que se habrían ganado: {fees}.",
+      "footer": "Campaña de prueba: las comisiones se registran como manual_test y no se cobra a nadie."
     }
   },
   "auth": {
@@ -1208,6 +1293,24 @@
         "email": "Escribe un email válido.",
         "limit": "Demasiados códigos. Espera unos minutos e inténtalo de nuevo.",
         "code": "Ese código no funcionó. Revísalo e inténtalo de nuevo.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      }
+    },
+    "sms": {
+      "tab": "Código por texto",
+      "phone": "Número de celular",
+      "phoneHint": "El número de tu cuenta. Te enviamos un código de 6 dígitos.",
+      "send": "Envíame un código",
+      "sent": "Te enviamos un código. Vence en 10 minutos.",
+      "demoCode": "Entorno de prueba: no se envía ningún texto. Usa el código {code}.",
+      "code": "Código de 6 dígitos",
+      "verify": "Iniciar sesión",
+      "errors": {
+        "phone": "Escribe un número de celular válido de EE. UU.",
+        "limit": "Demasiados códigos. Espera unos minutos y vuelve a intentarlo.",
+        "code": "Ese código no funcionó. Revísalo y vuelve a intentarlo.",
+        "unavailable": "Los códigos por texto aún no están disponibles. Usa tu correo.",
+        "noAccount": "Ninguna cuenta usa este número. Inicia sesión con tu correo.",
         "generic": "Algo salió mal. Inténtalo de nuevo."
       }
     }
@@ -1678,7 +1781,10 @@
             "¿Cuánto les cuesta a los proveedores?",
             "Una tarifa fija por cada solicitud en la que el conductor te elige, pagada de un saldo prepagado. Los planes opcionales dan descuentos y mejor visibilidad."
           ],
-          ["¿Yo fijo mis precios?", "Sí. Cotizas cada trabajo a tu precio."]
+          [
+            "¿Yo fijo mis precios?",
+            "Sí. Cotizas cada trabajo a tu precio."
+          ]
         ]
       }
     },
@@ -1766,7 +1872,10 @@
           "Envías una cotización",
           "Tu precio y cuándo puedes llegar. Cotiza lo que quieras, cuando quieras."
         ],
-        ["El conductor elige", "Si te elige, recibes sus datos y sales. Te paga directamente."]
+        [
+          "El conductor elige",
+          "Si te elige, recibes sus datos y sales. Te paga directamente."
+        ]
       ]
     },
     "money": {
@@ -1932,6 +2041,10 @@
             "Con los proveedores que cotizan o hacen tu trabajo, con empresas que nos ayudan a operar el servicio (alojamiento, mensajes, correo) y cuando la ley lo exige. No vendemos información personal por dinero."
           ],
           [
+            "Mensajes de texto",
+            "Cuando pides ayuda o nos llamas, usamos tu número de celular para escribirte sobre esa solicitud: un enlace para compartir tu ubicación, el proveedor asignado con el precio y la hora de llegada, y un enlace de seguimiento. Los proveedores reciben avisos de trabajos. No enviamos textos de publicidad y no compartimos ni vendemos tu número para la publicidad de nadie. Responde STOP para dejar de recibir textos en cualquier momento y START para volver a recibirlos; responde HELP para ayuda. Pueden aplicar tarifas de mensajes y datos. Guardamos un registro de los textos que enviamos y de tu decisión de no recibirlos."
+          ],
+          [
             "Cookies y tecnologías similares",
             "Usamos cookies necesarias para que el sitio funcione. Las cookies de análisis y publicidad se usan solo con tu consentimiento. Consulta la Política de cookies y \"Tus opciones de privacidad\"."
           ],
@@ -1955,7 +2068,10 @@
             "Menores",
             "El servicio no es para menores de 16 años y no recopilamos su información a sabiendas."
           ],
-          ["Cambios y contacto", "Publicaremos los cambios aquí con una nueva versión y fecha."]
+          [
+            "Cambios y contacto",
+            "Publicaremos los cambios aquí con una nueva versión y fecha."
+          ]
         ]
       },
       "sms-terms": {
@@ -1974,7 +2090,10 @@
             "Cancelar y ayuda",
             "Responde STOP para dejar de recibir mensajes en cualquier momento. Responde HELP para recibir ayuda, o contáctanos."
           ],
-          ["Costos", "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."],
+          [
+            "Costos",
+            "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."
+          ],
           [
             "Operadores",
             "Los operadores no son responsables de mensajes retrasados o no entregados."
@@ -2170,22 +2289,23 @@
     "contact": {
       "title": "¿Cómo te contacta el proveedor?",
       "name": "Tu nombre",
-      "phone": "Número de celular (para la llamada del proveedor)",
-      "sendCode": "Continuar",
-      "consent": "Al continuar aceptas los <terms>Términos para conductores</terms> y la <privacy>Política de privacidad</privacy>. Nosotros y el proveedor podemos llamarte sobre esta solicitud.",
+      "phone": "Número de celular",
+      "sendCode": "Envíame un código",
+      "consent": "Al continuar aceptas los <terms>Términos para conductores</terms> y la <privacy>Política de privacidad</privacy>, y recibir mensajes de texto sobre esta solicitud (pueden aplicar tarifas de mensajes y datos; responde STOP para cancelar).",
       "terms": "Términos para conductores",
       "privacy": "Política de privacidad",
       "email": "Email (opcional)",
       "emailHint": "Te enviamos por email un código de 6 dígitos y el enlace de tu solicitud. ¿Sin email? Confirmamos tu solicitud en la llamada."
     },
     "verify": {
-      "title": "Revisa y envía",
-      "body": "Enviamos un código de 6 dígitos a {email}.",
+      "title": "Escribe el código de 6 dígitos",
+      "body": "Enviamos un código al {phone}.",
       "code": "Código",
-      "demoCode": "Modo demo: no se envió ningún email. Tu código es {code}.",
+      "demoCode": "Modo demostración: no se envió ningún texto. Tu código es {code}.",
       "submit": "Enviar mi solicitud",
-      "resend": "Cambiar datos de contacto",
-      "noCode": "Confirmaremos tu solicitud en la llamada."
+      "resend": "Cambiar número",
+      "noCode": "Confirmaremos tu solicitud en la llamada.",
+      "noSms": "Aquí todavía no hay mensajes de texto, así que confirmaremos tu número por teléfono."
     },
     "errors": {
       "required": "Responde esta pregunta.",
@@ -2193,7 +2313,7 @@
       "outside": "Esa ubicación está fuera de las zonas donde estamos.",
       "phone": "Escribe un celular válido de EE. UU.",
       "code": "Ese código no es correcto. Revísalo e inténtalo de nuevo.",
-      "locked": "Demasiados intentos. Escribe tu email otra vez para recibir un código nuevo.",
+      "locked": "Demasiados intentos. Empieza de nuevo con tu número.",
       "turnstile": "La verificación de seguridad no pasó. Inténtalo de nuevo.",
       "limit": "Demasiadas solicitudes desde esta conexión. Llámanos, por favor.",
       "generic": "Algo salió mal. Inténtalo de nuevo o llámanos.",
@@ -2471,15 +2591,16 @@
   "driverAccount": {
     "title": "Tu cuenta",
     "signIn": {
-      "title": "Inicia sesión con tu email",
-      "body": "Te enviaremos un código por email. Sin contraseña.",
+      "title": "Entra con tu teléfono",
+      "body": "Te enviaremos un código por texto. Sin contraseña.",
       "send": "Envíame un código",
       "code": "Código de 6 dígitos",
       "demoCode": "Modo demostración: tu código es {code}.",
       "verify": "Entrar",
       "wrong": "Ese código no es correcto.",
       "email": "Email",
-      "badEmail": "Escribe un email válido."
+      "badEmail": "Escribe un email válido.",
+      "phone": "Número de celular"
     },
     "tabs": "Secciones de la cuenta",
     "requests": "Solicitudes",
@@ -2591,9 +2712,17 @@
       "title": "Instalar la app",
       "body": "Recibe solicitudes en pantalla completa con sonido y abre el portal con un toque.",
       "iphone": "iPhone (Safari)",
-      "iphoneSteps": ["Toca el botón Compartir.", "Elige \"Agregar a inicio\".", "Toca Agregar."],
+      "iphoneSteps": [
+        "Toca el botón Compartir.",
+        "Elige \"Agregar a inicio\".",
+        "Toca Agregar."
+      ],
       "android": "Android (Chrome)",
-      "androidSteps": ["Toca el menú (tres puntos).", "Elige \"Instalar app\".", "Toca Instalar."],
+      "androidSteps": [
+        "Toca el menú (tres puntos).",
+        "Elige \"Instalar app\".",
+        "Toca Instalar."
+      ],
       "installNow": "Instalar ahora"
     },
     "home": {
@@ -3054,14 +3183,14 @@
     "send": "Enviar mi ubicación",
     "safety": "Si estás en peligro o en el tráfico, llama primero al 911.",
     "doneTitle": "Gracias, ya tenemos tu ubicación",
-    "doneBody": "El despachador ya la puede ver. Mantente a salvo y con el teléfono encendido; te llamaremos.",
+    "doneBody": "El despachador ya la ve. Mantente seguro y con el teléfono encendido; te escribiremos o llamaremos.",
     "expiredTitle": "Este enlace venció",
-    "expiredBody": "Los enlaces de ubicación funcionan 2 horas. Llámanos y te daremos uno nuevo.",
+    "expiredBody": "Los enlaces de ubicación duran 2 horas. Responde a nuestro texto o llámanos y te enviaremos uno nuevo.",
     "errorTitle": "Algo salió mal",
-    "errorBody": "Inténtalo de nuevo o llámanos.",
+    "errorBody": "Inténtalo de nuevo o responde a nuestro texto.",
     "errors": {
       "location": "Comparte tu ubicación o escribe una dirección.",
-      "address": "Escribe una dirección con número, un cruce de calles o una carretera con salida.",
+      "address": "No encontramos esa dirección. Agrega la ciudad o el cruce de calles.",
       "photo": "No se pudo agregar esa foto (usa JPEG, PNG o HEIC de menos de 8 MB).",
       "limit": "Demasiados intentos. Espera unos minutos.",
       "generic": "Algo salió mal. Inténtalo de nuevo.",

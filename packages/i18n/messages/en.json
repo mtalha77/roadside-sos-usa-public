@@ -322,7 +322,10 @@
       "real": "Real",
       "moveTo": "Move",
       "empty": "No leads yet.",
-      "more": "+{count} more in the table view"
+      "more": "+{count} more in the table view",
+      "approve": "Approve",
+      "approvedNotice": "Approved and emailed:",
+      "approveFailed": "Could not approve. Only super admins and ops managers can."
     },
     "markets": {
       "title": "Markets",
@@ -507,7 +510,7 @@
       "tabs": {
         "users": "Users and roles",
         "audit": "Audit log",
-        "templates": "Message templates",
+        "templates": "Texts and templates",
         "rules": "Business rules",
         "flags": "Feature flags",
         "integrations": "Integrations",
@@ -651,14 +654,15 @@
         "adapters": "Third-party services",
         "adapter": "Service",
         "adapterNames": {
-          "twilio": "Twilio calls (voice)",
+          "twilio": "Twilio texts and calls",
           "texting": "Twilio texts (off)",
           "softphone": "Browser softphone",
-          "maps": "Google Maps (off)",
+          "maps": "Google Maps",
           "email": "Email (Resend)",
           "turnstile": "Bot protection (Turnstile)",
           "rateLimit": "Rate limits (Upstash)",
-          "analytics": "Ad tracking (GTM)"
+          "analytics": "Ad tracking (GTM)",
+          "twilioVerify": "Twilio Verify codes"
         },
         "state": {
           "real": "Real",
@@ -666,7 +670,7 @@
           "deferred": "Deferred",
           "missing": "Missing"
         },
-        "legend": "Real: live keys are set (and switched on). Fake: keys are missing outside production, so a safe stand-in is used and nothing is sent. Deferred: turned off by the owner for now (no SMS, no Google Maps, email provider after the final domain); the stand-in is used everywhere. Missing: keys are missing in production and the feature is off.",
+        "legend": "Real: live keys are set. Fake: keys are missing outside production, so a safe stand-in is used and nothing is sent. Missing: keys are missing in production and the feature is off.",
         "usage": "Paid API usage today",
         "usageIntro": "Google Maps and Twilio calls counted by our servers. The owner gets one email a day when a service passes its threshold.",
         "groups": {
@@ -750,6 +754,60 @@
           "4": "Thursday",
           "5": "Friday",
           "6": "Saturday"
+        }
+      },
+      "texts": {
+        "a2pTitle": "Carrier registration (A2P 10DLC)",
+        "a2pBody": "US carriers require our brand and texting campaign to be registered before we text drivers at scale. Until it is approved, texts to anyone but test numbers (OWNER_TEST_PHONE and staff mobiles) are held, unless you turn on the override. See docs/runbooks/a2p-10dlc.md.",
+        "a2p": {
+          "pending": "Registration pending",
+          "approved": "Approved",
+          "rejected": "Rejected"
+        },
+        "overrideOn": "Override on",
+        "a2pStatus": "Status",
+        "override": "Send to everyone anyway (override)",
+        "saveA2p": "Save",
+        "reportTitle": "Delivery, last 14 days",
+        "reportEmpty": "No texts yet.",
+        "cols": {
+          "day": "Day",
+          "market": "Market",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "failed": "Failed",
+          "undelivered": "Not delivered",
+          "held": "Held",
+          "blocked": "Blocked",
+          "received": "Received",
+          "errors": "Top errors"
+        },
+        "errorCode": "{code} ({meaning})",
+        "twilioErrors": {
+          "21211": "invalid phone number",
+          "21610": "the number replied STOP",
+          "21614": "not a mobile number",
+          "30003": "phone off or unreachable",
+          "30004": "blocked by the recipient",
+          "30005": "unknown or inactive number",
+          "30006": "landline or unreachable carrier",
+          "30007": "filtered by the carrier",
+          "30008": "unknown carrier error",
+          "30034": "blocked: A2P 10DLC registration missing"
+        },
+        "templatesTitle": "Text templates",
+        "templatesBody": "Placeholders in braces are filled in when the text is sent: '{first_name}', '{provider}', '{price}', '{eta}', '{link}', '{brand}', '{support}'. Keep texts to one or two segments.",
+        "english": "English",
+        "spanish": "Spanish",
+        "counter": "{chars} characters, {segments} segment(s)",
+        "urgent": "Urgent: may send during quiet hours",
+        "quiet": "Not sent 9pm to 8am (market time)",
+        "save": "Save template",
+        "saved": "Template saved.",
+        "errors": {
+          "forbidden": "You can't edit templates.",
+          "invalid": "Each language needs 2 to 640 characters.",
+          "generic": "Something went wrong. Try again."
         }
       }
     },
@@ -1048,9 +1106,13 @@
           "location": "Save the service and location first.",
           "step": "That step isn't possible from here.",
           "service": "That service isn't offered in this market.",
-          "address": "Type a street address with a number, cross streets, or a highway and exit.",
+          "address": "We couldn't find that address.",
           "quote": "Add the price and ETA for a quote.",
-          "generic": "Something went wrong. Try again."
+          "generic": "Something went wrong. Try again.",
+          "noNumber": "This market has no phone number yet.",
+          "optedOut": "The driver opted out of texts.",
+          "failed": "The text could not be sent.",
+          "held": "Held, not sent: quiet hours (9pm to 8am) or carrier registration pending. It shows on the timeline."
         }
       },
       "tell": {
@@ -1065,8 +1127,19 @@
         "linkScript": "Open this link and tap Share my location: {link}",
         "logged": "Logged on the timeline.",
         "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
+      },
+      "textIn": "New text",
+      "textsTitle": "Texts",
+      "texts": {
+        "savedReplies": "Saved replies",
+        "chooseReply": "Choose a saved reply",
+        "message": "Message",
+        "length": "{count} / 640 characters",
+        "send": "Send text",
+        "sendLink": "Send location link"
       }
-    }
+    },
+    "textingLimited": "Texting limited: carrier registration pending. Texts to drivers are held until it's approved."
   },
   "emails": {
     "welcome": {
@@ -1144,6 +1217,18 @@
       },
       "open": "Open: {url}",
       "footer": "You get this email because you asked for roadside help. Reply to this email if anything is wrong."
+    },
+    "applicationApproved": {
+      "subject": "You're approved to join {brand}",
+      "body": "Hi {name}, {company} is approved to receive jobs from {brand}.",
+      "next": "Sign in to the provider app to finish your profile, set your prices and service area: {url}",
+      "help": "Questions? Email {support}."
+    },
+    "dailySummary": {
+      "subject": "{brand} dispatch summary for {day}",
+      "none": "No requests yesterday.",
+      "line": "{requests} requests, {calls} calls ({missed} missed), {assigned} assigned, {completed} completed, {noProvider} without a provider. Fees that would have been earned: {fees}.",
+      "footer": "Test campaign: fees are recorded as manual_test and nobody is charged."
     }
   },
   "auth": {
@@ -1208,6 +1293,24 @@
         "email": "Enter a valid email address.",
         "limit": "Too many codes. Wait a few minutes and try again.",
         "code": "That code didn't work. Check it and try again.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "sms": {
+      "tab": "Text code",
+      "phone": "Mobile number",
+      "phoneHint": "The number on your account. We text you a 6-digit code.",
+      "send": "Text me a code",
+      "sent": "We texted you a code. It expires in 10 minutes.",
+      "demoCode": "Test environment: no text is sent. Use code {code}.",
+      "code": "6-digit code",
+      "verify": "Sign in",
+      "errors": {
+        "phone": "Enter a valid US mobile number.",
+        "limit": "Too many codes. Wait a few minutes and try again.",
+        "code": "That code didn't work. Check it and try again.",
+        "unavailable": "Text codes are not available yet. Use your email instead.",
+        "noAccount": "No account uses this number. Sign in with your email instead.",
         "generic": "Something went wrong. Please try again."
       }
     }
@@ -1678,7 +1781,10 @@
             "What does it cost providers?",
             "A flat fee per request where the driver picks you, paid from a prepaid wallet. Optional plans add discounts and featured placement."
           ],
-          ["Do I set my own prices?", "Yes. You quote each job at your price."]
+          [
+            "Do I set my own prices?",
+            "Yes. You quote each job at your price."
+          ]
         ]
       }
     },
@@ -1935,6 +2041,10 @@
             "With the providers who quote or do your job, with service companies that help us run the service (hosting, messaging, email), and when the law requires it. We do not sell personal information for money."
           ],
           [
+            "Text messages",
+            "When you ask for help or call us, we use your mobile number to text you about that request: a link to share your location, the provider assigned to you with the price and arrival time, and a tracking link. Providers get job alerts. We do not send marketing texts and we do not share or sell your number for anyone else's marketing. Reply STOP to stop texts at any time and START to resume; reply HELP for help. Message and data rates may apply. We keep a record of the texts we send and your opt-out choice."
+          ],
+          [
             "Cookies and similar technologies",
             "We use necessary cookies to run the site. Analytics and advertising cookies are used only with your consent. See the Cookie Policy and \"Your privacy choices\"."
           ],
@@ -1958,7 +2068,10 @@
             "Children",
             "The service is not for children under 16, and we do not knowingly collect their information."
           ],
-          ["Changes and contact", "We will post changes here with a new version and date."]
+          [
+            "Changes and contact",
+            "We will post changes here with a new version and date."
+          ]
         ]
       },
       "sms-terms": {
@@ -1977,8 +2090,14 @@
             "Opt out and help",
             "Reply STOP to stop messages at any time. Reply HELP for help, or contact us."
           ],
-          ["Costs", "Message and data rates may apply, depending on your mobile plan."],
-          ["Carriers", "Carriers are not liable for delayed or undelivered messages."],
+          [
+            "Costs",
+            "Message and data rates may apply, depending on your mobile plan."
+          ],
+          [
+            "Carriers",
+            "Carriers are not liable for delayed or undelivered messages."
+          ],
           [
             "Privacy",
             "We use your number as described in the Privacy Policy and do not share it for third-party marketing."
@@ -2170,22 +2289,23 @@
     "contact": {
       "title": "How can the provider reach you?",
       "name": "Your name",
-      "phone": "Mobile number (for the provider's call)",
-      "sendCode": "Continue",
-      "consent": "By continuing you agree to the <terms>Driver Terms</terms> and <privacy>Privacy Policy</privacy>. We and the provider may call you about this request.",
+      "phone": "Mobile number",
+      "sendCode": "Text me a code",
+      "consent": "By continuing you agree to the <terms>Driver Terms</terms> and <privacy>Privacy Policy</privacy>, and to receive text messages about this request (message and data rates may apply; reply STOP to stop).",
       "terms": "Driver Terms",
       "privacy": "Privacy Policy",
       "email": "Email (optional)",
       "emailHint": "We email you a 6-digit code and your request link. No email? We confirm your request on the call."
     },
     "verify": {
-      "title": "Check and send",
-      "body": "We emailed a 6-digit code to {email}.",
+      "title": "Enter the 6-digit code",
+      "body": "We texted a code to {phone}.",
       "code": "Code",
-      "demoCode": "Demo mode: no email was sent. Your code is {code}.",
+      "demoCode": "Demo mode: no text was sent. Your code is {code}.",
       "submit": "Send my request",
-      "resend": "Change contact details",
-      "noCode": "We'll confirm your request on the phone call."
+      "resend": "Change number",
+      "noCode": "We'll confirm your request on the phone call.",
+      "noSms": "Text messages aren't set up here yet, so we'll confirm your number by phone."
     },
     "errors": {
       "required": "Please answer this question.",
@@ -2193,7 +2313,7 @@
       "outside": "That location is outside the areas we serve.",
       "phone": "Enter a valid US mobile number.",
       "code": "That code isn't right. Check it and try again.",
-      "locked": "Too many tries. Enter your email again for a new code.",
+      "locked": "Too many tries. Start again with your number.",
       "turnstile": "The security check didn't pass. Please try again.",
       "limit": "Too many requests from this connection. Please call us instead.",
       "generic": "Something went wrong. Please try again, or call us.",
@@ -2471,15 +2591,16 @@
   "driverAccount": {
     "title": "Your account",
     "signIn": {
-      "title": "Sign in with your email",
-      "body": "We'll email you a code. No password.",
-      "send": "Email me a code",
+      "title": "Sign in with your phone",
+      "body": "We'll text you a code. No password.",
+      "send": "Text me a code",
       "code": "6-digit code",
       "demoCode": "Demo mode: your code is {code}.",
       "verify": "Sign in",
       "wrong": "That code isn't right.",
       "email": "Email",
-      "badEmail": "Enter a valid email address."
+      "badEmail": "Enter a valid email address.",
+      "phone": "Mobile number"
     },
     "tabs": "Account sections",
     "requests": "Requests",
@@ -2591,9 +2712,17 @@
       "title": "Install the app",
       "body": "Get requests full screen with sound, and open the portal in one tap.",
       "iphone": "iPhone (Safari)",
-      "iphoneSteps": ["Tap the Share button.", "Choose \"Add to Home Screen\".", "Tap Add."],
+      "iphoneSteps": [
+        "Tap the Share button.",
+        "Choose \"Add to Home Screen\".",
+        "Tap Add."
+      ],
       "android": "Android (Chrome)",
-      "androidSteps": ["Tap the menu (three dots).", "Choose \"Install app\".", "Tap Install."],
+      "androidSteps": [
+        "Tap the menu (three dots).",
+        "Choose \"Install app\".",
+        "Tap Install."
+      ],
       "installNow": "Install now"
     },
     "home": {
@@ -3054,14 +3183,14 @@
     "send": "Send my location",
     "safety": "If you are in danger or in traffic, call 911 first.",
     "doneTitle": "Thanks, we have your location",
-    "doneBody": "The dispatcher can see it now. Stay safe and keep your phone on; we'll call you.",
+    "doneBody": "The dispatcher can see it now. Stay safe and keep your phone on; we'll text or call you.",
     "expiredTitle": "This link has expired",
-    "expiredBody": "Location links work for 2 hours. Call us and we'll give you a new one.",
+    "expiredBody": "Location links work for 2 hours. Reply to our text or call us and we'll send a new one.",
     "errorTitle": "Something went wrong",
-    "errorBody": "Please try again, or call us.",
+    "errorBody": "Please try again, or reply to our text.",
     "errors": {
       "location": "Share your location or type an address.",
-      "address": "Type a street address with a number, cross streets, or a highway and exit.",
+      "address": "We couldn't find that address. Add a city or cross streets.",
       "photo": "That photo couldn't be added (use a JPEG, PNG or HEIC under 8 MB).",
       "limit": "Too many tries. Wait a few minutes.",
       "generic": "Something went wrong. Please try again.",

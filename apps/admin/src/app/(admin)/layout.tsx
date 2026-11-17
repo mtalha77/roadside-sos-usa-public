@@ -57,6 +57,17 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   const labels = Object.fromEntries(SHELL_KEYS.map((k) => [k, t(`shell.${k}`)]));
   // Everyone who answers calls gets the softphone dock (RSOS-074b).
   const dispatches = ["super_admin", "ops_manager", "dispatcher"].includes(ctx.role);
+  // RSOS-035: until A2P 10DLC is approved (or overridden), texts to real drivers are held.
+  const { data: a2p } = await (
+    await getServerSupabase()
+  )
+    .from("system_settings")
+    .select("value")
+    .eq("key", "a2p_10dlc")
+    .maybeSingle();
+  const a2pValue = (a2p?.value ?? {}) as { status?: unknown; override?: unknown };
+  const textingLimited =
+    a2p !== null && a2pValue.status !== "approved" && a2pValue.override !== true;
   const { data: myStatus } = dispatches
     ? await (
         await getServerSupabase()
@@ -92,6 +103,16 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         ) : null
       }
     >
+      {textingLimited ? (
+        <p
+          role="status"
+          className="mx-4 mt-3 rounded-xl border border-warning bg-warning-subtle px-4 py-2 text-sm font-medium text-warning-strong"
+        >
+          <Link href="/settings?tab=templates" className="underline underline-offset-2">
+            {t("textingLimited")}
+          </Link>
+        </p>
+      ) : null}
       {children}
       {dispatches ? <SoftphoneDock initialPresence={myStatus?.presence ?? "away"} /> : null}
     </AdminShell>

@@ -4,6 +4,7 @@ import { Badge } from "@rsos/ui/badge";
 import { Button } from "@rsos/ui/button";
 import { inputClass } from "@rsos/ui/input";
 import { useId, useState } from "react";
+import { approveApplicationAction } from "@/lib/application-actions";
 
 /** Cards shown per lane on the board; the table view lists every lead. */
 const LANE_LIMIT = 25;
@@ -163,6 +164,25 @@ export function Pipeline({
                         >
                           {l.remind}
                         </Button>
+                        {!x.demo && x.stage !== "onboarding" && x.stage !== "lost" ? (
+                          <Button
+                            variant="outline"
+                            onClick={async () => {
+                              const r = await approveApplicationAction(x.id);
+                              setMsg(
+                                r === "ok" ? `${l.approvedNotice} ${x.company}` : l.approveFailed,
+                              );
+                              if (r === "ok")
+                                setLeads((all) =>
+                                  all.map((y) =>
+                                    y.id === x.id ? { ...y, stage: "onboarding" } : y,
+                                  ),
+                                );
+                            }}
+                          >
+                            {l.approve}
+                          </Button>
+                        ) : null}
                       </div>
                     </li>
                   ))}
