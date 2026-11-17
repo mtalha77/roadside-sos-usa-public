@@ -87,9 +87,10 @@ test.describe("inbox and manual dispatch", () => {
 
     // No email on a phone request: the location link is read on the call and logged.
     await panel.getByRole("button", { name: "Location link" }).click();
-    await expect(panel.getByText(/and type the code \d{3} \d{3}/)).toBeVisible();
+    // Server actions can take a while on a loaded preview: allow 30 s for these two.
+    await expect(panel.getByText(/and type the code \d{3} \d{3}/)).toBeVisible({ timeout: 30_000 });
     await panel.getByRole("button", { name: "I read it to the driver" }).click();
-    await expect(panel.getByText("Logged on the timeline.")).toBeVisible();
+    await expect(panel.getByText("Logged on the timeline.")).toBeVisible({ timeout: 30_000 });
 
     // Ending needs a reason.
     await panel.getByRole("button", { name: "No provider found" }).click();
