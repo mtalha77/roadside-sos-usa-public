@@ -182,7 +182,12 @@ export async function demoSignInAction(form: FormData): Promise<void> {
         }
       }
     }
-    if (!passed) throw new Error("Demo second step failed");
+    // Every code in reach was taken by parallel sign-ins: start over cleanly (the caller retries)
+    // instead of failing the request.
+    if (!passed) {
+      await supabase.auth.signOut();
+      redirect("/sign-in?demo=busy");
+    }
   }
   redirect("/");
 }

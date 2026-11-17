@@ -1,4 +1,5 @@
 import { formatCurrency, type Locale } from "@rsos/i18n";
+import { CallButton } from "@/components/softphone/call-button";
 import { Badge } from "@rsos/ui/badge";
 import { LiteMap } from "@rsos/ui/lite-map";
 import { ProviderLogo } from "@rsos/ui/provider-logo";
@@ -54,8 +55,14 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
               <dt className="text-muted-foreground">{t("service")}</dt>
               <dd>{ts.has(`${r.service}.name`) ? ts(`${r.service}.name`) : r.service}</dd>
               <dt className="text-muted-foreground">{t("driver")}</dt>
-              <dd>
+              <dd className="flex flex-wrap items-center gap-2">
                 {r.driver} · {r.phone}
+                {!r.demo && /^\+1\d{10}$/.test(r.phone) ? (
+                  <CallButton
+                    label={t("callDriver")}
+                    call={{ to: r.phone, requestId: r.id, label: r.driver }}
+                  />
+                ) : null}
               </dd>
               <dt className="text-muted-foreground">{t("location")}</dt>
               <dd>{r.address}</dd>

@@ -124,6 +124,15 @@ export function voicemailTwiml(o: {
 }
 
 export const hangupTwiml = () => twiml("<Hangup/>");
+
+/** Hold: the caller hears quiet music until a dispatcher resumes the call. */
+export const holdTwiml = (musicUrl: string) => twiml(`<Play loop="0">${esc(musicUrl)}</Play>`);
+
+/** Ring one dispatcher's browser (resume after hold, or transfer). */
+export const ringClientTwiml = (identity: string, action?: string) =>
+  twiml(
+    `<Dial${attrs({ answerOnBridge: true, timeout: 30, action, method: action ? "POST" : undefined })}><Client>${esc(identity)}</Client></Dial>`,
+  );
 export const emptyTwiml = () => twiml("");
 
 /** Outbound call from a dispatcher's browser (RSOS-074b): our tracking number as caller ID. */

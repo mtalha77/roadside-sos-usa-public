@@ -176,7 +176,21 @@ export async function callStatus(params: Record<string, string>, url: URL) {
     .eq("twilio_call_sid", sid)
     .select("id, outcome, request_id, market_id, from_phone, to_phone, direction")
     .maybeSingle();
-  if (!call || call.direction !== "inbound" || call.outcome !== "ringing") return;
+  if (!call) return;
+  if (call.direction === "outbound") {
+    // Outbound (RSOS-074b): record how the dispatcher's call ended.
+    const outcome =
+      params.CallStatus === "completed"
+        ? ("completed" as const)
+        : params.CallStatus === "busy"
+          ? ("busy" as const)
+          : params.CallStatus === "no-answer" || params.CallStatus === "canceled"
+            ? ("missed" as const)
+            : ("failed" as const);
+    await admin.from("calls").update({ outcome }).eq("id", call.id);
+    return;
+  }
+  if (call.outcome !== "ringing") return;
   await admin.from("calls").update({ outcome: "missed" }).eq("id", call.id);
   await urgentFollowUp(call, "missed", url);
 }

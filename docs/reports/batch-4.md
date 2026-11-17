@@ -13,8 +13,8 @@
 | RSOS-099 Staging fixes before new work              | Done                     | [#172](https://github.com/mtalha77/roadside-sos-usa-public/pull/172) |
 | RSOS-021b Real maps and SMS codes                   | Done (real keys BLOCKED) | [#175](https://github.com/mtalha77/roadside-sos-usa-public/pull/175) |
 | RSOS-030 Call tracking and the phone flow (IVR)     | Done (real keys BLOCKED) | [#173](https://github.com/mtalha77/roadside-sos-usa-public/pull/173) |
-| RSOS-021c Owner scope change: email codes, no Maps  | Done                     | (this PR)                                                            |
-| RSOS-074b Real browser softphone                    | Not started              |                                                                      |
+| RSOS-021c Owner scope change: email codes, no Maps  | Done                     | [#176](https://github.com/mtalha77/roadside-sos-usa-public/pull/176) |
+| RSOS-074b Real browser softphone                    | Done (real keys BLOCKED) | (this PR)                                                            |
 | RSOS-034b Real inbox and manual dispatch            | Not started              |                                                                      |
 | RSOS-023 Location link                              | Not started              |                                                                      |
 | RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Not started              |                                                                      |
@@ -175,3 +175,26 @@ Applies the "Scope changes from the owner" section of the updated batch file (co
   Owner: buy numbers and point their webhooks per `docs/runbooks/twilio.md`, add the numbers in
   Admin > Settings > Phone numbers, set the on-duty schedule and mobiles.
 - **BLOCKED (keys missing)**: ringing the admin softphone from the staging number.
+
+### RSOS-074b: Real browser softphone for dispatchers
+
+- **Softphone dock** on every admin screen for super admins, ops managers and dispatchers: presence
+  (Available, Busy, Away: only Available dispatchers are rung), incoming call screen with caller,
+  market, source and linked request, answer, decline, mute, hold (the caller hears music; resume
+  rings this browser again), transfer to another Available dispatcher, hang up.
+- **Access tokens** minted on the server (`softphoneTokenAction`): Twilio Voice JWT signed with the
+  API key secret, 1 hour, identity = the dispatcher's user id, refreshed before expiry; refused for
+  other roles.
+- **Outbound calls** from request pages ("Call driver") and the inbox (driver, provider) through
+  the TwiML App (`/api/twilio/client`, signature-checked): caller ID is the market's tracking
+  number; each call is logged in `calls` and on the request timeline.
+- **Microphone**: an explanation and an "Allow microphone" button before the first call; a clear
+  message on unsupported browsers (Voice SDK `Device.isSupported`). The Voice SDK (2.18.4) loads
+  only when Twilio is connected.
+- Real or demo: built for real, **demo mode** without keys (the dock shows that calls are not
+  connected). Keys: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_API_KEY_SID`,
+  `TWILIO_API_KEY_SECRET`, `TWILIO_TWIML_APP_SID` (admin). Tested: token and live-call unit tests,
+  e2e (dock on every screen, presence saved, TwiML App rejects unsigned requests). Owner: create
+  the API key and the TwiML App per environment (`docs/runbooks/twilio.md`).
+- **BLOCKED (keys missing)**: answering a staging call in the browser; calling `OWNER_TEST_PHONE`
+  from a request page.

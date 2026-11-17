@@ -6,3 +6,4 @@
 export * from "./maps";
 export * from "./twilio";
 export * from "./voice";
+export * from "./softphone";
