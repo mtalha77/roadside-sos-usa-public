@@ -75,7 +75,8 @@ export function SoftphoneDock({ initialPresence }: { initialPresence: Presence }
 
   const changePresence = useCallback(async (p: Presence) => {
     setPresence(p);
-    await setPresenceAction(p);
+    // A request cut off by leaving the page is fine: the next screen saves it again.
+    await setPresenceAction(p).catch(() => null);
   }, []);
 
   const finish = useCallback(() => {
@@ -89,8 +90,10 @@ export function SoftphoneDock({ initialPresence }: { initialPresence: Presence }
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const tok = await softphoneTokenAction();
+      // Leaving the page aborts this request (Safari reports "Load failed"): not an error.
+      const tok = await softphoneTokenAction().catch(() => null);
       if (cancelled) return;
+      if (!tok) return setMode("error");
       if (tok.mode === "forbidden") return setMode("forbidden");
       if (tok.mode === "fake") return setMode("fake");
       try {
@@ -109,13 +112,15 @@ export function SoftphoneDock({ initialPresence }: { initialPresence: Presence }
           setState({ kind: "ringing", call, info: null });
           setOpen(true);
           call.on("cancel", () => setState({ kind: "idle" }));
-          void callInfoAction(sid).then((info) =>
-            setState((s) => (s.kind === "ringing" && s.call === call ? { ...s, info } : s)),
-          );
+          void callInfoAction(sid)
+            .then((info) =>
+              setState((s) => (s.kind === "ringing" && s.call === call ? { ...s, info } : s)),
+            )
+            .catch(() => null);
         });
         d.on("tokenWillExpire", async () => {
-          const next = await softphoneTokenAction();
-          if (next.mode === "real") d.updateToken(next.token);
+          const next = await softphoneTokenAction().catch(() => null);
+          if (next?.mode === "real") d.updateToken(next.token);
         });
         await d.register();
         device.current = d;
