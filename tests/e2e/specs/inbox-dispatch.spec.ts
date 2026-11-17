@@ -78,7 +78,7 @@ test.describe("inbox and manual dispatch", () => {
 
     // Intake: name, service and address (the fake geocoder places it at the market centre).
     await panel.getByLabel("Name").fill("E2E Driver");
-    await panel.getByLabel("Service", { exact: true }).selectOption({ index: 1 });
+    await panel.locator("select[name=service]").selectOption({ index: 1 });
     await panel.getByLabel("Address or cross streets").fill("1200 Main St");
     await panel.getByRole("button", { name: "Save intake" }).click();
     await expect(panel.getByText("Saved.").first()).toBeVisible();
