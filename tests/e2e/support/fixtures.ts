@@ -49,9 +49,14 @@ export const test = base.extend<{
         errors.push(`console: ${msg.text()}${at ? ` (${at.replace(/[?#].*$/, "")})` : ""}`);
       });
       page.on("pageerror", (err) => {
-        // WebKit reports a Next.js link prefetch (`_rsc=` request) that a navigation cancelled as
-        // "due to access control checks". It is not an app error; anything else still fails.
-        if (/[?&]_rsc=\S* due to access control checks\.$/.test(err.message)) return;
+        // WebKit reports a request to our own app that a navigation cancelled (a Next.js prefetch,
+        // a poll, a server action) as "<url> due to access control checks". It is not an app
+        // error; the same message for any other host, and every other error, still fails.
+        const cancelled = /^\S+ due to access control checks\.$/.test(err.message);
+        const ownHosts = Object.values(appUrls)
+          .filter((u): u is string => Boolean(u))
+          .map((u) => new URL(u).host);
+        if (cancelled && ownHosts.some((h) => err.message.includes(`${h}/`))) return;
         errors.push(`pageerror: ${err.message}`);
       });
       await use(errors);
