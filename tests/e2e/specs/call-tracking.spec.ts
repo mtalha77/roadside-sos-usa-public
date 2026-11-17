@@ -73,7 +73,12 @@ test.describe("Twilio voice webhooks", () => {
     await page.getByRole("textbox", { name: "Number", exact: true }).fill(trackingNumber);
     await page.getByLabel("Source").selectOption("staging_test");
     await page.getByRole("button", { name: "Add number" }).click();
-    await expect(page.getByText(`Added ${trackingNumber}.`)).toBeVisible();
+    // Only 100 fictional 555-01xx numbers exist, so earlier runs may have added this one already.
+    await expect(
+      page
+        .getByText(`Added ${trackingNumber}.`)
+        .or(page.getByText("That number is already tracked.")),
+    ).toBeVisible();
 
     const voice = new URL("/api/twilio/voice", appUrls.admin).toString();
     const sid = callSid();
