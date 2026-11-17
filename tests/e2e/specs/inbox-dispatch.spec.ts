@@ -87,7 +87,7 @@ test.describe("inbox and manual dispatch", () => {
 
     // No email on a phone request: the location link is read on the call and logged.
     await panel.getByRole("button", { name: "Location link" }).click();
-    await expect(panel.getByText(/Open this link and tap Share my location/)).toBeVisible();
+    await expect(panel.getByText(/and type the code \d{3} \d{3}/)).toBeVisible();
     await panel.getByRole("button", { name: "I read it to the driver" }).click();
     await expect(panel.getByText("Logged on the timeline.")).toBeVisible();
 
