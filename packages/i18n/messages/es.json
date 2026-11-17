@@ -1109,11 +1109,7 @@
           "service": "Ese servicio no se ofrece en este mercado.",
           "address": "No encontramos esa dirección.",
           "quote": "Agrega el precio y el tiempo de llegada.",
-          "generic": "Algo salió mal. Inténtalo de nuevo.",
-          "noNumber": "Este mercado aún no tiene número de teléfono.",
-          "optedOut": "El conductor se dio de baja de los textos.",
-          "failed": "No se pudo enviar el texto.",
-          "held": "Retenido, no enviado: horario de silencio (9 p. m. a 8 a. m.) o registro con operadores pendiente. Aparece en el historial."
+          "generic": "Algo salió mal. Inténtalo de nuevo."
         }
       },
       "tell": {
@@ -1128,16 +1124,6 @@
         "linkScript": "Abre este enlace y toca Compartir mi ubicación: {link}",
         "logged": "Anotado en el historial.",
         "codeScript": "Entra a {site} y escribe el código {code}, luego toca Compartir mi ubicación."
-      },
-      "textIn": "Texto nuevo",
-      "textsTitle": "Textos",
-      "texts": {
-        "savedReplies": "Respuestas guardadas",
-        "chooseReply": "Elige una respuesta guardada",
-        "message": "Mensaje",
-        "length": "{count} / 640 caracteres",
-        "send": "Enviar texto",
-        "sendLink": "Enviar enlace de ubicación"
       }
     },
     "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a conductores quedan retenidos hasta su aprobación."

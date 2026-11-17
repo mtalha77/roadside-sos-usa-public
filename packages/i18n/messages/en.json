@@ -1109,11 +1109,7 @@
           "service": "That service isn't offered in this market.",
           "address": "We couldn't find that address.",
           "quote": "Add the price and ETA for a quote.",
-          "generic": "Something went wrong. Try again.",
-          "noNumber": "This market has no phone number yet.",
-          "optedOut": "The driver opted out of texts.",
-          "failed": "The text could not be sent.",
-          "held": "Held, not sent: quiet hours (9pm to 8am) or carrier registration pending. It shows on the timeline."
+          "generic": "Something went wrong. Try again."
         }
       },
       "tell": {
@@ -1128,16 +1124,6 @@
         "linkScript": "Open this link and tap Share my location: {link}",
         "logged": "Logged on the timeline.",
         "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
-      },
-      "textIn": "New text",
-      "textsTitle": "Texts",
-      "texts": {
-        "savedReplies": "Saved replies",
-        "chooseReply": "Choose a saved reply",
-        "message": "Message",
-        "length": "{count} / 640 characters",
-        "send": "Send text",
-        "sendLink": "Send location link"
       }
     },
     "textingLimited": "Texting limited: carrier registration pending. Texts to drivers are held until it's approved."
