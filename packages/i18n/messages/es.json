@@ -1063,7 +1063,8 @@
         "sendLink": "Enlace de ubicación",
         "assignedScript": "{provider} va en camino. Precio cotizado {price}, unos {eta} minutos.",
         "linkScript": "Abre este enlace y toca Compartir mi ubicación: {link}",
-        "logged": "Anotado en el historial."
+        "logged": "Anotado en el historial.",
+        "codeScript": "Entra a {site} y escribe el código {code}, luego toca Compartir mi ubicación."
       }
     }
   },
@@ -1139,7 +1140,7 @@
       },
       "body": {
         "assigned": "Hola {first_name}, {provider} va en camino. Precio cotizado {price}, unos {eta} minutos.",
-        "locationLink": "Hola {first_name}, abre el enlace de abajo y comparte tu ubicación exacta para enviarte ayuda."
+        "locationLink": "Hola {first_name}, abre el enlace de abajo y comparte tu ubicación exacta para enviarte ayuda. Si el enlace no abre, entra a la página /l de nuestro sitio y escribe el código {code}."
       },
       "open": "Abrir: {url}",
       "footer": "Recibes este email porque pediste asistencia en carretera. Responde a este email si algo está mal."
@@ -3053,17 +3054,22 @@
     "send": "Enviar mi ubicación",
     "safety": "Si estás en peligro o en el tráfico, llama primero al 911.",
     "doneTitle": "Gracias, ya tenemos tu ubicación",
-    "doneBody": "El despachador ya la ve. Mantente seguro y con el teléfono encendido; te escribiremos o llamaremos.",
+    "doneBody": "El despachador ya la puede ver. Mantente a salvo y con el teléfono encendido; te llamaremos.",
     "expiredTitle": "Este enlace venció",
-    "expiredBody": "Los enlaces de ubicación duran 2 horas. Responde a nuestro texto o llámanos y te enviaremos uno nuevo.",
+    "expiredBody": "Los enlaces de ubicación funcionan 2 horas. Llámanos y te daremos uno nuevo.",
     "errorTitle": "Algo salió mal",
-    "errorBody": "Inténtalo de nuevo o responde a nuestro texto.",
+    "errorBody": "Inténtalo de nuevo o llámanos.",
     "errors": {
       "location": "Comparte tu ubicación o escribe una dirección.",
-      "address": "No encontramos esa dirección. Agrega la ciudad o el cruce de calles.",
+      "address": "Escribe una dirección con número, un cruce de calles o una carretera con salida.",
       "photo": "No se pudo agregar esa foto (usa JPEG, PNG o HEIC de menos de 8 MB).",
       "limit": "Demasiados intentos. Espera unos minutos.",
-      "generic": "Algo salió mal. Inténtalo de nuevo."
-    }
+      "generic": "Algo salió mal. Inténtalo de nuevo.",
+      "code": "Ese código no funcionó. Revísalo con el despachador."
+    },
+    "codeTitle": "Escribe tu código de ubicación",
+    "codeIntro": "Escribe el código de 6 dígitos que te leyó el despachador.",
+    "code": "Código de 6 dígitos",
+    "codeSubmit": "Continuar"
   }
 }

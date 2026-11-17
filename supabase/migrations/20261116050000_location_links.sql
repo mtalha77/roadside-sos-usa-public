@@ -1,4 +1,5 @@
--- RSOS-023: the driver's location link (/l/<token>). The website has no service key, so the page
+-- RSOS-023: the driver's location link (/l/<token>), plus a 6-digit code the dispatcher can read on
+-- the call (no SMS in batch 4): the driver opens /l on the website and types it. The website has no service key, so the page
 -- reads and submits through definer functions that check the token: unguessable (22+ characters),
 -- 2 hours, one request. The optional vehicle photo goes to the private job-photos bucket under
 -- loc/<token>/, which anonymous visitors may write only while the token is valid.
@@ -76,3 +77,18 @@ create policy "staff read vehicle photos in their markets" on storage.objects fo
          and (storage.foldername(name))[1] = 'loc'
          and exists (select 1 from public.location_links l join public.requests r on r.id = l.request_id
                      where l.token = (storage.foldername(name))[2] and public.staff_can_access_market(r.market_id)));
+
+-- Spoken codes: 6 digits, unique among unused links, only as good as the link (2 hours, one
+-- request); the website rate-limits lookups per IP.
+alter table public.location_links add column code text check (code ~ '^[0-9]{6}$');
+create unique index location_links_live_code_idx on public.location_links (code) where used_at is null;
+
+create function public.location_link_for_code(p_code text) returns text
+language sql stable security definer set search_path = '' as $$
+  select l.token from public.location_links l
+  where p_code ~ '^[0-9]{6}$' and l.code = p_code and l.used_at is null
+    and public.location_link_valid(l.token)
+  limit 1;
+$$;
+revoke all on function public.location_link_for_code(text) from public;
+grant execute on function public.location_link_for_code(text) to anon, authenticated;

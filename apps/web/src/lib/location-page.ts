@@ -6,7 +6,8 @@ import { getMessages, type Locale } from "@rsos/i18n";
 /**
  * The location link page (RSOS-023) as one small HTML document: inline CSS from our design tokens
  * and a ~3 KB script (CSP nonce), so it works on slow 3G with almost no JavaScript. Google Maps
- * loads only after the driver taps "Share my location", and only when a browser key exists.
+ * loads only after the driver taps "Share my location", and only when Maps is switched on (keys
+ * and MAPS_ENABLED; off in batch 4, so the browser's GPS coordinates are shown as text).
  */
 
 const esc = (s: string) =>
@@ -105,4 +106,26 @@ function map(lat,lng){if(!K)return;window.__rsosMap=function(){google.maps.impor
 $("share").addEventListener("click",function(){if(!navigator.geolocation){$("status").textContent=T.unsupported;$("address").focus();return;}$("status").textContent=T.finding;navigator.geolocation.getCurrentPosition(function(p){set(p.coords.latitude,p.coords.longitude);map(p.coords.latitude,p.coords.longitude);$("send").className="btn primary";$("share").className="btn outline";$("send").focus();},function(){$("status").textContent=T.denied;$("address").focus();},{enableHighAccuracy:true,timeout:15000,maximumAge:30000});});
 })();`;
   return shell(o.locale, t.title, body, o.nonce, script);
+}
+
+/** /l: the driver types the 6-digit code the dispatcher read on the call (no SMS in batch 4). */
+export function codePage(locale: Locale, nonce: string, error: string | null): string {
+  const t: PageText = getMessages(locale).locationLink;
+  const err = error
+    ? `<p role="alert" class="alert bad">${esc(t.errors[error as keyof PageText["errors"]] ?? t.errors.generic)}</p>`
+    : "";
+  return shell(
+    locale,
+    t.codeTitle,
+    `<p class="brand">${esc(brand.name)}</p>
+<h1>${esc(t.codeTitle)}</h1>
+<p>${esc(t.codeIntro)}</p>
+${err}
+<form class="card" method="post" action="/l">
+  <label>${esc(t.code)}<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 ]{6,7}" maxlength="7" required></label>
+  <button type="submit" class="btn primary">${esc(t.codeSubmit)}</button>
+</form>
+<p class="muted">${esc(t.safety)}</p>`,
+    nonce,
+  );
 }

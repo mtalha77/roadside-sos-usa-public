@@ -1063,7 +1063,8 @@
         "sendLink": "Location link",
         "assignedScript": "{provider} is on the way. Quoted price {price}, about {eta} minutes.",
         "linkScript": "Open this link and tap Share my location: {link}",
-        "logged": "Logged on the timeline."
+        "logged": "Logged on the timeline.",
+        "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
       }
     }
   },
@@ -1139,7 +1140,7 @@
       },
       "body": {
         "assigned": "Hi {first_name}, {provider} is on the way. Quoted price {price}, about {eta} minutes.",
-        "locationLink": "Hi {first_name}, please open the link below and share your exact location so we can send help."
+        "locationLink": "Hi {first_name}, please open the link below and share your exact location so we can send help. If the link doesn't open, go to our website's /l page and type the code {code}."
       },
       "open": "Open: {url}",
       "footer": "You get this email because you asked for roadside help. Reply to this email if anything is wrong."
@@ -3053,17 +3054,22 @@
     "send": "Send my location",
     "safety": "If you are in danger or in traffic, call 911 first.",
     "doneTitle": "Thanks, we have your location",
-    "doneBody": "The dispatcher can see it now. Stay safe and keep your phone on; we'll text or call you.",
+    "doneBody": "The dispatcher can see it now. Stay safe and keep your phone on; we'll call you.",
     "expiredTitle": "This link has expired",
-    "expiredBody": "Location links work for 2 hours. Reply to our text or call us and we'll send a new one.",
+    "expiredBody": "Location links work for 2 hours. Call us and we'll give you a new one.",
     "errorTitle": "Something went wrong",
-    "errorBody": "Please try again, or reply to our text.",
+    "errorBody": "Please try again, or call us.",
     "errors": {
       "location": "Share your location or type an address.",
-      "address": "We couldn't find that address. Add a city or cross streets.",
+      "address": "Type a street address with a number, cross streets, or a highway and exit.",
       "photo": "That photo couldn't be added (use a JPEG, PNG or HEIC under 8 MB).",
       "limit": "Too many tries. Wait a few minutes.",
-      "generic": "Something went wrong. Please try again."
-    }
+      "generic": "Something went wrong. Please try again.",
+      "code": "That code didn't work. Check it with the dispatcher."
+    },
+    "codeTitle": "Enter your location code",
+    "codeIntro": "Type the 6-digit code the dispatcher read to you.",
+    "code": "6-digit code",
+    "codeSubmit": "Continue"
   }
 }

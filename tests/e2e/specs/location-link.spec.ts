@@ -2,8 +2,9 @@ import { createHmac, randomBytes } from "node:crypto";
 import { signInAsDemo } from "../support/demo";
 import { appUrls, expect, expectNoA11yViolations, readOnly, test } from "../support/fixtures";
 
-// RSOS-023 on previews: the dispatcher texts a location link (fake Twilio records the text), the
-// driver opens it, shares GPS, and the request's location and timeline update in the inbox.
+// RSOS-023 on previews (no SMS in batch 4): a missed call opens a phone request without an email,
+// so the dispatcher reads a 6-digit code on the call; the driver types it at /l, shares GPS, and
+// the request's location and timeline update in the inbox.
 
 const FAKE_TOKEN = "fake-twilio-auth-token-for-tests";
 const sign = (url: string, params: Record<string, string>) =>
@@ -19,7 +20,7 @@ const fake555 = () => `+1210555${String(Math.floor(Math.random() * 1000)).padSta
 test.describe("location link", () => {
   test.skip(!appUrls.admin || !appUrls.web, "Needs admin and website URLs");
 
-  test("a texted link shares the driver's GPS location with the dispatcher", async ({
+  test("a code read on the call shares the driver's GPS location with the dispatcher", async ({
     page,
     browser,
     request,
@@ -31,19 +32,22 @@ test.describe("location link", () => {
     const tracking = fake555();
     const driver = fake555();
     await page.goto(new URL("/settings?tab=phones", appUrls.admin).toString());
-    await page.getByLabel("Number").fill(tracking);
+    await page.getByRole("textbox", { name: "Number", exact: true }).fill(tracking);
     await page.getByLabel("Source").selectOption("staging_test");
     await page.getByRole("button", { name: "Add number" }).click();
     await expect(page.getByText(`Added ${tracking}.`)).toBeVisible();
 
-    const url = new URL("/api/twilio/messages", appUrls.admin).toString();
-    const params = {
-      MessageSid: `SM${randomBytes(16).toString("hex")}`,
-      From: driver,
-      To: tracking,
-      Body: "Need a tow please",
+    // A missed call from the driver opens an urgent phone request.
+    const post = (path: string, params: Record<string, string>) => {
+      const url = new URL(path, appUrls.admin).toString();
+      return request.post(url, {
+        form: params,
+        headers: { "X-Twilio-Signature": sign(url, params) },
+      });
     };
-    await request.post(url, { form: params, headers: { "X-Twilio-Signature": sign(url, params) } });
+    const CallSid = `CA${randomBytes(16).toString("hex")}`;
+    await post("/api/twilio/voice", { CallSid, From: driver, To: tracking, CallStatus: "ringing" });
+    await post("/api/twilio/voice/status", { CallSid, CallStatus: "completed", CallDuration: "5" });
 
     await page.goto(new URL("/inbox", appUrls.admin).toString());
     await page
@@ -51,10 +55,12 @@ test.describe("location link", () => {
       .first()
       .click({ timeout: 30_000 });
     const panel = page.getByRole("article");
-    await panel.getByRole("button", { name: "Send location link" }).click();
-    const sent = panel.getByText(/\/l\/[A-Za-z0-9_-]{22,}/).first();
-    await expect(sent).toBeVisible();
-    const token = /\/l\/([A-Za-z0-9_-]{22,})/.exec((await sent.textContent()) ?? "")![1]!;
+    await panel.getByRole("button", { name: "Location link" }).click();
+    const script = panel.getByText(/and type the code \d{3} \d{3}/);
+    await expect(script).toBeVisible();
+    const code = /code (\d{3}) (\d{3})/.exec((await script.textContent()) ?? "")!;
+    await panel.getByRole("button", { name: "I read it to the driver" }).click();
+    await expect(panel.getByText("Logged on the timeline.")).toBeVisible();
 
     // The driver opens the link on their phone, with location allowed.
     const phone = await browser.newContext({
@@ -63,8 +69,16 @@ test.describe("location link", () => {
       viewport: { width: 375, height: 812 },
     });
     const driverPage = await phone.newPage();
-    const res = await driverPage.goto(new URL(`/l/${token}`, appUrls.web).toString());
+    const res = await driverPage.goto(new URL("/l", appUrls.web).toString());
     expect(res?.status()).toBe(200);
+    await expectNoA11yViolations(driverPage);
+    // A wrong code is refused; the one read on the call opens the location page.
+    await driverPage.getByLabel("6-digit code").fill("000000");
+    await driverPage.getByRole("button", { name: "Continue" }).click();
+    await expect(driverPage.getByText(/That code didn't work/)).toBeVisible();
+    await driverPage.getByLabel("6-digit code").fill(`${code[1]} ${code[2]}`);
+    await driverPage.getByRole("button", { name: "Continue" }).click();
+    await expect(driverPage).toHaveURL(/\/l\/[A-Za-z0-9_-]{22,}$/);
     // Almost no JavaScript before the map: one small inline script.
     const scripts = await driverPage.locator("script[src]").count();
     expect(scripts).toBe(0);

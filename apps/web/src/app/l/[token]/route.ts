@@ -3,6 +3,7 @@ import { createPublicSupabase } from "@rsos/db/public";
 import { checkRateLimits, rateLimitKeys } from "@rsos/core/security";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { isPlausibleAddress, mapsEnabled } from "@rsos/core/adapters";
 import { maps, rateLimitStore } from "@/lib/adapters";
 import { messagePage, sharePage } from "@/lib/location-page";
 
@@ -54,7 +55,7 @@ export async function GET(
       token,
       currentAddress: link.current_address,
       center: { lat: link.center_lat, lng: link.center_lng },
-      mapsKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || null,
+      mapsKey: mapsEnabled() ? (process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? null) : null,
       error: error && /^[a-z]{2,20}$/.test(error) ? error : null,
     }),
   );
@@ -105,8 +106,10 @@ export async function POST(
   let { lat, lng } = fields.data;
   let address = fields.data.address;
   if (lat === undefined || lng === undefined) {
-    // No GPS: find the typed address near the market.
+    // No GPS: a typed address, checked for format. The dummy maps adapter places it at the market
+    // centre (no geocoding while Google Maps is off); the dispatcher confirms it on the call.
     if (address.length < 3) return back("location");
+    if (!isPlausibleAddress(address)) return back("address");
     const place = await maps().geocode(address, { lat: link.center_lat, lng: link.center_lng });
     if (!place) return back("address");
     ({ lat, lng } = place);
