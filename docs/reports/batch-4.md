@@ -18,7 +18,7 @@
 | RSOS-034b Real inbox and manual dispatch            | Done                     | [#179](https://github.com/mtalha77/roadside-sos-usa-public/pull/179) |
 | RSOS-023 Location link                              | Done                     | [#180](https://github.com/mtalha77/roadside-sos-usa-public/pull/180) |
 | RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Done (texting off)       | (this PR)                                                            |
-| RSOS-031 Ad tracking and attribution                | Built, merge BLOCKED     | branch `rsos-031-ad-tracking`                                        |
+| RSOS-031 Ad tracking and attribution                | Done (ad keys missing)   | (this PR)                                                            |
 | RSOS-089-prep Test campaign kit                     | Built, merge BLOCKED     | branch `rsos-089-campaign-kit`                                       |
 | RSOS-036 Release QA and first production release    | Not released (see below) | `docs/reports/release-1.md`                                          |
 
@@ -232,6 +232,39 @@ Applies the "Scope changes from the owner" section of the updated batch file (co
   - e2e `inbox-dispatch.spec.ts`: a signed missed call becomes an urgent item; the dispatcher
     claims it, records the intake, reads the location link and ends it with a reason.
 - Owner: nothing.
+
+### RSOS-031: Ad tracking and attribution
+
+- **First touch.** On a visitor's first request, the website's proxy stores the click ids (gclid,
+  gbraid, wbraid, fbclid, msclkid), the UTM fields, the landing page, the referrer host and the
+  market. They go in an HttpOnly cookie for 90 days, and the visit is counted per day, market and
+  source (`record_visit`).
+  - Get Help merges this first touch into the request's attribution.
+  - The source cookie also drives the call-tracking number swap.
+- **Conversion events, server side.** Database triggers write one event per id, deduplicated:
+  request submitted, call started, call qualified (over 60 seconds), job assigned, job completed.
+  Each carries the click ids, the source and the job value.
+- **Admin > Marketing** (marketing, finance, ops and super admins):
+  - per market and source for a date range: visits, calls, qualified calls, forms, requests,
+    assigned, completed, spend, cost per lead and per job;
+  - daily ad spend entry (manual until the ad APIs are connected);
+  - a **Google Ads offline conversions** CSV download.
+- **Meta Conversions API**: sent by Vercel Cron, only with `META_CAPI_ENABLED=true` and its keys
+  (off now; event ids dedupe with the browser pixel).
+- **Google Tag Manager** loads only after the visitor accepts analytics cookies (Consent Mode
+  defaults to denied) and only with `NEXT_PUBLIC_GTM_ID`. It also gets a `call_click` event.
+  Nothing extra loads on marketing pages without consent (the 150 KB budget holds).
+- Real or demo: real (server-side counting and events). Keys: GTM, GA4, Google Ads and Meta ids
+  are missing, so nothing goes to ad platforms yet. Tested:
+  - unit `analytics.test.ts` (CSV format, CAPI payload and hashing, off without keys);
+  - pgTAP `025_ad_tracking` (RLS: marketing reads, dispatchers cannot enter spend; triggers and
+    dedupe; the report counts a qualified call);
+  - e2e `ad-tracking.spec.ts`.
+- Owner:
+  - add `NEXT_PUBLIC_GTM_ID` (and GA4, Google Ads conversion ids, Meta pixel) when the campaign
+    accounts exist;
+  - `CRON_SECRET` on rsos-admin;
+  - upload the offline conversions CSV in Google Ads weekly, or connect the API later.
 
 ### RSOS-035: Texts and emails, opt-outs, A2P 10DLC (texting built behind a flag, off)
 
