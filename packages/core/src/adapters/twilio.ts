@@ -239,7 +239,6 @@ export function chooseTexts(env: Env = process.env): TextAdapter {
 
 /** SMS segments: 160 GSM-7 characters (153 when split), 70 UCS-2 (67 when split). */
 export function segmentCount(body: string): number {
-  // eslint-disable-next-line no-control-regex
   const gsm = /^[\n\r -~£¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ¡ÄÖÑÜ§¿äöñüà€^{}\\[\]~|]*$/.test(body);
   const len = [...body].length;
   if (len === 0) return 0;
