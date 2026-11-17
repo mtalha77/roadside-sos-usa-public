@@ -14,6 +14,7 @@ export async function MobileBar({ market }: { market: SiteMarket | null }) {
           <Button asChild variant="outline" className="flex-1">
             <a
               href={`tel:${market.phone}`}
+              data-dni={market.slug}
               aria-label={t("callMarket", { phone: formatPhone(market.phone) })}
             >
               <Phone aria-hidden="true" className="size-5" />

@@ -1,4 +1,5 @@
 import { buildCsp, createNonce } from "@rsos/config/security";
+import { SOURCE_COOKIE, SOURCE_COOKIE_MAX_AGE, sourceForVisit } from "@rsos/core/adapters";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -51,6 +52,21 @@ export async function proxy(request: NextRequest) {
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+  // Call tracking (RSOS-030): remember the first-touch source of a visit with ad or campaign
+  // parameters for 90 days, so the site shows that source's number. First party, no personal data.
+  const q = request.nextUrl.searchParams;
+  if (isPage && !request.cookies.has(SOURCE_COOKIE)) {
+    const visit = Object.fromEntries(
+      ["gclid", "gbraid", "wbraid", "fbclid", "msclkid", "utm_source"].map((k) => [k, q.get(k)]),
+    );
+    if (Object.values(visit).some(Boolean))
+      response.cookies.set(SOURCE_COOKIE, sourceForVisit(visit), {
+        path: "/",
+        maxAge: SOURCE_COOKIE_MAX_AGE,
+        sameSite: "lax",
+        secure: request.nextUrl.protocol === "https:",
+      });
+  }
   return response;
 }
 

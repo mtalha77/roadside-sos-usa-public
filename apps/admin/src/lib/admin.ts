@@ -35,6 +35,7 @@ export async function getAdminContext() {
     .filter((s) => markets.some((m) => m.slug === s));
   return {
     email: claims?.email ?? "",
+    userId: claims?.sub ?? "",
     role: claims?.staff_role ?? "",
     markets,
     selected: chosen.length ? chosen : markets.map((m) => m.slug),

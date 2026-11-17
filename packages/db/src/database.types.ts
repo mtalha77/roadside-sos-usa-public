@@ -1,6 +1,3 @@
-// GENERATED from rsos-dev by `pnpm --filter @rsos/db gen:types`. Do not edit by hand.
-// Regenerate after every migration that changes the public schema.
-
 export type Json =
   | string
   | number
@@ -56,9 +53,24 @@ export type Database = {
         ]
       }
       api_usage: {
-        Row: { alerted_at: string | null; day: string; units: number; vendor: string }
-        Insert: { alerted_at?: string | null; day: string; units?: number; vendor: string }
-        Update: { alerted_at?: string | null; day?: string; units?: number; vendor?: string }
+        Row: {
+          alerted_at: string | null
+          day: string
+          units: number
+          vendor: string
+        }
+        Insert: {
+          alerted_at?: string | null
+          day: string
+          units?: number
+          vendor: string
+        }
+        Update: {
+          alerted_at?: string | null
+          day?: string
+          units?: number
+          vendor?: string
+        }
         Relationships: []
       }
       attributions: {
@@ -179,6 +191,97 @@ export type Database = {
           },
         ]
       }
+      calls: {
+        Row: {
+          answered_at: string | null
+          auto_text_sent_at: string | null
+          caller_line_type: string | null
+          created_at: string
+          direction: Database["public"]["Enums"]["call_direction"]
+          duration_sec: number | null
+          ended_at: string | null
+          from_phone: string
+          id: string
+          market_id: string
+          outcome: Database["public"]["Enums"]["call_outcome"]
+          recording_duration_sec: number | null
+          recording_sid: string | null
+          request_id: string | null
+          source: Database["public"]["Enums"]["phone_purpose"] | null
+          staff_user_id: string | null
+          to_phone: string
+          tracking_number_id: string | null
+          twilio_call_sid: string
+          voicemail_transcript: string | null
+        }
+        Insert: {
+          answered_at?: string | null
+          auto_text_sent_at?: string | null
+          caller_line_type?: string | null
+          created_at?: string
+          direction: Database["public"]["Enums"]["call_direction"]
+          duration_sec?: number | null
+          ended_at?: string | null
+          from_phone: string
+          id?: string
+          market_id: string
+          outcome?: Database["public"]["Enums"]["call_outcome"]
+          recording_duration_sec?: number | null
+          recording_sid?: string | null
+          request_id?: string | null
+          source?: Database["public"]["Enums"]["phone_purpose"] | null
+          staff_user_id?: string | null
+          to_phone: string
+          tracking_number_id?: string | null
+          twilio_call_sid: string
+          voicemail_transcript?: string | null
+        }
+        Update: {
+          answered_at?: string | null
+          auto_text_sent_at?: string | null
+          caller_line_type?: string | null
+          created_at?: string
+          direction?: Database["public"]["Enums"]["call_direction"]
+          duration_sec?: number | null
+          ended_at?: string | null
+          from_phone?: string
+          id?: string
+          market_id?: string
+          outcome?: Database["public"]["Enums"]["call_outcome"]
+          recording_duration_sec?: number | null
+          recording_sid?: string | null
+          request_id?: string | null
+          source?: Database["public"]["Enums"]["phone_purpose"] | null
+          staff_user_id?: string | null
+          to_phone?: string
+          tracking_number_id?: string | null
+          twilio_call_sid?: string
+          voicemail_transcript?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calls_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calls_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calls_tracking_number_id_fkey"
+            columns: ["tracking_number_id"]
+            isOneToOne: false
+            referencedRelation: "market_phone_numbers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consents: {
         Row: {
           consent_type: Database["public"]["Enums"]["consent_type"]
@@ -187,6 +290,7 @@ export type Database = {
           id: string
           ip: unknown
           phone: string
+          policy_document: string | null
           policy_version: string
           request_id: string | null
           source: string
@@ -199,6 +303,7 @@ export type Database = {
           id?: string
           ip?: unknown
           phone: string
+          policy_document?: string | null
           policy_version: string
           request_id?: string | null
           source: string
@@ -211,12 +316,20 @@ export type Database = {
           id?: string
           ip?: unknown
           phone?: string
+          policy_document?: string | null
           policy_version?: string
           request_id?: string | null
           source?: string
           user_agent?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "consents_policy_version_fk"
+            columns: ["policy_document", "policy_version"]
+            isOneToOne: false
+            referencedRelation: "policy_versions"
+            referencedColumns: ["document", "version"]
+          },
           {
             foreignKeyName: "consents_request_id_fkey"
             columns: ["request_id"]
@@ -270,6 +383,132 @@ export type Database = {
           },
         ]
       }
+      cookie_consents: {
+        Row: {
+          ads: boolean
+          analytics: boolean
+          browser_id: string
+          created_at: string
+          gpc: boolean
+          id: string
+          policy_document: string
+          policy_version: string
+        }
+        Insert: {
+          ads: boolean
+          analytics: boolean
+          browser_id: string
+          created_at?: string
+          gpc?: boolean
+          id?: string
+          policy_document?: string
+          policy_version: string
+        }
+        Update: {
+          ads?: boolean
+          analytics?: boolean
+          browser_id?: string
+          created_at?: string
+          gpc?: boolean
+          id?: string
+          policy_document?: string
+          policy_version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cookie_consents_policy_document_policy_version_fkey"
+            columns: ["policy_document", "policy_version"]
+            isOneToOne: false
+            referencedRelation: "policy_versions"
+            referencedColumns: ["document", "version"]
+          },
+        ]
+      }
+      demo_accounts: {
+        Row: {
+          created_at: string
+          role: string
+          totp_secret: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          role: string
+          totp_secret?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          role?: string
+          totp_secret?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      dispatcher_shifts: {
+        Row: {
+          end_minute: number
+          id: string
+          start_minute: number
+          time_zone: string
+          user_id: string
+          weekday: number
+        }
+        Insert: {
+          end_minute: number
+          id?: string
+          start_minute: number
+          time_zone?: string
+          user_id: string
+          weekday: number
+        }
+        Update: {
+          end_minute?: number
+          id?: string
+          start_minute?: number
+          time_zone?: string
+          user_id?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispatcher_shifts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "staff_members"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      dispatcher_status: {
+        Row: {
+          on_duty_now: boolean
+          presence: Database["public"]["Enums"]["dispatcher_presence"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          on_duty_now?: boolean
+          presence?: Database["public"]["Enums"]["dispatcher_presence"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          on_duty_now?: boolean
+          presence?: Database["public"]["Enums"]["dispatcher_presence"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispatcher_status_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "staff_members"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       email_second_step_codes: {
         Row: {
           attempts: number
@@ -297,32 +536,114 @@ export type Database = {
         }
         Relationships: []
       }
+      location_links: {
+        Row: {
+          created_at: string
+          expires_at: string
+          request_id: string
+          token: string
+          used_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          request_id: string
+          token: string
+          used_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          request_id?: string
+          token?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_links_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_pages: {
+        Row: {
+          areas: string[]
+          faqs: Json
+          headline: string
+          highways: string[]
+          intro: string
+          local_tips: string[]
+          locale: string
+          market_id: string
+          updated_at: string
+        }
+        Insert: {
+          areas?: string[]
+          faqs?: Json
+          headline: string
+          highways?: string[]
+          intro: string
+          local_tips?: string[]
+          locale?: string
+          market_id: string
+          updated_at?: string
+        }
+        Update: {
+          areas?: string[]
+          faqs?: Json
+          headline?: string
+          highways?: string[]
+          intro?: string
+          local_tips?: string[]
+          locale?: string
+          market_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_pages_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       market_phone_numbers: {
         Row: {
           created_at: string
           id: string
           is_active: boolean
+          label: string | null
           market_id: string
           phone_number: string
           purpose: Database["public"]["Enums"]["phone_purpose"]
+          synced_at: string | null
           twilio_sid: string | null
         }
         Insert: {
           created_at?: string
           id?: string
           is_active?: boolean
+          label?: string | null
           market_id: string
           phone_number: string
           purpose: Database["public"]["Enums"]["phone_purpose"]
+          synced_at?: string | null
           twilio_sid?: string | null
         }
         Update: {
           created_at?: string
           id?: string
           is_active?: boolean
+          label?: string | null
           market_id?: string
           phone_number?: string
           purpose?: Database["public"]["Enums"]["phone_purpose"]
+          synced_at?: string | null
           twilio_sid?: string | null
         }
         Relationships: [
@@ -331,6 +652,86 @@ export type Database = {
             columns: ["market_id"]
             isOneToOne: false
             referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_plans: {
+        Row: {
+          created_at: string
+          effective_from: string
+          fee_discount_bps: number
+          id: string
+          market_id: string
+          plan: Database["public"]["Enums"]["plan_kind"]
+          price_max_cents: number
+          price_min_cents: number
+        }
+        Insert: {
+          created_at?: string
+          effective_from?: string
+          fee_discount_bps?: number
+          id?: string
+          market_id: string
+          plan: Database["public"]["Enums"]["plan_kind"]
+          price_max_cents: number
+          price_min_cents: number
+        }
+        Update: {
+          created_at?: string
+          effective_from?: string
+          fee_discount_bps?: number
+          id?: string
+          market_id?: string
+          plan?: Database["public"]["Enums"]["plan_kind"]
+          price_max_cents?: number
+          price_min_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_plans_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_service_notes: {
+        Row: {
+          locale: string
+          market_id: string
+          note: string
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          locale?: string
+          market_id: string
+          note: string
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          locale?: string
+          market_id?: string
+          note?: string
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_service_notes_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_service_notes_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
             referencedColumns: ["id"]
           },
         ]
@@ -392,6 +793,7 @@ export type Database = {
       markets: {
         Row: {
           boundary: unknown
+          call_recording_enabled: boolean
           center: unknown
           coverage_hours: Json
           created_at: string
@@ -408,6 +810,7 @@ export type Database = {
         }
         Insert: {
           boundary: unknown
+          call_recording_enabled?: boolean
           center: unknown
           coverage_hours?: Json
           created_at?: string
@@ -424,6 +827,7 @@ export type Database = {
         }
         Update: {
           boundary?: unknown
+          call_recording_enabled?: boolean
           center?: unknown
           coverage_hours?: Json
           created_at?: string
@@ -437,6 +841,30 @@ export type Database = {
           support_phone?: string | null
           time_zone?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      policy_versions: {
+        Row: {
+          created_at: string
+          document: string
+          published_at: string | null
+          status: string
+          version: string
+        }
+        Insert: {
+          created_at?: string
+          document: string
+          published_at?: string | null
+          status?: string
+          version: string
+        }
+        Update: {
+          created_at?: string
+          document?: string
+          published_at?: string | null
+          status?: string
+          version?: string
         }
         Relationships: []
       }
@@ -615,9 +1043,21 @@ export type Database = {
         Relationships: []
       }
       rate_limit_counters: {
-        Row: { count: number; key: string; window_start: string }
-        Insert: { count: number; key: string; window_start: string }
-        Update: { count?: number; key?: string; window_start?: string }
+        Row: {
+          count: number
+          key: string
+          window_start: string
+        }
+        Insert: {
+          count: number
+          key: string
+          window_start: string
+        }
+        Update: {
+          count?: number
+          key?: string
+          window_start?: string
+        }
         Relationships: []
       }
       recovery_codes: {
@@ -641,6 +1081,60 @@ export type Database = {
           id?: string
           used_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      redirects: {
+        Row: {
+          created_at: string
+          destination: string
+          is_active: boolean
+          note: string | null
+          source_path: string
+          status_code: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          destination: string
+          is_active?: boolean
+          note?: string | null
+          source_path: string
+          status_code?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string
+          is_active?: boolean
+          note?: string | null
+          source_path?: string
+          status_code?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      request_drafts: {
+        Row: {
+          created_at: string
+          data: Json
+          expires_at: string
+          token: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          expires_at?: string
+          token?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          expires_at?: string
+          token?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -694,6 +1188,7 @@ export type Database = {
           assigned_dispatcher_id: string | null
           cancelled_at: string | null
           channel: Database["public"]["Enums"]["request_channel"]
+          claimed_at: string | null
           completed_at: string | null
           created_at: string
           destination_address: string | null
@@ -707,23 +1202,25 @@ export type Database = {
           id: string
           keys_available: boolean | null
           market_id: string
-          market_service_id: string
+          market_service_id: string | null
           notes: string | null
           on_highway: boolean | null
           on_site_at: string | null
-          pickup_address: string
+          pickup_address: string | null
           pickup_note: string | null
           pickup_point: unknown
           platform_fee_cents: number
           quoted_at: string | null
           safe_spot: boolean | null
-          service_id: string
+          service_id: string | null
           short_code: string
+          source: Database["public"]["Enums"]["phone_purpose"] | null
           spare_available: boolean | null
           status: Database["public"]["Enums"]["request_status"]
           status_token: string
           submitted_at: string | null
           updated_at: string
+          urgent: boolean
           vehicle_color: string | null
           vehicle_is_ev: boolean
           vehicle_make: string | null
@@ -736,6 +1233,7 @@ export type Database = {
           assigned_dispatcher_id?: string | null
           cancelled_at?: string | null
           channel?: Database["public"]["Enums"]["request_channel"]
+          claimed_at?: string | null
           completed_at?: string | null
           created_at?: string
           destination_address?: string | null
@@ -749,23 +1247,25 @@ export type Database = {
           id?: string
           keys_available?: boolean | null
           market_id: string
-          market_service_id: string
+          market_service_id?: string | null
           notes?: string | null
           on_highway?: boolean | null
           on_site_at?: string | null
-          pickup_address: string
+          pickup_address?: string | null
           pickup_note?: string | null
-          pickup_point: unknown
+          pickup_point?: unknown
           platform_fee_cents: number
           quoted_at?: string | null
           safe_spot?: boolean | null
-          service_id: string
+          service_id?: string | null
           short_code: string
+          source?: Database["public"]["Enums"]["phone_purpose"] | null
           spare_available?: boolean | null
           status?: Database["public"]["Enums"]["request_status"]
           status_token?: string
           submitted_at?: string | null
           updated_at?: string
+          urgent?: boolean
           vehicle_color?: string | null
           vehicle_is_ev?: boolean
           vehicle_make?: string | null
@@ -778,6 +1278,7 @@ export type Database = {
           assigned_dispatcher_id?: string | null
           cancelled_at?: string | null
           channel?: Database["public"]["Enums"]["request_channel"]
+          claimed_at?: string | null
           completed_at?: string | null
           created_at?: string
           destination_address?: string | null
@@ -791,23 +1292,25 @@ export type Database = {
           id?: string
           keys_available?: boolean | null
           market_id?: string
-          market_service_id?: string
+          market_service_id?: string | null
           notes?: string | null
           on_highway?: boolean | null
           on_site_at?: string | null
-          pickup_address?: string
+          pickup_address?: string | null
           pickup_note?: string | null
           pickup_point?: unknown
           platform_fee_cents?: number
           quoted_at?: string | null
           safe_spot?: boolean | null
-          service_id?: string
+          service_id?: string | null
           short_code?: string
+          source?: Database["public"]["Enums"]["phone_purpose"] | null
           spare_available?: boolean | null
           status?: Database["public"]["Enums"]["request_status"]
           status_token?: string
           submitted_at?: string | null
           updated_at?: string
+          urgent?: boolean
           vehicle_color?: string | null
           vehicle_is_ev?: boolean
           vehicle_make?: string | null
@@ -839,6 +1342,56 @@ export type Database = {
           },
           {
             foreignKeyName: "requests_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_pages: {
+        Row: {
+          covers: string[]
+          faqs: Json
+          locale: string
+          not_covered: string[]
+          onsite_minutes_max: number | null
+          onsite_minutes_min: number | null
+          safety_tips: string[]
+          service_id: string
+          summary: string
+          updated_at: string
+          what_to_expect: string[]
+        }
+        Insert: {
+          covers?: string[]
+          faqs?: Json
+          locale?: string
+          not_covered?: string[]
+          onsite_minutes_max?: number | null
+          onsite_minutes_min?: number | null
+          safety_tips?: string[]
+          service_id: string
+          summary: string
+          updated_at?: string
+          what_to_expect?: string[]
+        }
+        Update: {
+          covers?: string[]
+          faqs?: Json
+          locale?: string
+          not_covered?: string[]
+          onsite_minutes_max?: number | null
+          onsite_minutes_min?: number | null
+          safety_tips?: string[]
+          service_id?: string
+          summary?: string
+          updated_at?: string
+          what_to_expect?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_pages_service_id_fkey"
             columns: ["service_id"]
             isOneToOne: false
             referencedRelation: "services"
@@ -885,12 +1438,109 @@ export type Database = {
         }
         Relationships: []
       }
+      sms_messages: {
+        Row: {
+          body: string
+          created_at: string
+          direction: Database["public"]["Enums"]["message_direction"]
+          error_code: number | null
+          from_phone: string
+          id: string
+          market_id: string
+          request_id: string | null
+          segments: number | null
+          staff_user_id: string | null
+          status: Database["public"]["Enums"]["sms_status"]
+          status_at: string
+          status_reason: string | null
+          template_key: string | null
+          to_phone: string
+          twilio_sid: string | null
+          urgent: boolean
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          direction: Database["public"]["Enums"]["message_direction"]
+          error_code?: number | null
+          from_phone: string
+          id?: string
+          market_id: string
+          request_id?: string | null
+          segments?: number | null
+          staff_user_id?: string | null
+          status?: Database["public"]["Enums"]["sms_status"]
+          status_at?: string
+          status_reason?: string | null
+          template_key?: string | null
+          to_phone: string
+          twilio_sid?: string | null
+          urgent?: boolean
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          direction?: Database["public"]["Enums"]["message_direction"]
+          error_code?: number | null
+          from_phone?: string
+          id?: string
+          market_id?: string
+          request_id?: string | null
+          segments?: number | null
+          staff_user_id?: string | null
+          status?: Database["public"]["Enums"]["sms_status"]
+          status_at?: string
+          status_reason?: string | null
+          template_key?: string | null
+          to_phone?: string
+          twilio_sid?: string | null
+          urgent?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_messages_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sms_messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sms_opt_outs: {
+        Row: {
+          opted_out: boolean
+          phone: string
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          opted_out: boolean
+          phone: string
+          source: string
+          updated_at?: string
+        }
+        Update: {
+          opted_out?: boolean
+          phone?: string
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       staff_members: {
         Row: {
           created_at: string
           display_name: string
           is_active: boolean
           market_ids: string[] | null
+          mobile_phone: string | null
           role: Database["public"]["Enums"]["staff_role"]
           updated_at: string
           user_id: string
@@ -900,6 +1550,7 @@ export type Database = {
           display_name: string
           is_active?: boolean
           market_ids?: string[] | null
+          mobile_phone?: string | null
           role: Database["public"]["Enums"]["staff_role"]
           updated_at?: string
           user_id: string
@@ -909,6 +1560,7 @@ export type Database = {
           display_name?: string
           is_active?: boolean
           market_ids?: string[] | null
+          mobile_phone?: string | null
           role?: Database["public"]["Enums"]["staff_role"]
           updated_at?: string
           user_id?: string
@@ -943,9 +1595,21 @@ export type Database = {
         Relationships: []
       }
       usage_thresholds: {
-        Row: { daily_units: number; updated_at: string; vendor_group: string }
-        Insert: { daily_units: number; updated_at?: string; vendor_group: string }
-        Update: { daily_units?: number; updated_at?: string; vendor_group?: string }
+        Row: {
+          daily_units: number
+          updated_at: string
+          vendor_group: string
+        }
+        Insert: {
+          daily_units: number
+          updated_at?: string
+          vendor_group: string
+        }
+        Update: {
+          daily_units?: number
+          updated_at?: string
+          vendor_group?: string
+        }
         Relationships: []
       }
       user_security_settings: {
@@ -1023,6 +1687,24 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_events: {
+        Row: {
+          event_key: string
+          received_at: string
+          vendor: string
+        }
+        Insert: {
+          event_key: string
+          received_at?: string
+          vendor: string
+        }
+        Update: {
+          event_key?: string
+          received_at?: string
+          vendor?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       current_market_services: {
@@ -1057,9 +1739,53 @@ export type Database = {
       }
     }
     Functions: {
+      admin_live_requests: {
+        Args: { p_since?: string }
+        Returns: {
+          accepted_at: string
+          channel: Database["public"]["Enums"]["request_channel"]
+          created_at: string
+          driver_name: string
+          driver_phone: string
+          en_route_at: string
+          id: string
+          lat: number
+          lng: number
+          market_slug: string
+          on_site_at: string
+          pickup_address: string
+          quoted_at: string
+          service_slug: string
+          short_code: string
+          status: Database["public"]["Enums"]["request_status"]
+          status_token: string
+          submitted_at: string
+        }[]
+      }
+      admin_market_shapes: {
+        Args: never
+        Returns: {
+          boundary: Json
+          center_lat: number
+          center_lng: number
+          slug: string
+        }[]
+      }
+      admin_update_market_intro: {
+        Args: { p_intro: string; p_slug: string }
+        Returns: undefined
+      }
       auth_user_for_phone: {
         Args: { p_phone: string }
-        Returns: { email: string; is_demo: boolean; user_id: string }[]
+        Returns: {
+          email: string
+          is_demo: boolean
+          user_id: string
+        }[]
+      }
+      cancel_request_by_token: {
+        Args: { p_reason: string; p_token: string }
+        Returns: boolean
       }
       create_request: {
         Args: { p: Json }
@@ -1070,9 +1796,30 @@ export type Database = {
         }[]
       }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      find_recent_request: { Args: { p_phone: string }; Returns: string }
       forget_trusted_device: { Args: { p_id: string }; Returns: undefined }
       generate_recovery_codes: { Args: never; Returns: string[] }
       generate_short_code: { Args: never; Returns: string }
+      get_market_page: {
+        Args: { p_locale?: string; p_market_slug: string }
+        Returns: {
+          areas: string[]
+          faqs: Json
+          headline: string
+          highways: string[]
+          intro: string
+          local_tips: string[]
+          updated_at: string
+        }[]
+      }
+      get_market_service_note: {
+        Args: {
+          p_locale?: string
+          p_market_slug: string
+          p_service_slug: string
+        }
+        Returns: string
+      }
       get_market_services: {
         Args: { p_market_slug: string }
         Returns: {
@@ -1109,7 +1856,22 @@ export type Database = {
           submitted_at: string
         }[]
       }
+      get_request_draft: { Args: { p_token: string }; Returns: Json }
+      get_service_page: {
+        Args: { p_locale?: string; p_service_slug: string }
+        Returns: {
+          covers: string[]
+          faqs: Json
+          not_covered: string[]
+          onsite_minutes_max: number
+          onsite_minutes_min: number
+          safety_tips: string[]
+          summary: string
+          what_to_expect: string[]
+        }[]
+      }
       issue_email_code: { Args: never; Returns: string }
+      join_waitlist: { Args: { p: Json }; Returns: undefined }
       jwt_provider_role: {
         Args: { p_provider_id: string }
         Returns: Database["public"]["Enums"]["provider_role"]
@@ -1117,6 +1879,16 @@ export type Database = {
       jwt_staff_role: {
         Args: never
         Returns: Database["public"]["Enums"]["staff_role"]
+      }
+      list_market_plans: {
+        Args: never
+        Returns: {
+          fee_discount_bps: number
+          market_slug: string
+          plan: Database["public"]["Enums"]["plan_kind"]
+          price_max_cents: number
+          price_min_cents: number
+        }[]
       }
       list_public_markets: {
         Args: never
@@ -1131,6 +1903,42 @@ export type Database = {
           state_code: string
           status: Database["public"]["Enums"]["market_status"]
           support_phone: string
+          time_zone: string
+        }[]
+      }
+      list_public_services: {
+        Args: never
+        Returns: {
+          description: string
+          icon_key: string
+          market_count: number
+          name: string
+          needs_destination: boolean
+          price_max_cents: number
+          price_min_cents: number
+          slug: string
+          sort_order: number
+        }[]
+      }
+      list_redirects: {
+        Args: never
+        Returns: {
+          destination: string
+          source_path: string
+          status_code: number
+        }[]
+      }
+      list_site_markets: {
+        Args: never
+        Returns: {
+          center_lat: number
+          center_lng: number
+          id: string
+          name: string
+          phone: string
+          slug: string
+          state_code: string
+          status: Database["public"]["Enums"]["market_status"]
           time_zone: string
         }[]
       }
@@ -1151,6 +1959,19 @@ export type Database = {
           time_zone: string
         }[]
       }
+      market_phone_for_source: {
+        Args: { p_market_id: string; p_source: string }
+        Returns: string
+      }
+      market_public_stats: {
+        Args: { p_market_slug: string }
+        Returns: {
+          avg_eta_minutes: number
+          completed_jobs: number
+          provider_count: number
+        }[]
+      }
+      market_website_phone: { Args: { p_market_id: string }; Returns: string }
       my_provider_status: {
         Args: never
         Returns: {
@@ -1181,6 +2002,14 @@ export type Database = {
           user_agent: string
         }[]
       }
+      on_duty_dispatchers: {
+        Args: { p_at?: string }
+        Returns: {
+          mobile_phone: string
+          presence: Database["public"]["Enums"]["dispatcher_presence"]
+          user_id: string
+        }[]
+      }
       rate_limit_hit: {
         Args: { p_key: string; p_window_seconds: number }
         Returns: number
@@ -1188,10 +2017,19 @@ export type Database = {
       rate_limit_sweep: { Args: never; Returns: number }
       record_api_usage: {
         Args: { p_units?: number; p_vendor: string }
-        Returns: { alert: boolean; threshold: number; units_today: number }[]
+        Returns: {
+          alert: boolean
+          threshold: number
+          units_today: number
+        }[]
       }
+      record_cookie_consent: { Args: { p: Json }; Returns: undefined }
       request_account_closure: { Args: { p_reason: string }; Returns: string }
       revoke_my_session: { Args: { p_session_id: string }; Returns: boolean }
+      save_request_draft: {
+        Args: { p_patch: Json; p_token: string }
+        Returns: string
+      }
       session_status: {
         Args: never
         Returns: {
@@ -1208,6 +2046,16 @@ export type Database = {
         Args: { p_market_id: string }
         Returns: boolean
       }
+      submit_contact_message: { Args: { p: Json }; Returns: string }
+      submit_provider_application: { Args: { p: Json }; Returns: string }
+      submit_web_request: {
+        Args: { p: Json; p_draft_token: string; p_phone_verified: boolean }
+        Returns: {
+          request_id: string
+          short_code: string
+          status_token: string
+        }[]
+      }
       trust_this_device: {
         Args: { p_token: string; p_user_agent: string }
         Returns: undefined
@@ -1219,13 +2067,24 @@ export type Database = {
     Enums: {
       actor_type: "system" | "driver" | "provider" | "staff"
       application_status: "new" | "reviewing" | "approved" | "rejected"
+      call_direction: "inbound" | "outbound"
+      call_outcome:
+        | "ringing"
+        | "answered"
+        | "missed"
+        | "voicemail"
+        | "busy"
+        | "failed"
+        | "completed"
       consent_type:
         | "terms"
         | "privacy"
         | "sms_transactional"
         | "sms_marketing"
         | "call_recording"
+      dispatcher_presence: "available" | "busy" | "away"
       market_status: "draft" | "test" | "active" | "paused"
+      message_direction: "outbound" | "inbound"
       message_status: "new" | "in_progress" | "handled"
       phone_purpose:
         | "website"
@@ -1234,6 +2093,10 @@ export type Database = {
         | "microsoft"
         | "organic"
         | "provider_line"
+        | "gmb"
+        | "bing"
+        | "staging_test"
+      plan_kind: "pro" | "featured"
       provider_role: "owner" | "manager" | "operator"
       provider_status:
         | "applied"
@@ -1245,16 +2108,30 @@ export type Database = {
       request_channel: "web" | "phone" | "landing_page"
       request_status:
         | "draft"
+        | "phone_intake"
         | "submitted"
         | "quoting"
         | "quoted"
+        | "contacted"
+        | "location_confirmed"
+        | "assigned"
         | "accepted"
         | "en_route"
         | "on_site"
         | "completed"
         | "cancelled"
         | "expired"
+        | "no_provider"
       second_step_method: "email" | "sms" | "totp"
+      sms_status:
+        | "queued"
+        | "held"
+        | "blocked"
+        | "sent"
+        | "delivered"
+        | "undelivered"
+        | "failed"
+        | "received"
       staff_role:
         | "super_admin"
         | "ops_manager"
@@ -1393,6 +2270,16 @@ export const Constants = {
     Enums: {
       actor_type: ["system", "driver", "provider", "staff"],
       application_status: ["new", "reviewing", "approved", "rejected"],
+      call_direction: ["inbound", "outbound"],
+      call_outcome: [
+        "ringing",
+        "answered",
+        "missed",
+        "voicemail",
+        "busy",
+        "failed",
+        "completed",
+      ],
       consent_type: [
         "terms",
         "privacy",
@@ -1400,7 +2287,9 @@ export const Constants = {
         "sms_marketing",
         "call_recording",
       ],
+      dispatcher_presence: ["available", "busy", "away"],
       market_status: ["draft", "test", "active", "paused"],
+      message_direction: ["outbound", "inbound"],
       message_status: ["new", "in_progress", "handled"],
       phone_purpose: [
         "website",
@@ -1409,7 +2298,11 @@ export const Constants = {
         "microsoft",
         "organic",
         "provider_line",
+        "gmb",
+        "bing",
+        "staging_test",
       ],
+      plan_kind: ["pro", "featured"],
       provider_role: ["owner", "manager", "operator"],
       provider_status: [
         "applied",
@@ -1422,17 +2315,32 @@ export const Constants = {
       request_channel: ["web", "phone", "landing_page"],
       request_status: [
         "draft",
+        "phone_intake",
         "submitted",
         "quoting",
         "quoted",
+        "contacted",
+        "location_confirmed",
+        "assigned",
         "accepted",
         "en_route",
         "on_site",
         "completed",
         "cancelled",
         "expired",
+        "no_provider",
       ],
       second_step_method: ["email", "sms", "totp"],
+      sms_status: [
+        "queued",
+        "held",
+        "blocked",
+        "sent",
+        "delivered",
+        "undelivered",
+        "failed",
+        "received",
+      ],
       staff_role: [
         "super_admin",
         "ops_manager",

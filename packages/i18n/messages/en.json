@@ -509,7 +509,9 @@
         "rules": "Business rules",
         "flags": "Feature flags",
         "integrations": "Integrations",
-        "system": "System status"
+        "system": "System status",
+        "phones": "Phone numbers",
+        "duty": "On duty"
       },
       "onlyYou": "Only super admins see everyone; you see yourself.",
       "inactive": "Inactive",
@@ -671,6 +673,81 @@
         "usedOf": "{used} of {limit}",
         "threshold": "Daily alert threshold",
         "save": "Save"
+      },
+      "phones": {
+        "intro": "Each tracking number belongs to one market and one source, so every call is attributed. Numbers are bought in Twilio; add them here to start tracking.",
+        "title": "Tracking numbers",
+        "empty": "No numbers yet. Buy numbers in Twilio, then add them here.",
+        "number": "Number",
+        "market": "Market",
+        "source": "Source",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Label (optional)",
+        "active": "Active",
+        "inactive": "Off",
+        "inTwilio": "In Twilio",
+        "activate": "Turn on",
+        "deactivate": "Turn off",
+        "add": "Add a number",
+        "addButton": "Add number",
+        "added": "Added {phone}.",
+        "sync": "Sync from Twilio",
+        "synced": "{count, plural, one {# number} other {# numbers}} found in Twilio.",
+        "sources": {
+          "website": "Website",
+          "google_ads": "Google Ads",
+          "gmb": "Google Business Profile",
+          "meta": "Meta (Facebook, Instagram)",
+          "bing": "Microsoft Ads (Bing)",
+          "organic": "Organic",
+          "provider_line": "Provider line",
+          "staging_test": "Staging test"
+        },
+        "setupTitle": "Twilio setup for each number",
+        "setupBody": "In Twilio, set the number's Voice webhook to /api/twilio/voice on the admin domain (POST) and its call status callback to /api/twilio/voice/status. Staging numbers use the staging admin domain. See docs/runbooks/twilio.md.",
+        "errors": {
+          "forbidden": "Only super admins and ops managers can change numbers.",
+          "invalid": "Enter a valid US number, market and source.",
+          "exists": "That number is already tracked.",
+          "generic": "Something went wrong. Try again.",
+          "noTwilio": "Twilio is not connected yet."
+        }
+      },
+      "duty": {
+        "you": "You",
+        "presence": "Presence",
+        "presences": {
+          "available": "Available",
+          "busy": "Busy",
+          "away": "Away"
+        },
+        "onDutyNow": "I am on duty now",
+        "save": "Save",
+        "mobile": "Your mobile number",
+        "mobileHint": "Rung when no dispatcher answers in the browser, and texted about missed calls and voicemails.",
+        "nowTitle": "On duty right now",
+        "nobody": "Nobody is on duty. Calls go to voicemail.",
+        "weekTitle": "Weekly schedule",
+        "uncovered": "Not covered",
+        "shift": "{name}, {start} to {end}",
+        "remove": "Remove {name}'s shift",
+        "removeShort": "Remove",
+        "who": "Dispatcher",
+        "day": "Day",
+        "start": "Start",
+        "end": "End",
+        "zone": "Time zone",
+        "addShift": "Add shift",
+        "days": {
+          "0": "Sunday",
+          "1": "Monday",
+          "2": "Tuesday",
+          "3": "Wednesday",
+          "4": "Thursday",
+          "5": "Friday",
+          "6": "Saturday"
+        }
       }
     },
     "walkthrough": {
@@ -843,6 +920,18 @@
         "maps": "Google Maps",
         "twilio": "Twilio"
       }
+    },
+    "dispatchAlert": {
+      "subject": {
+        "missed": "{brand}: missed call from {caller} ({market})",
+        "voicemail": "{brand}: voicemail from {caller} ({market})"
+      },
+      "body": {
+        "missed": "Nobody answered a call from {caller}. Call them back from the admin inbox; the request is marked urgent.",
+        "voicemail": "{caller} left a voicemail. Listen and call back from the admin inbox; the request is marked urgent."
+      },
+      "transcript": "Transcript: {text}",
+      "open": "Open the inbox: {url}"
     }
   },
   "auth": {
@@ -2714,5 +2803,19 @@
         }
       }
     }
+  },
+  "voice": {
+    "greeting": "Thanks for calling {brand}. We're connecting you to a dispatcher now.",
+    "safety": "If you are in danger, hang up and call 9 1 1.",
+    "recordingNotice": "This call may be recorded for quality and safety.",
+    "voicemail": "All our dispatchers are busy. Please leave your name, where you are, and what happened after the tone. We will call you right back.",
+    "goodbye": "Thank you. We'll call you back shortly.",
+    "callerName": "Phone caller",
+    "autoText": "Thanks for calling {brand}. Share your exact location here: {link}",
+    "missedAlert": "Missed call from {caller}. Call them back from the admin inbox.",
+    "voicemailAlert": "New voicemail from {caller}. Listen in the admin inbox."
+  },
+  "texts": {
+    "stopNotice": "Reply STOP to opt out."
   }
 }

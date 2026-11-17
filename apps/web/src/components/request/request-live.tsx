@@ -32,17 +32,28 @@ import { MapView } from "@/components/site/map-view";
 
 type RealStatus =
   | "draft"
+  | "phone_intake"
   | "submitted"
   | "quoting"
   | "quoted"
+  | "contacted"
+  | "location_confirmed"
+  | "assigned"
   | "accepted"
   | "en_route"
   | "on_site"
   | "completed"
   | "cancelled"
-  | "expired";
+  | "expired"
+  | "no_provider";
 const REAL_TO_STAGE: Record<RealStatus, DemoStage> = {
   draft: "searching",
+  // Manual dispatch (RSOS-034b): the driver sees the same stages.
+  phone_intake: "searching",
+  contacted: "searching",
+  location_confirmed: "searching",
+  assigned: "picked",
+  no_provider: "expired",
   submitted: "searching",
   quoting: "searching",
   quoted: "quoting",

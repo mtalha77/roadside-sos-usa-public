@@ -1,4 +1,5 @@
 import { brand } from "@rsos/config/brand";
+import { DniSwap } from "@/components/site/dni-swap";
 import { formatPriceRange, type Locale } from "@rsos/i18n";
 import { inputClass } from "@rsos/ui/input";
 import { BadgeCheck, Clock, Phone, WalletCards } from "lucide-react";
@@ -86,7 +87,7 @@ export default async function LandingPage({ params, searchParams }: Params) {
         <span className="mr-auto text-lg font-bold">{brand.name}</span>
         <LightThemeToggle label={tc("toggleTheme")} />
         {m.phone ? (
-          <a href={`tel:${m.phone}`} className={`${ui.button.outline} px-3`}>
+          <a href={`tel:${m.phone}`} data-dni={m.slug} className={`${ui.button.outline} px-3`}>
             <Phone aria-hidden="true" className="size-5" />
             <span className="tabular-nums">{formatPhone(m.phone)}</span>
           </a>
@@ -97,7 +98,11 @@ export default async function LandingPage({ params, searchParams }: Params) {
           {t(`headlines.${h}`, { service: name, city: m.name })}
         </h1>
         {m.phone ? (
-          <a href={`tel:${m.phone}`} className={`${ui.button.primary} min-h-14 w-full text-lg`}>
+          <a
+            href={`tel:${m.phone}`}
+            data-dni={m.slug}
+            className={`${ui.button.primary} min-h-14 w-full text-lg`}
+          >
             <Phone aria-hidden="true" className="size-6" />
             {t("callNow", { phone: formatPhone(m.phone) })}
           </a>
@@ -176,12 +181,13 @@ export default async function LandingPage({ params, searchParams }: Params) {
       </div>
       {m.phone ? (
         <div className="fixed inset-x-0 bottom-0 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-          <a href={`tel:${m.phone}`} className={`${ui.button.primary} w-full`}>
+          <a href={`tel:${m.phone}`} data-dni={m.slug} className={`${ui.button.primary} w-full`}>
             <Phone aria-hidden="true" className="size-5" />
             {t("callNow", { phone: formatPhone(m.phone) })}
           </a>
         </div>
       ) : null}
+      <DniSwap />
     </main>
   );
 }
