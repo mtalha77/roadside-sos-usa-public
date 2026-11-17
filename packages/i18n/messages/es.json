@@ -36,7 +36,8 @@
       "walkthrough": "Recorrido",
       "intake": "Recepción telefónica",
       "inbox": "Bandeja",
-      "marketing": "Marketing"
+      "marketing": "Marketing",
+      "campaign": "Campaña de prueba"
     },
     "shell": {
       "nav": "Administración",
@@ -355,14 +356,27 @@
       "noPhones": "Aún no hay números (requiere Twilio).",
       "checklist": "Lista para lanzar",
       "checks": {
-        "boundary": "Límite definido",
-        "services": "Servicios y precios definidos",
-        "phone": "Número telefónico activo",
-        "providers": "Meta de cobertura alcanzada",
-        "content": "Página de ciudad escrita"
+        "numbers": "Números de seguimiento asignados (sitio web y Google Ads)",
+        "providers": "Suficientes proveedores activos por servicio",
+        "prices": "Precios y comisiones para cada servicio",
+        "on_duty": "Turnos cubren 24/7",
+        "landing_pages": "Páginas de ciudad y de anuncios publicadas",
+        "tracking": "Seguimiento de conversiones verificado (una conversión en los últimos 30 días)"
       },
       "done": "(hecho)",
-      "todo": "(pendiente)"
+      "todo": "(pendiente)",
+      "missing": "Falta: {detail}",
+      "statusLabel": "Estado del mercado",
+      "overrideReason": "Lista incompleta: motivo para activarlo de todos modos (queda registrado)",
+      "notReady": "Completa primero la lista. Solo un superadministrador puede hacer una excepción.",
+      "saveStatus": "Guardar estado",
+      "statusSaved": "Estado guardado.",
+      "statusErrors": {
+        "forbidden": "Solo superadministradores y gerentes de operaciones pueden cambiar el estado.",
+        "invalid": "Elige un estado.",
+        "checklist": "La lista de lanzamiento no está completa.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      }
     },
     "pricing": {
       "title": "Precios y cargos",
@@ -1170,6 +1184,31 @@
         "invalid": "Revisa el día, mercado, canal y monto.",
         "generic": "Algo salió mal. Inténtalo de nuevo."
       }
+    },
+    "campaign": {
+      "title": "Campaña de prueba",
+      "intro": "Los últimos {days} días por mercado: los números que deciden la ciudad de lanzamiento.",
+      "days": "Días",
+      "apply": "Mostrar",
+      "export": "Exportar CSV",
+      "byMarket": "Por mercado",
+      "minutes": "{m} min",
+      "cols": {
+        "market": "Mercado",
+        "requests": "Solicitudes",
+        "calls": "Llamadas",
+        "answerRate": "Tasa de respuesta",
+        "toContact": "Tiempo al primer contacto",
+        "toAssigned": "Tiempo a proveedor asignado",
+        "fillRate": "Tasa de cobertura",
+        "completionRate": "Tasa de finalización",
+        "avgPrice": "Precio cotizado promedio",
+        "fees": "Comisiones (que se habrían ganado)",
+        "spend": "Gasto en anuncios",
+        "perRequest": "Costo por solicitud",
+        "perCompleted": "Costo por trabajo terminado"
+      },
+      "note": "Los tiempos son medianas. Tasa de cobertura = solicitudes con proveedor asignado / solicitudes. Las comisiones se registran como manual_test y no se cobra a nadie. El gasto viene de Marketing > Gasto en anuncios."
     }
   },
   "emails": {

@@ -4,6 +4,7 @@ import { BoundaryPreview, type BoundaryFeature } from "@rsos/ui/boundary-preview
 import { CircleCheck, Circle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { MarketStatusForm } from "@/components/markets/market-status-form";
 import { getAdminContext } from "@/lib/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
 
@@ -15,7 +16,7 @@ async function load(slug: string) {
   const market = ctx.markets.find((m) => m.slug === slug);
   if (!market) return null;
   const supabase = await getServerSupabase();
-  const [{ data: row }, { data: phones }, { data: shapes }, { count: services }] =
+  const [{ data: row }, { data: phones }, { data: shapes }, { count: services }, { data: checks }] =
     await Promise.all([
       supabase
         .from("markets")
@@ -33,11 +34,21 @@ async function load(slug: string) {
         .from("market_services")
         .select("id", { count: "exact", head: true })
         .eq("market_id", market.id),
+      // RSOS-089-prep: the real launch checklist from the database.
+      supabase.rpc("market_launch_checklist", { p_market_id: market.id }),
     ]);
   const shape = (
     (Array.isArray(shapes) ? shapes : []) as { slug: string; boundary: unknown }[]
   ).find((s) => s.slug === slug);
-  return { ctx, market, row, phones: phones ?? [], shape, services: services ?? 0 };
+  return {
+    ctx,
+    market,
+    row,
+    phones: phones ?? [],
+    shape,
+    services: services ?? 0,
+    checks: checks ?? [],
+  };
 }
 
 /**
@@ -48,18 +59,13 @@ export default async function MarketDetailPage({ params }: { params: Promise<{ s
   const { slug } = await params;
   const [t, data] = await Promise.all([getTranslations("admin.markets"), load(slug)]);
   if (!data) notFound();
-  const { market, row, phones, shape, services, ctx } = data;
+  const { market, row, phones, shape, checks, ctx } = data;
   const hours = row?.coverage_hours as { always?: boolean } | null;
   const features: BoundaryFeature[] = shape?.boundary
     ? [{ geometry: shape.boundary as BoundaryFeature["geometry"] }]
     : [];
-  const checklist = [
-    { key: "boundary", ok: features.length > 0 },
-    { key: "services", ok: services > 0 },
-    { key: "phone", ok: phones.some((p) => p.is_active) || Boolean(row?.support_phone) },
-    { key: "providers", ok: false },
-    { key: "content", ok: true },
-  ];
+  const checklist = checks.map((c) => ({ key: c.item, ok: c.ok, detail: c.detail }));
+  const ready = checklist.length > 0 && checklist.every((c) => c.ok);
   const fx = demoMarkets[slug];
   return (
     <main id="main" className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6">
@@ -160,10 +166,24 @@ export default async function MarketDetailPage({ params }: { params: Promise<{ s
                   <span>
                     {t(`checks.${c.key}`)}
                     <span className="sr-only"> {c.ok ? t("done") : t("todo")}</span>
+                    {!c.ok && c.detail ? (
+                      <span className="block text-muted-foreground">
+                        {t("missing", { detail: c.detail })}
+                      </span>
+                    ) : null}
                   </span>
                 </li>
               ))}
             </ul>
+            <div className="mt-4 border-t pt-4">
+              <MarketStatusForm
+                marketId={market.id}
+                status={market.status}
+                ready={ready}
+                canOverride={ctx.role === "super_admin"}
+                canChange={ctx.role === "super_admin" || ctx.role === "ops_manager"}
+              />
+            </div>
           </section>
         </div>
       </div>

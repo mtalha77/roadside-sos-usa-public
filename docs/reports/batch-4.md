@@ -18,8 +18,8 @@
 | RSOS-034b Real inbox and manual dispatch            | Done                     | [#179](https://github.com/mtalha77/roadside-sos-usa-public/pull/179) |
 | RSOS-023 Location link                              | Done                     | [#180](https://github.com/mtalha77/roadside-sos-usa-public/pull/180) |
 | RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Done (texting off)       | [#181](https://github.com/mtalha77/roadside-sos-usa-public/pull/181) |
-| RSOS-031 Ad tracking and attribution                | Done (ad keys missing)   | (this PR)                                                            |
-| RSOS-089-prep Test campaign kit                     | Built, merge BLOCKED     | branch `rsos-089-campaign-kit`                                       |
+| RSOS-031 Ad tracking and attribution                | Done (ad keys missing)   | [#182](https://github.com/mtalha77/roadside-sos-usa-public/pull/182) |
+| RSOS-089-prep Test campaign kit                     | Done                     | (this PR)                                                            |
 | RSOS-036 Release QA and first production release    | Not released (see below) | `docs/reports/release-1.md`                                          |
 
 ## Run blocker (resolved): a new security advisory stopped every merge (2026-11-17)
@@ -37,15 +37,11 @@ next-intl); no user input reaches it.
   reason, to be removed when picomatch ships a fix. The run then continued.
 - Found during Release QA: since RSOS-099, every staging database deploy after the staging smoke
   has failed its "no fake data" check (the smoke's own Get Help request uses a fictional
-  number), and that skipped the Auth configuration step, so staging's sign-in email does not
-  carry the 6-digit code yet. The fix (the check skips the smoke's request; Auth is configured
-  before the check) is on `rsos-034b-inbox-dispatch`, waiting on the same blocker.
-- The remaining tickets are built and pushed as stacked branches, not opened as pull requests (each
-  pull request's `db` job writes to rsos-dev, so they go one at a time):
-  `rsos-034b-inbox-dispatch`, `rsos-023-location-link`, `rsos-035-texts-emails`,
-  `rsos-031-ad-tracking`, `rsos-089-campaign-kit`. On the top branch lint, unit tests and Prettier
-  pass; typecheck waits on database types for migrations 050 to 080, which are regenerated when
-  each migration reaches rsos-dev in its turn.
+  number), and that skipped the Auth configuration step, so staging's sign-in email did not
+  carry the 6-digit code. The fix (the check skips the smoke's request; Auth is configured
+  before the check) merged with #179; staging deploys are green again.
+- After the owner accepted it, the remaining tickets merged one pull request at a time: #177,
+  #179, #180, #181, #182 and RSOS-089-prep.
 
 ## Step 0: key check (presence only, no values)
 
@@ -232,6 +228,36 @@ Applies the "Scope changes from the owner" section of the updated batch file (co
   - e2e `inbox-dispatch.spec.ts`: a signed missed call becomes an urgent item; the dispatcher
     claims it, records the intake, reads the location link and ends it with a reason.
 - Owner: nothing.
+
+### RSOS-089-prep: Test campaign kit
+
+- **A real launch checklist per market** (Admin > Markets > a market), with six items:
+  - tracking numbers: website and Google Ads;
+  - at least N active, non-demo providers for every enabled service (N is per market, default 3);
+  - prices and fees set;
+  - on-duty dispatch covering 24/7;
+  - an English landing page;
+  - conversion tracking seen in the last 30 days.
+
+  Going live is blocked until every item is green. A super admin can override with a written
+  reason, which goes to the audit log. Ops managers cannot override.
+
+- **Campaign analytics** (`/campaign`):
+  - per market and day: requests, contacted within 2 minutes, assigned, completed, average time
+    to contact and to assign, quoted job value, and the `manual_test` fees that would have been
+    earned;
+  - a CSV export for the owner.
+- **Dispatch playbook** (`docs/runbooks/dispatch-playbook.md`): the steps for every request, the
+  scripts for calls (safety first, providers, assigning), no-provider and dangerous-location
+  scripts, price disputes, and recording outcomes. Written for this campaign with no texts: the
+  driver is told by email or on the call, and the location link is a code read on the call.
+- Real or demo: real. Keys: none. Tested:
+  - pgTAP `026_campaign_kit` (visitors cannot read the checklist; missing items block going live;
+    only super admins override; the override is audited);
+  - unit tests for the campaign metrics and CSV;
+  - e2e `campaign-kit.spec.ts`.
+- Owner: set the minimum providers per service for each market before launch, and onboard at least
+  that many real providers per service.
 
 ### RSOS-031: Ad tracking and attribution
 

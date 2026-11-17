@@ -36,7 +36,8 @@
       "walkthrough": "Walkthrough",
       "intake": "Phone intake",
       "inbox": "Inbox",
-      "marketing": "Marketing"
+      "marketing": "Marketing",
+      "campaign": "Test campaign"
     },
     "shell": {
       "nav": "Admin",
@@ -355,14 +356,27 @@
       "noPhones": "No numbers yet (needs Twilio).",
       "checklist": "Launch checklist",
       "checks": {
-        "boundary": "Boundary set",
-        "services": "Services and prices set",
-        "phone": "Phone number active",
-        "providers": "Coverage target reached",
-        "content": "City page written"
+        "numbers": "Tracking numbers assigned (website and Google Ads)",
+        "providers": "Enough active providers per service",
+        "prices": "Prices and fees set for every service",
+        "on_duty": "On-duty schedule covers 24/7",
+        "landing_pages": "City and landing pages live",
+        "tracking": "Conversion tracking verified (a conversion in the last 30 days)"
       },
       "done": "(done)",
-      "todo": "(to do)"
+      "todo": "(to do)",
+      "missing": "Missing: {detail}",
+      "statusLabel": "Market status",
+      "overrideReason": "Checklist not complete: reason to go live anyway (logged)",
+      "notReady": "Finish the checklist first. Only a super admin can override.",
+      "saveStatus": "Save status",
+      "statusSaved": "Status saved.",
+      "statusErrors": {
+        "forbidden": "Only super admins and ops managers can change status.",
+        "invalid": "Choose a status.",
+        "checklist": "The launch checklist is not complete.",
+        "generic": "Something went wrong. Try again."
+      }
     },
     "pricing": {
       "title": "Pricing and fees",
@@ -1170,6 +1184,31 @@
         "invalid": "Check the day, market, channel and amount.",
         "generic": "Something went wrong. Try again."
       }
+    },
+    "campaign": {
+      "title": "Test campaign",
+      "intro": "The last {days} days per market: the numbers that decide the launch city.",
+      "days": "Days",
+      "apply": "Show",
+      "export": "Export CSV",
+      "byMarket": "By market",
+      "minutes": "{m} min",
+      "cols": {
+        "market": "Market",
+        "requests": "Requests",
+        "calls": "Calls",
+        "answerRate": "Answer rate",
+        "toContact": "Time to first contact",
+        "toAssigned": "Time to provider assigned",
+        "fillRate": "Fill rate",
+        "completionRate": "Completion rate",
+        "avgPrice": "Average quoted price",
+        "fees": "Fees (would have earned)",
+        "spend": "Ad spend",
+        "perRequest": "Cost per request",
+        "perCompleted": "Cost per completed job"
+      },
+      "note": "Times are medians. Fill rate = requests with a provider assigned / requests. Fees are recorded as manual_test and nobody is charged. Spend comes from Marketing > Ad spend."
     }
   },
   "emails": {

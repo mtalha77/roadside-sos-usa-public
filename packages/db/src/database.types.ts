@@ -973,6 +973,7 @@ export type Database = {
           coverage_hours: Json
           created_at: string
           id: string
+          min_providers_per_service: number
           name: string
           seo_intro: string | null
           seo_title: string | null
@@ -990,6 +991,7 @@ export type Database = {
           coverage_hours?: Json
           created_at?: string
           id?: string
+          min_providers_per_service?: number
           name: string
           seo_intro?: string | null
           seo_title?: string | null
@@ -1007,6 +1009,7 @@ export type Database = {
           coverage_hours?: Json
           created_at?: string
           id?: string
+          min_providers_per_service?: number
           name?: string
           seo_intro?: string | null
           seo_title?: string | null
@@ -2148,6 +2151,21 @@ export type Database = {
         Args: { p_intro: string; p_slug: string }
         Returns: undefined
       }
+      campaign_requests: {
+        Args: { p_from: string; p_to: string }
+        Returns: {
+          assigned_at: string
+          channel: Database["public"]["Enums"]["request_channel"]
+          completed_at: string
+          contacted_at: string
+          created_at: string
+          fee_cents: number
+          market_id: string
+          quoted_price_cents: number
+          request_id: string
+          status: Database["public"]["Enums"]["request_status"]
+        }[]
+      }
       cancel_request_by_token: {
         Args: { p_reason: string; p_token: string }
         Returns: boolean
@@ -2340,6 +2358,10 @@ export type Database = {
         Returns: undefined
       }
       mark_session_verified: { Args: { p_method: string }; Returns: undefined }
+      market_dispatch_covered: {
+        Args: { p_market_id: string }
+        Returns: boolean
+      }
       market_for_point: {
         Args: { p_lat: number; p_lng: number }
         Returns: {
@@ -2350,6 +2372,14 @@ export type Database = {
           status: Database["public"]["Enums"]["market_status"]
           support_phone: string
           time_zone: string
+        }[]
+      }
+      market_launch_checklist: {
+        Args: { p_market_id: string }
+        Returns: {
+          detail: string
+          item: string
+          ok: boolean
         }[]
       }
       market_phone_for_source: {
@@ -2481,6 +2511,14 @@ export type Database = {
           active: boolean
           second_step_passed: boolean
         }[]
+      }
+      set_market_status: {
+        Args: {
+          p_market_id: string
+          p_override_reason?: string
+          p_status: Database["public"]["Enums"]["market_status"]
+        }
+        Returns: undefined
       }
       set_second_step_method: {
         Args: { p_method: Database["public"]["Enums"]["second_step_method"] }
