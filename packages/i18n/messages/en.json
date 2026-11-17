@@ -920,6 +920,18 @@
         "maps": "Google Maps",
         "twilio": "Twilio"
       }
+    },
+    "dispatchAlert": {
+      "subject": {
+        "missed": "{brand}: missed call from {caller} ({market})",
+        "voicemail": "{brand}: voicemail from {caller} ({market})"
+      },
+      "body": {
+        "missed": "Nobody answered a call from {caller}. Call them back from the admin inbox; the request is marked urgent.",
+        "voicemail": "{caller} left a voicemail. Listen and call back from the admin inbox; the request is marked urgent."
+      },
+      "transcript": "Transcript: {text}",
+      "open": "Open the inbox: {url}"
     }
   },
   "auth": {

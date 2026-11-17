@@ -3,7 +3,6 @@ import { randomBytes } from "node:crypto";
 import { appUrl } from "@rsos/config/site";
 import {
   type CallFlowText,
-  chooseLookup,
   fallbackCallTwiml,
   hangupTwiml,
   incomingCallTwiml,
@@ -12,10 +11,13 @@ import {
 } from "@rsos/core/adapters";
 import { createAdminSupabase } from "@rsos/db/admin";
 import { getMessages } from "@rsos/i18n";
-import { sendText, withBrand } from "@/lib/texting";
+import { DispatchAlertEmail, chooseEmailSender, dispatchAlertSubject } from "@rsos/emails";
+import { brand } from "@rsos/config/brand";
 import { callbackUrl } from "./webhook";
 
 const E164 = /^\+1[2-9]\d{2}[2-9]\d{6}$/;
+/** "{brand}" in a spoken message, filled from config. */
+const withBrand = (s: string) => s.replaceAll("{brand}", brand.name);
 const SID = /^CA[0-9a-fA-F]{32}$/;
 
 /** Browser softphone identity for a dispatcher (Twilio identities: letters, digits, underscore). */
@@ -125,7 +127,6 @@ export async function dialResult(params: Record<string, string>, url: URL) {
       .update({ outcome: "answered", answered_at: new Date().toISOString() })
       .eq("twilio_call_sid", sid)
       .eq("outcome", "ringing");
-    await autoTextCaller(sid, url);
     return hangupTwiml();
   }
   if (next === "numbers") {
@@ -200,7 +201,6 @@ export async function recordingDone(params: Record<string, string>, url: URL) {
     .maybeSingle();
   if (call && kind === "voicemail") {
     await urgentFollowUp(call, "voicemail", url);
-    await autoTextCaller(sid, url);
   }
 }
 
@@ -228,29 +228,33 @@ async function urgentFollowUp(
       data: {},
     });
   }
-  const v = getMessages("en").voice;
-  const body = (kind === "missed" ? v.missedAlert : v.voicemailAlert).replace(
-    "{caller}",
-    call.from_phone,
-  );
-  const mobiles = [
-    ...new Set(
-      (await onDuty())
-        .map((d) => d.mobile_phone)
-        .filter((n): n is string => typeof n === "string" && E164.test(n)),
-    ),
-  ];
-  for (const to of mobiles)
-    await sendText({
-      marketId: call.market_id,
-      requestId: call.request_id,
-      to,
-      from: call.to_phone,
-      body,
-      urgent: true,
-      templateKey: `dispatcher_${kind}`,
-      statusCallback: callbackUrl(url, "/api/twilio/messages/status"),
-    });
+  // Email the on-duty dispatchers (texts are off in this batch).
+  const admin2 = createAdminSupabase();
+  const [{ data: market }, onDutyNow] = await Promise.all([
+    admin2.from("markets").select("name").eq("id", call.market_id).maybeSingle(),
+    onDuty(),
+  ]);
+  const emails = (
+    await Promise.all(
+      onDutyNow.map(async (d) => (await admin2.auth.admin.getUserById(d.user_id)).data.user?.email),
+    )
+  ).filter((e): e is string => Boolean(e));
+  const alert = {
+    kind,
+    caller: call.from_phone,
+    market: market?.name ?? "",
+    inboxUrl: callbackUrl(url, "/inbox").replace(/\?.*$/, ""),
+  } as const;
+  const sender = chooseEmailSender();
+  for (const to of [...new Set(emails)])
+    await sender
+      .send({
+        to,
+        subject: dispatchAlertSubject(alert),
+        react: DispatchAlertEmail(alert),
+        tags: { category: `dispatch_${kind}` },
+      })
+      .catch(() => null);
 }
 
 /** A short, unguessable location link for a request (RSOS-023): 2 hours, one request. */
@@ -260,39 +264,4 @@ export async function createLocationLink(requestId: string): Promise<string | nu
     .from("location_links")
     .insert({ token, request_id: requestId });
   return error ? null : `${appUrl("web")}/l/${token}`;
-}
-
-/** After the call connects or goes to voicemail: text a location link to a mobile caller, once. */
-export async function autoTextCaller(callSid: string, url: URL) {
-  const admin = createAdminSupabase();
-  const { data: call } = await admin
-    .from("calls")
-    .select("id, from_phone, to_phone, market_id, request_id, auto_text_sent_at")
-    .eq("twilio_call_sid", callSid)
-    .maybeSingle();
-  if (!call || call.auto_text_sent_at || !call.request_id || !E164.test(call.from_phone)) return;
-  // Claim the send first so a retried webhook cannot text twice.
-  const { data: claimed } = await admin
-    .from("calls")
-    .update({ auto_text_sent_at: new Date().toISOString() })
-    .eq("id", call.id)
-    .is("auto_text_sent_at", null)
-    .select("id")
-    .maybeSingle();
-  if (!claimed) return;
-  const lineType = await chooseLookup().lineType(call.from_phone);
-  await admin.from("calls").update({ caller_line_type: lineType }).eq("id", call.id);
-  if (lineType !== "mobile") return;
-  const link = await createLocationLink(call.request_id);
-  if (!link) return;
-  await sendText({
-    marketId: call.market_id,
-    requestId: call.request_id,
-    to: call.from_phone,
-    from: call.to_phone,
-    body: withBrand(getMessages("en").voice.autoText).replace("{link}", link),
-    urgent: true,
-    templateKey: "location_link",
-    statusCallback: callbackUrl(url, "/api/twilio/messages/status"),
-  });
 }

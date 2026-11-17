@@ -920,6 +920,18 @@
         "maps": "Google Maps",
         "twilio": "Twilio"
       }
+    },
+    "dispatchAlert": {
+      "subject": {
+        "missed": "{brand}: llamada perdida de {caller} ({market})",
+        "voicemail": "{brand}: mensaje de voz de {caller} ({market})"
+      },
+      "body": {
+        "missed": "Nadie contestó una llamada de {caller}. Devuélvele la llamada desde la bandeja de admin; la solicitud quedó urgente.",
+        "voicemail": "{caller} dejó un mensaje de voz. Escúchalo y devuelve la llamada desde la bandeja de admin; la solicitud quedó urgente."
+      },
+      "transcript": "Transcripción: {text}",
+      "open": "Abre la bandeja: {url}"
     }
   },
   "auth": {

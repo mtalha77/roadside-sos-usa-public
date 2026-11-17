@@ -4,3 +4,4 @@ export * from "./templates/security-notice";
 export { WelcomeEmail, type WelcomeEmailProps } from "./templates/welcome";
 export * from "./templates/forms";
 export * from "./templates/ops-alert";
+export * from "./templates/dispatch-alert";

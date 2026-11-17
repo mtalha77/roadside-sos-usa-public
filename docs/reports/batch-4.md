@@ -116,9 +116,9 @@ BLOCKED until the owner adds the keys. `rsos-provider` Production has no `SUPABA
   with the brand name, "If you are in danger, hang up and call 9 1 1", recording notice only where
   the market enables recording, then every Available on-duty dispatcher's browser at once, then
   the on-duty mobiles, then voicemail with transcription.
-- **Missed calls and voicemails** mark the request urgent, add it to the timeline and text the
-  on-duty dispatchers. **Auto text** to the caller after the call connects or reaches voicemail:
-  a location link, once per call, only to mobile numbers (Twilio Lookup) that have not opted out.
+- **Missed calls and voicemails** mark the request urgent, add it to the timeline and **email** the
+  on-duty dispatchers. No text is sent to the caller (scope change: no SMS in this batch); the
+  dispatcher gives the location link on the call back (RSOS-023).
 - **Status callbacks** store duration and outcome; recordings stay in Twilio and play only through
   `/api/calls/<id>/recording` for signed-in staff who can see that market.
 - **On duty**: weekly shifts per dispatcher (managers edit), "I am on duty now" toggle, presence
@@ -130,11 +130,10 @@ BLOCKED until the owner adds the keys. `rsos-provider` Production has no `SUPABA
   idempotency on every event. A pgmq queue was not added: the work is a few database writes and one
   text, and retries come from Twilio's own redelivery plus the unique keys.
 - Real or demo: built for real, running on **fakes** (no Twilio keys): webhooks accept the
-  published test token outside production only, texts and lookups are recorded, not sent. Keys:
-  `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_MESSAGING_SERVICE_SID`. Tested: TwiML and
+  published test token outside production only; alert emails use the Resend fake. Keys:
+  `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`. Tested: TwiML and
   source unit tests, pgTAP (`021_call_tracking`: RLS per role, idempotency, intake rules, on-duty),
   e2e (unsigned 403, the full call flow with signed fake webhooks, idempotent repeat, DNI cookie).
   Owner: buy numbers and point their webhooks per `docs/runbooks/twilio.md`, add the numbers in
   Admin > Settings > Phone numbers, set the on-duty schedule and mobiles.
-- **BLOCKED (keys missing)**: ringing the admin softphone from the staging number, the
-  location-link text reaching `OWNER_TEST_PHONE`.
+- **BLOCKED (keys missing)**: ringing the admin softphone from the staging number.

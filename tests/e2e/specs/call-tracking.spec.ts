@@ -58,16 +58,6 @@ test.describe("Twilio voice webhooks", () => {
           )
         ).status(),
       ).toBe(403);
-    expect(
-      (
-        await postTwilio(
-          request,
-          new URL("/api/twilio/messages/status", appUrls.admin).toString(),
-          {},
-          false,
-        )
-      ).status(),
-    ).toBe(403);
   });
 
   test("a call to a tracking number greets, rings, falls back and goes to voicemail", async ({
