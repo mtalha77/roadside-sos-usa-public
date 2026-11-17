@@ -11,6 +11,7 @@ import {
   FileText,
   Gauge,
   Inbox,
+  MessagesSquare,
   Map as MapIcon,
   Phone,
   Radio,
@@ -27,6 +28,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import { MarketSwitcher } from "./market-switcher";
 
 const ICONS = {
+  inbox: MessagesSquare,
   dispatch: Radio,
   requests: Inbox,
   intake: Phone,

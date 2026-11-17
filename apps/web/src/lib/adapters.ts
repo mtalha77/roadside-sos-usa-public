@@ -31,6 +31,7 @@ export function maps(): MapsAdapter {
     autocomplete: async (...a) => (void countUsage("maps_autocomplete"), m.autocomplete(...a)),
     place: async (...a) => (void countUsage("maps_place"), m.place(...a)),
     reverseGeocode: async (...a) => (void countUsage("maps_geocode"), m.reverseGeocode(...a)),
+    geocode: async (...a) => (void countUsage("maps_geocode"), m.geocode(...a)),
     route: async (...a) => (void countUsage("maps_routes"), m.route(...a)),
   };
 }

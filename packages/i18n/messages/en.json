@@ -34,7 +34,8 @@
       "content": "Content",
       "settings": "Settings",
       "walkthrough": "Walkthrough",
-      "intake": "Phone intake"
+      "intake": "Phone intake",
+      "inbox": "Inbox"
     },
     "shell": {
       "nav": "Admin",
@@ -909,6 +910,161 @@
       "transferFailed": "The call could not be transferred.",
       "holdFailed": "Hold didn't work. Try again.",
       "hangUp": "Hang up"
+    },
+    "inbox": {
+      "title": "Inbox",
+      "alerts": "Sound and notifications",
+      "unread": "{count} new",
+      "unassigned": "{count} unassigned",
+      "empty": "Nothing waiting. New requests, calls and texts appear here as they arrive.",
+      "marketCount": "{market} ({count})",
+      "urgent": "Urgent",
+      "new": "New",
+      "waiting": "waiting {time}",
+      "owner": "Handled by {name}",
+      "unclaimed": "Not claimed",
+      "claimLapsed": "Claim lapsed after 10 minutes",
+      "textIn": "New text",
+      "newItem": "New in the inbox",
+      "pick": "Pick an item to see the request, call the driver and dispatch a provider.",
+      "status": {
+        "phone_intake": "Phone intake",
+        "submitted": "New",
+        "quoting": "Finding providers",
+        "quoted": "Quoted",
+        "contacted": "Contacted",
+        "location_confirmed": "Location confirmed",
+        "assigned": "Provider assigned",
+        "en_route": "On the way",
+        "on_site": "Arrived",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "no_provider": "No provider found",
+        "expired": "Expired",
+        "draft": "Draft",
+        "accepted": "Accepted"
+      },
+      "call": {
+        "ringing": "Calling now",
+        "answered": "Call answered",
+        "missed": "Missed call",
+        "voicemail": "Voicemail",
+        "busy": "Busy",
+        "failed": "Call failed",
+        "completed": "Call ended"
+      },
+      "stepTo": {
+        "contacted": "Mark contacted",
+        "location_confirmed": "Location confirmed",
+        "en_route": "On the way",
+        "on_site": "Arrived",
+        "completed": "Completed",
+        "cancelled": "Cancel",
+        "no_provider": "No provider found"
+      },
+      "textStatus": {
+        "queued": "Queued",
+        "held": "Held",
+        "blocked": "Blocked (opted out)",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "undelivered": "Not delivered",
+        "failed": "Failed",
+        "received": "Received"
+      },
+      "yours": "You are handling this.",
+      "claim": "Claim",
+      "takeOver": "Take over",
+      "claimTaken": "Another dispatcher is handling it.",
+      "reason": "Reason (required)",
+      "fullDetail": "Full detail",
+      "driver": "Driver",
+      "service": "Service",
+      "location": "Location",
+      "noLocation": "Not shared yet",
+      "vehicle": "Vehicle",
+      "notes": "Notes",
+      "source": "Source",
+      "map": "Map of the driver's location",
+      "handling": "Handling",
+      "endReason": "Reason: {reason}",
+      "intakeTitle": "Intake details",
+      "providersTitle": "Nearby providers",
+      "assignedTo": "Assigned to {name}: {price}, about {eta} min.",
+      "noProviders": "No active provider with a price for this service in this market yet.",
+      "miles": "{miles} mi",
+      "priceFrom": "Price {price}",
+      "responds": "Last answered in {sec} s",
+      "accepts": "Accepts {pct}%",
+      "callProvider": "Call",
+      "outcome": {
+        "no_answer": "No answer",
+        "declined": "Declined",
+        "quoted": "Quoted",
+        "assigned": "Assigned"
+      },
+      "textsTitle": "Texts",
+      "timeline": "Timeline",
+      "note": "Note",
+      "addNote": "Add note",
+      "tl": {
+        "status": "Status: {status}",
+        "claimed": "Claimed",
+        "note": "Note",
+        "call_received": "Call received",
+        "call_missed": "Missed call",
+        "voicemail": "Voicemail",
+        "call_answered": "Answered in the browser",
+        "call_outbound": "Outbound call",
+        "call_transferred": "Call transferred",
+        "location_shared": "Driver shared location",
+        "call_inbound": "Incoming call: {outcome}",
+        "call_outbound_x": "",
+        "text_inbound": "Text from the driver",
+        "text_outbound": "Text to the driver"
+      },
+      "intake": {
+        "name": "Name",
+        "service": "Service",
+        "choose": "Choose a service",
+        "address": "Address or cross streets",
+        "vehicle": "Vehicle",
+        "notes": "Notes",
+        "save": "Save intake"
+      },
+      "dispatch": {
+        "price": "Price ($)",
+        "eta": "ETA (min)",
+        "quoted": "Quoted",
+        "noAnswer": "No answer",
+        "declined": "Declined",
+        "assign": "Assign"
+      },
+      "texts": {
+        "savedReplies": "Saved replies",
+        "chooseReply": "Choose a saved reply",
+        "message": "Message",
+        "length": "{count} / 640 characters",
+        "send": "Send text",
+        "sendLink": "Send location link"
+      },
+      "result": {
+        "ok": "Saved.",
+        "errors": {
+          "forbidden": "Only dispatchers can do this.",
+          "invalid": "Check the fields and try again.",
+          "reason": "Add a reason.",
+          "location": "Save the service and location first.",
+          "step": "That step isn't possible from here.",
+          "service": "That service isn't offered in this market.",
+          "address": "We couldn't find that address.",
+          "quote": "Add the price and ETA for a quote.",
+          "generic": "Something went wrong. Try again.",
+          "noNumber": "This market has no phone number yet.",
+          "optedOut": "The driver opted out of texts.",
+          "failed": "The text could not be sent."
+        }
+      }
     }
   },
   "emails": {
@@ -2862,6 +3018,9 @@
     "voicemailAlert": "New voicemail from {caller}. Listen in the admin inbox."
   },
   "texts": {
-    "stopNotice": "Reply STOP to opt out."
+    "stopNotice": "Reply STOP to opt out.",
+    "help": "{brand}: roadside help dispatch. For support email {support}. Reply STOP to opt out. Msg & data rates may apply.",
+    "assigned": "Hi {first_name}, {provider} is on the way. Quoted price {price}, about {eta} min. Track here: {link}",
+    "locationLink": "Please share your exact location here so we can send help: {link}"
   }
 }
