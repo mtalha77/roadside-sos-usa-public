@@ -19,7 +19,7 @@
 | RSOS-023 Location link                              | Done                     | [#180](https://github.com/mtalha77/roadside-sos-usa-public/pull/180) |
 | RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Done (texting off)       | [#181](https://github.com/mtalha77/roadside-sos-usa-public/pull/181) |
 | RSOS-031 Ad tracking and attribution                | Done (ad keys missing)   | (this PR)                                                            |
-| RSOS-089-prep Test campaign kit                     | Built, merge BLOCKED     | branch `rsos-089-campaign-kit`                                       |
+| RSOS-089-prep Test campaign kit                     | Done                     | (this PR)                                                            |
 | RSOS-036 Release QA and first production release    | Not released (see below) | `docs/reports/release-1.md`                                          |
 
 ## Run blocker (resolved): a new security advisory stopped every merge (2026-11-17)
@@ -232,6 +232,36 @@ Applies the "Scope changes from the owner" section of the updated batch file (co
   - e2e `inbox-dispatch.spec.ts`: a signed missed call becomes an urgent item; the dispatcher
     claims it, records the intake, reads the location link and ends it with a reason.
 - Owner: nothing.
+
+### RSOS-089-prep: Test campaign kit
+
+- **A real launch checklist per market** (Admin > Markets > a market), with six items:
+  - tracking numbers: website and Google Ads;
+  - at least N active, non-demo providers for every enabled service (N is per market, default 3);
+  - prices and fees set;
+  - on-duty dispatch covering 24/7;
+  - an English landing page;
+  - conversion tracking seen in the last 30 days.
+
+  Going live is blocked until every item is green. A super admin can override with a written
+  reason, which goes to the audit log. Ops managers cannot override.
+
+- **Campaign analytics** (`/campaign`):
+  - per market and day: requests, contacted within 2 minutes, assigned, completed, average time
+    to contact and to assign, quoted job value, and the `manual_test` fees that would have been
+    earned;
+  - a CSV export for the owner.
+- **Dispatch playbook** (`docs/runbooks/dispatch-playbook.md`): the steps for every request, the
+  scripts for calls (safety first, providers, assigning), no-provider and dangerous-location
+  scripts, price disputes, and recording outcomes. Written for this campaign with no texts: the
+  driver is told by email or on the call, and the location link is a code read on the call.
+- Real or demo: real. Keys: none. Tested:
+  - pgTAP `026_campaign_kit` (visitors cannot read the checklist; missing items block going live;
+    only super admins override; the override is audited);
+  - unit tests for the campaign metrics and CSV;
+  - e2e `campaign-kit.spec.ts`.
+- Owner: set the minimum providers per service for each market before launch, and onboard at least
+  that many real providers per service.
 
 ### RSOS-031: Ad tracking and attribution
 
