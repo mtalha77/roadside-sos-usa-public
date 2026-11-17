@@ -14,15 +14,15 @@
 | RSOS-021b Real maps and SMS codes                   | Done (real keys BLOCKED) | [#175](https://github.com/mtalha77/roadside-sos-usa-public/pull/175) |
 | RSOS-030 Call tracking and the phone flow (IVR)     | Done (real keys BLOCKED) | [#173](https://github.com/mtalha77/roadside-sos-usa-public/pull/173) |
 | RSOS-021c Owner scope change: email codes, no Maps  | Done                     | [#176](https://github.com/mtalha77/roadside-sos-usa-public/pull/176) |
-| RSOS-074b Real browser softphone                    | Ready, merge BLOCKED     | [#177](https://github.com/mtalha77/roadside-sos-usa-public/pull/177) |
-| RSOS-034b Real inbox and manual dispatch            | Built, merge BLOCKED     | branch `rsos-034b-inbox-dispatch`                                    |
+| RSOS-074b Real browser softphone                    | Done (real keys BLOCKED) | [#177](https://github.com/mtalha77/roadside-sos-usa-public/pull/177) |
+| RSOS-034b Real inbox and manual dispatch            | Done                     | (this PR)                                                            |
 | RSOS-023 Location link                              | Built, merge BLOCKED     | branch `rsos-023-location-link`                                      |
 | RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Built, merge BLOCKED     | branch `rsos-035-texts-emails`                                       |
 | RSOS-031 Ad tracking and attribution                | Built, merge BLOCKED     | branch `rsos-031-ad-tracking`                                        |
 | RSOS-089-prep Test campaign kit                     | Built, merge BLOCKED     | branch `rsos-089-campaign-kit`                                       |
 | RSOS-036 Release QA and first production release    | Not released (see below) | `docs/reports/release-1.md`                                          |
 
-## Run blocker: a new security advisory stops every merge (2026-11-17)
+## Run blocker (resolved): a new security advisory stopped every merge (2026-11-17)
 
 `pnpm audit --prod --audit-level high` (inside the required `lint` check) started failing on
 GHSA-fc5q-39xc-vjpf: picomatch ReDoS (high), every version up to 4.0.7, **no patched version**.
@@ -32,9 +32,9 @@ next-intl); no user input reaches it.
 - [#177](https://github.com/mtalha77/roadside-sos-usa-public/pull/177) (RSOS-074b) passes every
   other check (build, db, e2e, lighthouse, scan, storybook, test, typecheck); only `lint` fails,
   on this audit step.
-- Accepting the advisory (an `auditConfig.ignoreGhsas` entry in `pnpm-workspace.yaml`) is an owner
-  decision, so it was not made unattended. Until then, or until picomatch ships a fix, nothing can
-  merge into `staging` or `main`.
+- Accepting the advisory is an owner decision, so the run stopped and asked. **The owner accepted
+  it** (2026-11-17): `pnpm-workspace.yaml` lists it under `auditConfig.ignoreGhsas` with the
+  reason, to be removed when picomatch ships a fix. The run then continued.
 - Found during Release QA: since RSOS-099, every staging database deploy after the staging smoke
   has failed its "no fake data" check (the smoke's own Get Help request uses a fictional
   number), and that skipped the Auth configuration step, so staging's sign-in email does not
