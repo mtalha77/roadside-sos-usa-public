@@ -19,6 +19,9 @@ select throws_ok($$ select * from public.market_launch_checklist((select id from
 reset role;
 
 select set_config('test.market', (select id::text from public.markets where slug = 'houston'), true);
+-- rsos-dev keeps audit rows from e2e runs: the test checks the increase.
+select set_config('test.overrides_before', (select count(*)::text from public.audit_log
+  where action = 'market.live_override' and entity_id = current_setting('test.market')), true);
 select pg_temp.as_role('ops_manager');
 select is((select count(*)::int from public.market_launch_checklist(current_setting('test.market')::uuid)), 6, 'six checklist items');
 select ok((select not ok from public.market_launch_checklist(current_setting('test.market')::uuid) where item = 'providers'),
@@ -34,7 +37,7 @@ select lives_ok($$ select public.set_market_status(current_setting('test.market'
   'a super admin overrides with a reason');
 reset role;
 select is((select count(*)::int from public.audit_log where action = 'market.live_override' and entity_id = current_setting('test.market')),
-  1, 'the override is in the audit log');
+  current_setting('test.overrides_before')::int + 1, 'the override is in the audit log');
 
 select * from finish();
 rollback;
