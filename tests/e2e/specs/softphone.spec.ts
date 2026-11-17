@@ -14,13 +14,16 @@ test.describe("softphone dock", () => {
     await dock.getByRole("button", { name: /Phone · / }).click();
     await expect(dock.getByText(/Demo phone: Twilio is not connected/)).toBeVisible();
     await expectNoA11yViolations(page);
+    // The demo dispatcher is shared by the parallel browsers, so every run only sets Available.
     await dock.getByLabel("Your status").selectOption("available");
-    await page.reload();
-    await expect(page.getByRole("button", { name: "Phone · Available" })).toBeVisible();
+    const pill = page.getByRole("button", { name: "Phone · Available" });
+    // Saved on the server: it survives a reload (retried while the save is still in flight).
+    await expect(async () => {
+      await page.reload();
+      await expect(pill).toBeVisible({ timeout: 3_000 });
+    }).toPass({ timeout: 30_000 });
     await page.goto(new URL("/requests", appUrls.admin).toString());
-    await expect(page.getByRole("button", { name: "Phone · Available" })).toBeVisible();
-    await page.getByRole("button", { name: "Phone · Available" }).click();
-    await page.getByLabel("Your status").selectOption("away");
+    await expect(pill).toBeVisible();
   });
 
   test("the TwiML App endpoint rejects unsigned requests", async ({ request }) => {
