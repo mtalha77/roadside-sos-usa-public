@@ -3,8 +3,11 @@ name: Staging smoke
 # RSOS-099: after every staging deploy, check that the three staging hosts serve the new commit
 # with green health checks, that "Sign in as demo" works for every role, and that Get Help reaches
 # the quotes screen in demo mode. Opens an issue on failure.
+# Triggered by every push to staging (Vercel's deployment events carry the commit SHA, not the
+# branch name); the first step waits until all three staging hosts serve that commit.
 on:
-  deployment_status:
+  push:
+    branches: [staging]
   workflow_dispatch:
 
 permissions:
@@ -18,11 +21,6 @@ concurrency:
 jobs:
   smoke:
     name: staging-smoke
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.deployment_status.state == 'success' &&
-       github.event.deployment.ref == 'staging' &&
-       contains(github.event.deployment.environment, 'rsos-web'))
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -30,16 +28,17 @@ jobs:
       E2E_PROVIDER_URL: https://staging-pro.${{ vars.APP_DOMAIN }}
       E2E_ADMIN_URL: https://staging-admin.${{ vars.APP_DOMAIN }}
       VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-      EXPECTED_SHA: ${{ github.event.deployment.sha }}
+      EXPECTED_SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Wait until all three staging hosts serve this commit
-        if: github.event_name == 'deployment_status'
+        if: github.event_name == 'push'
         run: |
           for host in "$E2E_WEB_URL" "$E2E_PROVIDER_URL" "$E2E_ADMIN_URL"; do
             for i in $(seq 1 60); do
               sha=$(curl -fsS -H "x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET" "$host/api/health" | jq -r '.commit // empty' || true)
               [ "$sha" = "$EXPECTED_SHA" ] && echo "$host is on $EXPECTED_SHA" && break
+              [ "$i" = 60 ] && echo "::error::$host never served $EXPECTED_SHA" && exit 1
               sleep 10
             done
           done
