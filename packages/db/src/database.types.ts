@@ -445,6 +445,67 @@ export type Database = {
         }
         Relationships: []
       }
+      dispatch_attempts: {
+        Row: {
+          created_at: string
+          id: string
+          market_id: string
+          outcome: Database["public"]["Enums"]["dispatch_outcome"]
+          provider_id: string
+          quoted_eta_minutes: number | null
+          quoted_price_cents: number | null
+          request_id: string
+          response_sec: number | null
+          staff_user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          market_id: string
+          outcome: Database["public"]["Enums"]["dispatch_outcome"]
+          provider_id: string
+          quoted_eta_minutes?: number | null
+          quoted_price_cents?: number | null
+          request_id: string
+          response_sec?: number | null
+          staff_user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          market_id?: string
+          outcome?: Database["public"]["Enums"]["dispatch_outcome"]
+          provider_id?: string
+          quoted_eta_minutes?: number | null
+          quoted_price_cents?: number | null
+          request_id?: string
+          response_sec?: number | null
+          staff_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispatch_attempts_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dispatch_attempts_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dispatch_attempts_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dispatcher_shifts: {
         Row: {
           end_minute: number
@@ -929,6 +990,7 @@ export type Database = {
           id: number
           kind: string
           provider_id: string
+          request_id: string | null
         }
         Insert: {
           amount_cents: number
@@ -936,6 +998,7 @@ export type Database = {
           id?: never
           kind: string
           provider_id: string
+          request_id?: string | null
         }
         Update: {
           amount_cents?: number
@@ -943,6 +1006,7 @@ export type Database = {
           id?: never
           kind?: string
           provider_id?: string
+          request_id?: string | null
         }
         Relationships: [
           {
@@ -950,6 +1014,13 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_billing_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
             referencedColumns: ["id"]
           },
         ]
@@ -983,6 +1054,55 @@ export type Database = {
           },
         ]
       }
+      provider_service_prices: {
+        Row: {
+          active: boolean
+          market_id: string
+          price_cents: number
+          provider_id: string
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          market_id: string
+          price_cents: number
+          provider_id: string
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          market_id?: string
+          price_cents?: number
+          provider_id?: string
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_service_prices_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_service_prices_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_service_prices_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       provider_wallets: {
         Row: {
           balance_cents: number
@@ -1011,31 +1131,40 @@ export type Database = {
       }
       providers: {
         Row: {
+          base_point: unknown
           created_at: string
+          dispatch_phone: string | null
           id: string
           is_demo: boolean
           market_ids: string[]
           name: string
+          service_radius_miles: number | null
           status: Database["public"]["Enums"]["provider_status"]
           status_reason: string | null
           updated_at: string
         }
         Insert: {
+          base_point?: unknown
           created_at?: string
+          dispatch_phone?: string | null
           id?: string
           is_demo?: boolean
           market_ids?: string[]
           name: string
+          service_radius_miles?: number | null
           status?: Database["public"]["Enums"]["provider_status"]
           status_reason?: string | null
           updated_at?: string
         }
         Update: {
+          base_point?: unknown
           created_at?: string
+          dispatch_phone?: string | null
           id?: string
           is_demo?: boolean
           market_ids?: string[]
           name?: string
+          service_radius_miles?: number | null
           status?: Database["public"]["Enums"]["provider_status"]
           status_reason?: string | null
           updated_at?: string
@@ -1185,11 +1314,14 @@ export type Database = {
       requests: {
         Row: {
           accepted_at: string | null
+          assigned_at: string | null
           assigned_dispatcher_id: string | null
+          assigned_provider_id: string | null
           cancelled_at: string | null
           channel: Database["public"]["Enums"]["request_channel"]
           claimed_at: string | null
           completed_at: string | null
+          contacted_at: string | null
           created_at: string
           destination_address: string | null
           destination_point: unknown
@@ -1199,12 +1331,15 @@ export type Database = {
           driver_phone: string
           driver_phone_verified: boolean
           en_route_at: string | null
+          end_reason: string | null
           expired_at: string | null
           has_passengers: boolean | null
           id: string
           keys_available: boolean | null
+          location_confirmed_at: string | null
           market_id: string
           market_service_id: string | null
+          no_provider_at: string | null
           notes: string | null
           on_highway: boolean | null
           on_site_at: string | null
@@ -1213,6 +1348,8 @@ export type Database = {
           pickup_point: unknown
           platform_fee_cents: number
           quoted_at: string | null
+          quoted_eta_minutes: number | null
+          quoted_price_cents: number | null
           safe_spot: boolean | null
           service_id: string | null
           short_code: string
@@ -1232,11 +1369,14 @@ export type Database = {
         }
         Insert: {
           accepted_at?: string | null
+          assigned_at?: string | null
           assigned_dispatcher_id?: string | null
+          assigned_provider_id?: string | null
           cancelled_at?: string | null
           channel?: Database["public"]["Enums"]["request_channel"]
           claimed_at?: string | null
           completed_at?: string | null
+          contacted_at?: string | null
           created_at?: string
           destination_address?: string | null
           destination_point?: unknown
@@ -1246,12 +1386,15 @@ export type Database = {
           driver_phone: string
           driver_phone_verified?: boolean
           en_route_at?: string | null
+          end_reason?: string | null
           expired_at?: string | null
           has_passengers?: boolean | null
           id?: string
           keys_available?: boolean | null
+          location_confirmed_at?: string | null
           market_id: string
           market_service_id?: string | null
+          no_provider_at?: string | null
           notes?: string | null
           on_highway?: boolean | null
           on_site_at?: string | null
@@ -1260,6 +1403,8 @@ export type Database = {
           pickup_point?: unknown
           platform_fee_cents: number
           quoted_at?: string | null
+          quoted_eta_minutes?: number | null
+          quoted_price_cents?: number | null
           safe_spot?: boolean | null
           service_id?: string | null
           short_code: string
@@ -1279,11 +1424,14 @@ export type Database = {
         }
         Update: {
           accepted_at?: string | null
+          assigned_at?: string | null
           assigned_dispatcher_id?: string | null
+          assigned_provider_id?: string | null
           cancelled_at?: string | null
           channel?: Database["public"]["Enums"]["request_channel"]
           claimed_at?: string | null
           completed_at?: string | null
+          contacted_at?: string | null
           created_at?: string
           destination_address?: string | null
           destination_point?: unknown
@@ -1293,12 +1441,15 @@ export type Database = {
           driver_phone?: string
           driver_phone_verified?: boolean
           en_route_at?: string | null
+          end_reason?: string | null
           expired_at?: string | null
           has_passengers?: boolean | null
           id?: string
           keys_available?: boolean | null
+          location_confirmed_at?: string | null
           market_id?: string
           market_service_id?: string | null
+          no_provider_at?: string | null
           notes?: string | null
           on_highway?: boolean | null
           on_site_at?: string | null
@@ -1307,6 +1458,8 @@ export type Database = {
           pickup_point?: unknown
           platform_fee_cents?: number
           quoted_at?: string | null
+          quoted_eta_minutes?: number | null
+          quoted_price_cents?: number | null
           safe_spot?: boolean | null
           service_id?: string | null
           short_code?: string
@@ -1325,6 +1478,13 @@ export type Database = {
           vehicle_year?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "requests_assigned_provider_id_fkey"
+            columns: ["assigned_provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "requests_market_id_fkey"
             columns: ["market_id"]
@@ -1354,6 +1514,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      saved_replies: {
+        Row: {
+          body: string
+          id: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          id?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          id?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       service_pages: {
         Row: {
@@ -1785,6 +1969,10 @@ export type Database = {
         Args: { p_reason: string; p_token: string }
         Returns: boolean
       }
+      claim_request: {
+        Args: { p_force?: boolean; p_request_id: string }
+        Returns: boolean
+      }
       create_request: {
         Args: { p: Json }
         Returns: {
@@ -1794,6 +1982,17 @@ export type Database = {
         }[]
       }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      dispatch_step: {
+        Args: {
+          p_eta_minutes?: number
+          p_price_cents?: number
+          p_provider_id?: string
+          p_reason?: string
+          p_request_id: string
+          p_status: Database["public"]["Enums"]["request_status"]
+        }
+        Returns: undefined
+      }
       find_recent_request: { Args: { p_phone: string }; Returns: string }
       forget_trusted_device: { Args: { p_id: string }; Returns: undefined }
       generate_recovery_codes: { Args: never; Returns: string[] }
@@ -2000,6 +2199,19 @@ export type Database = {
           user_agent: string
         }[]
       }
+      nearby_providers: {
+        Args: { p_request_id: string }
+        Returns: {
+          acceptance_rate: number
+          dispatch_phone: string
+          distance_miles: number
+          in_radius: boolean
+          last_response_sec: number
+          name: string
+          price_cents: number
+          provider_id: string
+        }[]
+      }
       on_duty_dispatchers: {
         Args: { p_at?: string }
         Returns: {
@@ -2022,7 +2234,22 @@ export type Database = {
         }[]
       }
       record_cookie_consent: { Args: { p: Json }; Returns: undefined }
+      record_manual_test_fee: {
+        Args: {
+          p_amount_cents: number
+          p_provider_id: string
+          p_request_id: string
+        }
+        Returns: undefined
+      }
       request_account_closure: { Args: { p_reason: string }; Returns: string }
+      request_point: {
+        Args: { p_request_id: string }
+        Returns: {
+          lat: number
+          lng: number
+        }[]
+      }
       revoke_my_session: { Args: { p_session_id: string }; Returns: boolean }
       save_request_draft: {
         Args: { p_patch: Json; p_token: string }
@@ -2085,6 +2312,7 @@ export type Database = {
         | "sms_transactional"
         | "sms_marketing"
         | "call_recording"
+      dispatch_outcome: "no_answer" | "declined" | "quoted" | "assigned"
       dispatcher_presence: "available" | "busy" | "away"
       market_status: "draft" | "test" | "active" | "paused"
       message_direction: "outbound" | "inbound"
@@ -2290,6 +2518,7 @@ export const Constants = {
         "sms_marketing",
         "call_recording",
       ],
+      dispatch_outcome: ["no_answer", "declined", "quoted", "assigned"],
       dispatcher_presence: ["available", "busy", "away"],
       market_status: ["draft", "test", "active", "paused"],
       message_direction: ["outbound", "inbound"],

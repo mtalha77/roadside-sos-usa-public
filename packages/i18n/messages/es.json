@@ -34,7 +34,8 @@
       "content": "Contenido",
       "settings": "Ajustes",
       "walkthrough": "Recorrido",
-      "intake": "Recepción telefónica"
+      "intake": "Recepción telefónica",
+      "inbox": "Bandeja"
     },
     "shell": {
       "nav": "Administración",
@@ -909,6 +910,161 @@
       "transferFailed": "No se pudo transferir la llamada.",
       "holdFailed": "La espera no funcionó. Inténtalo de nuevo.",
       "hangUp": "Colgar"
+    },
+    "inbox": {
+      "title": "Bandeja",
+      "alerts": "Sonido y notificaciones",
+      "unread": "{count} nuevas",
+      "unassigned": "{count} sin asignar",
+      "empty": "Nada pendiente. Las nuevas solicitudes, llamadas y textos aparecen aquí al llegar.",
+      "marketCount": "{market} ({count})",
+      "urgent": "Urgente",
+      "new": "Nueva",
+      "waiting": "esperando {time}",
+      "owner": "Atiende {name}",
+      "unclaimed": "Sin tomar",
+      "claimLapsed": "Se liberó tras 10 minutos",
+      "newItem": "Nuevo en la bandeja",
+      "pick": "Elige un elemento para ver la solicitud, llamar al conductor y despachar un proveedor.",
+      "status": {
+        "phone_intake": "Llamada entrante",
+        "submitted": "Nueva",
+        "quoting": "Buscando proveedores",
+        "quoted": "Cotizada",
+        "contacted": "Contactado",
+        "location_confirmed": "Ubicación confirmada",
+        "assigned": "Proveedor asignado",
+        "en_route": "En camino",
+        "on_site": "Llegó",
+        "completed": "Terminada",
+        "cancelled": "Cancelada",
+        "no_provider": "Sin proveedor",
+        "expired": "Vencida",
+        "draft": "Borrador",
+        "accepted": "Aceptada"
+      },
+      "call": {
+        "ringing": "Llamando ahora",
+        "answered": "Llamada contestada",
+        "missed": "Llamada perdida",
+        "voicemail": "Mensaje de voz",
+        "busy": "Ocupado",
+        "failed": "Llamada fallida",
+        "completed": "Llamada terminada"
+      },
+      "stepTo": {
+        "contacted": "Marcar contactado",
+        "location_confirmed": "Ubicación confirmada",
+        "en_route": "En camino",
+        "on_site": "Llegó",
+        "completed": "Terminada",
+        "cancelled": "Cancelar",
+        "no_provider": "Sin proveedor"
+      },
+      "textStatus": {
+        "queued": "En cola",
+        "held": "Retenido",
+        "blocked": "Bloqueado (se dio de baja)",
+        "sent": "Enviado",
+        "delivered": "Entregado",
+        "undelivered": "No entregado",
+        "failed": "Falló",
+        "received": "Recibido"
+      },
+      "yours": "Tú atiendes esta solicitud.",
+      "claim": "Tomar",
+      "takeOver": "Tomar el control",
+      "claimTaken": "Otro despachador la está atendiendo.",
+      "reason": "Motivo (obligatorio)",
+      "fullDetail": "Detalle completo",
+      "driver": "Conductor",
+      "service": "Servicio",
+      "location": "Ubicación",
+      "noLocation": "Aún no la comparte",
+      "vehicle": "Vehículo",
+      "notes": "Notas",
+      "source": "Fuente",
+      "map": "Mapa de la ubicación del conductor",
+      "handling": "Atención",
+      "endReason": "Motivo: {reason}",
+      "intakeTitle": "Datos de la llamada",
+      "providersTitle": "Proveedores cercanos",
+      "assignedTo": "Asignado a {name}: {price}, unos {eta} min.",
+      "noProviders": "Aún no hay proveedores activos con precio para este servicio en este mercado.",
+      "miles": "{miles} mi",
+      "priceFrom": "Precio {price}",
+      "responds": "Última respuesta en {sec} s",
+      "accepts": "Acepta {pct}%",
+      "callProvider": "Llamar",
+      "outcome": {
+        "no_answer": "No contestó",
+        "declined": "Rechazó",
+        "quoted": "Cotizó",
+        "assigned": "Asignado"
+      },
+      "timeline": "Historial",
+      "note": "Nota",
+      "addNote": "Agregar nota",
+      "tl": {
+        "status": "Estado: {status}",
+        "claimed": "Tomada",
+        "note": "Nota",
+        "call_received": "Llamada recibida",
+        "call_missed": "Llamada perdida",
+        "voicemail": "Mensaje de voz",
+        "call_answered": "Contestada en el navegador",
+        "call_outbound": "Llamada saliente",
+        "call_transferred": "Llamada transferida",
+        "location_shared": "El conductor compartió su ubicación",
+        "call_inbound": "Llamada entrante: {outcome}",
+        "text_inbound": "Texto del conductor",
+        "text_outbound": "Texto al conductor",
+        "driver_told": "Conductor avisado",
+        "driver_emailed": "Email enviado al conductor"
+      },
+      "intake": {
+        "name": "Nombre",
+        "service": "Servicio",
+        "choose": "Elige un servicio",
+        "address": "Dirección o cruce de calles",
+        "vehicle": "Vehículo",
+        "notes": "Notas",
+        "save": "Guardar datos"
+      },
+      "dispatch": {
+        "price": "Precio ($)",
+        "eta": "Llegada (min)",
+        "quoted": "Cotizó",
+        "noAnswer": "No contestó",
+        "declined": "Rechazó",
+        "assign": "Asignar"
+      },
+      "result": {
+        "ok": "Guardado.",
+        "errors": {
+          "forbidden": "Solo los despachadores pueden hacer esto.",
+          "invalid": "Revisa los campos e inténtalo de nuevo.",
+          "reason": "Agrega un motivo.",
+          "location": "Guarda primero el servicio y la ubicación.",
+          "step": "Ese paso no es posible desde aquí.",
+          "service": "Ese servicio no se ofrece en este mercado.",
+          "address": "Escribe una dirección con número, un cruce de calles o una carretera con salida.",
+          "quote": "Agrega el precio y el tiempo de llegada.",
+          "generic": "Algo salió mal. Inténtalo de nuevo."
+        }
+      },
+      "tell": {
+        "title": "Avisar al conductor",
+        "email": "Email: {email}",
+        "noEmail": "Esta solicitud no tiene email: lee el texto de abajo en la llamada.",
+        "emailed": "Enviado por email al conductor y anotado en el historial.",
+        "readAloud": "Léele esto al conductor y luego anótalo:",
+        "logRead": "Se lo leí al conductor",
+        "sendLink": "Enlace de ubicación",
+        "assignedScript": "{provider} va en camino. Precio cotizado {price}, unos {eta} minutos.",
+        "linkScript": "Abre este enlace y toca Compartir mi ubicación: {link}",
+        "logged": "Anotado en el historial."
+      }
     }
   },
   "emails": {
@@ -975,6 +1131,18 @@
       },
       "transcript": "Transcripción: {text}",
       "open": "Abre la bandeja: {url}"
+    },
+    "driverUpdate": {
+      "subject": {
+        "assigned": "{brand}: la ayuda va en camino",
+        "locationLink": "{brand}: comparte tu ubicación exacta"
+      },
+      "body": {
+        "assigned": "Hola {first_name}, {provider} va en camino. Precio cotizado {price}, unos {eta} minutos.",
+        "locationLink": "Hola {first_name}, abre el enlace de abajo y comparte tu ubicación exacta para enviarte ayuda."
+      },
+      "open": "Abrir: {url}",
+      "footer": "Recibes este email porque pediste asistencia en carretera. Responde a este email si algo está mal."
     }
   },
   "auth": {
@@ -2862,6 +3030,9 @@
     "voicemailAlert": "Nuevo mensaje de voz de {caller}. Escúchalo en la bandeja de admin."
   },
   "texts": {
-    "stopNotice": "Responde STOP para no recibir más mensajes."
+    "stopNotice": "Responde STOP para no recibir más mensajes.",
+    "help": "{brand}: despacho de asistencia en carretera. Para soporte escribe a {support}. Responde STOP para no recibir más mensajes. Pueden aplicar tarifas.",
+    "assigned": "Hola {first_name}, {provider} va en camino. Precio cotizado {price}, unos {eta} min. Sigue aquí: {link}",
+    "locationLink": "Comparte tu ubicación exacta aquí para enviarte ayuda: {link}"
   }
 }

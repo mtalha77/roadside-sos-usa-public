@@ -190,3 +190,29 @@ describe("rate limit stores", () => {
     ).not.toBe(durable);
   });
 });
+
+describe("forward geocoding", () => {
+  it("fake keeps the text at the market centre; real parses Google's answer", async () => {
+    expect(await createFakeMaps().geocode("12", { lat: 1, lng: 2 })).toBeNull();
+    expect(await createFakeMaps().geocode("1200 Main St", { lat: 1, lng: 2 })).toEqual({
+      address: "1200 Main St",
+      lat: 1,
+      lng: 2,
+    });
+    const g = createGoogleMaps("k", (async () =>
+      json({
+        status: "OK",
+        results: [
+          { formatted_address: "1200 Main St, Test", geometry: { location: { lat: 3, lng: 4 } } },
+        ],
+      })) as unknown as typeof fetch);
+    expect(await g.geocode("1200 Main St", { lat: 1, lng: 2 })).toEqual({
+      address: "1200 Main St, Test",
+      lat: 3,
+      lng: 4,
+    });
+    expect(await g.geocode("ab")).toBeNull();
+    const bad = createGoogleMaps("k", (async () => json({}, 500)) as unknown as typeof fetch);
+    expect(await bad.geocode("1200 Main St")).toBeNull();
+  });
+});

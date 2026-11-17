@@ -23,6 +23,8 @@ export interface MapsAdapter {
   ): Promise<PlaceSuggestion[]>;
   place(placeId: string, opts?: { sessionToken?: string }): Promise<Place | null>;
   reverseGeocode(point: LatLng): Promise<ReverseResult | null>;
+  /** Address text to a point (US only, biased to a market); null when not found. */
+  geocode(address: string, bias?: LatLng): Promise<Place | null>;
   route(from: LatLng, to: LatLng): Promise<RouteEstimate | null>;
 }
 
@@ -98,6 +100,10 @@ export function createFakeMaps(mph: number = DEFAULT_AVG_SPEED_MPH): MapsAdapter
     async reverseGeocode() {
       return null;
     },
+    async geocode(address, bias) {
+      // The fake places every address at the market centre (the address text is kept).
+      return address.trim().length >= 3 && bias ? { address: address.trim(), ...bias } : null;
+    },
     async route(from, to) {
       return estimateRoute(from, to, mph);
     },
@@ -134,6 +140,15 @@ const GeocodeResponse = z.object({
     z.object({
       formatted_address: z.string(),
       address_components: z.array(z.object({ long_name: z.string(), types: z.array(z.string()) })),
+    }),
+  ),
+});
+const ForwardGeocodeResponse = z.object({
+  status: z.string(),
+  results: z.array(
+    z.object({
+      formatted_address: z.string(),
+      geometry: z.object({ location: z.object({ lat: z.number(), lng: z.number() }) }),
     }),
   ),
 });
@@ -233,6 +248,30 @@ export function createGoogleMaps(serverKey: string, fetchImpl: typeof fetch = fe
         return {
           address: first.formatted_address,
           highway: highwayFrom(route ?? "") ?? highwayFrom(first.formatted_address),
+        };
+      } catch {
+        return null;
+      }
+    },
+    async geocode(address, bias) {
+      if (address.trim().length < 3) return null;
+      try {
+        const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
+        url.searchParams.set("address", address);
+        url.searchParams.set("components", "country:US");
+        if (bias)
+          url.searchParams.set(
+            "bounds",
+            `${bias.lat - 0.5},${bias.lng - 0.5}|${bias.lat + 0.5},${bias.lng + 0.5}`,
+          );
+        url.searchParams.set("key", serverKey);
+        const data = ForwardGeocodeResponse.parse(await json(url.toString(), { method: "GET" }));
+        const first = data.results[0];
+        if (data.status !== "OK" || !first) return null;
+        return {
+          address: first.formatted_address,
+          lat: first.geometry.location.lat,
+          lng: first.geometry.location.lng,
         };
       } catch {
         return null;

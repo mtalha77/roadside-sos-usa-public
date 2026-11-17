@@ -1,5 +1,6 @@
 /** Admin sections (RSOS-071). Each ticket adds its route to BUILT when the screen exists. */
 export const SECTIONS = [
+  { href: "/inbox", key: "inbox", shortcut: "g n" },
   { href: "/dispatch", key: "dispatch", shortcut: "g d" },
   { href: "/requests", key: "requests", shortcut: "g r" },
   { href: "/intake", key: "intake", shortcut: "g i" },
@@ -17,6 +18,7 @@ export type SectionKey = (typeof SECTIONS)[number]["key"];
 
 export const BUILT: ReadonlySet<string> = new Set([
   "/",
+  "/inbox",
   "/dispatch",
   "/requests",
   "/intake",
