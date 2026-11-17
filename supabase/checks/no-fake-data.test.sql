@@ -10,7 +10,10 @@ select is((select count(*)::int from public.services where slug in ('flat-tire',
 select is((select count(*)::int from public.current_market_services where enabled), 25, 'five enabled services in each of the five markets');
 select is((select slug from public.market_for_point(29.4241, -98.4936)), 'san-antonio', 'San Antonio centre is in San Antonio');
 
-select is_empty($$ select 1 from public.requests where driver_name ilike 'dev seed%' or driver_phone ~ '^\+1[0-9]{3}55501[0-9]{2}$' $$, 'no fake requests');
+-- The staging smoke test (staging-smoke.yml, demo mode only) submits one request per deploy as
+-- "Smoke Test Driver" with a fictional number: expected on staging, impossible in production.
+select is_empty($$ select 1 from public.requests where driver_name ilike 'dev seed%'
+  or (driver_phone ~ '^\+1[0-9]{3}55501[0-9]{2}$' and driver_name <> 'Smoke Test Driver') $$, 'no fake requests');
 select is_empty($$ select 1 from public.provider_applications where company_name ilike 'dev seed%' or email ilike '%@example.test' $$, 'no fake provider applications');
 select is_empty($$ select 1 from public.contact_messages where name ilike 'dev seed%' or email ilike '%@example.test' $$, 'no fake contact messages');
 select is_empty($$ select 1 from public.waitlist where email ilike '%@example.test' or source = 'dev-seed' $$, 'no fake waitlist entries');
