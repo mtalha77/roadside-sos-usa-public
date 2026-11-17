@@ -12,8 +12,10 @@ test.describe("address suggestions", () => {
   }) => {
     await page.goto(new URL("/get-help", appUrls.web).toString());
     await page.getByLabel("City").selectOption({ index: 1 });
+    // A plain field until the driver types; then the suggestions combobox takes over.
+    await page.getByLabel("Street address or cross streets").fill("1200 Main St");
     const box = page.getByRole("combobox", { name: "Street address or cross streets" });
-    await box.fill("1200 Main St");
+    await expect(box).toHaveValue("1200 Main St");
     const option = page.getByRole("option", { name: /1200 Main St/ });
     await expect(option).toBeVisible();
     await expectNoA11yViolations(page);
@@ -60,9 +62,11 @@ test.describe("sign in with a text code", () => {
     await expect(page.getByText("That code didn't work.", { exact: false })).toBeVisible();
     await page.getByLabel("6-digit code").fill("000000");
     await page.getByRole("button", { name: "Sign in" }).click();
-    await expect(page.getByRole("heading", { name: "Today", level: 1 })).toBeVisible({
-      timeout: 30_000,
-    });
+    // Signed in: the home screen, or the account's second step on a new device (the text code is
+    // the first factor only).
+    await expect(
+      page.getByRole("heading", { level: 1, name: /^(Today|Confirm it's you)$/ }),
+    ).toBeVisible({ timeout: 30_000 });
     await ctx.close();
   });
 

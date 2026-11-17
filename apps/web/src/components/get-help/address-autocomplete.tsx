@@ -16,6 +16,7 @@ export function AddressAutocomplete({
   className,
   listLabel,
   autoComplete,
+  autoFocus,
 }: {
   id: string;
   name: string;
@@ -23,6 +24,7 @@ export function AddressAutocomplete({
   className: string;
   listLabel: string;
   autoComplete?: string;
+  autoFocus?: boolean;
 }) {
   const listId = useId();
   const [value, setValue] = useState(defaultValue);
@@ -109,6 +111,7 @@ export function AddressAutocomplete({
         name={name}
         value={value}
         autoComplete={autoComplete}
+        autoFocus={autoFocus}
         role="combobox"
         aria-expanded={open}
         aria-controls={listId}
