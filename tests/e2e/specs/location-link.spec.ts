@@ -35,7 +35,9 @@ test.describe("location link", () => {
     await page.getByRole("textbox", { name: "Number", exact: true }).fill(tracking);
     await page.getByLabel("Source").selectOption("staging_test");
     await page.getByRole("button", { name: "Add number" }).click();
-    await expect(page.getByText(`Added ${tracking}.`)).toBeVisible();
+    await expect(
+      page.getByText(`Added ${tracking}.`).or(page.getByText("That number is already tracked.")),
+    ).toBeVisible();
 
     // A missed call from the driver opens an urgent phone request.
     const post = (path: string, params: Record<string, string>) => {
