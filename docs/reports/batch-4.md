@@ -16,8 +16,8 @@
 | RSOS-021c Owner scope change: email codes, no Maps  | Done                     | [#176](https://github.com/mtalha77/roadside-sos-usa-public/pull/176) |
 | RSOS-074b Real browser softphone                    | Done (real keys BLOCKED) | [#177](https://github.com/mtalha77/roadside-sos-usa-public/pull/177) |
 | RSOS-034b Real inbox and manual dispatch            | Done                     | [#179](https://github.com/mtalha77/roadside-sos-usa-public/pull/179) |
-| RSOS-023 Location link                              | Done                     | (this PR)                                                            |
-| RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Built, merge BLOCKED     | branch `rsos-035-texts-emails`                                       |
+| RSOS-023 Location link                              | Done                     | [#180](https://github.com/mtalha77/roadside-sos-usa-public/pull/180) |
+| RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Done (texting off)       | (this PR)                                                            |
 | RSOS-031 Ad tracking and attribution                | Built, merge BLOCKED     | branch `rsos-031-ad-tracking`                                        |
 | RSOS-089-prep Test campaign kit                     | Built, merge BLOCKED     | branch `rsos-089-campaign-kit`                                       |
 | RSOS-036 Release QA and first production release    | Not released (see below) | `docs/reports/release-1.md`                                          |
@@ -232,6 +232,41 @@ Applies the "Scope changes from the owner" section of the updated batch file (co
   - e2e `inbox-dispatch.spec.ts`: a signed missed call becomes an urgent item; the dispatcher
     claims it, records the intake, reads the location link and ends it with a reason.
 - Owner: nothing.
+
+### RSOS-035: Texts and emails, opt-outs, A2P 10DLC (texting built behind a flag, off)
+
+- **Owner scope change: no SMS in this batch.** Everything for texts is built and tested with fakes
+  behind `TEXTING_ENABLED`, which is off everywhere:
+  - `sendText` sends and records nothing while the flag is off;
+  - the incoming-text webhook (`/api/twilio/messages`) answers 404;
+  - real sends also need the Twilio Messaging keys.
+- **When switched on** (the flag plus the Messaging keys):
+  - Opted-out numbers are blocked in our code too, not only at Twilio. STOP, START and HELP are
+    handled, and HELP answers with the brand and support contact.
+  - The first text to a number carries the STOP notice.
+  - Quiet hours run from 9 pm to 8 am in the market's time zone, for non-urgent texts only.
+  - Until A2P 10DLC is approved, real texts go only to test numbers (staff mobiles and
+    `OWNER_TEST_PHONE`), unless the owner sets the override.
+  - Delivery is reported through the status callback.
+- **Admin > Settings > Texts**:
+  - says texting is off, with the A2P 10DLC status and override;
+  - shows the editable templates (English and Spanish) in `sms_templates`.
+
+  The "texts limited" banner appears only once texting is on.
+
+- **Emails through the Resend fake** (Resend comes after the final domain): a provider
+  application approved email (with an Approve button in recruitment), and a daily dispatch summary
+  for the owner (Vercel Cron, `CRON_SECRET`).
+- **Runbook:** `docs/runbooks/a2p-10dlc.md` (brand and campaign registration, sample messages,
+  opt-in wording). The privacy policy gains a "Text messages" section for when texting starts.
+- Real or demo: fakes and tests only, by the owner's decision. Keys: none now. Tested:
+  - unit `texting.test.ts` (the flag, the fake, keywords, quiet hours, the send decision order);
+  - pgTAP `024_texts_and_compliance` (templates and settings RLS, delivery report);
+  - e2e `admin-settings.spec.ts` (the Texts tab).
+- Owner:
+  - register A2P 10DLC when texting is wanted;
+  - then set `TEXTING_ENABLED=true` with the Messaging keys;
+  - set `CRON_SECRET` on rsos-admin for the daily summary.
 
 ### RSOS-023: Location link
 
