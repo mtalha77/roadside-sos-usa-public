@@ -6,16 +6,16 @@ Messaging Services and separate TwiML Apps**, so test traffic never reaches real
 
 ## Keys (Vercel, per project, Preview for `staging` and Production)
 
-| Variable                       | Projects             | What it is                                                          |
-| ------------------------------ | -------------------- | ------------------------------------------------------------------- |
-| `TWILIO_ACCOUNT_SID`           | web, provider, admin | Account SID (AC…)                                                   |
-| `TWILIO_AUTH_TOKEN`            | web, provider, admin | Auth token: signs and checks webhooks. Sensitive.                   |
-| `TWILIO_API_KEY_SID`           | admin                | API key SID (SK…), for softphone access tokens                      |
-| `TWILIO_API_KEY_SECRET`        | admin                | API key secret. Sensitive.                                          |
-| `TWILIO_VERIFY_SERVICE_SID`    | web, provider, admin | Verify service (VA…): driver phone checks and SMS sign-in           |
-| `TWILIO_MESSAGING_SERVICE_SID` | web, provider, admin | Messaging Service (MG…), **different per environment**              |
-| `TWILIO_TWIML_APP_SID`         | admin                | TwiML App (AP…) for browser calls, **different per environment**    |
-| `OWNER_TEST_PHONE`             | admin (staging only) | The owner's mobile for manual QA texts and calls                    |
+| Variable                       | Projects             | What it is                                                       |
+| ------------------------------ | -------------------- | ---------------------------------------------------------------- |
+| `TWILIO_ACCOUNT_SID`           | web, provider, admin | Account SID (AC…)                                                |
+| `TWILIO_AUTH_TOKEN`            | web, provider, admin | Auth token: signs and checks webhooks. Sensitive.                |
+| `TWILIO_API_KEY_SID`           | admin                | API key SID (SK…), for softphone access tokens                   |
+| `TWILIO_API_KEY_SECRET`        | admin                | API key secret. Sensitive.                                       |
+| `TWILIO_VERIFY_SERVICE_SID`    | web, provider, admin | Verify service (VA…): driver phone checks and SMS sign-in        |
+| `TWILIO_MESSAGING_SERVICE_SID` | web, provider, admin | Messaging Service (MG…), **different per environment**           |
+| `TWILIO_TWIML_APP_SID`         | admin                | TwiML App (AP…) for browser calls, **different per environment** |
+| `OWNER_TEST_PHONE`             | admin (staging only) | The owner's mobile for manual QA texts and calls                 |
 
 Without keys every Twilio feature uses its fake (nothing is sent; Admin > Settings > System status
 shows **Fake**). Production without keys shows **Missing** and the features are off.
