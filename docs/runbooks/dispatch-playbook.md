@@ -18,13 +18,15 @@ New → **Contacted** → **Location confirmed** → **Provider assigned** → *
 **Arrived** → **Completed**, or **Cancelled** / **No provider found** (a reason is required).
 
 1. **Claim** it (others then see you have it). A claim lapses after 10 minutes without action.
-2. **Contact the driver** within 2 minutes: call from the request (Call button) or text.
+2. **Contact the driver** within 2 minutes: call from the request (Call button). No texts in this campaign (owner decision).
    Mark **Contacted**.
 3. **Safety first** (every call):
    > "Are you in a safe place right now? If you're in traffic or feel unsafe, please hang up and
    > call 911 first. We'll keep working on your help."
-4. **Location**: if the driver used Get Help with GPS, check the map. Otherwise press **Send
-   location link**; the driver taps it and the pin appears on the timeline within seconds. If
+4. **Location**: if the driver used Get Help with GPS, check the map. Otherwise press **Location
+   link**. If the driver gave an email, it is emailed. If not, read the words on screen: "Go to
+   {site}/l and type the code 482 917" (the code is shown, 6 digits), then press **I read it to
+   the driver**. The pin appears on the timeline within seconds of them sharing it. If
    they can't, type the address or cross streets in the intake form. Mark **Location confirmed**.
 5. **Service and vehicle**: fill the intake (name, service, vehicle, notes: exit, direction,
    landmark, colour of the car).
@@ -35,7 +37,8 @@ New → **Contacted** → **Location confirmed** → **Provider assigned** → *
    > Record each call: **No answer**, **Declined**, or **Quoted** with price and ETA.
 7. **Assign**: confirm price and ETA with the driver ("{provider} can be there in about {eta}
    minutes for {price}, paid directly to them. Shall I send them?"), then press **Assign** on that
-   provider. The driver gets a text with the provider, price, ETA and a tracking link.
+   provider. If the driver gave an email they get the provider, price, ETA and a tracking link by email;
+   otherwise read the words shown on screen and press **I read it to the driver**.
 8. **Follow up**: mark **On the way** when the provider leaves, **Arrived** when they're there
    (call the driver if the ETA passes), **Completed** when the job is done.
 
@@ -45,7 +48,7 @@ After the nearest providers have no answered or declined (try at least 3, or eve
 the radius):
 
 > "I'm sorry, I haven't been able to get a provider to you yet. I'll keep trying for the next
-> 15 minutes and text you as soon as someone confirms. If you'd rather not wait, your insurance or
+> 15 minutes and call you back as soon as someone confirms. If you'd rather not wait, your insurance or
 > car manufacturer may include roadside help."
 
 Keep trying for 15 minutes. If still nobody: mark **No provider found** with the reason (for
@@ -64,7 +67,7 @@ Mark the request urgent in your notes, and say so to the provider.
 ## Price disputes
 
 - The quoted all-in price is what the provider agreed to on the call and what the driver saw in
-  the text. Read both back.
+  the email or what you read on the call. Read both back.
 - Extra charges only for what was not in the request (for example extra tow miles, waiting more
   than 15 minutes). Ask the provider to explain before work starts.
 - If the driver was charged more than the quote without a reason they agreed to: note it on the
@@ -81,5 +84,5 @@ Mark the request urgent in your notes, and say so to the provider.
 
 ## Voicemails and missed calls
 
-They show as **Urgent** at the top of the Inbox. Call back within 5 minutes. If no answer, send
-the location link with a short text and try again in 10 minutes.
+They show as **Urgent** at the top of the Inbox. Call back within 5 minutes. If no answer, leave
+a voicemail with the location code (press **Location link**) and try again in 10 minutes.
