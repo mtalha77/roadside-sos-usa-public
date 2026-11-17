@@ -45,7 +45,9 @@ test.describe("ad tracking and attribution", () => {
     await web
       .getByLabel("Mobile number")
       .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
-    await web.getByRole("button", { name: "Text me a code" }).click();
+    // A reserved example.com address: demo hosts show the code on screen and send nothing.
+    await web.getByLabel("Email (optional)").fill("e2e-ads@example.com");
+    await web.getByRole("button", { name: "Continue" }).click();
     const code = /code is (\d{6})/.exec(
       (await web.getByText(/Your code is/).textContent()) ?? "",
     )?.[1];
