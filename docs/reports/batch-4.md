@@ -13,7 +13,7 @@
 | RSOS-099 Staging fixes before new work              | Done                     | [#172](https://github.com/mtalha77/roadside-sos-usa-public/pull/172) |
 | RSOS-021b Real maps and SMS codes                   | Done (real keys BLOCKED) | [#175](https://github.com/mtalha77/roadside-sos-usa-public/pull/175) |
 | RSOS-030 Call tracking and the phone flow (IVR)     | Done (real keys BLOCKED) | [#173](https://github.com/mtalha77/roadside-sos-usa-public/pull/173) |
-| RSOS-021c Owner scope change: email codes, no Maps  | In progress              |                                                                      |
+| RSOS-021c Owner scope change: email codes, no Maps  | Done                     | (this PR)                                                            |
 | RSOS-074b Real browser softphone                    | Not started              |                                                                      |
 | RSOS-034b Real inbox and manual dispatch            | Not started              |                                                                      |
 | RSOS-023 Location link                              | Not started              |                                                                      |

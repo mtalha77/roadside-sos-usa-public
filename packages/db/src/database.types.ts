@@ -1193,6 +1193,8 @@ export type Database = {
           created_at: string
           destination_address: string | null
           destination_point: unknown
+          driver_email: string | null
+          driver_email_verified: boolean
           driver_name: string
           driver_phone: string
           driver_phone_verified: boolean
@@ -1238,6 +1240,8 @@ export type Database = {
           created_at?: string
           destination_address?: string | null
           destination_point?: unknown
+          driver_email?: string | null
+          driver_email_verified?: boolean
           driver_name: string
           driver_phone: string
           driver_phone_verified?: boolean
@@ -1283,6 +1287,8 @@ export type Database = {
           created_at?: string
           destination_address?: string | null
           destination_point?: unknown
+          driver_email?: string | null
+          driver_email_verified?: boolean
           driver_name?: string
           driver_phone?: string
           driver_phone_verified?: boolean
@@ -1775,14 +1781,6 @@ export type Database = {
         Args: { p_intro: string; p_slug: string }
         Returns: undefined
       }
-      auth_user_for_phone: {
-        Args: { p_phone: string }
-        Returns: {
-          email: string
-          is_demo: boolean
-          user_id: string
-        }[]
-      }
       cancel_request_by_token: {
         Args: { p_reason: string; p_token: string }
         Returns: boolean
@@ -2049,7 +2047,12 @@ export type Database = {
       submit_contact_message: { Args: { p: Json }; Returns: string }
       submit_provider_application: { Args: { p: Json }; Returns: string }
       submit_web_request: {
-        Args: { p: Json; p_draft_token: string; p_phone_verified: boolean }
+        Args: {
+          p: Json
+          p_draft_token: string
+          p_email: string
+          p_email_verified: boolean
+        }
         Returns: {
           request_id: string
           short_code: string
