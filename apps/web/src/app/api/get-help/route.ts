@@ -1,6 +1,7 @@
 import { isDemoMode } from "@rsos/config/demo";
 import { legalDocuments } from "@rsos/config/legal";
-import { verifyAvailable } from "@rsos/core/adapters";
+import { createHash, randomInt } from "node:crypto";
+import { isPlausibleAddress } from "@rsos/core/adapters";
 import { checkRateLimits, rateLimitKeys, verifyTurnstile } from "@rsos/core/security";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
@@ -17,7 +18,7 @@ import {
   toE164,
   VEHICLE_TYPES,
 } from "@/lib/get-help";
-import { maps, rateLimitStore, verify } from "@/lib/adapters";
+import { maps, rateLimitStore } from "@/lib/adapters";
 import { getMarkets, getMarketServices, marketSlugForPoint } from "@/lib/site-data";
 
 type Rpc = (
@@ -30,12 +31,39 @@ const db = () => {
   return s.rpc.bind(s) as unknown as Rpc;
 };
 /**
- * Production limits (RSOS-021b): 3 codes per phone per 10 minutes, 10 per IP per hour. Demo-mode
+ * Production limits (RSOS-021b): 3 codes per email per 10 minutes, 10 per IP per hour. Demo-mode
  * previews and staging allow more because test suites submit from one IP.
  */
 const LIMITS = isDemoMode()
-  ? { codeIp: 100, codePhone: 50, requestIp: 100 }
-  : { codeIp: 10, codePhone: 3, requestIp: 5 };
+  ? { codeIp: 100, codeEmail: 50, requestIp: 100 }
+  : { codeIp: 10, codeEmail: 3, requestIp: 5 };
+const Email = z.email().max(254);
+const codeHash = (email: string, code: string) =>
+  createHash("sha256").update(`${email}:${code}`).digest("hex");
+
+/**
+ * Email codes (owner scope change: no SMS). Real: Supabase Auth email OTP (the session it opens is
+ * not kept; it only proves the address). Demo hosts (never production): a dummy code shown on
+ * screen, since test inboxes do not exist.
+ */
+async function sendEmailCode(email: string) {
+  if (isDemoMode()) {
+    const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
+    return { ok: true as const, demoCode: code, hash: codeHash(email, code) };
+  }
+  const s = createPublicSupabase();
+  if (!s) return { ok: false as const };
+  const { error } = await s.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+  return error ? { ok: false as const } : { ok: true as const, demoCode: "", hash: "" };
+}
+async function checkEmailCode(draft: Draft, code: string) {
+  if (!/^\d{6}$/.test(code) || !draft.email) return false;
+  if (draft.codeHash) return codeHash(draft.email, code) === draft.codeHash;
+  const s = createPublicSupabase();
+  if (!s) return false;
+  const { error } = await s.auth.verifyOtp({ email: draft.email, token: code, type: "email" });
+  return !error;
+}
 
 /**
  * Every Get Help step posts here (plain forms, no JavaScript needed). Each answer is validated,
@@ -107,6 +135,8 @@ export async function POST(request: NextRequest) {
         if (near && !address)
           address = near.highway ? `${near.address} (${near.highway})` : near.address;
       } else if (chosen && address.length >= 3) {
+        // A typed address is checked for format only (no geocoding while Google Maps is off).
+        if (!placeId && !isPlausibleAddress(address)) return fail("location", "address");
         market = chosen.slug;
         point = { lat: chosen.center_lat, lng: chosen.center_lng };
         // A suggestion picked from Places Autocomplete gives the exact point.
@@ -226,35 +256,35 @@ export async function POST(request: NextRequest) {
     case "contact": {
       const phone = toE164(form.get("phone"));
       const name = str("name", 120);
+      const rawEmail = str("email", 254).toLowerCase();
       if (!name) return fail("contact", "required");
       if (!phone) return fail("contact", "phone");
+      if (!rawEmail)
+        return save(
+          { name, phone, email: "", codeSent: false, codeHash: "", demoCode: "", codeAttempts: 0 },
+          "verify",
+        );
+      const email = Email.safeParse(rawEmail);
+      if (!email.success) return fail("contact", "email");
       const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
       const limit = await checkRateLimits(
         [
           { key: `code:${rateLimitKeys.ip(ip)}`, limit: LIMITS.codeIp, windowSeconds: 3600 },
-          {
-            key: `code:${rateLimitKeys.phone(phone)}`,
-            limit: LIMITS.codePhone,
-            windowSeconds: 600,
-          },
+          { key: `code:email:${email.data}`, limit: LIMITS.codeEmail, windowSeconds: 600 },
         ],
         rateLimitStore(),
       );
       if (!limit.allowed) return fail("contact", "limit");
-      // Twilio Verify sends and checks the code (RSOS-021b). The fake (never in production)
-      // sends nothing and shows its fixed code on screen.
-      const v = verify();
-      const started = verifyAvailable(v) ? await v.start(phone) : null;
-      if (started && !started.ok && started.reason === "invalid-phone")
-        return fail("contact", "phone");
+      const sent = await sendEmailCode(email.data);
       return save(
         {
           name,
           phone,
-          codeHash: "",
+          email: email.data,
+          codeSent: sent.ok,
+          codeHash: sent.ok ? sent.hash : "",
+          demoCode: sent.ok ? sent.demoCode : "",
           codeAttempts: 0,
-          smsAvailable: Boolean(started?.ok),
-          demoCode: started?.ok && started.demoCode ? started.demoCode : "",
         },
         "verify",
       );
@@ -268,17 +298,17 @@ export async function POST(request: NextRequest) {
         draft.lng === undefined
       )
         return go("/get-help");
-      // 1. The code (when texts can be sent here); five wrong codes start the number over.
-      if (draft.smsAvailable) {
+      // 1. The emailed code, when the driver gave an email; five wrong codes start contact over.
+      if (draft.codeSent) {
         if ((draft.codeAttempts ?? 0) >= 5) {
           await rpc("save_request_draft", {
             p_token: cookieToken,
-            p_patch: { phone: "", codeHash: "" },
+            p_patch: { email: "", codeSent: false, codeHash: "", demoCode: "" },
           });
           return fail("contact", "locked");
         }
-        const checked = await verify().check(draft.phone, str("code", 6));
-        if (!checked.ok) {
+        const checked = await checkEmailCode(draft, str("code", 6));
+        if (!checked) {
           await rpc("save_request_draft", {
             p_token: cookieToken,
             p_patch: { codeAttempts: (draft.codeAttempts ?? 0) + 1 },
@@ -358,18 +388,14 @@ export async function POST(request: NextRequest) {
               policy_version: legalDocuments["driver-terms"].version,
             },
             { type: "privacy", granted: true, policy_version: legalDocuments.privacy.version },
-            {
-              type: "sms_transactional",
-              granted: true,
-              policy_version: legalDocuments["sms-terms"].version,
-            },
           ],
           consent_ip: ip === "unknown" ? null : ip,
           user_agent: (request.headers.get("user-agent") ?? "").slice(0, 300),
           source: "web",
         },
         p_draft_token: cookieToken,
-        p_phone_verified: Boolean(draft.smsAvailable),
+        p_email: draft.email ?? "",
+        p_email_verified: Boolean(draft.codeSent),
       });
       const row = Array.isArray(data)
         ? (data[0] as { status_token?: string } | undefined)

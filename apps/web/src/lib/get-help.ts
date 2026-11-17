@@ -89,10 +89,14 @@ export const DraftSchema = z
     passengers: z.number(),
     name: z.string(),
     phone: z.string(),
+    /** Optional: the driver's email, for links and updates (no SMS in batch 4). */
+    email: z.string(),
+    /** A code went to the email; the last step checks it. */
+    codeSent: z.boolean(),
+    /** Demo hosts only: the dummy code's hash, and the code shown on screen. */
     codeHash: z.string(),
     codeAttempts: z.number(),
     demoCode: z.string(),
-    smsAvailable: z.boolean(),
     attribution: z.record(z.string(), z.string()),
     /** Quick repeat request from the driver account: safety becomes one tap. */
     quick: z.boolean(),

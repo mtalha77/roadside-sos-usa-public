@@ -4,6 +4,8 @@ import { z } from "zod";
 export const DRIVER_COOKIE = "rsos_driver";
 
 export const DriverSessionSchema = z.object({
+  /** Signs in with an emailed code (no SMS); the phone is a fictional 555-01xx number from it. */
+  email: z.string().default(""),
   phone: z.string(),
   pendingCodeHash: z.string().optional(),
   signedIn: z.boolean(),
@@ -21,4 +23,11 @@ export function readDriverSession(raw: string | undefined): DriverSession | null
   } catch {
     return null;
   }
+}
+
+/** A fictional 555-01xx number derived from the demo email (for the quick request's draft). */
+export function demoPhoneFor(email: string): string {
+  let h = 0;
+  for (const ch of email) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return `+1713555${String(100 + (h % 100)).padStart(4, "0")}`;
 }

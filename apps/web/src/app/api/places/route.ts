@@ -1,3 +1,4 @@
+import { mapsEnabled } from "@rsos/core/adapters";
 import { checkRateLimits, rateLimitKeys, rateLimitResponse } from "@rsos/core/security";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -23,6 +24,8 @@ const Query = z.object({
  * selected market. The server key never reaches the browser. 60 lookups per IP per minute.
  */
 export async function GET(request: NextRequest) {
+  // Off until Google Maps is switched on (keys and MAPS_ENABLED; owner scope change, batch 4).
+  if (!mapsEnabled()) return NextResponse.json({ suggestions: [] }, { status: 404 });
   const parsed = Query.safeParse(Object.fromEntries(request.nextUrl.searchParams));
   if (!parsed.success) return NextResponse.json({ suggestions: [] });
   const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();

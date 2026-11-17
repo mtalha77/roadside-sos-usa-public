@@ -1,9 +1,12 @@
 import { z } from "zod";
 
 /**
- * Google Maps adapter (batch 4): Places Autocomplete (New), place details, reverse geocoding and
- * Routes, over REST with the server key. The browser key only loads the Maps JavaScript API.
- * The fake answers deterministically without any network call (tests, previews, demo, no key).
+ * Maps adapter (batch 4). The dummy implementation is used everywhere for now (owner scope
+ * change: no Google Maps in this batch): typed addresses without autocomplete or geocoding,
+ * browser GPS stored as coordinates, straight-line (haversine) distance and an ETA from an average
+ * speed in config. The Google adapter (Places Autocomplete (New), place details, reverse
+ * geocoding, Routes over REST with the server key) is written and unit tested against mocks but
+ * switched off: turning it on needs only the keys and MAPS_ENABLED=true.
  */
 
 export type LatLng = { lat: number; lng: number };
@@ -32,10 +35,35 @@ export function milesBetweenPoints(a: LatLng, b: LatLng): number {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
-/** Straight-line distance times 1.3 for roads, at 35 mph average: a fair fake (and fallback). */
-export function estimateRoute(from: LatLng, to: LatLng): RouteEstimate {
-  const miles = milesBetweenPoints(from, to) * 1.3;
-  return { meters: Math.round(miles * 1609.344), seconds: Math.round((miles / 35) * 3600) };
+/** Average driving speed for dummy ETAs (config; MAPS_AVG_SPEED_MPH overrides, 5 to 80 mph). */
+export const DEFAULT_AVG_SPEED_MPH = 30;
+export function averageSpeedMph(env: Record<string, string | undefined> = process.env): number {
+  const v = Number(env.MAPS_AVG_SPEED_MPH);
+  return Number.isFinite(v) && v >= 5 && v <= 80 ? v : DEFAULT_AVG_SPEED_MPH;
+}
+
+/** Straight-line (haversine) distance; ETA = distance / average speed. The dummy's route. */
+export function estimateRoute(
+  from: LatLng,
+  to: LatLng,
+  mph: number = DEFAULT_AVG_SPEED_MPH,
+): RouteEstimate {
+  const miles = milesBetweenPoints(from, to);
+  return { meters: Math.round(miles * 1609.344), seconds: Math.round((miles / mph) * 3600) };
+}
+
+/** US street address format check for typed addresses (no geocoding): a number and a street,
+ * or a highway with a mile marker or exit, or a cross street ("Main St and 5th St"). */
+export function isPlausibleAddress(raw: string): boolean {
+  const s = raw.trim().replace(/\s+/g, " ");
+  if (s.length < 5 || s.length > 200) return false;
+  if (!/[a-z]{2}/i.test(s)) return false;
+  return (
+    /^\d{1,6}[a-z]?\s+\S+/i.test(s) ||
+    highwayFrom(s) !== null ||
+    /\b(mile( marker)?|mm|exit)\s*\d+/i.test(s) ||
+    /\S+\s+(and|&|at|near)\s+\S+/i.test(s)
+  );
 }
 
 /** Pulls a highway name ("I-35", "US-90", "TX-1604", "Loop 410") out of an address, if any. */
@@ -52,7 +80,7 @@ export function highwayFrom(text: string): string | null {
   return `${kind}-${m[2]}`;
 }
 
-export function createFakeMaps(): MapsAdapter {
+export function createFakeMaps(mph: number = DEFAULT_AVG_SPEED_MPH): MapsAdapter {
   return {
     mode: "fake",
     async autocomplete(input, opts) {
@@ -71,7 +99,7 @@ export function createFakeMaps(): MapsAdapter {
       return null;
     },
     async route(from, to) {
-      return estimateRoute(from, to);
+      return estimateRoute(from, to, mph);
     },
   };
 }
@@ -234,9 +262,18 @@ export function createGoogleMaps(serverKey: string, fetchImpl: typeof fetch = fe
   };
 }
 
-/** Real Google Maps when the server key is set; otherwise the fake. */
+/** The Google adapter is on only with MAPS_ENABLED=true and both keys (browser and server). */
+export function mapsEnabled(env: Record<string, string | undefined> = process.env): boolean {
+  return (
+    env.MAPS_ENABLED === "true" &&
+    Boolean(env.GOOGLE_MAPS_SERVER_KEY?.trim()) &&
+    Boolean(env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim())
+  );
+}
+
+/** Real Google Maps when switched on (keys and flag); otherwise the dummy. */
 export function chooseMaps(env: Record<string, string | undefined> = process.env): MapsAdapter {
-  return env.GOOGLE_MAPS_SERVER_KEY
-    ? createGoogleMaps(env.GOOGLE_MAPS_SERVER_KEY)
-    : createFakeMaps();
+  return mapsEnabled(env)
+    ? createGoogleMaps(env.GOOGLE_MAPS_SERVER_KEY!.trim())
+    : createFakeMaps(averageSpeedMph(env));
 }

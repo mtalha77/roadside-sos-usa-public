@@ -25,7 +25,8 @@ test.describe("staging smoke @staging", () => {
       expect(body.serviceKey).not.toBe("mismatch");
       expect(body.ok).toBe(true);
       expect(res.status()).toBe(200);
-      for (const state of Object.values(body.adapters)) expect(["real", "fake"]).toContain(state);
+      for (const state of Object.values(body.adapters))
+        expect(["real", "fake", "deferred"]).toContain(state);
       if (expectedSha) expect(body.commit).toBe(expectedSha);
     });
   }
@@ -64,8 +65,10 @@ test.describe("staging smoke @staging", () => {
     await page
       .getByLabel("Mobile number")
       .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
-    await page.getByRole("button", { name: "Text me a code" }).click();
-    await expect(page.getByRole("heading", { name: "Enter the 6-digit code" })).toBeVisible();
+    // A reserved example.com address: demo hosts show the code on screen and send nothing.
+    await page.getByLabel("Email (optional)").fill("e2e-driver@example.com");
+    await page.getByRole("button", { name: "Continue" }).click();
+    await expect(page.getByRole("heading", { name: "Check and send" })).toBeVisible();
     const code = /code is (\d{6})/.exec(
       (await page.getByText(/Your code is/).textContent()) ?? "",
     )?.[1];

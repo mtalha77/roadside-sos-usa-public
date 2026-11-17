@@ -1,6 +1,6 @@
 import { Alert } from "@rsos/ui/alert";
 import { DemoSignIn } from "@rsos/account/components/demo-sign-in";
-import { SmsSignIn } from "@rsos/account/components/sms-sign-in";
+import { EmailCodeSignIn } from "@rsos/account/components/email-code-sign-in";
 import { AuthShell } from "@rsos/ui/auth-shell";
 import { getTranslations } from "next-intl/server";
 import { SignInForm } from "./sign-in-form";
@@ -20,10 +20,10 @@ export default async function SignInPage({
       <SignInForm expired={expired === "1"} />
       <details className="rounded-xl border p-4">
         <summary className="flex min-h-touch cursor-pointer items-center font-medium">
-          {tauth("sms.tab")}
+          {tauth("emailCode.tab")}
         </summary>
         <div className="pt-3">
-          <SmsSignIn />
+          <EmailCodeSignIn />
         </div>
       </details>
       <DemoSignIn roles={["admin_super", "admin_dispatcher"]} />

@@ -32,6 +32,7 @@ import { pageMetadata } from "@/lib/seo";
 import { getMarkets, getMarketServices } from "@/lib/site-data";
 import { ui } from "@/lib/ui-classes";
 import { getVisitorMarket } from "@/lib/visitor";
+import { mapsEnabled } from "@rsos/core/adapters";
 import { createPublicSupabase } from "@rsos/db/public";
 
 // Written out in full so Tailwind generates them: each follow-up shows when its service is picked.
@@ -164,6 +165,7 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             autoComplete="street-address"
             className={inputClass}
             listLabel={t("location.suggestions")}
+            suggest={mapsEnabled()}
           />
         </label>
         <label className={label}>
@@ -462,6 +464,20 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             className={inputClass}
           />
         </label>
+        <label className={label}>
+          {t("contact.email")}
+          <input
+            name="email"
+            type="email"
+            autoComplete="email"
+            defaultValue={draft.email ?? ""}
+            className={inputClass}
+            aria-describedby="gh-email-hint"
+          />
+          <span id="gh-email-hint" className="text-sm font-normal text-muted-foreground">
+            {t("contact.emailHint")}
+          </span>
+        </label>
         <p className="text-sm text-muted-foreground">
           {t.rich("contact.consent", {
             terms: (chunks) => (
@@ -485,9 +501,9 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
     body = (
       <form method="post" action="/api/get-help" className="flex flex-col gap-5">
         {hidden("step", "verify")}
-        {draft.smsAvailable ? (
+        {draft.codeSent ? (
           <>
-            <p>{t("verify.body", { phone: formatPhone(draft.phone ?? "") })}</p>
+            <p>{t("verify.body", { email: draft.email ?? "" })}</p>
             {draft.demoCode ? (
               <p className="rounded-xl bg-warning-subtle p-3 text-sm font-medium text-warning-strong">
                 {t("verify.demoCode", { code: draft.demoCode })}
@@ -507,7 +523,7 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             </label>
           </>
         ) : (
-          <p>{t("verify.noSms")}</p>
+          <p>{t("verify.noCode")}</p>
         )}
         {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
           <Turnstile siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} label={brand.name} />

@@ -2,7 +2,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = extensions, public;
-select plan(16);
+select plan(14);
 
 create function pg_temp.as_user(claims jsonb) returns void language sql as $$
   select set_config('request.jwt.claims', claims::text, true), set_config('role', 'authenticated', true);
@@ -34,14 +34,6 @@ select ok((select count(*) from public.api_usage) >= 2, 'staff read today''s usa
 update public.usage_thresholds set daily_units = 1 where vendor_group = 'twilio';
 reset role;
 select is((select daily_units from public.usage_thresholds where vendor_group = 'twilio'), 300, 'a dispatcher cannot change thresholds');
-
--- SMS sign-in lookup is for the server (service role) only.
-set local role anon;
-select throws_ok($$ select * from public.auth_user_for_phone('+12105550191') $$, '42501', null, 'visitors cannot look up accounts by phone');
-reset role;
-select pg_temp.as_user(jsonb_build_object('sub', gen_random_uuid(), 'role', 'authenticated'));
-select throws_ok($$ select * from public.auth_user_for_phone('+12105550191') $$, '42501', null, 'signed-in users cannot either');
-reset role;
 
 select * from finish();
 rollback;

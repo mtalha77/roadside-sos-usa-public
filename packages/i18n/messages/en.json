@@ -649,10 +649,10 @@
         "adapters": "Third-party services",
         "adapter": "Service",
         "adapterNames": {
-          "twilio": "Twilio texts and calls",
-          "twilioVerify": "Twilio Verify codes",
+          "twilio": "Twilio calls (voice)",
+          "texting": "Twilio texts (off)",
           "softphone": "Browser softphone",
-          "maps": "Google Maps",
+          "maps": "Google Maps (off)",
           "email": "Email (Resend)",
           "turnstile": "Bot protection (Turnstile)",
           "rateLimit": "Rate limits (Upstash)",
@@ -661,9 +661,10 @@
         "state": {
           "real": "Real",
           "fake": "Fake",
+          "deferred": "Deferred",
           "missing": "Missing"
         },
-        "legend": "Real: live keys are set. Fake: keys are missing outside production, so a safe stand-in is used and nothing is sent. Missing: keys are missing in production and the feature is off.",
+        "legend": "Real: live keys are set (and switched on). Fake: keys are missing outside production, so a safe stand-in is used and nothing is sent. Deferred: turned off by the owner for now (no SMS, no Google Maps, email provider after the final domain); the stand-in is used everywhere. Missing: keys are missing in production and the feature is off.",
         "usage": "Paid API usage today",
         "usageIntro": "Google Maps and Twilio calls counted by our servers. The owner gets one email a day when a service passes its threshold.",
         "groups": {
@@ -983,21 +984,19 @@
       "dashboardTitle": "Provider portal",
       "signedInAs": "Signed in as {email}"
     },
-    "sms": {
-      "tab": "Text code",
-      "phone": "Mobile number",
-      "phoneHint": "The number on your account. We text you a 6-digit code.",
-      "send": "Text me a code",
-      "sent": "We texted you a code. It expires in 10 minutes.",
-      "demoCode": "Test environment: no text is sent. Use code {code}.",
+    "emailCode": {
+      "tab": "Email code",
+      "email": "Email",
+      "emailHint": "The email on your account. We send you a 6-digit code.",
+      "send": "Email me a code",
+      "sent": "If an account uses that email, we sent it a code. It expires in 10 minutes.",
+      "demoCode": "Test environment: no email is sent. Use code {code}.",
       "code": "6-digit code",
       "verify": "Sign in",
       "errors": {
-        "phone": "Enter a valid US mobile number.",
+        "email": "Enter a valid email address.",
         "limit": "Too many codes. Wait a few minutes and try again.",
         "code": "That code didn't work. Check it and try again.",
-        "unavailable": "Text codes are not available yet. Use your email instead.",
-        "noAccount": "No account uses this number. Sign in with your email instead.",
         "generic": "Something went wrong. Please try again."
       }
     }
@@ -1960,20 +1959,22 @@
     "contact": {
       "title": "How can the provider reach you?",
       "name": "Your name",
-      "phone": "Mobile number",
-      "sendCode": "Text me a code",
-      "consent": "By continuing you agree to the <terms>Driver Terms</terms> and <privacy>Privacy Policy</privacy>, and to receive text messages about this request (message and data rates may apply; reply STOP to stop).",
+      "phone": "Mobile number (for the provider's call)",
+      "sendCode": "Continue",
+      "consent": "By continuing you agree to the <terms>Driver Terms</terms> and <privacy>Privacy Policy</privacy>. We and the provider may call you about this request.",
       "terms": "Driver Terms",
-      "privacy": "Privacy Policy"
+      "privacy": "Privacy Policy",
+      "email": "Email (optional)",
+      "emailHint": "We email you a 6-digit code and your request link. No email? We confirm your request on the call."
     },
     "verify": {
-      "title": "Enter the 6-digit code",
-      "body": "We texted a code to {phone}.",
+      "title": "Check and send",
+      "body": "We emailed a 6-digit code to {email}.",
       "code": "Code",
-      "demoCode": "Demo mode: no text was sent. Your code is {code}.",
-      "noSms": "Text messages aren't set up here yet, so we'll confirm your number by phone.",
+      "demoCode": "Demo mode: no email was sent. Your code is {code}.",
       "submit": "Send my request",
-      "resend": "Change number"
+      "resend": "Change contact details",
+      "noCode": "We'll confirm your request on the phone call."
     },
     "errors": {
       "required": "Please answer this question.",
@@ -1981,11 +1982,13 @@
       "outside": "That location is outside the areas we serve.",
       "phone": "Enter a valid US mobile number.",
       "code": "That code isn't right. Check it and try again.",
-      "locked": "Too many tries. Start again with your number.",
+      "locked": "Too many tries. Enter your email again for a new code.",
       "turnstile": "The security check didn't pass. Please try again.",
       "limit": "Too many requests from this connection. Please call us instead.",
       "generic": "Something went wrong. Please try again, or call us.",
-      "service": "That service isn't available in this area yet."
+      "service": "That service isn't available in this area yet.",
+      "email": "Enter a valid email address, or leave it empty.",
+      "address": "Type a street address with a number (1200 Main St), cross streets (Main St and 5th St) or a highway and exit or mile marker."
     }
   },
   "track": {
@@ -2257,14 +2260,15 @@
   "driverAccount": {
     "title": "Your account",
     "signIn": {
-      "title": "Sign in with your phone",
-      "body": "We'll text you a code. No password.",
-      "phone": "Mobile number",
-      "send": "Text me a code",
+      "title": "Sign in with your email",
+      "body": "We'll email you a code. No password.",
+      "send": "Email me a code",
       "code": "6-digit code",
       "demoCode": "Demo mode: your code is {code}.",
       "verify": "Sign in",
-      "wrong": "That code isn't right."
+      "wrong": "That code isn't right.",
+      "email": "Email",
+      "badEmail": "Enter a valid email address."
     },
     "tabs": "Account sections",
     "requests": "Requests",

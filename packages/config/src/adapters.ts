@@ -10,9 +10,8 @@ export const ADAPTER_KEYS = {
     "TWILIO_AUTH_TOKEN",
     "TWILIO_API_KEY_SID",
     "TWILIO_API_KEY_SECRET",
-    "TWILIO_MESSAGING_SERVICE_SID",
   ],
-  twilioVerify: ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_VERIFY_SERVICE_SID"],
+  texting: ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_MESSAGING_SERVICE_SID"],
   softphone: [
     "TWILIO_ACCOUNT_SID",
     "TWILIO_API_KEY_SID",
@@ -27,15 +26,29 @@ export const ADAPTER_KEYS = {
 } as const satisfies Record<string, readonly string[]>;
 
 export type AdapterName = keyof typeof ADAPTER_KEYS;
-/** real: every key present. fake: keys missing outside production, so the fake is used. missing:
- * keys missing in production (the feature is off and must be fixed). */
-export type AdapterState = "real" | "fake" | "missing";
+
+/** Adapters that also need an on switch besides their keys (owner scope change, batch 4). */
+export const ADAPTER_FLAGS: Partial<Record<AdapterName, string>> = {
+  maps: "MAPS_ENABLED",
+  texting: "TEXTING_ENABLED",
+};
+
+/** Deferred by the owner in batch 4 (no Google Maps, no SMS, Resend after the final domain):
+ * without keys they run on the fake everywhere, production included, and are not blockers. */
+export const DEFERRED_BY_OWNER: readonly AdapterName[] = ["maps", "texting", "email"];
+
+/** real: every key present (and the flag on, where one exists). fake: keys missing outside
+ * production, so the fake is used. deferred: off by the owner's decision, the fake is used.
+ * missing: keys missing in production (the feature is off and must be fixed). */
+export type AdapterState = "real" | "fake" | "deferred" | "missing";
 
 type EnvSource = Record<string, string | undefined>;
 
 export function adapterState(name: AdapterName, env: EnvSource = process.env): AdapterState {
   const present = ADAPTER_KEYS[name].every((k) => (env[k] ?? "").trim().length > 0);
-  if (present) return "real";
+  const flag = ADAPTER_FLAGS[name];
+  if (present && (!flag || env[flag] === "true")) return "real";
+  if (DEFERRED_BY_OWNER.includes(name)) return "deferred";
   return getSiteEnv(env) === "production" ? "missing" : "fake";
 }
 

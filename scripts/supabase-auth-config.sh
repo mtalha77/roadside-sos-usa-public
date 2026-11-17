@@ -31,6 +31,11 @@ case "$env_name" in
     ;;
 esac
 
+# Email codes (batch 4 scope change: no SMS). Sign-in emails carry a 6-digit code, not only a
+# link, so drivers, providers and admins type it on the page they are on. No brand in the text:
+# Supabase's built-in sender is used until the product email provider is connected.
+code_html='<h2>Your sign-in code</h2><p>Enter this code to sign in: <strong>{{ .Token }}</strong></p><p>It expires in 10 minutes. If you did not ask for it, you can ignore this email.</p>'
+
 body=$(cat <<JSON
 {
   "site_url": "$site_url",
@@ -42,7 +47,13 @@ body=$(cat <<JSON
   "mfa_max_enrolled_factors": 10,
   "password_min_length": 12,
   "mailer_secure_email_change_enabled": true,
-  "security_update_password_require_reauthentication": true
+  "security_update_password_require_reauthentication": true,
+  "mailer_otp_length": 6,
+  "mailer_otp_exp": 600,
+  "mailer_subjects_magic_link": "Your sign-in code",
+  "mailer_templates_magic_link_content": "$code_html",
+  "mailer_subjects_confirmation": "Your sign-in code",
+  "mailer_templates_confirmation_content": "$code_html"
 }
 JSON
 )
@@ -56,4 +67,4 @@ if [ "$status" -ge 300 ]; then
   echo "Auth config update failed for $env_name (HTTP $status): $(head -c 400 /tmp/auth-config-response.json)" >&2
   exit 1
 fi
-echo "Auth configured for $env_name: site_url=$site_url, token hook on, TOTP MFA on"
+echo "Auth configured for $env_name: site_url=$site_url, token hook on, TOTP MFA on, email codes on"

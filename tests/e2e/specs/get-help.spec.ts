@@ -56,9 +56,11 @@ test.describe("get help flow", () => {
     await page
       .getByLabel("Mobile number")
       .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
-    await page.getByRole("button", { name: "Text me a code" }).click();
+    // A reserved example.com address: demo hosts show the code on screen and send nothing.
+    await page.getByLabel("Email (optional)").fill("e2e-driver@example.com");
+    await page.getByRole("button", { name: "Continue" }).click();
 
-    await expect(page.getByRole("heading", { name: "Enter the 6-digit code" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Check and send" })).toBeVisible();
     const code = /code is (\d{6})/.exec(
       (await page.getByText(/Your code is/).textContent()) ?? "",
     )?.[1];

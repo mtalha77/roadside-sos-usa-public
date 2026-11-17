@@ -1,5 +1,13 @@
 # Runbook: Google Maps keys (RSOS-021b)
 
+> **Switched off by the owner (batch 4 scope change).** Every app uses the dummy maps adapter: the
+> placeholder map (our tokens, pins from coordinates), typed addresses checked for format only (no
+> autocomplete, no geocoding), browser GPS stored as coordinates, straight-line distance and an
+> ETA from `MAPS_AVG_SPEED_MPH` (default 30). `/api/places` answers 404. The Google adapter stays
+> in `packages/core/src/adapters/maps.ts`, unit tested against mocks. **To switch it on later:**
+> add the keys below in Vercel and set `MAPS_ENABLED=true` for that environment, then redeploy.
+> No code change. Interactive maps never load on marketing or city pages either way.
+
 Two keys, both in the same Google Cloud project, both **restricted**. Values go only into Vercel
 environment variables; never into the repository, chat or logs.
 
