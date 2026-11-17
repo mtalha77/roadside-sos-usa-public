@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { cn } from "../lib/cn";
-import { LiteMap, type LiteMapPoint } from "./lite-map";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import type { LiteMapPoint } from "./lite-map";
 
 /* Minimal typings for the parts of the Maps JavaScript API we use (no @types dependency). */
 type LatLngLiteral = { lat: number; lng: number };
@@ -74,7 +73,7 @@ function markerContent(p: LiteMapPoint): HTMLElement {
 /**
  * Real map (RSOS-021b): Google Maps JavaScript API with Advanced Markers and our own glyphs,
  * following the light or dark theme. Without a browser key (previews, tests, demo) or until the
- * API loads, it shows the schematic LiteMap, so pages never wait on the map.
+ * API loads, it shows the fallback (the schematic LiteMap), so pages never wait on the map.
  */
 export function GoogleMap({
   apiKey,
@@ -84,7 +83,10 @@ export function GoogleMap({
   radius,
   label,
   className,
+  fallback,
 }: {
+  /** Shown until the map loads, and if it cannot (the schematic map, rendered on the server). */
+  fallback: ReactNode;
   apiKey?: string;
   mapId?: string;
   points: LiteMapPoint[];
@@ -176,29 +178,15 @@ export function GoogleMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiKey, mapId, key]);
 
-  if (!apiKey)
-    return (
-      <LiteMap points={points} route={route} radius={radius} label={label} className={className} />
-    );
+  if (!apiKey) return fallback;
   return (
-    <div className={cn("relative", className)}>
-      {ready ? null : (
-        <LiteMap
-          points={points}
-          route={route}
-          radius={radius}
-          label={label}
-          className="absolute inset-0"
-        />
-      )}
+    <div className={`relative ${className ?? ""}`}>
+      {ready ? null : <div className="absolute inset-0">{fallback}</div>}
       <div
         ref={el}
         role="img"
         aria-label={label}
-        className={cn(
-          "aspect-[16/10] w-full overflow-hidden rounded-2xl border",
-          ready ? "" : "invisible",
-        )}
+        className={`aspect-[16/10] w-full overflow-hidden rounded-2xl border ${ready ? "" : "invisible"}`}
       />
     </div>
   );

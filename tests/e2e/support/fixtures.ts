@@ -73,9 +73,7 @@ export async function expectNoA11yViolations(page: Page) {
       () =>
         document
           .getAnimations()
-          .every(
-            (a) => a.playState !== "running" || a.effect?.getTiming().iterations === Infinity,
-          ),
+          .every((a) => a.playState !== "running" || a.effect?.getTiming().iterations === Infinity),
       undefined,
       { timeout: 5000 },
     )
