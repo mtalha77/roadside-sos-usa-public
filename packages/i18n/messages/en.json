@@ -808,7 +808,8 @@
           "forbidden": "You can't edit templates.",
           "invalid": "Each language needs 2 to 640 characters.",
           "generic": "Something went wrong. Try again."
-        }
+        },
+        "textingOff": "Texting is off for now (owner decision): nothing is sent or received. Templates, opt-outs and quiet hours are ready for when it is switched on with TEXTING_ENABLED and the Twilio Messaging keys."
       }
     },
     "walkthrough": {
@@ -1781,10 +1782,7 @@
             "What does it cost providers?",
             "A flat fee per request where the driver picks you, paid from a prepaid wallet. Optional plans add discounts and featured placement."
           ],
-          [
-            "Do I set my own prices?",
-            "Yes. You quote each job at your price."
-          ]
+          ["Do I set my own prices?", "Yes. You quote each job at your price."]
         ]
       }
     },
@@ -2068,10 +2066,7 @@
             "Children",
             "The service is not for children under 16, and we do not knowingly collect their information."
           ],
-          [
-            "Changes and contact",
-            "We will post changes here with a new version and date."
-          ]
+          ["Changes and contact", "We will post changes here with a new version and date."]
         ]
       },
       "sms-terms": {
@@ -2090,14 +2085,8 @@
             "Opt out and help",
             "Reply STOP to stop messages at any time. Reply HELP for help, or contact us."
           ],
-          [
-            "Costs",
-            "Message and data rates may apply, depending on your mobile plan."
-          ],
-          [
-            "Carriers",
-            "Carriers are not liable for delayed or undelivered messages."
-          ],
+          ["Costs", "Message and data rates may apply, depending on your mobile plan."],
+          ["Carriers", "Carriers are not liable for delayed or undelivered messages."],
           [
             "Privacy",
             "We use your number as described in the Privacy Policy and do not share it for third-party marketing."
@@ -2712,17 +2701,9 @@
       "title": "Install the app",
       "body": "Get requests full screen with sound, and open the portal in one tap.",
       "iphone": "iPhone (Safari)",
-      "iphoneSteps": [
-        "Tap the Share button.",
-        "Choose \"Add to Home Screen\".",
-        "Tap Add."
-      ],
+      "iphoneSteps": ["Tap the Share button.", "Choose \"Add to Home Screen\".", "Tap Add."],
       "android": "Android (Chrome)",
-      "androidSteps": [
-        "Tap the menu (three dots).",
-        "Choose \"Install app\".",
-        "Tap Install."
-      ],
+      "androidSteps": ["Tap the menu (three dots).", "Choose \"Install app\".", "Tap Install."],
       "installNow": "Install now"
     },
     "home": {

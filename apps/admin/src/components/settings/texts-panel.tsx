@@ -1,3 +1,5 @@
+import { textingEnabled } from "@rsos/core/adapters";
+import { Alert } from "@rsos/ui/alert";
 import { Badge } from "@rsos/ui/badge";
 import { inputClass } from "@rsos/ui/input";
 import { getTranslations } from "next-intl/server";
@@ -37,6 +39,7 @@ export async function TextsPanel() {
   const canEditTemplates = ["super_admin", "ops_manager", "marketing"].includes(ctx.role);
   return (
     <div className="flex flex-col gap-4">
+      {textingEnabled() ? null : <Alert tone="info" title={t("textingOff")} />}
       <section className={card} aria-labelledby="a2p-h">
         <div className="mb-2 flex flex-wrap items-center gap-2">
           <h2 id="a2p-h" className="font-semibold">

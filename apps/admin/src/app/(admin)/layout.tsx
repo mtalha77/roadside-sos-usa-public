@@ -1,3 +1,4 @@
+import { textingEnabled } from "@rsos/core/adapters";
 import { Map as MapIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
@@ -66,8 +67,12 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     .eq("key", "a2p_10dlc")
     .maybeSingle();
   const a2pValue = (a2p?.value ?? {}) as { status?: unknown; override?: unknown };
+  // Texting is off in batch 4 (owner scope change): no banner until TEXTING_ENABLED.
   const textingLimited =
-    a2p !== null && a2pValue.status !== "approved" && a2pValue.override !== true;
+    textingEnabled() &&
+    a2p !== null &&
+    a2pValue.status !== "approved" &&
+    a2pValue.override !== true;
   const { data: myStatus } = dispatches
     ? await (
         await getServerSupabase()

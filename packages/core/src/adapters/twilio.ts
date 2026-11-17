@@ -135,8 +135,14 @@ export function createTwilioTexts(
   };
 }
 
+/** Real texts only with TEXTING_ENABLED=true and the Messaging keys; otherwise the fake. */
 export function chooseTexts(env: Env = process.env): TextAdapter {
-  if (env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_MESSAGING_SERVICE_SID)
+  if (
+    env.TEXTING_ENABLED === "true" &&
+    env.TWILIO_ACCOUNT_SID &&
+    env.TWILIO_AUTH_TOKEN &&
+    env.TWILIO_MESSAGING_SERVICE_SID
+  )
     return createTwilioTexts({
       accountSid: env.TWILIO_ACCOUNT_SID,
       authToken: env.TWILIO_AUTH_TOKEN,

@@ -1,13 +1,14 @@
 import "server-only";
 import { brand } from "@rsos/config/brand";
-import { chooseTexts, segmentCount } from "@rsos/core/adapters";
+import { chooseTexts, inQuietHours, segmentCount, textingEnabled } from "@rsos/core/adapters";
 import { createAdminSupabase } from "@rsos/db/admin";
 import { getMessages } from "@rsos/i18n";
 
 /**
- * Sends one text and records it (RSOS-030, extended in RSOS-035). Opted-out numbers are blocked
- * in our code too, not only at Twilio. The first text to a new number carries the STOP notice.
- * Without Twilio keys (previews, demo, staging before setup) the fake records it and sends nothing.
+ * Sends one text and records it (RSOS-035). Off in batch 4 (owner scope change: no SMS): without
+ * TEXTING_ENABLED=true nothing is sent or recorded. When on, opted-out numbers are blocked in our
+ * code too, not only at Twilio, and the first text to a new number carries the STOP notice.
+ * Without Twilio keys the fake records it and sends nothing.
  */
 export async function sendText(o: {
   marketId: string;
@@ -19,7 +20,8 @@ export async function sendText(o: {
   templateKey?: string;
   staffUserId?: string | null;
   statusCallback?: string;
-}): Promise<{ status: "sent" | "blocked" | "held" | "failed"; id: string | null }> {
+}): Promise<{ status: "sent" | "blocked" | "held" | "failed" | "disabled"; id: string | null }> {
+  if (!textingEnabled()) return { status: "disabled", id: null };
   const admin = createAdminSupabase();
   const [{ data: optOut }, { count: prior }] = await Promise.all([
     admin.from("sms_opt_outs").select("opted_out").eq("phone", o.to).maybeSingle(),
@@ -85,14 +87,6 @@ export async function sendText(o: {
 
 /** "{brand}" in a message, filled from config. */
 export const withBrand = (s: string) => s.replaceAll("{brand}", brand.name);
-
-/** 9pm to 8am in the market's time zone: no non-urgent texts (RSOS-035). */
-export function inQuietHours(timeZone: string, at = new Date()): boolean {
-  const hour = Number(
-    new Intl.DateTimeFormat("en-US", { hour: "numeric", hourCycle: "h23", timeZone }).format(at),
-  );
-  return hour >= 21 || hour < 8;
-}
 
 /**
  * Why a text must wait instead of going out now, or null:
