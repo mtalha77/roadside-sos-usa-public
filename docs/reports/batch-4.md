@@ -18,7 +18,7 @@
 | RSOS-034b Real inbox and manual dispatch            | Done                     | [#179](https://github.com/mtalha77/roadside-sos-usa-public/pull/179) |
 | RSOS-023 Location link                              | Done                     | [#180](https://github.com/mtalha77/roadside-sos-usa-public/pull/180) |
 | RSOS-035 Real texts and emails, opt-outs, A2P 10DLC | Done (texting off)       | [#181](https://github.com/mtalha77/roadside-sos-usa-public/pull/181) |
-| RSOS-031 Ad tracking and attribution                | Done (ad keys missing)   | (this PR)                                                            |
+| RSOS-031 Ad tracking and attribution                | Done (ad keys missing)   | [#182](https://github.com/mtalha77/roadside-sos-usa-public/pull/182) |
 | RSOS-089-prep Test campaign kit                     | Done                     | (this PR)                                                            |
 | RSOS-036 Release QA and first production release    | Not released (see below) | `docs/reports/release-1.md`                                          |
 
@@ -37,15 +37,11 @@ next-intl); no user input reaches it.
   reason, to be removed when picomatch ships a fix. The run then continued.
 - Found during Release QA: since RSOS-099, every staging database deploy after the staging smoke
   has failed its "no fake data" check (the smoke's own Get Help request uses a fictional
-  number), and that skipped the Auth configuration step, so staging's sign-in email does not
-  carry the 6-digit code yet. The fix (the check skips the smoke's request; Auth is configured
-  before the check) is on `rsos-034b-inbox-dispatch`, waiting on the same blocker.
-- The remaining tickets are built and pushed as stacked branches, not opened as pull requests (each
-  pull request's `db` job writes to rsos-dev, so they go one at a time):
-  `rsos-034b-inbox-dispatch`, `rsos-023-location-link`, `rsos-035-texts-emails`,
-  `rsos-031-ad-tracking`, `rsos-089-campaign-kit`. On the top branch lint, unit tests and Prettier
-  pass; typecheck waits on database types for migrations 050 to 080, which are regenerated when
-  each migration reaches rsos-dev in its turn.
+  number), and that skipped the Auth configuration step, so staging's sign-in email did not
+  carry the 6-digit code. The fix (the check skips the smoke's request; Auth is configured
+  before the check) merged with #179; staging deploys are green again.
+- After the owner accepted it, the remaining tickets merged one pull request at a time: #177,
+  #179, #180, #181, #182 and RSOS-089-prep.
 
 ## Step 0: key check (presence only, no values)
 
