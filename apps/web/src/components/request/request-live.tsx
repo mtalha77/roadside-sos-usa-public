@@ -16,7 +16,6 @@ import { Alert } from "@rsos/ui/alert";
 import { Badge } from "@rsos/ui/badge";
 import { Button } from "@rsos/ui/button";
 import { CountdownRing } from "@rsos/ui/countdown-ring";
-import { LiteMap } from "@rsos/ui/lite-map";
 import { ProviderLogo } from "@rsos/ui/provider-logo";
 import { QuoteCard, type QuoteCardLabels } from "@rsos/ui/quote-card";
 import { Sheet, SheetContent } from "@rsos/ui/sheet";
@@ -29,6 +28,7 @@ import { CompareView } from "./compare-view";
 import { ProviderProfilePanel } from "./provider-profile";
 import { DemoBar, StageStepper } from "./stage-stepper";
 import { useDemoClock } from "./use-demo-clock";
+import { MapView } from "@/components/site/map-view";
 
 type RealStatus =
   | "draft"
@@ -512,7 +512,7 @@ function RequestLiveView({
       picked &&
       simulation ? (
         <section className="flex flex-col gap-4">
-          <LiteMap
+          <MapView
             label={t("tracking.map")}
             route={
               stage === "on_site"

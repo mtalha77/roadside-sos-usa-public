@@ -3,11 +3,11 @@
 import { type DemoQuote, demoProviderProfile } from "@rsos/core/demo";
 import { Button } from "@rsos/ui/button";
 import { illustrations } from "@rsos/ui/illustrations";
-import { LiteMap } from "@rsos/ui/lite-map";
 import { ProviderLogo } from "@rsos/ui/provider-logo";
 import { SidePanel, SidePanelContent } from "@rsos/ui/side-panel";
 import { BadgeCheck, ShieldCheck, Star } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
+import { MapView } from "@/components/site/map-view";
 
 const card = "rounded-2xl border bg-card p-4";
 
@@ -178,7 +178,7 @@ export function ProviderProfilePanel({
               <h3 id="pp-area" className="mb-2 font-semibold">
                 {t("area")}
               </h3>
-              <LiteMap
+              <MapView
                 label={t("areaMap", { miles: profile.radiusMiles })}
                 points={[{ id: "base", ...p.home, kind: "provider", label: p.name }]}
                 radius={{ center: p.home, miles: profile.radiusMiles }}

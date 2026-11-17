@@ -55,6 +55,12 @@ export type Database = {
           },
         ]
       }
+      api_usage: {
+        Row: { alerted_at: string | null; day: string; units: number; vendor: string }
+        Insert: { alerted_at?: string | null; day: string; units?: number; vendor: string }
+        Update: { alerted_at?: string | null; day?: string; units?: number; vendor?: string }
+        Relationships: []
+      }
       attributions: {
         Row: {
           call_id: string | null
@@ -608,6 +614,12 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_counters: {
+        Row: { count: number; key: string; window_start: string }
+        Insert: { count: number; key: string; window_start: string }
+        Update: { count?: number; key?: string; window_start?: string }
+        Relationships: []
+      }
       recovery_codes: {
         Row: {
           code_hash: string
@@ -930,6 +942,12 @@ export type Database = {
         }
         Relationships: []
       }
+      usage_thresholds: {
+        Row: { daily_units: number; updated_at: string; vendor_group: string }
+        Insert: { daily_units: number; updated_at?: string; vendor_group: string }
+        Update: { daily_units?: number; updated_at?: string; vendor_group?: string }
+        Relationships: []
+      }
       user_security_settings: {
         Row: {
           second_step_method: Database["public"]["Enums"]["second_step_method"]
@@ -1039,6 +1057,10 @@ export type Database = {
       }
     }
     Functions: {
+      auth_user_for_phone: {
+        Args: { p_phone: string }
+        Returns: { email: string; is_demo: boolean; user_id: string }[]
+      }
       create_request: {
         Args: { p: Json }
         Returns: {
@@ -1158,6 +1180,15 @@ export type Database = {
           refreshed_at: string
           user_agent: string
         }[]
+      }
+      rate_limit_hit: {
+        Args: { p_key: string; p_window_seconds: number }
+        Returns: number
+      }
+      rate_limit_sweep: { Args: never; Returns: number }
+      record_api_usage: {
+        Args: { p_units?: number; p_vendor: string }
+        Returns: { alert: boolean; threshold: number; units_today: number }[]
       }
       request_account_closure: { Args: { p_reason: string }; Returns: string }
       revoke_my_session: { Args: { p_session_id: string }; Returns: boolean }

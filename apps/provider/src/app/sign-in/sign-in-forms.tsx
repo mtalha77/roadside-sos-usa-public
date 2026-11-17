@@ -5,6 +5,7 @@ import { Button } from "@rsos/ui/button";
 import { Field } from "@rsos/ui/field";
 import { Input } from "@rsos/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rsos/ui/tabs";
+import { SmsSignIn } from "@rsos/account/components/sms-sign-in";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { type AuthFormState, magicLinkAction, passwordSignInAction } from "@/lib/auth-actions";
@@ -24,6 +25,7 @@ export function ProviderSignIn({ expired }: { expired: boolean }) {
       <TabsList aria-label={t("provider.title")} className="w-full">
         <TabsTrigger value="password">{t("provider.passwordTab")}</TabsTrigger>
         <TabsTrigger value="link">{t("provider.linkTab")}</TabsTrigger>
+        <TabsTrigger value="sms">{t("sms.tab")}</TabsTrigger>
       </TabsList>
       <TabsContent value="password">
         <form action={pwAction} className="flex flex-col gap-4" noValidate>
@@ -66,6 +68,9 @@ export function ProviderSignIn({ expired }: { expired: boolean }) {
             </Button>
           </form>
         )}
+      </TabsContent>
+      <TabsContent value="sms">
+        <SmsSignIn />
       </TabsContent>
     </Tabs>
   );

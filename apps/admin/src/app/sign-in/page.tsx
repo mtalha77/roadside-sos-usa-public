@@ -1,5 +1,6 @@
 import { Alert } from "@rsos/ui/alert";
 import { DemoSignIn } from "@rsos/account/components/demo-sign-in";
+import { SmsSignIn } from "@rsos/account/components/sms-sign-in";
 import { AuthShell } from "@rsos/ui/auth-shell";
 import { getTranslations } from "next-intl/server";
 import { SignInForm } from "./sign-in-form";
@@ -12,10 +13,19 @@ export default async function SignInPage({
   const t = await getTranslations("auth.admin");
   const { expired, signedOut } = await searchParams;
   const ta = await getTranslations("account");
+  const tauth = await getTranslations("auth");
   return (
     <AuthShell title={t("title")} subtitle={t("subtitle")}>
       {signedOut === "1" ? <Alert tone="info" title={ta("signedOutNotice")} /> : null}
       <SignInForm expired={expired === "1"} />
+      <details className="rounded-xl border p-4">
+        <summary className="flex min-h-touch cursor-pointer items-center font-medium">
+          {tauth("sms.tab")}
+        </summary>
+        <div className="pt-3">
+          <SmsSignIn />
+        </div>
+      </details>
       <DemoSignIn roles={["admin_super", "admin_dispatcher"]} />
       <a
         href="/forgot-password"

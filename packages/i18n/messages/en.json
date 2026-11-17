@@ -661,7 +661,16 @@
           "fake": "Fake",
           "missing": "Missing"
         },
-        "legend": "Real: live keys are set. Fake: keys are missing outside production, so a safe stand-in is used and nothing is sent. Missing: keys are missing in production and the feature is off."
+        "legend": "Real: live keys are set. Fake: keys are missing outside production, so a safe stand-in is used and nothing is sent. Missing: keys are missing in production and the feature is off.",
+        "usage": "Paid API usage today",
+        "usageIntro": "Google Maps and Twilio calls counted by our servers. The owner gets one email a day when a service passes its threshold.",
+        "groups": {
+          "maps": "Google Maps",
+          "twilio": "Twilio"
+        },
+        "usedOf": "{used} of {limit}",
+        "threshold": "Daily alert threshold",
+        "save": "Save"
       }
     },
     "walkthrough": {
@@ -825,6 +834,15 @@
         "provider_application": "Thanks for applying to join. We review every application and will contact you within two business days about the next steps: proof of insurance and, where required, your license."
       },
       "signoff": "The {brand} team"
+    },
+    "opsAlert": {
+      "usageSubject": "{brand}: {group} usage passed today's limit",
+      "usageBody": "{group} usage reached {units} today ({day}), above the alert threshold of {threshold}. Check Admin > Settings > System status, and the API key restrictions if this was not expected.",
+      "usageHint": "You get one alert per service per day. Change the threshold in Admin > Settings > System status.",
+      "groups": {
+        "maps": "Google Maps",
+        "twilio": "Twilio"
+      }
     }
   },
   "auth": {
@@ -875,6 +893,24 @@
       "noAccessBody": "This account isn't linked to a provider company yet.",
       "dashboardTitle": "Provider portal",
       "signedInAs": "Signed in as {email}"
+    },
+    "sms": {
+      "tab": "Text code",
+      "phone": "Mobile number",
+      "phoneHint": "The number on your account. We text you a 6-digit code.",
+      "send": "Text me a code",
+      "sent": "We texted you a code. It expires in 10 minutes.",
+      "demoCode": "Test environment: no text is sent. Use code {code}.",
+      "code": "6-digit code",
+      "verify": "Sign in",
+      "errors": {
+        "phone": "Enter a valid US mobile number.",
+        "limit": "Too many codes. Wait a few minutes and try again.",
+        "code": "That code didn't work. Check it and try again.",
+        "unavailable": "Text codes are not available yet. Use your email instead.",
+        "noAccount": "No account uses this number. Sign in with your email instead.",
+        "generic": "Something went wrong. Please try again."
+      }
     }
   },
   "account": {
@@ -1760,7 +1796,9 @@
       "found": "Near {place}",
       "approx": "We'll use the address you typed; the provider will confirm the exact spot.",
       "saved": "Using your location near {place}. Tap “Use my location” again to update it.",
-      "savedNoPlace": "Using the location you shared. Tap “Use my location” again to update it."
+      "savedNoPlace": "Using the location you shared. Tap “Use my location” again to update it.",
+      "suggestions": "Address suggestions",
+      "mapLabel": "Map of your location"
     },
     "problem": {
       "title": "What happened?",
@@ -1902,7 +1940,7 @@
       "extrasTow": "Towing beyond the miles in your request is charged per mile, as quoted.",
       "extrasWait": "Waiting more than 15 minutes after arrival can be charged.",
       "payDirect": "You pay the provider directly when the job is done.",
-      "methods": "Accepted: {methods}",
+      "methods": "Accepted: card, cash, Apple Pay, Google Pay",
       "confirm": "Confirm and request",
       "cancel": "Back to quotes"
     },

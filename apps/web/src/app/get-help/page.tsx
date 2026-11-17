@@ -8,7 +8,9 @@ import Link from "next/link";
 import nextDynamic from "next/dynamic";
 import { Choice } from "@/components/get-help/choice";
 import { LocateButton } from "@/components/get-help/locate-button";
+import { AddressField } from "@/components/get-help/address-field";
 import { StepShell } from "@/components/get-help/step-shell";
+import { MapView } from "@/components/site/map-view";
 import { OutsideArea } from "@/components/site/outside-area";
 import { serviceName } from "@/components/site/service-label";
 import { SitePage } from "@/components/site/site-page";
@@ -110,6 +112,20 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         <input type="hidden" name="lng" defaultValue={savedFix ? String(draft.lng) : ""} />
         {savedFix ? hidden("fix", "saved") : null}
         {savedFix ? (
+          <MapView
+            label={t("location.mapLabel")}
+            points={[
+              {
+                id: "me",
+                kind: "request",
+                lat: draft.lat!,
+                lng: draft.lng!,
+                label: draft.address || t("location.mapLabel"),
+              },
+            ]}
+          />
+        ) : null}
+        {savedFix ? (
           <p className="rounded-xl border bg-muted/40 p-3 text-sm font-medium">
             {draft.address
               ? t("location.saved", { place: draft.address })
@@ -141,12 +157,13 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         <p className="text-sm font-medium text-muted-foreground">{t("location.or")}</p>
         <label className={label}>
           {t("location.address")}
-          <input
+          <AddressField
             id="gh-address"
             name="address"
-            defaultValue={draft.approx ? draft.address : ""}
+            defaultValue={draft.approx ? (draft.address ?? "") : ""}
             autoComplete="street-address"
             className={inputClass}
+            listLabel={t("location.suggestions")}
           />
         </label>
         <label className={label}>

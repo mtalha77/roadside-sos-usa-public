@@ -1,8 +1,6 @@
-import { createHash, randomInt } from "node:crypto";
-import { brand } from "@rsos/config/brand";
 import { isDemoMode } from "@rsos/config/demo";
 import { legalDocuments } from "@rsos/config/legal";
-import { chooseSmsSender } from "@rsos/core";
+import { verifyAvailable } from "@rsos/core/adapters";
 import { checkRateLimits, rateLimitKeys, verifyTurnstile } from "@rsos/core/security";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
@@ -19,6 +17,7 @@ import {
   toE164,
   VEHICLE_TYPES,
 } from "@/lib/get-help";
+import { maps, rateLimitStore, verify } from "@/lib/adapters";
 import { getMarkets, getMarketServices, marketSlugForPoint } from "@/lib/site-data";
 
 type Rpc = (
@@ -30,13 +29,13 @@ const db = () => {
   if (!s) throw new Error("Supabase is not configured");
   return s.rpc.bind(s) as unknown as Rpc;
 };
-/** Production limits; demo-mode previews and staging allow more because test suites submit from one IP. */
+/**
+ * Production limits (RSOS-021b): 3 codes per phone per 10 minutes, 10 per IP per hour. Demo-mode
+ * previews and staging allow more because test suites submit from one IP.
+ */
 const LIMITS = isDemoMode()
   ? { codeIp: 100, codePhone: 50, requestIp: 100 }
-  : { codeIp: 10, codePhone: 5, requestIp: 5 };
-
-const hash = (code: string, token: string) =>
-  createHash("sha256").update(`${token}:${code}`).digest("hex");
+  : { codeIp: 10, codePhone: 3, requestIp: 5 };
 
 /**
  * Every Get Help step posts here (plain forms, no JavaScript needed). Each answer is validated,
@@ -94,15 +93,34 @@ export async function POST(request: NextRequest) {
         // A saved fix (shown again after Back) gives way to an address the driver types now.
         !(form.get("fix") === "saved" && str("address").length >= 3);
       const chosen = markets.find((m) => m.slug === str("market"));
+      const placeId = str("placeId", 300);
       let market: string | null;
       let point: { lat: number; lng: number };
+      let precise = gps;
+      let address = str("address");
       if (gps) {
         market = await marketSlugForPoint(lat, lng);
         point = { lat, lng };
         if (!market) return go(`/get-help?step=location&outside=1`);
-      } else if (chosen && str("address").length >= 3) {
+        // A readable address and the nearest highway for the provider (real Maps only).
+        const near = await maps().reverseGeocode(point);
+        if (near && !address)
+          address = near.highway ? `${near.address} (${near.highway})` : near.address;
+      } else if (chosen && address.length >= 3) {
         market = chosen.slug;
         point = { lat: chosen.center_lat, lng: chosen.center_lng };
+        // A suggestion picked from Places Autocomplete gives the exact point.
+        const m = maps();
+        const place = placeId && m.mode === "real" ? await m.place(placeId) : null;
+        if (place) {
+          const inMarket = await marketSlugForPoint(place.lat, place.lng);
+          if (inMarket) {
+            market = inMarket;
+            point = { lat: place.lat, lng: place.lng };
+            address = place.address;
+            precise = true;
+          }
+        }
       } else return fail("location", "location");
       const service = str("service", 40);
       const attribution = Object.fromEntries(
@@ -126,10 +144,8 @@ export async function POST(request: NextRequest) {
         {
           market,
           ...point,
-          approx: !gps,
-          address: gps
-            ? str("address") || `${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`
-            : str("address"),
+          approx: !precise,
+          address: address || `${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`,
           note: str("note", 300),
           ...(service ? { service } : {}),
           ...(Object.keys(attribution).length ? { attribution } : {}),
@@ -213,28 +229,32 @@ export async function POST(request: NextRequest) {
       if (!name) return fail("contact", "required");
       if (!phone) return fail("contact", "phone");
       const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
-      const limit = await checkRateLimits([
-        { key: `code:${rateLimitKeys.ip(ip)}`, limit: LIMITS.codeIp, windowSeconds: 3600 },
-        { key: `code:${rateLimitKeys.phone(phone)}`, limit: LIMITS.codePhone, windowSeconds: 3600 },
-      ]);
+      const limit = await checkRateLimits(
+        [
+          { key: `code:${rateLimitKeys.ip(ip)}`, limit: LIMITS.codeIp, windowSeconds: 3600 },
+          {
+            key: `code:${rateLimitKeys.phone(phone)}`,
+            limit: LIMITS.codePhone,
+            windowSeconds: 600,
+          },
+        ],
+        rateLimitStore(),
+      );
       if (!limit.allowed) return fail("contact", "limit");
-      const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
-      const sms = chooseSmsSender();
-      const sent =
-        sms.mode === "unavailable"
-          ? null
-          : await sms.send(
-              phone,
-              `${brand.shortName}: your code is ${code}. It expires in 10 minutes.`,
-            );
+      // Twilio Verify sends and checks the code (RSOS-021b). The fake (never in production)
+      // sends nothing and shows its fixed code on screen.
+      const v = verify();
+      const started = verifyAvailable(v) ? await v.start(phone) : null;
+      if (started && !started.ok && started.reason === "invalid-phone")
+        return fail("contact", "phone");
       return save(
         {
           name,
           phone,
-          codeHash: hash(code, cookieToken ?? ""),
+          codeHash: "",
           codeAttempts: 0,
-          smsAvailable: Boolean(sent?.ok),
-          demoCode: sms.mode === "mock" ? code : "",
+          smsAvailable: Boolean(started?.ok),
+          demoCode: started?.ok && started.demoCode ? started.demoCode : "",
         },
         "verify",
       );
@@ -257,7 +277,8 @@ export async function POST(request: NextRequest) {
           });
           return fail("contact", "locked");
         }
-        if (hash(str("code", 6), cookieToken ?? "") !== draft.codeHash) {
+        const checked = await verify().check(draft.phone, str("code", 6));
+        if (!checked.ok) {
           await rpc("save_request_draft", {
             p_token: cookieToken,
             p_patch: { codeAttempts: (draft.codeAttempts ?? 0) + 1 },
@@ -272,13 +293,16 @@ export async function POST(request: NextRequest) {
         return fail("verify", "turnstile");
       if (
         !(
-          await checkRateLimits([
-            {
-              key: `request:${rateLimitKeys.ip(ip)}`,
-              limit: LIMITS.requestIp,
-              windowSeconds: 3600,
-            },
-          ])
+          await checkRateLimits(
+            [
+              {
+                key: `request:${rateLimitKeys.ip(ip)}`,
+                limit: LIMITS.requestIp,
+                windowSeconds: 3600,
+              },
+            ],
+            rateLimitStore(),
+          )
         ).allowed
       )
         return fail("verify", "limit");

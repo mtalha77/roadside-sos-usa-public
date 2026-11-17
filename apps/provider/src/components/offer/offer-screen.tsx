@@ -40,7 +40,8 @@ const KEY = "rsos_offer_sent";
 /** One-tap tone and vibration when a new request arrives (only after the first tap: browsers block autoplay). */
 function alertOnce() {
   try {
-    navigator.vibrate?.([200, 100, 200]);
+    // Browsers block vibration (and log an error) before the first tap on the page.
+    if (navigator.userActivation?.hasBeenActive) navigator.vibrate?.([200, 100, 200]);
     const ctx = new AudioContext();
     const o = ctx.createOscillator();
     const g = ctx.createGain();

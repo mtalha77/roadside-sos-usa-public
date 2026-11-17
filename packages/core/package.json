@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./security": "./src/security/index.ts",
-    "./demo": "./src/demo/index.ts"
+    "./demo": "./src/demo/index.ts",
+    "./adapters": "./src/adapters/index.ts"
   },
   "scripts": {
     "lint": "eslint .",

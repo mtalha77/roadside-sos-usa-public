@@ -73,3 +73,33 @@ BLOCKED until the owner adds the keys. `rsos-provider` Production has no `SUPABA
   Release QA runs the same specs.
 - Real or demo: real. Keys: Supabase only. Tested: unit tests for the key check and adapter
   states, e2e health and smoke specs. Owner: nothing.
+
+### RSOS-021b: Real maps and SMS codes
+
+- **Adapters** (`packages/core/src/adapters/`): `maps` (Places Autocomplete (New), place details,
+  reverse geocoding with nearest highway, Routes; fake: echoed suggestion at the city centre,
+  straight-line routes) and `twilio` (Verify start/check; fake: fixed code `000000`, never in
+  production; webhook signature check). Screens never import a vendor SDK.
+- **Get Help**: the address field is an accessible combobox fed by `/api/places` (server key,
+  US only, biased to the chosen city, 60 lookups per IP per minute). Picking a suggestion gives the
+  exact point; GPS fixes get a readable address and nearest highway. Real map (`GoogleMap`:
+  Maps JavaScript API, Advanced Markers with our own glyphs, light and dark) wherever a browser key
+  is set, the schematic map otherwise.
+- **Codes**: the driver's phone check uses Twilio Verify (was our own code generation). Provider
+  and admin apps gain "Sign in with a text code" (Verify, then a one-time session for the account
+  with that phone). With the fake verifier only demo accounts can sign in this way.
+- **Rate limits**: 3 codes per phone per 10 minutes, 10 per IP per hour (demo-mode hosts allow
+  more for test suites). Upstash is still missing, so limits use a **Postgres-backed limiter**
+  (`rate_limit_hit`), shared by every server instance, with an in-memory fallback.
+- **Budget guard**: every real Maps and Verify call is counted per day (`api_usage`). Admin >
+  Settings > System status shows today's usage and lets super admins set daily thresholds; the
+  team inbox gets one email per service per day when a threshold is passed.
+- Real or demo: built for real, running on **fakes** (no Google or Twilio keys). Keys:
+  `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`, `GOOGLE_MAPS_SERVER_KEY`, optional
+  `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`,
+  `TWILIO_VERIFY_SERVICE_SID`. Tested: adapter unit tests (real and fake, including Twilio's
+  documented signature example), pgTAP for limits, usage and the phone lookup, e2e for the
+  combobox, the Places endpoint and SMS sign-in. Owner: create and restrict the Maps keys
+  (`docs/runbooks/google-maps.md`), create the Verify service, add the keys in Vercel.
+- **BLOCKED (keys missing)**: real map and autocomplete on staging; a Verify code reaching
+  `OWNER_TEST_PHONE`.

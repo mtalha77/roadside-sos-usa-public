@@ -3,6 +3,10 @@ import { ADAPTER_KEYS, type AdapterName } from "@rsos/config/adapters";
 import { appUrl } from "@rsos/config/site";
 import { type Health, getHealth } from "@rsos/db/health";
 import { Badge } from "@rsos/ui/badge";
+import { inputClass } from "@rsos/ui/input";
+import { getAdminContext } from "@/lib/admin";
+import { getServerSupabase } from "@/lib/supabase/server";
+import { updateThresholdAction } from "@/lib/system-actions";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 
@@ -49,6 +53,17 @@ export async function SystemStatus() {
     remoteHealth("provider"),
   ]);
   const all: Record<(typeof APPS)[number], Health | null> = { web, provider, admin };
+  const supabase = await getServerSupabase();
+  const [ctx, { data: usage }, { data: thresholds }] = await Promise.all([
+    getAdminContext(),
+    supabase
+      .from("api_usage")
+      .select("vendor, units")
+      .eq("day", new Date().toISOString().slice(0, 10)),
+    supabase.from("usage_thresholds").select("vendor_group, daily_units").order("vendor_group"),
+  ]);
+  const groupTotal = (g: string) =>
+    (usage ?? []).filter((u) => u.vendor.startsWith(`${g}_`)).reduce((n, u) => n + u.units, 0);
   const adapters = Object.keys(ADAPTER_KEYS) as AdapterName[];
   return (
     <div className="flex flex-col gap-4">
@@ -137,6 +152,58 @@ export async function SystemStatus() {
           </table>
         </div>
         <p className="mt-3 text-sm text-muted-foreground">{t("legend")}</p>
+      </section>
+      <section className={card} aria-labelledby="sys-usage">
+        <h2 id="sys-usage" className="mb-1 font-semibold">
+          {t("usage")}
+        </h2>
+        <p className="mb-3 text-sm text-muted-foreground">{t("usageIntro")}</p>
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {(thresholds ?? []).map((th) => {
+            const used = groupTotal(th.vendor_group);
+            return (
+              <li key={th.vendor_group} className="flex flex-col gap-2 rounded-xl border p-3">
+                <p className="flex items-center justify-between gap-2">
+                  <span className="font-medium">{t(`groups.${th.vendor_group}`)}</span>
+                  <Badge tone={used >= th.daily_units ? "warning" : "neutral"}>
+                    {t("usedOf", { used, limit: th.daily_units })}
+                  </Badge>
+                </p>
+                <ul className="text-sm text-muted-foreground">
+                  {(usage ?? [])
+                    .filter((u) => u.vendor.startsWith(`${th.vendor_group}_`))
+                    .map((u) => (
+                      <li key={u.vendor} className="flex justify-between">
+                        <span>{u.vendor}</span>
+                        <span className="tabular-nums">{u.units}</span>
+                      </li>
+                    ))}
+                </ul>
+                {ctx.role === "super_admin" ? (
+                  <form action={updateThresholdAction} className="flex items-end gap-2">
+                    <input type="hidden" name="group" value={th.vendor_group} />
+                    <label className="flex flex-1 flex-col gap-1 text-sm font-medium">
+                      {t("threshold")}
+                      <input
+                        name="units"
+                        type="number"
+                        min={1}
+                        defaultValue={th.daily_units}
+                        className={inputClass}
+                      />
+                    </label>
+                    <button
+                      type="submit"
+                      className="min-h-touch rounded-lg border px-4 text-sm font-medium hover:bg-accent"
+                    >
+                      {t("save")}
+                    </button>
+                  </form>
+                ) : null}
+              </li>
+            );
+          })}
+        </ul>
       </section>
     </div>
   );

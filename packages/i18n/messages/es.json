@@ -661,7 +661,16 @@
           "fake": "Simulado",
           "missing": "Falta"
         },
-        "legend": "Real: las claves están configuradas. Simulado: faltan claves fuera de producción, así que se usa un sustituto seguro y no se envía nada. Falta: faltan claves en producción y la función está apagada."
+        "legend": "Real: las claves están configuradas. Simulado: faltan claves fuera de producción, así que se usa un sustituto seguro y no se envía nada. Falta: faltan claves en producción y la función está apagada.",
+        "usage": "Uso de APIs de pago hoy",
+        "usageIntro": "Llamadas a Google Maps y Twilio contadas por nuestros servidores. El dueño recibe un correo al día cuando un servicio pasa su umbral.",
+        "groups": {
+          "maps": "Google Maps",
+          "twilio": "Twilio"
+        },
+        "usedOf": "{used} de {limit}",
+        "threshold": "Umbral diario de alerta",
+        "save": "Guardar"
       }
     },
     "walkthrough": {
@@ -825,6 +834,15 @@
         "provider_application": "Gracias por tu solicitud. Revisamos cada solicitud y te contactaremos en dos días hábiles sobre los siguientes pasos: comprobante de seguro y, donde se requiera, tu licencia."
       },
       "signoff": "El equipo de {brand}"
+    },
+    "opsAlert": {
+      "usageSubject": "{brand}: el uso de {group} pasó el límite de hoy",
+      "usageBody": "El uso de {group} llegó a {units} hoy ({day}), por encima del umbral de alerta de {threshold}. Revisa Admin > Configuración > Estado del sistema, y las restricciones de las claves si no era de esperar.",
+      "usageHint": "Recibes una alerta por servicio por día. Cambia el umbral en Admin > Configuración > Estado del sistema.",
+      "groups": {
+        "maps": "Google Maps",
+        "twilio": "Twilio"
+      }
     }
   },
   "auth": {
@@ -875,6 +893,24 @@
       "noAccessBody": "Esta cuenta aún no está vinculada a una empresa proveedora.",
       "dashboardTitle": "Portal de proveedores",
       "signedInAs": "Sesión iniciada como {email}"
+    },
+    "sms": {
+      "tab": "Código por texto",
+      "phone": "Número de celular",
+      "phoneHint": "El número de tu cuenta. Te enviamos un código de 6 dígitos.",
+      "send": "Envíame un código",
+      "sent": "Te enviamos un código. Vence en 10 minutos.",
+      "demoCode": "Entorno de prueba: no se envía ningún texto. Usa el código {code}.",
+      "code": "Código de 6 dígitos",
+      "verify": "Iniciar sesión",
+      "errors": {
+        "phone": "Escribe un número de celular válido de EE. UU.",
+        "limit": "Demasiados códigos. Espera unos minutos y vuelve a intentarlo.",
+        "code": "Ese código no funcionó. Revísalo y vuelve a intentarlo.",
+        "unavailable": "Los códigos por texto aún no están disponibles. Usa tu correo.",
+        "noAccount": "Ninguna cuenta usa este número. Inicia sesión con tu correo.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      }
     }
   },
   "account": {
@@ -1760,7 +1796,9 @@
       "found": "Cerca de {place}",
       "approx": "Usaremos la dirección que escribiste; el proveedor confirmará el lugar exacto.",
       "saved": "Usando tu ubicación cerca de {place}. Toca “Usar mi ubicación” otra vez para actualizarla.",
-      "savedNoPlace": "Usando la ubicación que compartiste. Toca “Usar mi ubicación” otra vez para actualizarla."
+      "savedNoPlace": "Usando la ubicación que compartiste. Toca “Usar mi ubicación” otra vez para actualizarla.",
+      "suggestions": "Sugerencias de dirección",
+      "mapLabel": "Mapa de tu ubicación"
     },
     "problem": {
       "title": "¿Qué pasó?",
@@ -1902,7 +1940,7 @@
       "extrasTow": "El remolque más allá de las millas de tu solicitud se cobra por milla, según la cotización.",
       "extrasWait": "Esperar más de 15 minutos después de la llegada puede tener costo.",
       "payDirect": "Le pagas directamente al proveedor al terminar.",
-      "methods": "Acepta: {methods}",
+      "methods": "Aceptan: tarjeta, efectivo, Apple Pay, Google Pay",
       "confirm": "Confirmar y solicitar",
       "cancel": "Volver a las cotizaciones"
     },
