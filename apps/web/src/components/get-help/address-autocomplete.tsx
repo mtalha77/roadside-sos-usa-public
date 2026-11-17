@@ -34,10 +34,25 @@ export function AddressAutocomplete({
   // One Places session per typing session (billing groups autocomplete with the final lookup).
   const session = useRef<string>("");
 
+  // Leaving the page (submitting the form) cancels any lookup in flight, so the browser does not
+  // report a cancelled request as an error.
+  const inflight = useRef<AbortController | null>(null);
+  useEffect(() => {
+    const stop = () => inflight.current?.abort();
+    const form = input.current?.form;
+    form?.addEventListener("submit", stop);
+    window.addEventListener("pagehide", stop);
+    return () => {
+      form?.removeEventListener("submit", stop);
+      window.removeEventListener("pagehide", stop);
+    };
+  }, []);
+
   useEffect(() => {
     const q = value.trim();
     if (placeId || q.length < 3) return;
     const ctrl = new AbortController();
+    inflight.current = ctrl;
     const timer = setTimeout(async () => {
       session.current ||= crypto.randomUUID();
       const market = (input.current?.form?.elements.namedItem("market") as HTMLSelectElement | null)
@@ -45,6 +60,7 @@ export function AddressAutocomplete({
       const params = new URLSearchParams({ q, session: session.current });
       if (market) params.set("market", market);
       try {
+        if (ctrl.signal.aborted) return;
         const res = await fetch(`/api/places?${params}`, { signal: ctrl.signal });
         if (!res.ok) return;
         const data = (await res.json()) as { suggestions?: Suggestion[] };

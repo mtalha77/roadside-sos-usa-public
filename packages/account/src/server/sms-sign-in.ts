@@ -1,5 +1,6 @@
 "use server";
 
+import { isDemoMode } from "@rsos/config/demo";
 import { getSiteEnv } from "@rsos/config/site";
 import { chooseVerify, verifyAvailable } from "@rsos/core/adapters";
 import { checkRateLimits, getRateLimitStore, rateLimitKeys } from "@rsos/core/security";
@@ -24,13 +25,17 @@ const toE164 = (raw: unknown) => {
   return /^[2-9]\d{2}[2-9]\d{6}$/.test(d) ? `+1${d}` : null;
 };
 
-/** 3 codes per phone per 10 minutes, 10 per IP per hour (Upstash, else Postgres, else memory). */
+/**
+ * 3 codes per phone per 10 minutes, 10 per IP per hour (Upstash, else Postgres, else memory).
+ * Demo-mode hosts (previews, staging) allow more because test suites share one demo phone and IP.
+ */
 async function limited(phone: string) {
+  const [perIp, perPhone] = isDemoMode() ? [200, 100] : [10, 3];
   const ip = ((await headers()).get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
   const r = await checkRateLimits(
     [
-      { key: `signin:${rateLimitKeys.ip(ip)}`, limit: 10, windowSeconds: 3600 },
-      { key: `signin:${rateLimitKeys.phone(phone)}`, limit: 3, windowSeconds: 600 },
+      { key: `signin:${rateLimitKeys.ip(ip)}`, limit: perIp, windowSeconds: 3600 },
+      { key: `signin:${rateLimitKeys.phone(phone)}`, limit: perPhone, windowSeconds: 600 },
     ],
     getRateLimitStore(process.env, postgresRateLimitStore()),
   );
