@@ -275,6 +275,7 @@ export function AdminShell({
                   <li key={s.href}>
                     <Link
                       href={s.href}
+                      data-tour={where === "side" ? `nav-${s.key}` : undefined}
                       className={item}
                       onClick={where === "menu" ? () => setMenu(false) : undefined}
                       aria-current={current(s.href) ? "page" : undefined}
