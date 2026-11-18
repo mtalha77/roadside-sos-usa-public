@@ -171,3 +171,29 @@ RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at t
   preview region). The command palette loads on first open. JavaScript is about 208 KB on most
   routes against the 200 KB target, 312 KB on Inbox (live updates) and 248 KB on Calls (the
   table): **partial**, recorded for the owner.
+
+### RSOS-104: Provider portal polish
+
+- **The menu follows the role**, from the same permission map as the admin
+  (`packages/config/src/permissions.ts`), and the **portal proxy enforces it**: a page outside the
+  role sends technicians to My jobs and everyone else to `/no-access`.
+  - Provider owner: everything (home, offers, jobs, wallet, services and prices, profile, team,
+    insights, notifications).
+  - Provider dispatcher: the same without Team and Setup.
+  - Technician: only **My jobs** and their account.
+- **Technician view**: a simple top bar (company, My jobs, account), no bottom tabs. My jobs opens
+  with the active job as one big card (**Open the job**), then Active and Done; prices only, never
+  fees.
+- **Offer screen**, full screen on every device (it covers the tabs and the side menu):
+  - the countdown ring and the job (distance, drive time, area, highway and safety flags, map);
+  - a big price box pre-filled from the company's own price table (`provider_service_prices`),
+    else the market's typical price, with the fee if picked; outside the market's range the
+    button turns off and says the allowed range;
+  - arrival chips **15, 30, 45 and 60 min** (the nearest to the drive time is chosen);
+  - one **Send quote** button; declining with a reason is a small secondary control.
+- **States**: every portal page has a skeleton while loading and an error page with a retry.
+- **Customer wording** in the portal ("Waiting for the customer to choose", "Hours shown to
+  customers").
+- Tests: `provider-roles.spec.ts` (technician sees only My jobs and is sent back from office
+  pages; a provider dispatcher quotes but cannot open Team), `provider-offer.spec.ts` (chips and
+  Send quote), unit tests for the provider permission map.
