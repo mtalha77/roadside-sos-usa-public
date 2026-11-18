@@ -26,7 +26,7 @@ export async function SiteHeader({ markets, services, market }: Props) {
     "absolute top-full left-0 z-40 mt-2 flex min-w-60 flex-col rounded-xl border bg-popover p-2 shadow-lg";
   return (
     <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-4 sm:h-16">
         <Link
           href="/"
           className="mr-auto flex min-h-touch items-center text-lg font-bold tracking-tight"

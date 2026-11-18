@@ -33,7 +33,7 @@ export async function EmergencyHero({
     <section
       data-hero
       aria-labelledby="hero-title"
-      className="mx-auto flex max-w-6xl flex-col gap-3 px-4 pt-3 pb-8 sm:gap-5 sm:pt-12"
+      className="mx-auto flex max-w-6xl flex-col gap-2.5 px-4 pt-2 pb-8 sm:gap-5 sm:pt-12"
     >
       <h1
         id="hero-title"
