@@ -2255,7 +2255,8 @@
       "saved": "Using your location near {place}. Tap “Use my location” again to update it.",
       "savedNoPlace": "Using the location you shared. Tap “Use my location” again to update it.",
       "suggestions": "Address suggestions",
-      "mapLabel": "Map of your location"
+      "mapLabel": "Map of your location",
+      "why": "We send help to this spot. Allow location when your phone asks, or type the address below."
     },
     "problem": {
       "title": "What happened?",
@@ -2296,68 +2297,56 @@
       "note": "Providers include the distance in their price."
     },
     "vehicle": {
-      "title": "What are you driving?",
-      "type": "Type",
-      "types": {
-        "car": "Car",
-        "suv": "SUV",
-        "pickup": "Pickup",
-        "van": "Van",
-        "motorcycle": "Motorcycle",
-        "rv": "RV"
-      },
       "make": "Make",
-      "model": "Model",
       "color": "Color",
-      "year": "Year (optional)",
-      "ev": "Electric vehicle"
+      "modelOptional": "Model (optional)",
+      "colors": {
+        "White": "White",
+        "Black": "Black",
+        "Silver": "Silver",
+        "Gray": "Gray",
+        "Blue": "Blue",
+        "Red": "Red",
+        "Green": "Green",
+        "Other": "Other"
+      }
     },
     "safety": {
-      "title": "Are you safe?",
-      "safe": "Are you in a safe place, off the road?",
-      "highway": "Are you on a highway?",
-      "passengers": "Passengers with you",
-      "yes": "Yes",
-      "no": "No",
       "unsafe": "If you're in danger or blocking traffic, call 911 first. Stay in your vehicle with your seatbelt on if you're on a highway.",
       "call911": "Call 911",
-      "quickSafe": "I'm safe, off the road",
-      "quickHighway": "I'm safe, on a highway shoulder",
-      "quickUnsafe": "I'm not safe"
+      "where": "Where are you right now?",
+      "spotSafe": "Off the road, in a safe place",
+      "spotHighway": "On a highway shoulder",
+      "spotUnsafe": "I don't feel safe"
     },
     "contact": {
-      "title": "How can the provider reach you?",
       "name": "Your name",
       "phone": "Mobile number (for the provider's call)",
-      "sendCode": "Continue",
       "consent": "By continuing you agree to the <terms>Driver Terms</terms> and <privacy>Privacy Policy</privacy>. We and the provider may call you about this request.",
       "terms": "Driver Terms",
       "privacy": "Privacy Policy",
       "email": "Email (optional)",
-      "emailHint": "We email you a 6-digit code and your request link. No email? We confirm your request on the call."
-    },
-    "verify": {
-      "title": "Check and send",
-      "body": "We emailed a 6-digit code to {email}.",
-      "code": "Code",
-      "demoCode": "Demo mode: no email was sent. Your code is {code}.",
-      "submit": "Send my request",
-      "resend": "Change contact details",
-      "noCode": "We'll confirm your request on the phone call."
+      "emailHint": "We email you the link to your request. No email? The link is on the next screen."
     },
     "errors": {
-      "required": "Please answer this question.",
-      "location": "We need your location or an address.",
-      "outside": "That location is outside the areas we serve.",
-      "phone": "Enter a valid US mobile number.",
-      "code": "That code isn't right. Check it and try again.",
-      "locked": "Too many tries. Enter your email again for a new code.",
-      "turnstile": "The security check didn't pass. Please try again.",
-      "limit": "Too many requests from this connection. Please call us instead.",
-      "generic": "Something went wrong. Please try again, or call us.",
-      "service": "That service isn't available in this area yet.",
+      "required": "Choose an answer, then tap Continue.",
+      "location": "Tap Use my location, or type an address and choose your city.",
+      "outside": "We don't serve that area yet. Choose one of our cities below.",
+      "phone": "Enter a 10-digit US mobile number, like (210) 555-0123.",
+      "turnstile": "The security check didn't finish. Wait a moment, then tap Send my request again.",
+      "limit": "Too many requests from this connection. Call us instead, or try again in an hour.",
+      "generic": "Something went wrong on our side. Tap the button again, or call us.",
+      "service": "That service isn't offered here yet. Go back and choose another, or call us.",
       "email": "Enter a valid email address, or leave it empty.",
-      "address": "Type a street address with a number (1200 Main St), cross streets (Main St and 5th St) or a highway and exit or mile marker."
+      "address": "Type a street address with a number (1200 Main St), cross streets (Main St and 5th St) or a highway and exit or mile marker.",
+      "name": "Type your name so the provider knows who to look for.",
+      "vehicle": "Type your vehicle's make (for example Toyota) and pick its color.",
+      "spot": "Choose where you are right now.",
+      "destination": "Type where to take the vehicle (an address or a shop name)."
+    },
+    "details": {
+      "title": "Who should the provider look for?",
+      "submit": "Send my request"
     }
   },
   "track": {
@@ -2376,7 +2365,15 @@
     "searching": {
       "body": "We sent your request to verified providers nearby. Quotes usually arrive within 3 minutes. Stay where you are and keep your phone on.",
       "call": "Call us {phone}",
-      "timeLeft": "Time left for quotes"
+      "timeLeft": "Time left for quotes",
+      "reach": "{count, plural, one {# verified provider serves} other {# verified providers serve}} {city}.",
+      "whileTitle": "While you wait",
+      "while": [
+        "Turn on your hazard lights.",
+        "On a highway, stay in your vehicle with your seatbelt on.",
+        "Keep your phone on: the provider may call you.",
+        "If you feel unsafe at any moment, call 911."
+      ]
     },
     "quotes": {
       "count": "{count, plural, one {# quote} other {# quotes}}",

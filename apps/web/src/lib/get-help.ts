@@ -3,15 +3,8 @@ import { z } from "zod";
 /** Cookie holding the draft token (HttpOnly; the draft itself is in the database). */
 export const DRAFT_COOKIE = "rsos_draft";
 
-export const STEPS = [
-  "location",
-  "problem",
-  "destination",
-  "vehicle",
-  "safety",
-  "contact",
-  "verify",
-] as const;
+/** Three screens (RSOS-101): what happened, where (and where to tow), who and which vehicle. */
+export const STEPS = ["problem", "location", "details"] as const;
 export type Step = (typeof STEPS)[number];
 
 /** Services that need a destination (tow, winch out). */
@@ -104,34 +97,24 @@ export const DraftSchema = z
   .partial();
 export type Draft = z.infer<typeof DraftSchema>;
 
-/** The steps this draft goes through (destination only for tow and winch out). */
-export function stepsFor(d: Draft): Step[] {
-  return STEPS.filter((s) => s !== "destination" || NEEDS_DESTINATION.has(d.service ?? ""));
-}
-
 /** First step the draft has not finished: the flow resumes there after a reload. */
 export function currentStep(d: Draft): Step {
-  if (d.lat === undefined || !d.market) return "location";
   if (!d.service) return "problem";
-  if (NEEDS_DESTINATION.has(d.service) && !d.destAddress) return "destination";
-  if (!d.vehicleType) return "vehicle";
-  if (d.safe === undefined) return "safety";
-  if (!d.phone || !d.name) return "contact";
-  return "verify";
+  if (d.lat === undefined || !d.market) return "location";
+  if (NEEDS_DESTINATION.has(d.service) && !d.destAddress) return "location";
+  return "details";
 }
 
 /** A step may be shown only when every earlier step is done. */
 export function allowedStep(d: Draft, wanted: string | undefined): Step {
-  const order = stepsFor(d);
   const now = currentStep(d);
-  const w = order.find((s) => s === wanted);
-  return w && order.indexOf(w) <= order.indexOf(now) ? w : now;
+  const w = STEPS.find((s) => s === wanted);
+  return w && STEPS.indexOf(w) <= STEPS.indexOf(now) ? w : now;
 }
 
-export function previousStep(d: Draft, step: Step): Step | null {
-  const order = stepsFor(d);
-  const i = order.indexOf(step);
-  return i > 0 ? order[i - 1]! : null;
+export function previousStep(_d: Draft, step: Step): Step | null {
+  const i = STEPS.indexOf(step);
+  return i > 0 ? STEPS[i - 1]! : null;
 }
 
 export const toE164 = (raw: unknown) => {

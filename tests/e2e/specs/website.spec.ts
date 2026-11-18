@@ -69,7 +69,8 @@ test.describe("website structure", () => {
     // A plain form post that comes back to this page with the choice remembered.
     await page.getByRole("button", { name: "Use this area" }).click();
     await expect(page.getByRole("combobox", { name: "Change area" })).toHaveValue(value!);
-    await page.goto(url("/get-help"));
+    // The city is asked on the location screen (a tile already chose the service).
+    await page.goto(url("/get-help?service=tow"));
     await expect(page.locator("select[name=market]")).toHaveValue(value!);
   });
 

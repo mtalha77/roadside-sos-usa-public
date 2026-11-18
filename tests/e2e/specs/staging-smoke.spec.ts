@@ -37,42 +37,24 @@ test.describe("staging smoke @staging", () => {
     test.skip(info.project.name !== "desktop-chrome", "One browser is enough for this smoke flow");
     test.setTimeout(150_000);
     const url = (p: string) => new URL(p, web).toString();
+    // Three screens (RSOS-101): what happened, where, who and which vehicle.
     await page.goto(url("/get-help"));
-    await page.getByLabel("Street address or cross streets").fill("1200 Main St");
-    await page.getByLabel("City").selectOption({ index: 1 });
-    await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
     await page.locator("label").filter({ hasText: "Flat tire" }).click();
     await page.getByRole("radio", { name: "Yes" }).check();
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
-    await page.getByLabel("Make").fill("Toyota");
-    await page.getByLabel("Model").fill("Camry");
+    await page.getByLabel("Street address or cross streets").fill("1200 Main St");
+    await page.getByLabel("City").selectOption({ index: 1 });
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: "Are you safe?" })).toBeVisible();
-    await page
-      .getByRole("group", { name: /safe place/ })
-      .getByRole("radio", { name: "Yes" })
-      .check();
-    await page
-      .getByRole("group", { name: /highway/ })
-      .getByRole("radio", { name: "No" })
-      .check();
-    await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: /reach you/ })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Who should the provider look for?" }),
+    ).toBeVisible();
+    // The name the staging "no fake data" check expects; a fictional 555-01xx number.
     await page.getByLabel("Your name").fill("Smoke Test Driver");
-    // Fictional 555-01xx number: never a real phone (demo mode shows the code on screen).
     await page
       .getByLabel("Mobile number")
       .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
-    // A reserved example.com address: demo hosts show the code on screen and send nothing.
-    await page.getByLabel("Email (optional)").fill("e2e-driver@example.com");
-    await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: "Check and send" })).toBeVisible();
-    const code = /code is (\d{6})/.exec(
-      (await page.getByText(/Your code is/).textContent()) ?? "",
-    )?.[1];
-    await page.getByLabel("Code").fill(code!);
+    await page.getByLabel("Make").fill("Toyota");
+    await page.getByRole("radio", { name: "Off the road, in a safe place" }).check();
     await expect(page.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,
     });

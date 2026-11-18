@@ -6,15 +6,15 @@
 
 ## Summary
 
-| Ticket                                            | Status      | Pull request |
-| ------------------------------------------------- | ----------- | ------------ |
-| RSOS-100 Emergency-first website home, city pages | In progress |              |
-| RSOS-101 Get Help flow, faster and calmer         | Not started |              |
-| RSOS-102 Roles and permissions in the admin       | Not started |              |
-| RSOS-103 Admin rebuild (Today, navigation, board) | Not started |              |
-| RSOS-104 Provider portal polish                   | Not started |              |
-| RSOS-105 Skippable guided tours                   | Not started |              |
-| RSOS-106 QA pass and walkthrough                  | Not started |              |
+| Ticket                                            | Status      | Pull request                                                         |
+| ------------------------------------------------- | ----------- | -------------------------------------------------------------------- |
+| RSOS-100 Emergency-first website home, city pages | Merged      | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184) |
+| RSOS-101 Get Help flow, faster and calmer         | In review   |                                                                      |
+| RSOS-102 Roles and permissions in the admin       | Not started |                                                                      |
+| RSOS-103 Admin rebuild (Today, navigation, board) | Not started |                                                                      |
+| RSOS-104 Provider portal polish                   | Not started |                                                                      |
+| RSOS-105 Skippable guided tours                   | Not started |                                                                      |
+| RSOS-106 QA pass and walkthrough                  | Not started |                                                                      |
 
 ## Tickets
 
@@ -55,3 +55,27 @@
 - Note: the spec's availability line says "online now". There is no provider presence data yet
   (going online arrives with the provider portal work), so the line shows the real count of
   verified providers serving the market, never invented numbers.
+
+### RSOS-101: Get Help in three screens
+
+- **Three screens, each with one job**, and "Step n of 3" on each:
+  1. **What happened?** The service tiles; follow-up questions are optional. Tapping a tile on the
+     home page skips this screen.
+  2. **Where are you?** The browser asks for the location as soon as the screen opens (one sentence
+     says why); the pin, the address, the city and a landmark note; tow requests also ask where the
+     car should go.
+  3. **Who should the provider look for?** Name, phone, vehicle make (with suggestions), colour,
+     optional model and email, and where the car is now: off the road in a safe place, on the
+     shoulder of a highway, or somewhere unsafe (with the call 911 alert). Consent and the bot check
+     sit above one full-width **Send my request**.
+- **No email code step any more.** It added a fourth screen to a stranded customer's request. The
+  email stays optional and unverified on the request; the code check stays for the customer account
+  pages.
+- **Errors say what to do next** ("Type your name so the provider knows who to look for.",
+  "Type where to take the vehicle (an address or a shop name).") and keep everything already
+  typed.
+- **"Finding help" screen** (the status page while quotes are on the way): "N verified providers
+  serve {city}" from real data, a "While you wait" list (hazard lights on, stay buckled in on a
+  highway, keep the phone on, call 911 if unsafe), and the call link only where phones are enabled.
+- The action bar is hidden on the request screens so the send button is the only thing pinned to
+  the bottom of the phone.

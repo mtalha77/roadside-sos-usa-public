@@ -71,8 +71,11 @@ select throws_ok($$ select public.dispatch_step('00000000-0000-4000-8000-0000000
   'assigning needs provider, price and ETA');
 select lives_ok($$ select public.dispatch_step('00000000-0000-4000-8000-0000000004c1', 'assigned', null, '00000000-0000-4000-8000-0000000004b1', 12500, 25) $$,
   'location confirmed -> assigned');
+-- Counted as the database owner: who may read fee rows is RSOS-102's matrix (027), not this test.
+reset role;
 select is((select count(*)::int from public.provider_billing_events where request_id = '00000000-0000-4000-8000-0000000004c1' and kind = 'manual_test'),
   1, 'assignment writes one manual_test fee row');
+select pg_temp.as_a();
 select is((select count(*)::int from public.dispatch_attempts where request_id = '00000000-0000-4000-8000-0000000004c1' and outcome = 'assigned'),
   1, 'and an assigned attempt');
 select throws_ok($$ select public.dispatch_step('00000000-0000-4000-8000-0000000004c1', 'cancelled') $$, '22023', null, 'cancelling needs a reason');

@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import nextDynamic from "next/dynamic";
+import type { ReactNode } from "react";
 import { Choice } from "@/components/get-help/choice";
 import { LocateButton } from "@/components/get-help/locate-button";
 import { AddressField } from "@/components/get-help/address-field";
@@ -22,14 +23,15 @@ import {
   DRAFT_COOKIE,
   FOLLOW_UPS,
   MILE_RANGES,
+  NEEDS_DESTINATION,
   previousStep,
-  stepsFor,
+  STEPS,
   VEHICLE_MAKES,
-  VEHICLE_TYPES,
 } from "@/lib/get-help";
 import { cityLabel, formatPhone } from "@/lib/market";
 import { pageMetadata } from "@/lib/seo";
-import { getMarkets, getMarketServices } from "@/lib/site-data";
+import { getMarkets, getMarketServices, getServices } from "@/lib/site-data";
+import { orderTiles } from "@/lib/tiles";
 import { ui } from "@/lib/ui-classes";
 import { getVisitorMarket } from "@/lib/visitor";
 import { mapsEnabled } from "@rsos/core/adapters";
@@ -65,10 +67,22 @@ async function loadDraft(): Promise<Draft> {
   return DraftSchema.safeParse(data ?? {}).data ?? {};
 }
 
+/** The step's main button, in the bottom thumb zone on a phone (sticky), full width. */
+function Submit({ children }: { children: ReactNode }) {
+  return (
+    <div className="sticky bottom-0 -mx-4 mt-2 border-t bg-background/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0">
+      <button type="submit" className={`${ui.button.primary} min-h-14 w-full text-lg`}>
+        {children}
+      </button>
+    </div>
+  );
+}
+
 /**
- * Get Help (RSOS-021): one question per screen, saved to a draft after every step, so a reload or
- * a lost connection resumes where the driver was. Plain forms: works without JavaScript and stays
- * inside the 150 KB budget; only "Use my location" and the final security check use script.
+ * Get Help (RSOS-021, three screens since RSOS-101): (1) what happened, skipped when a home tile
+ * was tapped; (2) where: GPS first, or a typed address and a landmark, plus the destination for a
+ * tow; (3) name, phone and vehicle, then submit. Saved to a draft after every screen, so Back and a
+ * reload keep the answers. Plain forms: works without JavaScript and stays inside the budget.
  */
 export default async function GetHelpPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
@@ -79,12 +93,13 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
     getMarkets(),
     getVisitorMarket(sp.market),
   ]);
-  const step = allowedStep(draft, sp.step);
-  const order = stepsFor(draft);
-  const n = order.indexOf(step) + 1;
-  const back = previousStep(draft, step);
-  // Every step has a Back: the first one goes back home. Answers live in the saved draft, so
-  // Back (and the browser's back button) shows each step filled in.
+  const tileService = sp.service && /^[a-z-]{2,40}$/.test(sp.service) ? sp.service : undefined;
+  // A home tile chose the service: start at the location step with it (no "what happened").
+  const effective: Draft =
+    tileService && !draft.service ? { ...draft, service: tileService } : draft;
+  const step = allowedStep(effective, sp.step);
+  const n = STEPS.indexOf(step) + 1;
+  const back = previousStep(effective, step);
   const backHref = back ? `/get-help?step=${back}` : "/";
   const savedFix = draft.lat !== undefined && draft.lng !== undefined && !draft.approx;
   const error = sp.error ?? null;
@@ -94,7 +109,6 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         m.slug ===
         (draft.market ?? (detection.kind === "market" ? detection.market.slug : undefined)),
     ) ?? null;
-  const services = market ? (await getMarketServices(market.slug)).filter((s) => s.enabled) : [];
   const hidden = (name: string, value: string | number | undefined | null) =>
     value === undefined || value === null ? null : (
       <input type="hidden" name={name} value={String(value)} />
@@ -103,7 +117,70 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
   const fieldset = "flex flex-col gap-3";
 
   let body;
-  if (step === "location") {
+  if (step === "problem") {
+    // The market's services when it is known; otherwise every service offered somewhere (the
+    // location step checks it is offered there).
+    const services = market
+      ? (await getMarketServices(market.slug))
+          .filter((s) => s.enabled)
+          .map((s) => ({ slug: s.service_slug, name: s.service_name, icon_key: s.icon_key }))
+      : (await getServices()).filter((s) => s.market_count > 0);
+    body = (
+      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
+        {hidden("step", "problem")}
+        {hidden("market", market?.slug)}
+        <fieldset className="grid grid-cols-2 gap-3">
+          <legend className="sr-only">{t("problem.title")}</legend>
+          {orderTiles(services).map((s) => {
+            const Glyph = serviceIcons[s.icon_key as ServiceIconKey];
+            return (
+              <label
+                key={s.slug}
+                className="flex min-h-24 cursor-pointer flex-col items-start justify-between gap-2 rounded-2xl border-2 border-border bg-surface p-4 has-[:checked]:border-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring"
+              >
+                <input
+                  id={`svc-${s.slug}`}
+                  type="radio"
+                  name="service"
+                  value={s.slug}
+                  defaultChecked={draft.service === s.slug}
+                  required
+                  className="sr-only"
+                />
+                <span
+                  aria-hidden="true"
+                  className="grid size-10 place-items-center rounded-xl bg-muted [&_svg]:size-6"
+                >
+                  {Glyph ? <Glyph /> : null}
+                </span>
+                <span className="text-lg leading-tight font-semibold">
+                  {serviceName(ts, s, "tile")}
+                </span>
+              </label>
+            );
+          })}
+        </fieldset>
+        {Object.entries(FOLLOW_UPS).map(([slug, fu]) => (
+          <fieldset key={slug} className={`${fieldset} hidden ${SHOW_WHEN[slug] ?? ""}`}>
+            <legend className="mb-1 font-semibold">{t(`problem.${fu.key}.q` as never)}</legend>
+            {fu.options.map((o) => (
+              <Choice
+                key={o}
+                name={`followUp-${slug}`}
+                value={o}
+                checked={draft.service === slug && draft.followUp === o}
+                required={false}
+              >
+                {t(`problem.${fu.key}.${o}` as never)}
+              </Choice>
+            ))}
+          </fieldset>
+        ))}
+        <Submit>{t("next")}</Submit>
+      </form>
+    );
+  } else if (step === "location") {
+    const needsDestination = NEEDS_DESTINATION.has(effective.service ?? "");
     body = sp.outside ? (
       <OutsideArea city={null} region={null} markets={markets} />
     ) : (
@@ -112,6 +189,20 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         <input type="hidden" name="lat" defaultValue={savedFix ? String(draft.lat) : ""} />
         <input type="hidden" name="lng" defaultValue={savedFix ? String(draft.lng) : ""} />
         {savedFix ? hidden("fix", "saved") : null}
+        {hidden("service", tileService)}
+        {[
+          "utm_source",
+          "utm_medium",
+          "utm_campaign",
+          "utm_term",
+          "utm_content",
+          "gclid",
+          "gbraid",
+          "wbraid",
+          "fbclid",
+          "msclkid",
+        ].map((k) => hidden(k, sp[k]?.slice(0, 200)))}
+        <p className="text-muted-foreground">{t("location.why")}</p>
         {savedFix ? (
           <MapView
             label={t("location.mapLabel")}
@@ -133,27 +224,12 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
               : t("location.savedNoPlace")}
           </p>
         ) : null}
-        {hidden(
-          "service",
-          sp.service && /^[a-z-]{2,40}$/.test(sp.service) ? sp.service : undefined,
-        )}
-        {[
-          "utm_source",
-          "utm_medium",
-          "utm_campaign",
-          "utm_term",
-          "utm_content",
-          "gclid",
-          "gbraid",
-          "wbraid",
-          "fbclid",
-          "msclkid",
-        ].map((k) => hidden(k, sp[k]?.slice(0, 200)))}
         <LocateButton
           label={t("location.useMine")}
           busyLabel={t("location.locating")}
           deniedLabel={t("location.denied")}
           fallbackId="gh-address"
+          auto={!savedFix && !error}
         />
         <p className="text-sm font-medium text-muted-foreground">{t("location.or")}</p>
         <label className={label}>
@@ -194,112 +270,65 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             {t("location.notePlaceholderHint")}
           </span>
         </label>
-        <button type="submit" className={`${ui.button.outline} self-start`}>
-          {t("next")}
-        </button>
-      </form>
-    );
-  } else if (step === "problem") {
-    body = (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
-        {hidden("step", "problem")}
-        <fieldset className="grid grid-cols-2 gap-3">
-          <legend className="sr-only">{t("problem.title")}</legend>
-          {services.map((s) => {
-            const Glyph = serviceIcons[s.icon_key as ServiceIconKey];
-            return (
-              <label
-                key={s.service_slug}
-                className="flex min-h-28 cursor-pointer flex-col items-start gap-2 rounded-2xl border-2 border-border bg-surface p-4 has-[:checked]:border-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring"
+        {needsDestination ? (
+          <fieldset className="flex flex-col gap-4 rounded-2xl border p-4">
+            <legend className="px-1 text-lg font-semibold">{t("destination.title")}</legend>
+            <label className={label}>
+              {t("destination.address")}
+              <input
+                name="destAddress"
+                required
+                defaultValue={draft.destAddress ?? ""}
+                className={inputClass}
+              />
+            </label>
+            <label className={label}>
+              {t("destination.miles")}
+              <select
+                name="destMiles"
+                defaultValue={draft.destMiles ?? "lt5"}
+                className={inputClass}
               >
-                <input
-                  id={`svc-${s.service_slug}`}
-                  type="radio"
-                  name="service"
-                  value={s.service_slug}
-                  defaultChecked={draft.service === s.service_slug}
-                  required
-                  className="sr-only"
-                />
-                <span
-                  aria-hidden="true"
-                  className="grid size-11 place-items-center rounded-xl bg-muted [&_svg]:size-6"
-                >
-                  {Glyph ? <Glyph /> : null}
-                </span>
-                <span className="text-lg font-semibold">
-                  {serviceName(ts, { slug: s.service_slug, name: s.service_name })}
-                </span>
-              </label>
-            );
-          })}
-        </fieldset>
-        {Object.entries(FOLLOW_UPS).map(([slug, fu]) => (
-          <fieldset key={slug} className={`${fieldset} hidden ${SHOW_WHEN[slug] ?? ""}`}>
-            <legend className="mb-1 font-semibold">{t(`problem.${fu.key}.q` as never)}</legend>
-            {fu.options.map((o) => (
-              <Choice
-                key={o}
-                name={`followUp-${slug}`}
-                value={o}
-                checked={draft.service === slug && draft.followUp === o}
-                required={false}
-              >
-                {t(`problem.${fu.key}.${o}` as never)}
-              </Choice>
-            ))}
+                {Object.keys(MILE_RANGES).map((k) => (
+                  <option key={k} value={k}>
+                    {t(`destination.ranges.${k}` as never)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="text-sm text-muted-foreground">{t("destination.note")}</p>
           </fieldset>
-        ))}
-        <button type="submit" className={`${ui.button.primary} self-start`}>
-          {t("next")}
-        </button>
+        ) : null}
+        <Submit>{t("next")}</Submit>
       </form>
     );
-  } else if (step === "destination") {
+  } else {
     body = (
       <form method="post" action="/api/get-help" className="flex flex-col gap-5">
-        {hidden("step", "destination")}
-        <label className={label}>
-          {t("destination.address")}
-          <input
-            name="destAddress"
-            required
-            defaultValue={draft.destAddress ?? ""}
-            className={inputClass}
-          />
-        </label>
-        <fieldset className={fieldset}>
-          <legend className="mb-1 font-semibold">{t("destination.miles")}</legend>
-          {Object.keys(MILE_RANGES).map((k) => (
-            <Choice key={k} name="destMiles" value={k} checked={draft.destMiles === k}>
-              {t(`destination.ranges.${k}` as never)}
-            </Choice>
-          ))}
-        </fieldset>
-        <p className="text-sm text-muted-foreground">{t("destination.note")}</p>
-        <button type="submit" className={`${ui.button.primary} self-start`}>
-          {t("next")}
-        </button>
-      </form>
-    );
-  } else if (step === "vehicle") {
-    body = (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
-        {hidden("step", "vehicle")}
-        <fieldset className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <legend className="mb-1 font-semibold">{t("vehicle.type")}</legend>
-          {VEHICLE_TYPES.map((v) => (
-            <Choice
-              key={v}
-              name="vehicleType"
-              value={v}
-              checked={(draft.vehicleType ?? "car") === v}
-            >
-              {t(`vehicle.types.${v}` as never)}
-            </Choice>
-          ))}
-        </fieldset>
+        {hidden("step", "details")}
         <div className="grid gap-4 sm:grid-cols-2">
+          <label className={label}>
+            {t("contact.name")}
+            <input
+              name="name"
+              required
+              autoComplete="name"
+              defaultValue={draft.name ?? ""}
+              className={inputClass}
+            />
+          </label>
+          <label className={label}>
+            {t("contact.phone")}
+            <input
+              name="phone"
+              type="tel"
+              required
+              inputMode="tel"
+              autoComplete="tel"
+              defaultValue={draft.phone ? formatPhone(draft.phone) : ""}
+              className={inputClass}
+            />
+          </label>
           <label className={label}>
             {t("vehicle.make")}
             <input
@@ -317,88 +346,48 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             </datalist>
           </label>
           <label className={label}>
-            {t("vehicle.model")}
-            <input name="model" defaultValue={draft.model ?? ""} className={inputClass} />
-          </label>
-          <label className={label}>
             {t("vehicle.color")}
             <select name="color" defaultValue={draft.color ?? "White"} className={inputClass}>
               {COLORS.map((c) => (
                 <option key={c} value={c}>
-                  {c}
+                  {t(`vehicle.colors.${c}` as never)}
                 </option>
               ))}
             </select>
           </label>
           <label className={label}>
-            {t("vehicle.year")}
+            {t("vehicle.modelOptional")}
+            <input name="model" defaultValue={draft.model ?? ""} className={inputClass} />
+          </label>
+          <label className={label}>
+            {t("contact.email")}
             <input
-              name="year"
-              inputMode="numeric"
-              pattern="[0-9]{4}"
-              maxLength={4}
-              defaultValue={draft.year ?? ""}
+              name="email"
+              type="email"
+              autoComplete="email"
+              defaultValue={draft.email ?? ""}
               className={inputClass}
+              aria-describedby="gh-email-hint"
             />
+            <span id="gh-email-hint" className="text-sm font-normal text-muted-foreground">
+              {t("contact.emailHint")}
+            </span>
           </label>
         </div>
-        <label className="flex min-h-touch items-center gap-3 font-medium">
-          <input
-            type="checkbox"
-            name="ev"
-            defaultChecked={draft.ev}
-            className="size-5 accent-[var(--primary)]"
-          />
-          {t("vehicle.ev")}
-        </label>
-        <button type="submit" className={`${ui.button.primary} self-start`}>
-          {t("next")}
-        </button>
-      </form>
-    );
-  } else if (step === "safety" && draft.quick) {
-    // Quick repeat request (driver account): one tap answers both safety questions.
-    body = (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-3">
-        {hidden("step", "safety")}
-        <button
-          type="submit"
-          name="quick"
-          value="safe"
-          className={`${ui.button.primary} min-h-14 w-full`}
-        >
-          {t("safety.quickSafe")}
-        </button>
-        <button
-          type="submit"
-          name="quick"
-          value="highway"
-          className={`${ui.button.outline} min-h-14 w-full`}
-        >
-          {t("safety.quickHighway")}
-        </button>
-        <button
-          type="submit"
-          name="quick"
-          value="unsafe"
-          className={`${ui.button.outline} min-h-14 w-full`}
-        >
-          {t("safety.quickUnsafe")}
-        </button>
-        <p className="text-sm font-medium">{t("safety.unsafe")}</p>
-      </form>
-    );
-  } else if (step === "safety") {
-    body = (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
-        {hidden("step", "safety")}
-        <fieldset className={fieldset}>
-          <legend className="mb-1 font-semibold">{t("safety.safe")}</legend>
-          <Choice name="safe" value="yes" checked={draft.safe === true}>
-            {t("safety.yes")}
+        <fieldset className="flex flex-col gap-2">
+          <legend className="mb-1 font-semibold">{t("safety.where")}</legend>
+          <Choice name="spot" value="safe" checked={draft.safe === true && draft.highway === false}>
+            {t("safety.spotSafe")}
           </Choice>
-          <Choice name="safe" value="no" id="gh-unsafe" checked={draft.safe === false}>
-            {t("safety.no")}
+          <Choice
+            name="spot"
+            value="highway"
+            checked={draft.safe === true && draft.highway === true}
+          >
+            {t("safety.spotHighway")}
+          </Choice>
+          <Choice name="spot" value="unsafe" id="gh-unsafe" checked={draft.safe === false}>
+            {t("safety.spotUnsafe")}
           </Choice>
         </fieldset>
         <div
@@ -410,74 +399,6 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             {t("safety.call911")}
           </a>
         </div>
-        <fieldset className={fieldset}>
-          <legend className="mb-1 font-semibold">{t("safety.highway")}</legend>
-          <Choice name="highway" value="yes" checked={draft.highway === true}>
-            {t("safety.yes")}
-          </Choice>
-          <Choice name="highway" value="no" checked={draft.highway === false}>
-            {t("safety.no")}
-          </Choice>
-        </fieldset>
-        <label className={label}>
-          {t("safety.passengers")}
-          <select
-            name="passengers"
-            defaultValue={String(draft.passengers ?? 0)}
-            className={inputClass}
-          >
-            {[0, 1, 2, 3, 4, 5].map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button type="submit" className={`${ui.button.primary} self-start`}>
-          {t("next")}
-        </button>
-      </form>
-    );
-  } else if (step === "contact") {
-    body = (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
-        {hidden("step", "contact")}
-        <label className={label}>
-          {t("contact.name")}
-          <input
-            name="name"
-            required
-            autoComplete="name"
-            defaultValue={draft.name ?? ""}
-            className={inputClass}
-          />
-        </label>
-        <label className={label}>
-          {t("contact.phone")}
-          <input
-            name="phone"
-            type="tel"
-            required
-            inputMode="tel"
-            autoComplete="tel"
-            defaultValue={draft.phone ? formatPhone(draft.phone) : ""}
-            className={inputClass}
-          />
-        </label>
-        <label className={label}>
-          {t("contact.email")}
-          <input
-            name="email"
-            type="email"
-            autoComplete="email"
-            defaultValue={draft.email ?? ""}
-            className={inputClass}
-            aria-describedby="gh-email-hint"
-          />
-          <span id="gh-email-hint" className="text-sm font-normal text-muted-foreground">
-            {t("contact.emailHint")}
-          </span>
-        </label>
         <p className="text-sm text-muted-foreground">
           {t.rich("contact.consent", {
             terms: (chunks) => (
@@ -492,60 +413,19 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             ),
           })}
         </p>
-        <button type="submit" className={`${ui.button.primary} self-start`}>
-          {t("contact.sendCode")}
-        </button>
-      </form>
-    );
-  } else {
-    body = (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
-        {hidden("step", "verify")}
-        {draft.codeSent ? (
-          <>
-            <p>{t("verify.body", { email: draft.email ?? "" })}</p>
-            {draft.demoCode ? (
-              <p className="rounded-xl bg-warning-subtle p-3 text-sm font-medium text-warning-strong">
-                {t("verify.demoCode", { code: draft.demoCode })}
-              </p>
-            ) : null}
-            <label className={label}>
-              {t("verify.code")}
-              <input
-                name="code"
-                required
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                pattern="[0-9]{6}"
-                maxLength={6}
-                className={`${inputClass} text-2xl tracking-[0.5em] tabular-nums`}
-              />
-            </label>
-          </>
-        ) : (
-          <p>{t("verify.noCode")}</p>
-        )}
         {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
           <Turnstile siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} label={brand.name} />
         ) : null}
-        <button type="submit" className={`${ui.button.primary} self-start`}>
-          {t("verify.submit")}
-        </button>
-        <Link
-          className="inline-flex min-h-touch items-center self-start underline underline-offset-4"
-          href="/get-help?step=contact"
-        >
-          {t("verify.resend")}
-        </Link>
+        <Submit>{t("details.submit")}</Submit>
       </form>
     );
   }
 
   return (
-    <SitePage marketSlug={market?.slug}>
+    <SitePage marketSlug={market?.slug} bar={false}>
       <StepShell
         n={n}
-        total={order.length}
+        total={STEPS.length}
         title={t(`${step}.title` as never)}
         back={backHref}
         error={error}
