@@ -1,6 +1,6 @@
 "use client";
 
-import { CommandPalette, type CommandAction } from "@rsos/ui/command-palette";
+import type { CommandAction } from "@rsos/ui/command-palette";
 import { Dialog, DialogContent } from "@rsos/ui/dialog";
 import { SidePanel, SidePanelContent } from "@rsos/ui/side-panel";
 import { ThemeToggle } from "@rsos/ui/theme-toggle";
@@ -29,6 +29,7 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useMemo, useState, useSyncExternalStore } from "react";
@@ -54,6 +55,11 @@ const ICONS = {
   settings: Settings,
   status: Activity,
 } as const;
+
+// The palette (cmdk) loads on first open, not with every page (RSOS-103 speed).
+const CommandPalette = dynamic(() =>
+  import("@rsos/ui/command-palette").then((m) => m.CommandPalette),
+);
 
 const PALETTE_KEYS = "⌘K";
 const HELP_KEY = "?";
@@ -169,6 +175,18 @@ export function AdminShell({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [sections, router]);
+  // Cmd+K (Ctrl+K) opens the palette before its code has loaded; once open, it handles the keys.
+  useEffect(() => {
+    if (palette) return;
+    const onK = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setPalette(true);
+      }
+    };
+    window.addEventListener("keydown", onK);
+    return () => window.removeEventListener("keydown", onK);
+  }, [palette]);
   const q = query.trim();
   const actions: CommandAction[] = [
     ...sections.map((s) => ({
@@ -319,7 +337,7 @@ export function AdminShell({
           <button
             type="button"
             onClick={() => setMenu(true)}
-            className="flex min-h-12 items-center gap-2 rounded-lg border px-3 text-sm font-medium hover:bg-accent md:hidden"
+            className="order-first flex min-h-12 items-center gap-2 rounded-lg border px-3 text-sm font-medium hover:bg-accent md:hidden"
           >
             <Menu aria-hidden="true" className="size-5" />
             {labels.menu}
@@ -335,18 +353,20 @@ export function AdminShell({
           </nav>
         </SidePanelContent>
       </SidePanel>
-      <CommandPalette
-        open={palette}
-        onOpenChange={(o) => {
-          setPalette(o);
-          if (!o) setQuery("");
-        }}
-        actions={actions}
-        label={labels.palette}
-        placeholder={labels.paletteHint}
-        emptyText={labels.empty}
-        onQueryChange={setQuery}
-      />
+      {palette ? (
+        <CommandPalette
+          open={palette}
+          onOpenChange={(o) => {
+            setPalette(o);
+            if (!o) setQuery("");
+          }}
+          actions={actions}
+          label={labels.palette}
+          placeholder={labels.paletteHint}
+          emptyText={labels.empty}
+          onQueryChange={setQuery}
+        />
+      ) : null}
       <Dialog open={help} onOpenChange={setHelp}>
         <DialogContent title={labels.shortcuts} closeLabel={labels.close}>
           <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
