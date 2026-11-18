@@ -41,13 +41,13 @@
       "team": "Equipo y roles",
       "calls": "Llamadas",
       "today": "Hoy",
-      "economics": "Modelo económico"
+      "economics": "Modelo económico",
+      "status": "Estado del sistema"
     },
     "shell": {
       "nav": "Administración",
       "navMobile": "Secciones",
       "skip": "Saltar al contenido",
-      "overview": "Resumen",
       "account": "Cuenta y seguridad",
       "collapse": "Contraer barra lateral",
       "search": "Buscar o ir a…",
@@ -64,7 +64,14 @@
       "close": "Cerrar",
       "allMarkets": "Todos los mercados",
       "marketsCount": "mercados",
-      "marketLabel": "Mercados a la vista"
+      "marketLabel": "Mercados a la vista",
+      "groups": {
+        "operate": "Operar",
+        "network": "Red",
+        "business": "Negocio",
+        "system": "Sistema"
+      },
+      "menu": "Menú"
     },
     "demoControls": {
       "title": "Controles de demo",
@@ -78,22 +85,15 @@
       "reset": "Volver a ahora",
       "scenario": "Economía de demostración",
       "scenarioBase": "Escenario base",
-      "scenarioStrong": "Escenario fuerte"
+      "scenarioStrong": "Escenario fuerte",
+      "load": "Prueba de carga: 200 solicitudes de demostración en el tablero",
+      "loadOn": "Prueba de carga activa"
     },
     "overview": {
-      "markets": "Mercados a la vista",
-      "sections": "Secciones",
-      "shortcut": "Atajo: {keys}",
-      "tip": "Pulsa ⌘K (Ctrl K) para buscar en cualquier lugar y ? para ver los atajos.",
-      "status": {
-        "draft": "Borrador",
-        "test": "En prueba",
-        "active": "Activo",
-        "paused": "En pausa"
-      }
+      "status": {}
     },
     "dispatch": {
-      "title": "Despacho en vivo",
+      "title": "Tablero de despacho",
       "map": "Mapa en vivo de solicitudes y grúas",
       "supply": "Proveedores por zona",
       "gap": "Nadie en línea",
@@ -103,32 +103,45 @@
         "quoting": "Cotizando",
         "picked": "Elegidas",
         "en_route": "En camino",
-        "on_site": "En el lugar"
+        "on_site": "En el lugar",
+        "closing": "Por cerrar"
       },
       "demo": "Demo",
       "real": "Real",
       "quotes": "{count} cotizaciones",
       "waiting": "Sin cotización",
-      "call": "Llamar al conductor o proveedor",
+      "call": "Llamar al cliente",
       "push": "Enviar a más proveedores",
       "assign": "Asignar manualmente",
       "note": "Agregar una nota",
       "cancel": "Cancelar solicitud",
-      "open": "Abrir",
+      "open": "Abrir la solicitud completa",
       "empty": "Los proveedores aparecen aquí cuando están en línea.",
       "count": "{count} solicitudes abiertas",
       "live": "En vivo, se actualiza cada 2 segundos",
-      "paused": "En pausa",
       "pushed": "Enviada a más proveedores (simulado).",
       "noted": "Nota guardada.",
-      "cancelled": "Solicitud cancelada.",
       "assigned": "Asignación iniciada (simulado).",
       "softphone": "El softphone se abre aquí cuando se conecte el servicio telefónico.",
-      "actions": "Acciones para",
-      "load": "Prueba de carga: 200 solicitudes demo",
-      "loadOn": "Prueba de carga activa",
       "error": "Se perdió la conexión. Reintentando…",
-      "more": "+{count} más"
+      "more": "+{count} más",
+      "laneEmpty": "Nada aquí.",
+      "quotesLabel": "Cotizaciones",
+      "stale": "Atrasada",
+      "market": "Mercado",
+      "source": "Mostrar solicitudes",
+      "sources": {
+        "real": "Reales",
+        "demo": "Demostración",
+        "both": "Ambas"
+      },
+      "keys": "Teclas: J/K moverse, Enter abrir, A asignar, C llamar",
+      "close": "Cerrar",
+      "customer": "Cliente",
+      "phone": "Teléfono",
+      "where": "Dónde",
+      "provider": "Proveedor",
+      "kind": "Tipo"
     },
     "requests": {
       "title": "Solicitudes",
@@ -139,7 +152,7 @@
       "service": "Servicio",
       "market": "Mercado",
       "status": "Estado",
-      "driver": "Conductor",
+      "driver": "Cliente",
       "created": "Creada",
       "demo": "Demo",
       "statuses": {
@@ -156,7 +169,7 @@
         "expired": "Vencida"
       },
       "detailTitle": "Solicitud {code}",
-      "inputs": "Lo que nos dijo el conductor",
+      "inputs": "Lo que nos dijo el cliente",
       "location": "Ubicación",
       "vehicle": "Vehículo",
       "safety": "Seguridad",
@@ -180,13 +193,13 @@
       "actions": "Notas y acciones",
       "note": "Nota",
       "addNote": "Agregar nota",
-      "call": "Llamar al conductor (softphone pendiente)",
+      "call": "Llamar al cliente (softphone pendiente)",
       "credit": "Acreditar el cargo del proveedor",
       "dispute": "Abrir una disputa",
       "logged": "Registro de acciones",
       "review": "Reseña",
       "noReview": "Aún no hay reseña.",
-      "callDriver": "Llamar al conductor"
+      "callDriver": "Llamar al cliente"
     },
     "intake": {
       "title": "Recepción telefónica",
@@ -210,7 +223,7 @@
       "history": "Solicitudes anteriores",
       "noHistory": "Sin solicitudes anteriores.",
       "form": "Nueva solicitud por teléfono",
-      "name": "Nombre del conductor",
+      "name": "Nombre del cliente",
       "phone": "Número para devolver la llamada",
       "market": "Mercado",
       "service": "Servicio",
@@ -391,7 +404,7 @@
       "current": "Precios actuales en {market}",
       "cols": {
         "service": "Servicio",
-        "range": "Rango de precio para el conductor",
+        "range": "Rango de precio para el cliente",
         "fee": "Nuestro cargo",
         "proFee": "Cargo Pro",
         "featured": "Lugar destacado",
@@ -467,7 +480,7 @@
       "queue": "Cola de moderación (más bajas primero)",
       "approve": "Aprobar",
       "hide": "Ocultar",
-      "followUp": "Dar seguimiento al conductor",
+      "followUp": "Dar seguimiento al cliente",
       "approved": "Publicada.",
       "hidden": "Oculta del perfil.",
       "followed": "Tarea de seguimiento creada.",
@@ -615,7 +628,7 @@
           "value": "10, 20 y luego 35 millas"
         },
         "maxQuotes": {
-          "label": "Máximo de cotizaciones para el conductor",
+          "label": "Máximo de cotizaciones para el cliente",
           "value": "5"
         },
         "autoExpire": {
@@ -623,7 +636,7 @@
           "value": "15 minutos"
         },
         "cancelFee": {
-          "label": "Cargo si el conductor cancela tras elegir",
+          "label": "Cargo si el cliente cancela tras elegir",
           "value": "Ninguno (decisión pendiente)"
         }
       },
@@ -639,15 +652,15 @@
         },
         "auto_pick": {
           "label": "Ayuda más rápida",
-          "hint": "Los conductores pueden dejarnos elegir la cotización más rápida."
+          "hint": "Los clientes pueden dejarnos elegir la cotización más rápida."
         },
         "featured_slots": {
           "label": "Lugares destacados",
           "hint": "Proveedores destacados en páginas de ciudad."
         },
         "driver_accounts": {
-          "label": "Cuentas de conductor",
-          "hint": "Los conductores pueden entrar para ver su historial."
+          "label": "Cuentas de cliente",
+          "hint": "Los clientes pueden entrar para ver su historial."
         }
       },
       "flagSaved": "{flag} actualizado en esta página.",
@@ -823,7 +836,7 @@
       },
       "texts": {
         "a2pTitle": "Registro con operadores (A2P 10DLC)",
-        "a2pBody": "Los operadores de EE. UU. exigen registrar nuestra marca y campaña de textos antes de escribir a conductores a gran escala. Hasta que se apruebe, los textos a cualquiera que no sea un número de prueba (OWNER_TEST_PHONE y celulares del equipo) quedan retenidos, salvo que actives la excepción. Consulta docs/runbooks/a2p-10dlc.md.",
+        "a2pBody": "Los operadores de EE. UU. exigen registrar nuestra marca y campaña de textos antes de escribir a clientes a gran escala. Hasta que se apruebe, los textos a cualquiera que no sea un número de prueba (OWNER_TEST_PHONE y celulares del equipo) quedan retenidos, salvo que actives la excepción. Consulta docs/runbooks/a2p-10dlc.md.",
         "a2p": {
           "pending": "Registro pendiente",
           "approved": "Aprobado",
@@ -882,19 +895,19 @@
       "subtitle": "Cada pantalla de las tres apps, en el orden en que ocurre un trabajo real. Los enlaces se abren en pestañas nuevas.",
       "run": "Ejecutar demo completa",
       "runHint": "Abre un trabajo demo nuevo en el sitio, el portal del proveedor y aquí, lado a lado. Dura unos 18 minutos; usa Controles de demo para adelantar.",
-      "openWeb": "Abrir la vista del conductor",
+      "openWeb": "Abrir la vista del cliente",
       "openProvider": "Abrir la vista del proveedor",
       "openAdmin": "Abrir la vista de administración",
       "started": "Iniciada. Si tu navegador bloqueó las pestañas extra, usa los tres enlaces.",
       "groups": {
-        "driver": "1. Conductor",
+        "driver": "1. Cliente",
         "provider": "2. Proveedor",
         "admin": "3. Administración"
       },
       "steps": {
         "home": {
           "title": "Inicio del sitio",
-          "hint": "Donde llega un conductor varado."
+          "hint": "Donde llega un cliente varado."
         },
         "city": {
           "title": "Página de ciudad",
@@ -906,10 +919,10 @@
         },
         "tracking": {
           "title": "Cotizaciones, elección y seguimiento",
-          "hint": "El mismo trabajo demo que ven el proveedor y la administración: llegan cotizaciones, el conductor elige, la grúa avanza y luego la reseña."
+          "hint": "El mismo trabajo demo que ven el proveedor y la administración: llegan cotizaciones, el cliente elige, la grúa avanza y luego la reseña."
         },
         "account": {
-          "title": "Cuenta del conductor",
+          "title": "Cuenta del cliente",
           "hint": "Historial, vehículos guardados y solicitudes rápidas (acceso demo con código)."
         },
         "signIn": {
@@ -1049,7 +1062,7 @@
       "unclaimed": "Sin tomar",
       "claimLapsed": "Se liberó tras 10 minutos",
       "newItem": "Nuevo en la bandeja",
-      "pick": "Elige un elemento para ver la solicitud, llamar al conductor y despachar un proveedor.",
+      "pick": "Elige un elemento para ver la solicitud, llamar al cliente y despachar un proveedor.",
       "status": {
         "phone_intake": "Llamada entrante",
         "submitted": "Nueva",
@@ -1101,14 +1114,14 @@
       "claimTaken": "Otro despachador la está atendiendo.",
       "reason": "Motivo (obligatorio)",
       "fullDetail": "Detalle completo",
-      "driver": "Conductor",
+      "driver": "Cliente",
       "service": "Servicio",
       "location": "Ubicación",
       "noLocation": "Aún no la comparte",
       "vehicle": "Vehículo",
       "notes": "Notas",
       "source": "Fuente",
-      "map": "Mapa de la ubicación del conductor",
+      "map": "Mapa de la ubicación del cliente",
       "handling": "Atención",
       "endReason": "Motivo: {reason}",
       "intakeTitle": "Datos de la llamada",
@@ -1139,12 +1152,12 @@
         "call_answered": "Contestada en el navegador",
         "call_outbound": "Llamada saliente",
         "call_transferred": "Llamada transferida",
-        "location_shared": "El conductor compartió su ubicación",
+        "location_shared": "El cliente compartió su ubicación",
         "call_inbound": "Llamada entrante: {outcome}",
-        "text_inbound": "Texto del conductor",
-        "text_outbound": "Texto al conductor",
-        "driver_told": "Conductor avisado",
-        "driver_emailed": "Email enviado al conductor"
+        "text_inbound": "Texto del cliente",
+        "text_outbound": "Texto al cliente",
+        "driver_told": "Cliente avisado",
+        "driver_emailed": "Email enviado al cliente"
       },
       "intake": {
         "name": "Nombre",
@@ -1178,20 +1191,21 @@
         }
       },
       "tell": {
-        "title": "Avisar al conductor",
+        "title": "Avisar al cliente",
         "email": "Email: {email}",
         "noEmail": "Esta solicitud no tiene email: lee el texto de abajo en la llamada.",
-        "emailed": "Enviado por email al conductor y anotado en el historial.",
-        "readAloud": "Léele esto al conductor y luego anótalo:",
-        "logRead": "Se lo leí al conductor",
+        "emailed": "Enviado por email al cliente y anotado en el historial.",
+        "readAloud": "Léele esto al cliente y luego anótalo:",
+        "logRead": "Se lo leí al cliente",
         "sendLink": "Enlace de ubicación",
         "assignedScript": "{provider} va en camino. Precio cotizado {price}, unos {eta} minutos.",
         "linkScript": "Abre este enlace y toca Compartir mi ubicación: {link}",
         "logged": "Anotado en el historial.",
         "codeScript": "Entra a {site} y escribe el código {code}, luego toca Compartir mi ubicación."
-      }
+      },
+      "logCall": "Registrar una llamada"
     },
-    "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a conductores quedan retenidos hasta su aprobación.",
+    "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a clientes quedan retenidos hasta su aprobación.",
     "marketing": {
       "title": "Marketing",
       "from": "Desde",
@@ -1312,7 +1326,7 @@
       },
       "operator": {
         "name": "Técnico",
-        "who": "El conductor de la grúa que va con el cliente.",
+        "who": "El técnico que va con el cliente.",
         "can": "Solo los trabajos que tiene asignados: navegación, pasos de estado (en camino, llegué, terminado) y fotos. Ve el número del cliente solo en su trabajo activo."
       }
     },
@@ -1411,6 +1425,101 @@
       },
       "sharedStateOn": ": activado",
       "sharedStateOff": ": desactivado"
+    },
+    "today": {
+      "lead": "Lo que necesita a una persona ahora y cómo va el día en tus mercados.",
+      "strip": {
+        "title": "Ahora mismo",
+        "needAction": "Requiere acción ahora",
+        "oldest": "La más antigua espera {age}",
+        "none": "Nadie está esperando",
+        "missedCalls": "Llamadas sin atender",
+        "last24h": "Últimas 24 horas, sin devolver",
+        "noQuote": "Sin cotización tras 3 minutos",
+        "noQuoteHint": "Ámbar a los 3 minutos, rojo a los 10",
+        "online": "Proveedores en línea",
+        "verified": "Proveedores verificados"
+      },
+      "urgent": {
+        "title": "Lo más urgente",
+        "emptyTitle": "Todo en orden",
+        "empty": "Nada espera a una persona en este momento."
+      },
+      "reasons": {
+        "noQuote": "Sin cotización aún",
+        "unclaimed": "Nadie la ha tomado",
+        "missedCall": "Llamada perdida",
+        "closing": "Sin avance en 2 horas"
+      },
+      "do": {
+        "claim": "Tomar",
+        "callBack": "Devolver llamada",
+        "assign": "Asignar",
+        "close": "Cerrar"
+      },
+      "alerts": {
+        "title": "Alertas",
+        "stale": "{count, plural, one {# solicitud lleva} other {# solicitudes llevan}} 2 horas sin avance.",
+        "noProviders": "{market}: no hay proveedores disponibles.",
+        "none": "Sin alertas.",
+        "webhooks": "Los webhooks fallidos aparecerán aquí cuando se conecte el monitoreo de errores."
+      },
+      "numbers": {
+        "title": "Hoy por mercado",
+        "market": "Mercado",
+        "requests": "Solicitudes",
+        "fill": "Atendidas",
+        "assign": "Mediana para asignar",
+        "completed": "Completadas",
+        "fees": "Comisiones ganadas",
+        "note": "Desde la medianoche en la zona horaria de cada mercado. Solo solicitudes reales."
+      }
+    },
+    "calls": {
+      "title": "Llamadas",
+      "lead": "Todas las llamadas de tus mercados en los últimos 7 días.",
+      "log": "Registrar una llamada",
+      "filter": "Filtrar por resultado",
+      "all": "Todas",
+      "emptyTitle": "Aún no hay llamadas",
+      "emptyBody": "Las llamadas a los números de tus mercados aparecen aquí al momento.",
+      "directions": {
+        "inbound": "Entrante",
+        "outbound": "Saliente"
+      },
+      "outcomes": {
+        "ringing": "Sonando",
+        "answered": "Atendida",
+        "missed": "Perdida",
+        "voicemail": "Buzón de voz",
+        "busy": "Ocupado",
+        "failed": "Fallida",
+        "completed": "Completada"
+      },
+      "table": {
+        "caption": "Llamadas",
+        "time": "Hora",
+        "direction": "Dirección",
+        "outcome": "Resultado",
+        "from": "De",
+        "to": "Para",
+        "duration": "Duración",
+        "market": "Mercado",
+        "request": "Solicitud",
+        "search": "Buscar llamadas",
+        "columns": "Columnas",
+        "empty": "Ninguna llamada coincide.",
+        "previous": "Página anterior",
+        "next": "Página siguiente",
+        "page": "Página {page} de {pages}",
+        "sortBy": "Ordenar por {column}"
+      }
+    },
+    "states": {
+      "loading": "Cargando…",
+      "errorTitle": "Esta página no cargó",
+      "errorBody": "Algo salió mal de nuestro lado. Tus datos están a salvo. Inténtalo de nuevo y, si sigue pasando, avisa al equipo en el canal de operaciones.",
+      "retry": "Intentar de nuevo"
     }
   },
   "emails": {
@@ -2034,7 +2143,10 @@
             "¿Cuánto les cuesta a los proveedores?",
             "Una tarifa fija por cada solicitud en la que el conductor te elige, pagada de un saldo prepagado. Los planes opcionales dan descuentos y mejor visibilidad."
           ],
-          ["¿Yo fijo mis precios?", "Sí. Cotizas cada trabajo a tu precio."]
+          [
+            "¿Yo fijo mis precios?",
+            "Sí. Cotizas cada trabajo a tu precio."
+          ]
         ]
       }
     },
@@ -2122,7 +2234,10 @@
           "Envías una cotización",
           "Tu precio y cuándo puedes llegar. Cotiza lo que quieras, cuando quieras."
         ],
-        ["El conductor elige", "Si te elige, recibes sus datos y sales. Te paga directamente."]
+        [
+          "El conductor elige",
+          "Si te elige, recibes sus datos y sales. Te paga directamente."
+        ]
       ]
     },
     "money": {
@@ -2315,7 +2430,10 @@
             "Menores",
             "El servicio no es para menores de 16 años y no recopilamos su información a sabiendas."
           ],
-          ["Cambios y contacto", "Publicaremos los cambios aquí con una nueva versión y fecha."]
+          [
+            "Cambios y contacto",
+            "Publicaremos los cambios aquí con una nueva versión y fecha."
+          ]
         ]
       },
       "sms-terms": {
@@ -2334,7 +2452,10 @@
             "Cancelar y ayuda",
             "Responde STOP para dejar de recibir mensajes en cualquier momento. Responde HELP para recibir ayuda, o contáctanos."
           ],
-          ["Costos", "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."],
+          [
+            "Costos",
+            "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."
+          ],
           [
             "Operadores",
             "Los operadores no son responsables de mensajes retrasados o no entregados."
@@ -2954,9 +3075,17 @@
       "title": "Instalar la app",
       "body": "Recibe solicitudes en pantalla completa con sonido y abre el portal con un toque.",
       "iphone": "iPhone (Safari)",
-      "iphoneSteps": ["Toca el botón Compartir.", "Elige \"Agregar a inicio\".", "Toca Agregar."],
+      "iphoneSteps": [
+        "Toca el botón Compartir.",
+        "Elige \"Agregar a inicio\".",
+        "Toca Agregar."
+      ],
       "android": "Android (Chrome)",
-      "androidSteps": ["Toca el menú (tres puntos).", "Elige \"Instalar app\".", "Toca Instalar."],
+      "androidSteps": [
+        "Toca el menú (tres puntos).",
+        "Elige \"Instalar app\".",
+        "Toca Instalar."
+      ],
       "installNow": "Instalar ahora"
     },
     "home": {

@@ -7,40 +7,68 @@ import {
   test,
 } from "../support/fixtures";
 
-// RSOS-034 + 072: live dispatch board with lanes, SLA timers, actions, supply and a load test.
+// RSOS-034 + 072, rebuilt in RSOS-103: one market at a time, Real / Demo / Both (Real by default),
+// lanes plus "Needs closing", a side panel per request, J/K/Enter keys, and the load test (now in
+// Demo controls).
 const base = appUrls.admin;
 
 test.describe("admin dispatch board", () => {
   test.skip(!base, "No admin URL");
 
-  test("lanes, demo cards, actions and 200-request load", async ({ page }, info) => {
+  test("market, source filter, lanes, side panel, keys and 200-request load", async ({
+    page,
+  }, info) => {
     test.setTimeout(120_000);
     await signInAsDemo(page, base!, "Dispatcher");
     await page.goto(new URL("/dispatch", base).toString());
-    await expect(page.getByRole("heading", { name: "Live dispatch", level: 1 })).toBeVisible();
-    for (const lane of ["New", "Quoting", "Picked", "En route", "On site"])
+    await expect(page.getByRole("heading", { name: "Dispatch board", level: 1 })).toBeVisible();
+    for (const lane of ["New", "Quoting", "Picked", "On the way", "On site", "Needs closing"])
       await expect(
         page.getByRole("heading", { name: new RegExp(`^${lane}`), level: 2 }),
       ).toBeVisible();
-    await expect(page.getByText("Demo", { exact: true }).first()).toBeVisible();
+    // Real is the default: no demo card shows until Demo is chosen.
+    await expect(page.getByRole("button", { name: "Real", exact: true })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await expect(page.locator("[data-card]").getByText("Demo", { exact: true })).toHaveCount(0);
+    await page.getByRole("button", { name: "Demo", exact: true }).click();
+    await expect(page).toHaveURL(/source=demo/);
+    await expect(page.locator("[data-card]").first()).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByLabel("Market")).toBeVisible();
     await expectNoA11yViolations(page);
     await expectNoHorizontalScroll(page);
     await page.screenshot({ path: info.outputPath("admin-dispatch.png"), fullPage: true });
 
-    await page
-      .getByRole("button", { name: /^Actions for/ })
-      .first()
-      .click();
-    await page.getByRole("menuitem", { name: "Push to more providers" }).click();
-    await expect(page.getByText("Sent to more providers (simulated).")).toBeVisible();
+    // Keyboard: J focuses the first card, Enter opens its side panel.
+    await page.locator("main h1").click();
+    await page.keyboard.press("j");
+    await expect(page.locator("[data-card]").first()).toBeFocused();
+    await page.keyboard.press("Enter");
+    const panel = page.getByRole("dialog");
+    await expect(panel.getByText("Customer", { exact: true })).toBeVisible();
+    await panel.getByRole("button", { name: "Push to more providers" }).click();
+    await expect(panel.getByText("Sent to more providers (simulated).")).toBeVisible();
+    await expectNoA11yViolations(page);
+    await page.keyboard.press("Escape");
+    await expect(panel).toBeHidden();
 
-    // Load test: about 200 live demo requests, and the board keeps updating smoothly.
-    await page.getByLabel("Load test: 200 demo requests").check();
+    // Load test (Demo controls): about 200 live demo requests, and the board keeps updating.
+    const openDemo = async () => {
+      const menu = page.getByRole("button", { name: "Menu", exact: true });
+      if (await menu.isVisible()) await menu.click();
+      await page.getByRole("button", { name: "Demo controls" }).click();
+    };
+    await openDemo();
+    await page.getByLabel("Load test: 200 demo requests on the dispatch board").check();
+    await page.keyboard.press("Escape");
+    if (await page.getByRole("dialog").isVisible()) await page.keyboard.press("Escape");
+    await page.getByRole("button", { name: "Both", exact: true }).click();
     await page.reload();
-    const status = page.getByText(/open requests$/);
-    await expect(status).toHaveText(/(\d{3}) open requests$/, { timeout: 20_000 });
+    const status = page.getByText(/open requests ·/);
+    await expect(status).toHaveText(/(\d{2,3}) open requests ·/, { timeout: 20_000 });
     const n = Number((await status.textContent())?.match(/(\d+) open/)?.[1] ?? 0);
-    expect(n).toBeGreaterThanOrEqual(150);
+    expect(n, "one market's share of the 200").toBeGreaterThanOrEqual(30);
     const longTasks = await page.evaluate(
       () =>
         new Promise<number>((resolve) => {
@@ -56,6 +84,7 @@ test.describe("admin dispatch board", () => {
         }),
     );
     expect(longTasks, "blocking time over 6 s of live updates").toBeLessThan(600);
+    await openDemo();
     await page.getByLabel("Load test on").uncheck();
   });
 });

@@ -3,8 +3,9 @@ import type { ProviderLogoData } from "@rsos/ui/provider-logo";
 import { demoMarkets } from "@rsos/config/demo-fixtures";
 import { demoProviders, demoState, demoStream, rng, seedFrom } from "@rsos/core/demo";
 import { getServerSupabase } from "@/lib/supabase/server";
+import { type Lane, needsClosing } from "./board-time";
 
-export type Lane = "new" | "quoting" | "picked" | "en_route" | "on_site";
+export type { Lane } from "./board-time";
 export type BoardCard = {
   id: string;
   code: string;
@@ -13,6 +14,8 @@ export type BoardCard = {
   service: string;
   lane: Lane;
   createdAt: number;
+  /** The last time the request moved forward (closing is measured from here). */
+  progressAt: number;
   quotes: number;
   driver: string;
   phone: string;
@@ -25,6 +28,7 @@ export type BoardCard = {
   truck: { lat: number; lng: number } | null;
   token: string | null;
 };
+export type MapArea = { market: string; name: string; lat: number; lng: number };
 export type SupplyRow = { market: string; area: string; online: number; trucks: number };
 
 const LANE_OF: Record<string, Lane | null> = {
@@ -58,6 +62,10 @@ async function realCards(markets: string[]): Promise<BoardCard[]> {
     lng: number | null;
     created_at: string;
     submitted_at: string | null;
+    quoted_at: string | null;
+    accepted_at: string | null;
+    en_route_at: string | null;
+    on_site_at: string | null;
     status_token: string;
   }[];
   return rows
@@ -70,6 +78,14 @@ async function realCards(markets: string[]): Promise<BoardCard[]> {
       service: r.service_slug,
       lane: LANE_OF[r.status]!,
       createdAt: ms(r.submitted_at) || ms(r.created_at),
+      progressAt: Math.max(
+        ms(r.created_at),
+        ms(r.submitted_at),
+        ms(r.quoted_at),
+        ms(r.accepted_at),
+        ms(r.en_route_at),
+        ms(r.on_site_at),
+      ),
       quotes: 0,
       driver: r.driver_name,
       phone: r.driver_phone,
@@ -99,6 +115,7 @@ function demoCards(now: number, markets: string[], load: boolean): BoardCard[] {
         service: r.serviceSlug,
         lane: s.stage === "searching" && s.quotes.length ? "quoting" : lane,
         createdAt: r.createdAt,
+        progressAt: r.createdAt,
         quotes: s.quotes.length,
         driver: r.driver.name,
         phone: r.driver.phone,
@@ -138,9 +155,17 @@ export async function getBoard(opts: {
 }) {
   const [real] = await Promise.all([realCards(opts.markets)]);
   const demo = opts.demo ? demoCards(opts.now, opts.markets, opts.load) : [];
+  const cards = [...real, ...demo].map((c) =>
+    needsClosing(opts.now - c.progressAt) ? { ...c, lane: "closing" as const } : c,
+  );
+  // Neighbourhood names give the placeholder map its city context.
+  const areas: MapArea[] = opts.markets.flatMap((m) =>
+    (demoMarkets[m]?.areas ?? []).map((a) => ({ market: m, ...a })),
+  );
   return {
     now: opts.now,
-    cards: [...real, ...demo],
+    cards,
+    areas,
     supply: opts.demo ? supply(opts.now, opts.markets) : [],
   };
 }

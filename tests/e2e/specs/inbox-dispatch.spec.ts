@@ -89,7 +89,7 @@ test.describe("inbox and manual dispatch", () => {
     await panel.getByRole("button", { name: "Location link" }).click();
     // Server actions can take a while on a loaded preview: allow 30 s for these two.
     await expect(panel.getByText(/and type the code \d{3} \d{3}/)).toBeVisible({ timeout: 30_000 });
-    await panel.getByRole("button", { name: "I read it to the driver" }).click();
+    await panel.getByRole("button", { name: "I read it to the customer" }).click();
     await expect(panel.getByText("Logged on the timeline.")).toBeVisible({ timeout: 30_000 });
 
     // Ending needs a reason.
