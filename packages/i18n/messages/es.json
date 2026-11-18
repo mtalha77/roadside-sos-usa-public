@@ -2939,7 +2939,8 @@
       "install": "Instalar la app",
       "onboarding": "Configuración",
       "theme": "Modo día o noche",
-      "signOut": "Cerrar sesión"
+      "signOut": "Cerrar sesión",
+      "myJobs": "Mis trabajos"
     },
     "shell": {
       "offline": "Estás sin conexión. Las solicitudes nuevas aparecerán cuando vuelvas a conectarte.",
@@ -3025,7 +3026,7 @@
         "description": "Sobre tu empresa",
         "topUp": "Primera recarga",
         "terms": "Acepto los términos para proveedores.",
-        "fees": "Entiendo que el cargo se cobra solo cuando un conductor me elige."
+        "fees": "Entiendo que el cargo se cobra solo cuando un cliente me elige."
       },
       "nextTitle": "¡Gracias! Esto es lo que sigue",
       "next1": "Revisamos tus documentos, normalmente en un día hábil.",
@@ -3037,7 +3038,7 @@
     },
     "offer": {
       "title": "Solicitudes entrantes",
-      "subtitle": "Envía una cotización con un toque. La dirección exacta aparece cuando el conductor te elige.",
+      "subtitle": "Envía una cotización con un toque. La dirección exacta aparece cuando el cliente te elige.",
       "none": "No hay solicitudes esperando ahora. Mantente en línea: las nuevas aparecen aquí.",
       "stack": "Solicitudes en espera",
       "ev": "Eléctrico",
@@ -3050,18 +3051,13 @@
       "minutes": "{minutes} min",
       "flags": {
         "highway": "En autopista",
-        "unsafe": "El conductor no está en un lugar seguro",
+        "unsafe": "El cliente no está en un lugar seguro",
         "passengers": "{count, plural, one {# pasajero} other {# pasajeros}}"
       },
       "mapLabel": "Zona aproximada de la solicitud",
       "addressHidden": "La dirección exacta se oculta hasta que te elijan.",
       "yourPrice": "Tu precio",
-      "ourFee": "Tarifa si te eligen",
-      "driverPays": "El conductor te paga",
-      "price": "Precio ({min} a {max})",
-      "eta": "Llegada: {minutes} min",
-      "send": "Enviar {price} · {minutes} min",
-      "adjust": "Ajustar precio o tiempo",
+      "send": "Enviar cotización · {price} · {minutes} min",
       "decline": "Rechazar",
       "declineReason": "Motivo del rechazo",
       "reasons": {
@@ -3070,10 +3066,14 @@
         "no_equipment": "No tengo el equipo",
         "price": "Rango de precio muy bajo"
       },
-      "waiting": "Cotización enviada: {price}, {minutes} min. Esperando a que el conductor elija.",
+      "waiting": "Cotización enviada: {price}, {minutes} min. Esperando a que el cliente elija.",
       "won": "¡Te eligieron!",
       "wonBody": "Sal ahora: el trabajo está en Trabajos con la dirección exacta.",
-      "lost": "El conductor eligió a otro proveedor esta vez."
+      "lost": "El cliente eligió a otro proveedor esta vez.",
+      "close": "Cerrar",
+      "arrival": "Tiempo de llegada",
+      "suggested": "De tu tabla de precios: {price}. Comisión si te eligen: {fee}.",
+      "outOfRange": "Escribe un precio de {min} a {max}."
     },
     "jobs": {
       "title": "Trabajos",
@@ -3089,14 +3089,17 @@
       "more": "Ver más",
       "fee": "Tarifa {fee}",
       "rated": "Calificación {stars}",
-      "open": "Abrir trabajo"
+      "open": "Abrir trabajo",
+      "mine": "Mis trabajos",
+      "activeNow": "Tu trabajo ahora",
+      "openActive": "Abrir el trabajo"
     },
     "job": {
       "title": "Trabajo {code}",
       "timeline": "Historial",
       "price": "Precio",
       "fee": "Tarifa cobrada",
-      "driver": "Conductor",
+      "driver": "Cliente",
       "vehicle": "Vehículo",
       "operator": "Operador",
       "review": "Reseña",
@@ -3108,7 +3111,7 @@
       "stages": {
         "searching": "Solicitud enviada",
         "quoting": "Cotización enviada",
-        "picked": "Elegido por el conductor",
+        "picked": "Elegido por el cliente",
         "en_route": "En camino",
         "on_site": "Llegó",
         "completed": "Terminado",
@@ -3131,8 +3134,8 @@
         "apple": "Apple Maps",
         "waze": "Waze"
       },
-      "call": "Llamar al conductor",
-      "text": "Enviar texto al conductor",
+      "call": "Llamar al cliente",
+      "text": "Enviar texto al cliente",
       "masked": "Las llamadas y textos usan un número privado.",
       "photosBefore": "Fotos de antes",
       "photosAfter": "Fotos de después",
@@ -3141,13 +3144,13 @@
       "cancel": "Cancelar trabajo",
       "cancelReason": "Motivo",
       "cancelReasons": {
-        "driver_no_show": "El conductor no está",
+        "driver_no_show": "El cliente no está",
         "vehicle_not_found": "No encuentro el vehículo",
         "unsafe": "Lugar inseguro",
         "equipment": "Problema de equipo"
       },
       "assign": "Asignar a",
-      "done": "Trabajo terminado. El conductor ya puede calificarte.",
+      "done": "Trabajo terminado. El cliente ya puede calificarte.",
       "addressLine": "Dirección: {address}",
       "photoAlt": "Foto {n}"
     },
@@ -3204,7 +3207,7 @@
       "range": "Rango del mercado {min} a {max}",
       "prices": "Tus precios",
       "offer": "tu precio",
-      "preview": "El conductor ve",
+      "preview": "El cliente ve",
       "fee": "cargo si te eligen",
       "outside": "Fuera del rango del mercado",
       "area": "Área de servicio",
@@ -3224,13 +3227,13 @@
     },
     "profile": {
       "title": "Perfil público",
-      "subtitle": "Lo que ven los conductores al comparar cotizaciones.",
+      "subtitle": "Lo que ven los clientes al comparar cotizaciones.",
       "photos": "Fotos",
       "addPhoto": "Agregar fotos",
       "photoAlt": "Foto de la empresa",
       "description": "Sobre tu empresa",
       "descriptionHint": "Dos o tres frases: experiencia, equipo, por qué eres confiable.",
-      "hours": "Horario que ven los conductores",
+      "hours": "Horario que ven los clientes",
       "payments": "Métodos de pago que aceptas",
       "methods": {
         "card": "Tarjeta",
@@ -3242,7 +3245,7 @@
       "trucksShown": "Grúas que se muestran",
       "preview": "Vista previa en vivo",
       "profileCard": "Tarjeta de perfil",
-      "quoteCard": "Cotización que ven los conductores",
+      "quoteCard": "Cotización que ven los clientes",
       "strength": "Fuerza del perfil",
       "tips": "Consejos",
       "tipPhoto": "Agrega una foto de tu grúa",
@@ -3347,11 +3350,11 @@
       "articles": {
         "quotes": {
           "title": "Cómo funcionan las cotizaciones",
-          "body": "Cuando un conductor cerca pide ayuda, recibes una oferta. Envía tu precio y hora de llegada; el conductor elige un proveedor."
+          "body": "Cuando un cliente cerca pide ayuda, recibes una oferta. Envía tu precio y hora de llegada; el cliente elige un proveedor."
         },
         "fees": {
           "title": "Nuestro cargo",
-          "body": "Solo pagas un cargo cuando un conductor te elige. Se muestra antes de enviar la cotización."
+          "body": "Solo pagas un cargo cuando un cliente te elige. Se muestra antes de enviar la cotización."
         },
         "wallet": {
           "title": "Billetera y recargas",
@@ -3363,7 +3366,7 @@
         },
         "photos": {
           "title": "Fotos de antes y después",
-          "body": "Agrega fotos en el flujo del trabajo. Te protegen si un conductor reporta daños."
+          "body": "Agrega fotos en el flujo del trabajo. Te protegen si un cliente reporta daños."
         },
         "disputes": {
           "title": "Disputar un cargo",
@@ -3378,6 +3381,12 @@
           "body": "Mantén tus documentos al día. Un documento vencido pausa las solicitudes nuevas."
         }
       }
+    },
+    "states": {
+      "loading": "Cargando…",
+      "errorTitle": "Esta página no cargó",
+      "errorBody": "Algo salió mal de nuestro lado. Tus trabajos y tu saldo están a salvo. Inténtalo de nuevo o llama a soporte para proveedores si sigue pasando.",
+      "retry": "Intentar de nuevo"
     }
   },
   "voice": {

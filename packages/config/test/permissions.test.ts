@@ -64,3 +64,24 @@ describe("roles and permissions (RSOS-102)", () => {
     expect(maskPhone("12")).toBe("•••");
   });
 });
+
+describe("provider portal roles (RSOS-104)", () => {
+  it("technicians see only their jobs, help and their account", async () => {
+    const { providerCanSee, providerSectionForPath, providerHome } =
+      await import("../src/permissions");
+    expect(providerCanSee("operator", "jobs")).toBe(true);
+    expect(providerCanSee("operator", "account")).toBe(true);
+    for (const s of ["home", "offer", "wallet", "team", "services", "insights"] as const)
+      expect(providerCanSee("operator", s)).toBe(false);
+    expect(providerCanSee("manager", "offer")).toBe(true);
+    expect(providerCanSee("manager", "wallet")).toBe(true);
+    expect(providerCanSee("manager", "team")).toBe(false);
+    expect(providerCanSee("owner", "team")).toBe(true);
+    expect(providerCanSee("", "jobs")).toBe(false);
+    expect(providerSectionForPath("/")).toBe("home");
+    expect(providerSectionForPath("/jobs/abc/active")).toBe("jobs");
+    expect(providerSectionForPath("/sign-in")).toBeNull();
+    expect(providerHome("operator")).toBe("/jobs");
+    expect(providerHome("owner")).toBe("/");
+  });
+});

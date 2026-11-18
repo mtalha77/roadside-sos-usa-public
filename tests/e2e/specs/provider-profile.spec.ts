@@ -18,7 +18,7 @@ test.describe("provider public profile", () => {
     await signInAsDemo(page, base!, "Provider owner");
     await page.goto(new URL("/profile", base).toString());
     await expect(page.getByRole("heading", { name: "Public profile", level: 1 })).toBeVisible();
-    await page.getByLabel("Hours shown to drivers").fill("Open 24/7");
+    await page.getByLabel("Hours shown to customers").fill("Open 24/7");
     await expect(page.getByLabel("Live preview").getByText("Open 24/7")).toBeVisible();
     await expectNoA11yViolations(page);
     await expectNoHorizontalScroll(page);

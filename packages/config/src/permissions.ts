@@ -122,3 +122,47 @@ export function canManageRole(actor: string | null | undefined, target: StaffRol
   if (actor === "super_admin") return true;
   return actor === "ops_manager" && target !== "super_admin";
 }
+
+// ---------------------------------------------------------------------------------------------
+// Provider portal (RSOS-104): owner, dispatcher (enum "manager") and technician (enum "operator").
+// ---------------------------------------------------------------------------------------------
+const P_ALL: readonly ProviderRole[] = PROVIDER_ROLES;
+const P_OFFICE: readonly ProviderRole[] = ["owner", "manager"];
+
+/** Provider portal sections and the roles that may open them. Technicians see only their jobs. */
+export const PROVIDER_SECTION_ROLES = {
+  home: P_OFFICE,
+  offer: P_OFFICE,
+  jobs: P_ALL,
+  wallet: P_OFFICE,
+  profile: P_OFFICE,
+  services: P_OFFICE,
+  team: ["owner"],
+  insights: P_OFFICE,
+  notifications: P_OFFICE,
+  onboarding: ["owner"],
+  more: P_OFFICE,
+  help: P_ALL,
+  account: P_ALL,
+  install: P_ALL,
+} as const satisfies Record<string, readonly ProviderRole[]>;
+export type ProviderSection = keyof typeof PROVIDER_SECTION_ROLES;
+
+const isProviderRole = (r: unknown): r is ProviderRole =>
+  typeof r === "string" && (PROVIDER_ROLES as readonly string[]).includes(r);
+
+export function providerCanSee(role: string | null | undefined, section: ProviderSection): boolean {
+  return (
+    isProviderRole(role) && (PROVIDER_SECTION_ROLES[section] as readonly string[]).includes(role)
+  );
+}
+
+/** The portal section a page belongs to, or null (sign-in, APIs and other pages decide alone). */
+export function providerSectionForPath(path: string): ProviderSection | null {
+  const first = path.split("/").filter(Boolean)[0] ?? "home";
+  return first in PROVIDER_SECTION_ROLES ? (first as ProviderSection) : null;
+}
+
+/** Where a role lands when it opens the portal: technicians go straight to their jobs. */
+export const providerHome = (role: string | null | undefined) =>
+  role === "operator" ? "/jobs" : "/";

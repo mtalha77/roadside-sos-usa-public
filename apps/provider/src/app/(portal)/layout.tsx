@@ -21,6 +21,7 @@ const NAV_KEYS = [
   "install",
   "theme",
   "signOut",
+  "myJobs",
 ] as const;
 
 /** Provider portal shell (RSOS-051): side navigation on desktop, bottom tabs on phones. */
@@ -43,9 +44,11 @@ export default async function PortalLayout({ children }: { children: ReactNode }
         labels={labels}
         company={ctx.company}
         companyLogo={ctx.companyLogo}
-        canSeeMoney={ctx.canSeeMoney}
+        role={ctx.role}
       />
-      <div className="min-w-0 flex-1 pb-24 md:pb-8">{children}</div>
+      <div className={`min-w-0 flex-1 ${ctx.role === "operator" ? "pt-16 pb-8" : "pb-24 md:pb-8"}`}>
+        {children}
+      </div>
       <AppRuntime
         offlineLabel={t("shell.offline")}
         updateLabel={t("shell.update")}
