@@ -91,6 +91,8 @@ export type RequestLiveProps = {
   /** Simulated providers (demo mode only). */
   simulation: DemoRequest | null;
   supportPhone: string | null;
+  /** Real active, non-demo providers serving the market (null without real data). */
+  reach?: { count: number; city: string } | null;
 };
 
 const storageKey = (token: string) => `rsos_pick_${token}`;
@@ -128,6 +130,7 @@ function RequestLiveView({
   realStatus,
   simulation,
   supportPhone,
+  reach,
 }: RequestLiveProps) {
   const t = useTranslations("track");
   const f = useFormatter();
@@ -410,6 +413,19 @@ function RequestLiveView({
             />
           )}
           <p>{t("searching.body")}</p>
+          {reach ? (
+            <p className="font-medium">
+              {t("searching.reach", { count: reach.count, city: reach.city })}
+            </p>
+          ) : null}
+          <div className="w-full text-left">
+            <h2 className="mb-2 font-semibold">{t("searching.whileTitle")}</h2>
+            <ul className="flex list-disc flex-col gap-1 pl-5 text-sm">
+              {(t.raw("searching.while") as string[]).map((tip) => (
+                <li key={tip}>{tip}</li>
+              ))}
+            </ul>
+          </div>
           {supportPhone ? (
             <Button asChild variant="outline">
               <a href={`tel:${supportPhone}`}>

@@ -13,9 +13,12 @@ import { SiteHeader } from "./site-header";
  */
 export async function SitePage({
   marketSlug,
+  bar = true,
   children,
 }: {
   marketSlug?: string | null;
+  /** The phone action bar; off in the request flow, whose own button sits in the thumb zone. */
+  bar?: boolean;
   children: ReactNode;
 }) {
   const [markets, services, detection, t] = await Promise.all([
@@ -40,7 +43,7 @@ export async function SitePage({
       <SiteFooter markets={markets} services={services} market={market} />
       <DniSwap />
       <div aria-hidden="true" className="pb-32 sm:pb-6" />
-      <MobileBar market={market} />
+      {bar ? <MobileBar market={market} /> : null}
     </>
   );
 }

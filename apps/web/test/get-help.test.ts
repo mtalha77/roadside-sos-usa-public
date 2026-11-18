@@ -4,38 +4,26 @@ import {
   attributionFrom,
   currentStep,
   previousStep,
-  stepsFor,
+  STEPS,
   toE164,
 } from "../src/lib/get-help";
 
-describe("get help flow (RSOS-021)", () => {
+describe("get help flow (RSOS-021, three screens since RSOS-101)", () => {
   const base = { market: "houston", lat: 29.76, lng: -95.37 };
-  it("resumes at the first unfinished step", () => {
-    expect(currentStep({})).toBe("location");
-    expect(currentStep(base)).toBe("problem");
-    expect(currentStep({ ...base, service: "tow" })).toBe("destination");
-    expect(currentStep({ ...base, service: "flat-tire" })).toBe("vehicle");
-    expect(currentStep({ ...base, service: "flat-tire", vehicleType: "car", safe: true })).toBe(
-      "contact",
-    );
-    expect(
-      currentStep({
-        ...base,
-        service: "flat-tire",
-        vehicleType: "car",
-        safe: true,
-        name: "A",
-        phone: "+17135550100",
-      }),
-    ).toBe("verify");
+  it("resumes at the first unfinished screen", () => {
+    expect(currentStep({})).toBe("problem");
+    expect(currentStep({ service: "flat-tire" })).toBe("location");
+    expect(currentStep({ ...base, service: "flat-tire" })).toBe("details");
+    // A tow also needs where to take the vehicle, asked on the location screen.
+    expect(currentStep({ ...base, service: "tow" })).toBe("location");
+    expect(currentStep({ ...base, service: "tow", destAddress: "1 Main St" })).toBe("details");
   });
-  it("only tow and winch out ask for a destination, and steps cannot be skipped", () => {
-    expect(stepsFor({ service: "flat-tire" })).not.toContain("destination");
-    expect(stepsFor({ service: "tow" })).toContain("destination");
-    expect(allowedStep(base, "contact")).toBe("problem");
+  it("has at most three screens, and screens cannot be skipped", () => {
+    expect(STEPS).toHaveLength(3);
+    expect(allowedStep({}, "details")).toBe("problem");
     expect(allowedStep({ ...base, service: "tow", destAddress: "x" }, "location")).toBe("location");
-    expect(previousStep({ service: "flat-tire" }, "vehicle")).toBe("problem");
-    expect(previousStep({}, "location")).toBeNull();
+    expect(previousStep({ service: "flat-tire" }, "details")).toBe("location");
+    expect(previousStep({}, "problem")).toBeNull();
   });
   it("normalizes phone numbers and keeps ad parameters", () => {
     expect(toE164("(713) 555-0123")).toBe("+17135550123");

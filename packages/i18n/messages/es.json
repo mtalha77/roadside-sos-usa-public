@@ -1832,7 +1832,10 @@
             "¿Cuánto les cuesta a los proveedores?",
             "Una tarifa fija por cada solicitud en la que el conductor te elige, pagada de un saldo prepagado. Los planes opcionales dan descuentos y mejor visibilidad."
           ],
-          ["¿Yo fijo mis precios?", "Sí. Cotizas cada trabajo a tu precio."]
+          [
+            "¿Yo fijo mis precios?",
+            "Sí. Cotizas cada trabajo a tu precio."
+          ]
         ]
       }
     },
@@ -1920,7 +1923,10 @@
           "Envías una cotización",
           "Tu precio y cuándo puedes llegar. Cotiza lo que quieras, cuando quieras."
         ],
-        ["El conductor elige", "Si te elige, recibes sus datos y sales. Te paga directamente."]
+        [
+          "El conductor elige",
+          "Si te elige, recibes sus datos y sales. Te paga directamente."
+        ]
       ]
     },
     "money": {
@@ -2113,7 +2119,10 @@
             "Menores",
             "El servicio no es para menores de 16 años y no recopilamos su información a sabiendas."
           ],
-          ["Cambios y contacto", "Publicaremos los cambios aquí con una nueva versión y fecha."]
+          [
+            "Cambios y contacto",
+            "Publicaremos los cambios aquí con una nueva versión y fecha."
+          ]
         ]
       },
       "sms-terms": {
@@ -2132,7 +2141,10 @@
             "Cancelar y ayuda",
             "Responde STOP para dejar de recibir mensajes en cualquier momento. Responde HELP para recibir ayuda, o contáctanos."
           ],
-          ["Costos", "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."],
+          [
+            "Costos",
+            "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."
+          ],
           [
             "Operadores",
             "Los operadores no son responsables de mensajes retrasados o no entregados."
@@ -2255,7 +2267,8 @@
       "saved": "Usando tu ubicación cerca de {place}. Toca “Usar mi ubicación” otra vez para actualizarla.",
       "savedNoPlace": "Usando la ubicación que compartiste. Toca “Usar mi ubicación” otra vez para actualizarla.",
       "suggestions": "Sugerencias de dirección",
-      "mapLabel": "Mapa de tu ubicación"
+      "mapLabel": "Mapa de tu ubicación",
+      "why": "Enviamos la ayuda a este lugar. Permite la ubicación cuando tu teléfono pregunte, o escribe la dirección abajo."
     },
     "problem": {
       "title": "¿Qué pasó?",
@@ -2296,68 +2309,56 @@
       "note": "Los proveedores incluyen la distancia en su precio."
     },
     "vehicle": {
-      "title": "¿Qué vehículo manejas?",
-      "type": "Tipo",
-      "types": {
-        "car": "Auto",
-        "suv": "SUV",
-        "pickup": "Camioneta",
-        "van": "Van",
-        "motorcycle": "Motocicleta",
-        "rv": "Casa rodante"
-      },
       "make": "Marca",
-      "model": "Modelo",
       "color": "Color",
-      "year": "Año (opcional)",
-      "ev": "Vehículo eléctrico"
+      "modelOptional": "Modelo (opcional)",
+      "colors": {
+        "White": "Blanco",
+        "Black": "Negro",
+        "Silver": "Plateado",
+        "Gray": "Gris",
+        "Blue": "Azul",
+        "Red": "Rojo",
+        "Green": "Verde",
+        "Other": "Otro"
+      }
     },
     "safety": {
-      "title": "¿Estás a salvo?",
-      "safe": "¿Estás en un lugar seguro, fuera del camino?",
-      "highway": "¿Estás en una autopista?",
-      "passengers": "Pasajeros contigo",
-      "yes": "Sí",
-      "no": "No",
       "unsafe": "Si estás en peligro o bloqueando el tráfico, llama primero al 911. Quédate en el vehículo con el cinturón puesto si estás en una autopista.",
       "call911": "Llamar al 911",
-      "quickSafe": "Estoy a salvo, fuera del camino",
-      "quickHighway": "Estoy a salvo, en el acotamiento de la autopista",
-      "quickUnsafe": "No estoy a salvo"
+      "where": "¿Dónde estás ahora?",
+      "spotSafe": "Fuera del camino, en un lugar seguro",
+      "spotHighway": "En el acotamiento de una autopista",
+      "spotUnsafe": "No me siento seguro"
     },
     "contact": {
-      "title": "¿Cómo te contacta el proveedor?",
       "name": "Tu nombre",
       "phone": "Número de celular (para la llamada del proveedor)",
-      "sendCode": "Continuar",
       "consent": "Al continuar aceptas los <terms>Términos para conductores</terms> y la <privacy>Política de privacidad</privacy>. Nosotros y el proveedor podemos llamarte sobre esta solicitud.",
       "terms": "Términos para conductores",
       "privacy": "Política de privacidad",
       "email": "Email (opcional)",
       "emailHint": "Te enviamos por email un código de 6 dígitos y el enlace de tu solicitud. ¿Sin email? Confirmamos tu solicitud en la llamada."
     },
-    "verify": {
-      "title": "Revisa y envía",
-      "body": "Enviamos un código de 6 dígitos a {email}.",
-      "code": "Código",
-      "demoCode": "Modo demo: no se envió ningún email. Tu código es {code}.",
-      "submit": "Enviar mi solicitud",
-      "resend": "Cambiar datos de contacto",
-      "noCode": "Confirmaremos tu solicitud en la llamada."
-    },
     "errors": {
-      "required": "Responde esta pregunta.",
-      "location": "Necesitamos tu ubicación o una dirección.",
-      "outside": "Esa ubicación está fuera de las zonas donde estamos.",
-      "phone": "Escribe un celular válido de EE. UU.",
-      "code": "Ese código no es correcto. Revísalo e inténtalo de nuevo.",
-      "locked": "Demasiados intentos. Escribe tu email otra vez para recibir un código nuevo.",
-      "turnstile": "La verificación de seguridad no pasó. Inténtalo de nuevo.",
-      "limit": "Demasiadas solicitudes desde esta conexión. Llámanos, por favor.",
-      "generic": "Algo salió mal. Inténtalo de nuevo o llámanos.",
-      "service": "Ese servicio todavía no está disponible en esta zona.",
+      "required": "Elige una respuesta y toca Continuar.",
+      "location": "Toca Usar mi ubicación, o escribe una dirección y elige tu ciudad.",
+      "outside": "Aún no damos servicio en esa zona. Elige una de nuestras ciudades abajo.",
+      "phone": "Escribe un celular de EE. UU. de 10 dígitos, como (210) 555-0123.",
+      "turnstile": "La verificación de seguridad no terminó. Espera un momento y toca Enviar mi solicitud otra vez.",
+      "limit": "Demasiadas solicitudes desde esta conexión. Llámanos, o inténtalo de nuevo en una hora.",
+      "generic": "Algo falló de nuestro lado. Toca el botón otra vez, o llámanos.",
+      "service": "Ese servicio aún no se ofrece aquí. Regresa y elige otro, o llámanos.",
       "email": "Escribe un email válido o déjalo vacío.",
-      "address": "Escribe una dirección con número (1200 Main St), un cruce de calles (Main St y 5th St) o una carretera con salida o marcador de milla."
+      "address": "Escribe una dirección con número (1200 Main St), un cruce de calles (Main St y 5th St) o una carretera con salida o marcador de milla.",
+      "name": "Escribe tu nombre para que el proveedor sepa a quién buscar.",
+      "vehicle": "Escribe la marca de tu vehículo (por ejemplo Toyota) y elige su color.",
+      "spot": "Elige dónde estás ahora.",
+      "destination": "Escribe a dónde llevar el vehículo (una dirección o el nombre de un taller)."
+    },
+    "details": {
+      "title": "¿A quién debe buscar el proveedor?",
+      "submit": "Enviar mi solicitud"
     }
   },
   "track": {
@@ -2376,7 +2377,15 @@
     "searching": {
       "body": "Enviamos tu solicitud a proveedores verificados cercanos. Las cotizaciones suelen llegar en 3 minutos. Quédate donde estás y mantén tu teléfono encendido.",
       "call": "Llámanos al {phone}",
-      "timeLeft": "Tiempo restante para cotizaciones"
+      "timeLeft": "Tiempo restante para cotizaciones",
+      "reach": "{count, plural, one {# proveedor verificado da servicio en} other {# proveedores verificados dan servicio en}} {city}.",
+      "whileTitle": "Mientras esperas",
+      "while": [
+        "Enciende las luces intermitentes.",
+        "En una autopista, quédate en tu vehículo con el cinturón puesto.",
+        "Mantén tu teléfono encendido: el proveedor puede llamarte.",
+        "Si en algún momento no te sientes seguro, llama al 911."
+      ]
     },
     "quotes": {
       "count": "{count, plural, one {# cotización} other {# cotizaciones}}",
@@ -2749,9 +2758,17 @@
       "title": "Instalar la app",
       "body": "Recibe solicitudes en pantalla completa con sonido y abre el portal con un toque.",
       "iphone": "iPhone (Safari)",
-      "iphoneSteps": ["Toca el botón Compartir.", "Elige \"Agregar a inicio\".", "Toca Agregar."],
+      "iphoneSteps": [
+        "Toca el botón Compartir.",
+        "Elige \"Agregar a inicio\".",
+        "Toca Agregar."
+      ],
       "android": "Android (Chrome)",
-      "androidSteps": ["Toca el menú (tres puntos).", "Elige \"Instalar app\".", "Toca Instalar."],
+      "androidSteps": [
+        "Toca el menú (tres puntos).",
+        "Elige \"Instalar app\".",
+        "Toca Instalar."
+      ],
       "installNow": "Instalar ahora"
     },
     "home": {

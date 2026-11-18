@@ -13,7 +13,8 @@ import { RequestLive } from "@/components/request/request-live";
 import { formatPhone } from "@/lib/market";
 import { getRealRequest } from "@/lib/request-status";
 import { pageMetadata } from "@/lib/seo";
-import { getMarkets, getMarketServices } from "@/lib/site-data";
+import { getMarkets, getMarketServices, getMarketStats } from "@/lib/site-data";
+import { phonesEnabled } from "@/lib/phones";
 
 export const dynamic = "force-dynamic";
 
@@ -79,7 +80,10 @@ export default async function RequestPage({ params }: Params) {
   ]);
   const simulation = await loadSimulation(token, real);
   const marketSlug = real?.market_slug ?? simulation?.marketSlug;
-  const phone = markets.find((m) => m.slug === marketSlug)?.phone ?? null;
+  const market = markets.find((m) => m.slug === marketSlug) ?? null;
+  // "Call us" only when phones are enabled (RSOS-100); the provider count only from real data.
+  const phone = phonesEnabled() ? (market?.phone ?? null) : null;
+  const stats = marketSlug ? await getMarketStats(marketSlug) : null;
   if (!real && !simulation) {
     return (
       <SitePage>
@@ -123,6 +127,11 @@ export default async function RequestPage({ params }: Params) {
             realStatus={real?.status ?? null}
             simulation={simulation}
             supportPhone={phone ? formatPhone(phone) : null}
+            reach={
+              market && stats?.provider_count
+                ? { count: stats.provider_count, city: market.name }
+                : null
+            }
           />
         </div>
       </NextIntlClientProvider>

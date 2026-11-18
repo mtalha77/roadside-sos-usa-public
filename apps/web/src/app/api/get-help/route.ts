@@ -1,6 +1,5 @@
 import { isDemoMode } from "@rsos/config/demo";
 import { legalDocuments } from "@rsos/config/legal";
-import { createHash, randomInt } from "node:crypto";
 import { isPlausibleAddress } from "@rsos/core/adapters";
 import { checkRateLimits, rateLimitKeys, verifyTurnstile } from "@rsos/core/security";
 import { createPublicSupabase } from "@rsos/db/public";
@@ -16,11 +15,10 @@ import {
   NEEDS_DESTINATION,
   currentStep,
   toE164,
-  VEHICLE_TYPES,
 } from "@/lib/get-help";
 import { maps, rateLimitStore } from "@/lib/adapters";
 import { ATTRIBUTION_COOKIE, decodeAttribution } from "@/lib/attribution";
-import { getMarkets, getMarketServices, marketSlugForPoint } from "@/lib/site-data";
+import { getMarkets, getMarketServices, getServices, marketSlugForPoint } from "@/lib/site-data";
 
 type Rpc = (
   fn: string,
@@ -32,44 +30,16 @@ const db = () => {
   return s.rpc.bind(s) as unknown as Rpc;
 };
 /**
- * Production limits (RSOS-021b): 3 codes per email per 10 minutes, 10 per IP per hour. Demo-mode
- * previews and staging allow more because test suites submit from one IP.
+ * Production limit (RSOS-021b): 5 requests per IP per hour. Demo-mode previews and staging allow
+ * more because test suites submit from one IP.
  */
-const LIMITS = isDemoMode()
-  ? { codeIp: 100, codeEmail: 50, requestIp: 100 }
-  : { codeIp: 10, codeEmail: 3, requestIp: 5 };
+const LIMITS = isDemoMode() ? { requestIp: 100 } : { requestIp: 5 };
 const Email = z.email().max(254);
-const codeHash = (email: string, code: string) =>
-  createHash("sha256").update(`${email}:${code}`).digest("hex");
 
 /**
- * Email codes (owner scope change: no SMS). Real: Supabase Auth email OTP (the session it opens is
- * not kept; it only proves the address). Demo hosts (never production): a dummy code shown on
- * screen, since test inboxes do not exist.
- */
-async function sendEmailCode(email: string) {
-  if (isDemoMode()) {
-    const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
-    return { ok: true as const, demoCode: code, hash: codeHash(email, code) };
-  }
-  const s = createPublicSupabase();
-  if (!s) return { ok: false as const };
-  const { error } = await s.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
-  return error ? { ok: false as const } : { ok: true as const, demoCode: "", hash: "" };
-}
-async function checkEmailCode(draft: Draft, code: string) {
-  if (!/^\d{6}$/.test(code) || !draft.email) return false;
-  if (draft.codeHash) return codeHash(draft.email, code) === draft.codeHash;
-  const s = createPublicSupabase();
-  if (!s) return false;
-  const { error } = await s.auth.verifyOtp({ email: draft.email, token: code, type: "email" });
-  return !error;
-}
-
-/**
- * Every Get Help step posts here (plain forms, no JavaScript needed). Each answer is validated,
- * merged into the visitor's draft in the database and the visitor moves to the next step; the last
- * step checks the code, Turnstile, rate limits and duplicates, then creates the request.
+ * Every Get Help screen posts here (plain forms, no JavaScript needed). Each answer is validated,
+ * merged into the visitor's draft in the database and the visitor moves on; the last screen
+ * (details) checks Turnstile, rate limits and duplicates, then creates the request (RSOS-101).
  */
 export async function POST(request: NextRequest) {
   const form = await request.formData();
@@ -99,9 +69,9 @@ export async function POST(request: NextRequest) {
       p_patch: patch,
     });
     if (error) return fail(step, "generic");
-    // Resume at the first unanswered step: answers already in the draft (a quick repeat request)
-    // are not asked again.
-    const resume = step === "contact" ? next : currentStep({ ...draft, ...patch });
+    // Resume at the first unanswered step (answers already in the draft are not asked again),
+    // except when the location step asks to come back to itself (GPS saved: show the pin).
+    const resume = next === "stay" ? "location" : currentStep({ ...draft, ...patch });
     return go(`/get-help?step=${resume}`, String(data));
   };
   const str = (k: string, max = 200) =>
@@ -177,6 +147,20 @@ export async function POST(request: NextRequest) {
       if (firstTouch)
         for (const [k, v] of Object.entries(firstTouch))
           if (v && k !== "market" && !(k in attribution)) attribution[k] = v;
+      // A tow (or winch out) also needs where to take the vehicle, asked on this screen.
+      const svc = service || draft.service || "";
+      let destination: Draft = {};
+      const stay = str("stay") === "1";
+      if (NEEDS_DESTINATION.has(svc) && !stay) {
+        const d = z
+          .object({
+            destAddress: z.string().min(3).max(200),
+            destMiles: z.enum(Object.keys(MILE_RANGES) as [keyof typeof MILE_RANGES]),
+          })
+          .safeParse({ destAddress: str("destAddress"), destMiles: str("destMiles") || "lt5" });
+        if (!d.success) return fail("location", "destination");
+        destination = d.data;
+      }
       return save(
         {
           market,
@@ -185,149 +169,65 @@ export async function POST(request: NextRequest) {
           address: address || `${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`,
           note: str("note", 300),
           ...(service ? { service } : {}),
+          ...destination,
           ...(Object.keys(attribution).length ? { attribution } : {}),
         },
-        service ? (NEEDS_DESTINATION.has(service) ? "destination" : "vehicle") : "problem",
+        stay ? "stay" : "details",
       );
     }
     case "problem": {
       const service = str("service", 40);
-      const offered = (await getMarketServices(draft.market ?? "")).find(
-        (s) => s.service_slug === service,
-      );
+      // Before the location is known, any service offered somewhere; the market is checked again
+      // when the request is created.
+      const market = draft.market ?? str("market", 60);
+      const offered = market
+        ? (await getMarketServices(market)).find((s) => s.service_slug === service && s.enabled)
+        : (await getServices()).find((s) => s.slug === service && s.market_count > 0);
       if (!offered) return fail("problem", "required");
-      if (!offered.enabled) return fail("problem", "service");
       const fu = FOLLOW_UPS[service];
       const followUp = fu ? str(`followUp-${service}`, 20) : "";
-      if (fu && !fu.options.includes(followUp)) return fail("problem", "required");
       return save(
-        { service, followUp },
-        NEEDS_DESTINATION.has(service) ? "destination" : "vehicle",
+        { service, followUp: fu && fu.options.includes(followUp) ? followUp : "" },
+        "location",
       );
     }
-    case "destination": {
-      const p = z
-        .object({
-          destAddress: z.string().min(3).max(200),
-          destMiles: z.enum(Object.keys(MILE_RANGES) as [keyof typeof MILE_RANGES]),
-        })
-        .safeParse({ destAddress: str("destAddress"), destMiles: str("destMiles") });
-      return p.success ? save(p.data, "vehicle") : fail("destination", "required");
-    }
-    case "vehicle": {
-      const p = z
-        .object({
-          vehicleType: z.enum(VEHICLE_TYPES),
-          make: z.string().min(1).max(40),
-          model: z.string().max(60),
-          color: z.enum(COLORS),
-          year: z.number().int().min(1950).max(2100).nullable(),
-          ev: z.boolean(),
-        })
-        .safeParse({
-          vehicleType: str("vehicleType"),
-          make: str("make", 40),
-          model: str("model", 60),
-          color: str("color"),
-          year: str("year") ? Number(str("year")) : null,
-          ev: form.get("ev") === "on",
-        });
-      return p.success ? save(p.data, "safety") : fail("vehicle", "required");
-    }
-    case "safety": {
-      const quick = str("quick");
-      if (quick) {
-        // One-tap answers on a quick repeat request.
-        const map: Record<string, Draft> = {
-          safe: { safe: true, highway: false },
-          highway: { safe: true, highway: true },
-          unsafe: { safe: false, highway: true },
-        };
-        return map[quick]
-          ? save({ ...map[quick], passengers: 0 }, draft.phone ? "verify" : "contact")
-          : fail("safety", "required");
-      }
-      const safe = str("safe");
-      const highway = str("highway");
-      if (!["yes", "no"].includes(safe) || !["yes", "no"].includes(highway))
-        return fail("safety", "required");
-      return save(
-        {
-          safe: safe === "yes",
-          highway: highway === "yes",
-          passengers: Math.min(10, Math.max(0, Number(str("passengers")) || 0)),
-        },
-        "contact",
-      );
-    }
-    case "contact": {
+    case "details": {
+      if (!draft.market || !draft.service || draft.lat === undefined || draft.lng === undefined)
+        return go("/get-help");
       const phone = toE164(form.get("phone"));
       const name = str("name", 120);
       const rawEmail = str("email", 254).toLowerCase();
-      if (!name) return fail("contact", "required");
-      if (!phone) return fail("contact", "phone");
-      if (!rawEmail)
-        return save(
-          { name, phone, email: "", codeSent: false, codeHash: "", demoCode: "", codeAttempts: 0 },
-          "verify",
-        );
-      const email = Email.safeParse(rawEmail);
-      if (!email.success) return fail("contact", "email");
-      const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
-      const limit = await checkRateLimits(
-        [
-          { key: `code:${rateLimitKeys.ip(ip)}`, limit: LIMITS.codeIp, windowSeconds: 3600 },
-          { key: `code:email:${email.data}`, limit: LIMITS.codeEmail, windowSeconds: 600 },
-        ],
-        rateLimitStore(),
-      );
-      if (!limit.allowed) return fail("contact", "limit");
-      const sent = await sendEmailCode(email.data);
-      return save(
-        {
-          name,
-          phone,
-          email: email.data,
-          codeSent: sent.ok,
-          codeHash: sent.ok ? sent.hash : "",
-          demoCode: sent.ok ? sent.demoCode : "",
-          codeAttempts: 0,
-        },
-        "verify",
-      );
-    }
-    case "verify": {
-      if (
-        !draft.phone ||
-        !draft.market ||
-        !draft.service ||
-        draft.lat === undefined ||
-        draft.lng === undefined
-      )
-        return go("/get-help");
-      // 1. The emailed code, when the driver gave an email; five wrong codes start contact over.
-      if (draft.codeSent) {
-        if ((draft.codeAttempts ?? 0) >= 5) {
-          await rpc("save_request_draft", {
-            p_token: cookieToken,
-            p_patch: { email: "", codeSent: false, codeHash: "", demoCode: "" },
-          });
-          return fail("contact", "locked");
-        }
-        const checked = await checkEmailCode(draft, str("code", 6));
-        if (!checked) {
-          await rpc("save_request_draft", {
-            p_token: cookieToken,
-            p_patch: { codeAttempts: (draft.codeAttempts ?? 0) + 1 },
-          });
-          return fail("verify", "code");
-        }
-      }
+      const email = rawEmail ? Email.safeParse(rawEmail) : null;
+      const spot = str("spot");
+      const vehicle = z
+        .object({
+          make: z.string().min(1).max(40),
+          model: z.string().max(60),
+          color: z.enum(COLORS),
+        })
+        .safeParse({ make: str("make", 40), model: str("model", 60), color: str("color") });
+      const patch: Draft = {
+        name,
+        phone: phone ?? "",
+        email: email?.success ? email.data : "",
+        ...(vehicle.success ? vehicle.data : {}),
+        ...(spot === "safe" || spot === "highway" || spot === "unsafe"
+          ? { safe: spot !== "unsafe", highway: spot !== "safe" }
+          : {}),
+      };
+      // Keep what was typed, even when something is missing (the screen comes back filled in).
+      await rpc("save_request_draft", { p_token: cookieToken, p_patch: patch });
+      Object.assign(draft, patch);
+      if (!name) return fail("details", "name");
+      if (!phone) return fail("details", "phone");
+      if (email && !email.success) return fail("details", "email");
+      if (!vehicle.success) return fail("details", "vehicle");
+      if (draft.safe === undefined) return fail("details", "spot");
       // 2. Turnstile and the per-IP limit.
       const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
       const token = form.get("cf-turnstile-response");
       if (!(await verifyTurnstile(typeof token === "string" ? token : null, { remoteIp: ip })).ok)
-        return fail("verify", "turnstile");
+        return fail("details", "turnstile");
       if (
         !(
           await checkRateLimits(
@@ -342,7 +242,7 @@ export async function POST(request: NextRequest) {
           )
         ).allowed
       )
-        return fail("verify", "limit");
+        return fail("details", "limit");
       // 3. Same phone within 30 minutes: open that request instead of creating a second one.
       const { data: existing } = await rpc("find_recent_request", { p_phone: draft.phone });
       if (typeof existing === "string" && existing) return go(`/r/${existing}`);
@@ -378,7 +278,7 @@ export async function POST(request: NextRequest) {
           situation: {
             safe_spot: draft.safe,
             on_highway: draft.highway,
-            has_passengers: (draft.passengers ?? 0) > 0,
+            has_passengers: false,
             spare_available: draft.service === "flat-tire" ? draft.followUp === "yes" : null,
             keys_available: draft.service === "locked-out" ? draft.followUp === "inside" : null,
           },
@@ -402,14 +302,16 @@ export async function POST(request: NextRequest) {
         },
         p_draft_token: cookieToken,
         p_email: draft.email ?? "",
-        p_email_verified: Boolean(draft.codeSent),
+        // The email is stored for updates but not checked with a code: a code would be a fourth
+        // screen for someone stranded (RSOS-101). It is never used to sign in.
+        p_email_verified: false,
       });
       const row = Array.isArray(data)
         ? (data[0] as { status_token?: string } | undefined)
         : undefined;
       if (error || !row?.status_token)
         return fail(
-          "verify",
+          "details",
           /service area|not available/.test(error?.message ?? "") ? "service" : "generic",
         );
       const res = go(`/r/${row.status_token}`);
