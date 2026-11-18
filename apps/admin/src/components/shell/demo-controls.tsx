@@ -14,15 +14,19 @@ type Clock = { offset: number; paused: number | null };
  */
 export function DemoControls({
   initial,
+  loadTest,
   labels,
   extra,
 }: {
   initial: Clock;
+  /** Load test: about 200 demo requests on the dispatch board (moved here in RSOS-103). */
+  loadTest: boolean;
   labels: Record<string, string>;
   extra?: React.ReactNode;
 }) {
   const router = useRouter();
   const [clock, setClock] = useState(initial);
+  const [load, setLoad] = useState(loadTest);
   const save = (c: Clock) => {
     setClock(c);
     document.cookie = `rsos_demo_clock=${encodeURIComponent(JSON.stringify(c))}; path=/; max-age=86400; samesite=lax; secure`;
@@ -69,6 +73,19 @@ export function DemoControls({
             {labels.reset}
           </Button>
         </div>
+        <label className="flex min-h-12 items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            className="size-5"
+            checked={load}
+            onChange={(e) => {
+              setLoad(e.target.checked);
+              document.cookie = `rsos_demo_load=${e.target.checked ? "1" : ""}; path=/; max-age=3600; samesite=lax; secure`;
+              router.refresh();
+            }}
+          />
+          {load ? labels.loadOn : labels.load}
+        </label>
         {extra}
       </DialogContent>
     </Dialog>

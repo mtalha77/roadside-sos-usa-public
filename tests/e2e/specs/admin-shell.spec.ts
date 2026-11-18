@@ -7,7 +7,8 @@ import {
   test,
 } from "../support/fixtures";
 
-// RSOS-071: admin shell with sidebar, market switcher, command palette, shortcuts, demo controls.
+// RSOS-071 + 103: admin shell with the grouped menu (a Menu button on phones), market switcher,
+// command palette, shortcuts and demo controls.
 const base = appUrls.admin;
 
 test.describe("admin shell", () => {
@@ -33,6 +34,19 @@ test.describe("admin shell", () => {
     await page.getByRole("button", { name: /Markets in view/ }).click();
     await expect(page.getByRole("group", { name: "Markets in view" })).toBeVisible();
     await page.keyboard.press("Escape");
+
+    // The menu is grouped: Operate, Network, Business, System (behind "Menu" on phones).
+    const menu = page.getByRole("button", { name: "Menu", exact: true });
+    const phone = await menu.isVisible();
+    if (phone) await menu.click();
+    for (const group of ["Operate", "Network", "Business", "System"])
+      await expect(page.getByRole("button", { name: group, exact: true }).first()).toBeVisible();
+    const operate = page.getByRole("button", { name: "Operate", exact: true }).first();
+    await operate.click();
+    await expect(operate).toHaveAttribute("aria-expanded", "false");
+    await operate.click();
+    await expect(page.getByRole("link", { name: "Calls" }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: "Phone intake" })).toHaveCount(0);
 
     const demo = page.getByRole("button", { name: "Demo controls" });
     if (await demo.isVisible()) {

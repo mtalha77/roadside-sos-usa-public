@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { z } from "zod";
 import { InboxLive } from "@/components/inbox/inbox-live";
 import { RequestPanel } from "@/components/inbox/request-panel";
@@ -32,11 +33,20 @@ export default async function InboxPage({
       id="main"
       className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]"
     >
-      <InboxLive
-        initial={inbox}
-        markets={markets.map((m) => ({ id: m.id, name: m.name }))}
-        selectedId={id.success ? id.data : null}
-      />
+      <div className="flex min-w-0 flex-col gap-3">
+        {/* Phone intake now opens from here and from Calls (RSOS-103). */}
+        <Link
+          href="/intake"
+          className="inline-flex min-h-12 items-center justify-center self-start rounded-lg border px-4 text-sm font-medium hover:bg-accent"
+        >
+          {t("logCall")}
+        </Link>
+        <InboxLive
+          initial={inbox}
+          markets={markets.map((m) => ({ id: m.id, name: m.name }))}
+          selectedId={id.success ? id.data : null}
+        />
+      </div>
       {selected ? (
         <RequestPanel data={selected} userId={ctx.userId} />
       ) : (

@@ -61,7 +61,7 @@ test.describe("location link", () => {
     const script = panel.getByText(/and type the code \d{3} \d{3}/);
     await expect(script).toBeVisible();
     const code = /code (\d{3}) (\d{3})/.exec((await script.textContent()) ?? "")!;
-    await panel.getByRole("button", { name: "I read it to the driver" }).click();
+    await panel.getByRole("button", { name: "I read it to the customer" }).click();
     await expect(panel.getByText("Logged on the timeline.")).toBeVisible();
 
     // The driver opens the link on their phone, with location allowed.
@@ -97,7 +97,7 @@ test.describe("location link", () => {
     // The dispatcher sees it on the timeline (live, or after a reload).
     await expect(async () => {
       await page.reload();
-      await expect(panel.getByText("Driver shared location").first()).toBeVisible({
+      await expect(panel.getByText("Customer shared location").first()).toBeVisible({
         timeout: 2_000,
       });
     }).toPass({ timeout: 30_000 });

@@ -24,7 +24,7 @@ test.describe("admin phone intake", () => {
     await page.getByRole("button", { name: "Simulate an incoming call (demo)" }).click();
     await page.getByRole("button", { name: "Answer" }).click();
     await expect(page.getByRole("heading", { name: "Caller" })).toBeVisible();
-    await page.getByLabel("Driver's name").fill("Test Caller");
+    await page.getByLabel("Customer's name").fill("Test Caller");
     await page.getByLabel("Callback number").fill("2105550123");
     await page.getByLabel("Location").fill("I-35 at exit 160");
     await page.getByRole("button", { name: "Text a location link" }).click();

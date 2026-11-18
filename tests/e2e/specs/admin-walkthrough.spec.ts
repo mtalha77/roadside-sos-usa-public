@@ -24,7 +24,7 @@ test.describe("admin walkthrough", () => {
     ).toBeVisible();
     for (const group of ["1. Driver", "2. Provider", "3. Admin"])
       await expect(page.getByRole("heading", { name: group })).toBeVisible();
-    const driver = page.getByRole("link", { name: "Open the driver's view" });
+    const driver = page.getByRole("link", { name: "Open the customer's view" });
     const admin = page.getByRole("link", { name: "Open the admin view" });
     const token = (await driver.getAttribute("href"))!.split("/r/")[1];
     expect(token).toMatch(/^demo_/);
