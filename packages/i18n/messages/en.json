@@ -3081,7 +3081,8 @@
         "active": "Active",
         "won": "Won",
         "lost": "Lost or missed",
-        "cancelled": "Cancelled"
+        "cancelled": "Cancelled",
+        "done": "Done"
       },
       "filter": "Service",
       "all": "All services",

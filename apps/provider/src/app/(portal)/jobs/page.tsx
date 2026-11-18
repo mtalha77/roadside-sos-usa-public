@@ -71,7 +71,7 @@ export default async function JobsPage({
             aria-current={x === tab ? "page" : undefined}
             className="inline-flex min-h-touch items-center border-b-2 border-transparent px-3 font-medium whitespace-nowrap aria-[current=page]:border-primary"
           >
-            {t(`tabs.${x}`)}
+            {tech && x === "won" ? t("tabs.done") : t(`tabs.${x}`)}
           </Link>
         ))}
       </nav>
