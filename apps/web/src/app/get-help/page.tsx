@@ -95,7 +95,8 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
   ]);
   const tileService = sp.service && /^[a-z-]{2,40}$/.test(sp.service) ? sp.service : undefined;
   // A home tile chose the service: start at the location step with it (no "what happened").
-  const effective: Draft = tileService && !draft.service ? { ...draft, service: tileService } : draft;
+  const effective: Draft =
+    tileService && !draft.service ? { ...draft, service: tileService } : draft;
   const step = allowedStep(effective, sp.step);
   const n = STEPS.indexOf(step) + 1;
   const back = previousStep(effective, step);
@@ -378,7 +379,11 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
           <Choice name="spot" value="safe" checked={draft.safe === true && draft.highway === false}>
             {t("safety.spotSafe")}
           </Choice>
-          <Choice name="spot" value="highway" checked={draft.safe === true && draft.highway === true}>
+          <Choice
+            name="spot"
+            value="highway"
+            checked={draft.safe === true && draft.highway === true}
+          >
             {t("safety.spotHighway")}
           </Choice>
           <Choice name="spot" value="unsafe" id="gh-unsafe" checked={draft.safe === false}>

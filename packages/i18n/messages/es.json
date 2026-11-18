@@ -1832,10 +1832,7 @@
             "¿Cuánto les cuesta a los proveedores?",
             "Una tarifa fija por cada solicitud en la que el conductor te elige, pagada de un saldo prepagado. Los planes opcionales dan descuentos y mejor visibilidad."
           ],
-          [
-            "¿Yo fijo mis precios?",
-            "Sí. Cotizas cada trabajo a tu precio."
-          ]
+          ["¿Yo fijo mis precios?", "Sí. Cotizas cada trabajo a tu precio."]
         ]
       }
     },
@@ -1923,10 +1920,7 @@
           "Envías una cotización",
           "Tu precio y cuándo puedes llegar. Cotiza lo que quieras, cuando quieras."
         ],
-        [
-          "El conductor elige",
-          "Si te elige, recibes sus datos y sales. Te paga directamente."
-        ]
+        ["El conductor elige", "Si te elige, recibes sus datos y sales. Te paga directamente."]
       ]
     },
     "money": {
@@ -2119,10 +2113,7 @@
             "Menores",
             "El servicio no es para menores de 16 años y no recopilamos su información a sabiendas."
           ],
-          [
-            "Cambios y contacto",
-            "Publicaremos los cambios aquí con una nueva versión y fecha."
-          ]
+          ["Cambios y contacto", "Publicaremos los cambios aquí con una nueva versión y fecha."]
         ]
       },
       "sms-terms": {
@@ -2141,10 +2132,7 @@
             "Cancelar y ayuda",
             "Responde STOP para dejar de recibir mensajes en cualquier momento. Responde HELP para recibir ayuda, o contáctanos."
           ],
-          [
-            "Costos",
-            "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."
-          ],
+          ["Costos", "Pueden aplicar tarifas de mensajes y datos, según tu plan móvil."],
           [
             "Operadores",
             "Los operadores no son responsables de mensajes retrasados o no entregados."
@@ -2758,17 +2746,9 @@
       "title": "Instalar la app",
       "body": "Recibe solicitudes en pantalla completa con sonido y abre el portal con un toque.",
       "iphone": "iPhone (Safari)",
-      "iphoneSteps": [
-        "Toca el botón Compartir.",
-        "Elige \"Agregar a inicio\".",
-        "Toca Agregar."
-      ],
+      "iphoneSteps": ["Toca el botón Compartir.", "Elige \"Agregar a inicio\".", "Toca Agregar."],
       "android": "Android (Chrome)",
-      "androidSteps": [
-        "Toca el menú (tres puntos).",
-        "Elige \"Instalar app\".",
-        "Toca Instalar."
-      ],
+      "androidSteps": ["Toca el menú (tres puntos).", "Elige \"Instalar app\".", "Toca Instalar."],
       "installNow": "Instalar ahora"
     },
     "home": {

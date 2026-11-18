@@ -23,35 +23,18 @@ test.describe("ad tracking and attribution", () => {
 
     // The driver browses to Get Help later (no gclid in that URL) and sends a request.
     await web.goto(new URL("/get-help", appUrls.web).toString());
-    await web.getByLabel("Street address or cross streets").fill("1200 Main St");
-    await web.getByLabel("City").selectOption({ index: 1 });
-    await web.getByRole("button", { name: "Continue" }).click();
     await web.locator("label").filter({ hasText: "Flat tire" }).click();
     await web.getByRole("radio", { name: "Yes" }).check();
     await web.getByRole("button", { name: "Continue" }).click();
-    await web.getByLabel("Make").fill("Toyota");
-    await web.getByLabel("Model").fill("Camry");
+    await web.getByLabel("Street address or cross streets").fill("1200 Main St");
+    await web.getByLabel("City").selectOption({ index: 1 });
     await web.getByRole("button", { name: "Continue" }).click();
-    await web
-      .getByRole("group", { name: /safe place/ })
-      .getByRole("radio", { name: "Yes" })
-      .check();
-    await web
-      .getByRole("group", { name: /highway/ })
-      .getByRole("radio", { name: "No" })
-      .check();
-    await web.getByRole("button", { name: "Continue" }).click();
-    await web.getByLabel("Your name").fill("Ad Test Driver");
+    await web.getByLabel("Your name").fill("Ad Test Customer");
     await web
       .getByLabel("Mobile number")
       .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
-    // A reserved example.com address: demo hosts show the code on screen and send nothing.
-    await web.getByLabel("Email (optional)").fill("e2e-ads@example.com");
-    await web.getByRole("button", { name: "Continue" }).click();
-    const code = /code is (\d{6})/.exec(
-      (await web.getByText(/Your code is/).textContent()) ?? "",
-    )?.[1];
-    await web.getByLabel("Code").fill(code!);
+    await web.getByLabel("Make").fill("Toyota");
+    await web.getByRole("radio", { name: "Off the road, in a safe place" }).check();
     await expect(web.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,
     });

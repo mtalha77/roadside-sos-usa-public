@@ -7,90 +7,75 @@ import {
   test,
 } from "../support/fixtures";
 
-// RSOS-021: the real request flow on the preview (rsos-dev, demo mode: the code is shown on screen).
+// RSOS-021, three screens since RSOS-101: what happened, where, who and which vehicle.
 const web = appUrls.web;
 const url = (p: string) => new URL(p, web).toString();
+const fakePhone = () => `(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`;
 
 test.describe("get help flow", () => {
   test.skip(!web, "No website URL");
 
-  test("a first-time driver sends a request in under 60 seconds", async ({ page }, info) => {
+  test("a first-time customer sends a request in three screens, under 60 seconds", async ({
+    page,
+  }, info) => {
     test.skip(readOnly, "Writes to the database");
     test.setTimeout(90_000);
     const started = Date.now();
     await page.goto(url("/get-help"));
     await expectNoA11yViolations(page);
-    await page.getByLabel("Street address or cross streets").fill("1200 Main St");
-    await page.getByLabel("City").selectOption({ index: 1 });
-    await page.getByRole("button", { name: "Continue" }).click();
 
+    // Screen 1 of 3: what happened.
+    await expect(page.getByText("Step 1 of 3")).toBeVisible();
     await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
     await page.locator("label").filter({ hasText: "Flat tire" }).click();
     await page.getByRole("radio", { name: "Yes" }).check();
     await page.screenshot({ path: info.outputPath("problem.png"), fullPage: true });
     await page.getByRole("button", { name: "Continue" }).click();
 
-    await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
+    // Screen 2 of 3: where.
+    await expect(page.getByText("Step 2 of 3")).toBeVisible();
+    await page.getByLabel("Street address or cross streets").fill("1200 Main St");
+    await page.getByLabel("City").selectOption({ index: 1 });
+    await page.getByRole("button", { name: "Continue" }).click();
+
+    // Screen 3 of 3: who and which vehicle, then send.
+    await expect(page.getByText("Step 3 of 3")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Who should the provider look for?" }),
+    ).toBeVisible();
+    await page.getByLabel("Your name").fill("E2E Customer");
+    await page.getByLabel("Mobile number").fill(fakePhone());
     await page.getByLabel("Make").fill("Toyota");
-    await page.getByLabel("Model").fill("Camry");
-    await page.getByRole("button", { name: "Continue" }).click();
-
-    await expect(page.getByRole("heading", { name: "Are you safe?" })).toBeVisible();
-    await page
-      .getByRole("group", { name: /safe place/ })
-      .getByRole("radio", { name: "No" })
-      .check();
+    await page.getByRole("radio", { name: "I don't feel safe" }).check();
     await expect(page.getByText(/call 911 first/)).toBeVisible();
-    await page
-      .getByRole("group", { name: /safe place/ })
-      .getByRole("radio", { name: "Yes" })
-      .check();
-    await page
-      .getByRole("group", { name: /highway/ })
-      .getByRole("radio", { name: "No" })
-      .check();
-    await page.getByRole("button", { name: "Continue" }).click();
-
-    await expect(page.getByRole("heading", { name: /reach you/ })).toBeVisible();
-    await page.getByLabel("Your name").fill("E2E Driver");
-    await page
-      .getByLabel("Mobile number")
-      .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
-    // A reserved example.com address: demo hosts show the code on screen and send nothing.
-    await page.getByLabel("Email (optional)").fill("e2e-driver@example.com");
-    await page.getByRole("button", { name: "Continue" }).click();
-
-    await expect(page.getByRole("heading", { name: "Check and send" })).toBeVisible();
-    const code = /code is (\d{6})/.exec(
-      (await page.getByText(/Your code is/).textContent()) ?? "",
-    )?.[1];
-    await page.getByLabel("Code").fill(code!);
+    await page.getByRole("radio", { name: "Off the road, in a safe place" }).check();
     await expect(page.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,
     });
+    await expectNoA11yViolations(page);
     await page.getByRole("button", { name: "Send my request" }).click();
     await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
     expect(Date.now() - started).toBeLessThan(60_000);
   });
 
-  test("a reload keeps the driver's place, and denied location falls back to the address form", async ({
-    page,
-    context,
-  }) => {
-    await context.grantPermissions([]);
-    await page.goto(url("/get-help"));
-    await page.getByRole("button", { name: "Use my location" }).click();
-    await expect(page.getByText(/couldn't get your location/)).toBeVisible();
-    await expect(page.getByLabel("Street address or cross streets")).toBeFocused();
+  test("errors say what to do next and keep what was typed", async ({ page }) => {
+    await page.goto(url("/get-help?service=flat-tire"));
+    // A tile chose the service: the flow starts at screen 2.
+    await expect(page.getByText("Step 2 of 3")).toBeVisible();
+    await page.getByLabel("Street address or cross streets").fill("somewhere");
+    await page.getByLabel("City").selectOption({ index: 1 });
+    await page.getByRole("button", { name: "Continue" }).click();
+    await expect(
+      page.getByRole("alert").filter({ hasText: /Type a street address/ }),
+    ).toBeVisible();
     await page.getByLabel("Street address or cross streets").fill("500 Commerce St");
     await page.getByLabel("City").selectOption({ index: 1 });
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
-    await page.reload();
-    await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
+    await page.getByLabel("Your name").fill("E2E Customer");
+    await page.getByRole("button", { name: "Send my request" }).click();
+    await expect(page.getByText(/Enter a 10-digit US mobile number/)).toBeVisible();
+    await expect(page.getByLabel("Your name")).toHaveValue("E2E Customer");
     await expectNoHorizontalScroll(page);
-    await page.getByRole("link", { name: "Back" }).click();
-    await expect(page.getByLabel("Street address or cross streets")).toHaveValue("500 Commerce St");
   });
 });
 
@@ -98,53 +83,31 @@ test.describe("get help flow", () => {
 test.describe("get help: going back", () => {
   test.skip(!web, "No website URL");
 
-  test("every step has a working Back, and browser back keeps the answers", async ({ page }) => {
+  test("every screen has a working Back, and browser back keeps the answers", async ({ page }) => {
     test.setTimeout(90_000);
     await page.goto(url("/get-help"));
-    // Step 1 goes back home.
+    // Screen 1 goes back home.
     await expect(page.getByRole("link", { name: "Back" })).toHaveAttribute("href", "/");
-    await page.getByLabel("Street address or cross streets").fill("700 Market St");
-    await page.getByLabel("City").selectOption({ index: 1 });
-    await page.getByRole("button", { name: "Continue" }).click();
-
-    await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
     await page.locator("label").filter({ hasText: "Flat tire" }).click();
     await page.getByRole("radio", { name: "Yes" }).check();
     await page.getByRole("button", { name: "Continue" }).click();
-
-    await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
-    await page.getByLabel("Make").fill("Honda");
-    await page.getByLabel("Model").fill("Civic");
+    await page.getByLabel("Street address or cross streets").fill("700 Market St");
+    await page.getByLabel("City").selectOption({ index: 1 });
     await page.getByRole("button", { name: "Continue" }).click();
-
-    await expect(page.getByRole("heading", { name: "Are you safe?" })).toBeVisible();
-    await page
-      .getByRole("group", { name: /safe place/ })
-      .getByRole("radio", { name: "Yes" })
-      .check();
-    await page
-      .getByRole("group", { name: /highway/ })
-      .getByRole("radio", { name: "No" })
-      .check();
-    await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: /reach you/ })).toBeVisible();
-
-    // The browser's back button: previous step, answers kept.
-    await page.goBack();
-    await expect(page.getByRole("heading", { name: "Are you safe?" })).toBeVisible();
     await expect(
-      page.getByRole("group", { name: /safe place/ }).getByRole("radio", { name: "Yes" }),
-    ).toBeChecked();
-    await page.goBack();
-    await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
+      page.getByRole("heading", { name: "Who should the provider look for?" }),
+    ).toBeVisible();
+    await page.getByLabel("Make").fill("Honda");
+    await page.getByLabel("Your name").fill("E2E Back");
+    await page.getByRole("button", { name: "Send my request" }).click();
     await expect(page.getByLabel("Make")).toHaveValue("Honda");
 
-    // The in-page Back link, step by step to the start.
+    // The in-page Back link, screen by screen to the start, answers kept.
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page.getByLabel("Street address or cross streets")).toHaveValue("700 Market St");
     await page.getByRole("link", { name: "Back" }).click();
     await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
     await expect(page.getByRole("radio", { name: "Yes" })).toBeChecked();
-    await page.getByRole("link", { name: "Back" }).click();
-    await expect(page.getByLabel("Street address or cross streets")).toHaveValue("700 Market St");
     await page.getByRole("link", { name: "Back" }).click();
     await page.waitForURL((u) => u.pathname === "/");
   });
@@ -176,6 +139,8 @@ test.describe("ad landing pages", () => {
     await page.goto(url("/lp/houston/flat-tire"));
     await page.getByLabel(/Your address/).fill("800 Bagby St");
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: "What are you driving?" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Who should the provider look for?" }),
+    ).toBeVisible();
   });
 });

@@ -11,7 +11,8 @@ test.describe("typed addresses", () => {
   test("a plain address field: badly formed addresses are refused, good ones continue", async ({
     page,
   }) => {
-    await page.goto(new URL("/get-help", appUrls.web).toString());
+    // A tile chose the service, so the flow opens on the location screen.
+    await page.goto(new URL("/get-help?service=flat-tire", appUrls.web).toString());
     await page.getByLabel("City").selectOption({ index: 1 });
     const field = page.getByLabel("Street address or cross streets");
     await field.fill("somewhere");
@@ -24,7 +25,9 @@ test.describe("typed addresses", () => {
     await page.getByLabel("City").selectOption({ index: 1 });
     await page.getByLabel("Street address or cross streets").fill("1200 Main St");
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Who should the provider look for?" }),
+    ).toBeVisible();
   });
 
   test("the Places endpoint is off while Google Maps is off, and never exposes a key", async ({
