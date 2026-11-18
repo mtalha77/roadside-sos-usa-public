@@ -3,7 +3,6 @@ import { DniSwap } from "./dni-swap";
 import type { ReactNode } from "react";
 import { getMarkets, getServices } from "@/lib/site-data";
 import { getVisitorMarket } from "@/lib/visitor";
-import { MenuCloser } from "./menu-closer";
 import { MobileBar } from "./mobile-bar";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
@@ -42,7 +41,6 @@ export async function SitePage({
       <DniSwap />
       <div aria-hidden="true" className="pb-32 sm:pb-6" />
       <MobileBar market={market} />
-      <MenuCloser />
     </>
   );
 }

@@ -1,7 +1,6 @@
 import { buildMetadata } from "@rsos/config/metadata";
 import { themeColor } from "@rsos/config/theme-colors";
 import { getSiteEnv } from "@rsos/config/site";
-import { ThemeProvider } from "@rsos/ui/theme-provider";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -9,11 +8,10 @@ import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { isDemoMode } from "@rsos/config/demo";
 import { DemoBadge } from "@rsos/ui/demo-badge";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cookies } from "next/headers";
 import { ConsentBanner } from "@/components/site/consent-banner";
 import { CONSENT_COOKIE, consentHeadScript, parseConsent } from "@/lib/consent";
+import { SITE_SCRIPT } from "@/lib/site-script";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -40,6 +38,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang={locale} className={GeistSans.variable} suppressHydrationWarning>
       <head>
+        {/* Theme (with the night default), menus and the phone action bar: no bundle (RSOS-100). */}
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: SITE_SCRIPT }} />
         {/* Consent Mode defaults run before anything else: Google tags start denied (RSOS-028). */}
         <script
           nonce={nonce}
@@ -49,16 +49,28 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         />
       </head>
       <body>
-        {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}
-        <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
+        {isDemoMode() ? <DemoBadge label={demoLabel} strip /> : null}
+        {children}
         <ConsentBanner />
-        {analytics ? (
-          <>
-            <Analytics />
-            <SpeedInsights />
-          </>
-        ) : null}
+        {analytics ? <VercelAnalytics /> : null}
       </body>
     </html>
+  );
+}
+
+/**
+ * Vercel Analytics and Speed Insights, imported only when they are used (production, with
+ * analytics consent), so their script is not in every visitor's download (RSOS-100 budget).
+ */
+async function VercelAnalytics() {
+  const [{ Analytics }, { SpeedInsights }] = await Promise.all([
+    import("@vercel/analytics/next"),
+    import("@vercel/speed-insights/next"),
+  ]);
+  return (
+    <>
+      <Analytics />
+      <SpeedInsights />
+    </>
   );
 }
