@@ -63,8 +63,12 @@ test.describe("roles and permissions", () => {
       "Marketing",
       "Viewer",
     ])
-      await expect(page.getByText(role, { exact: true }).first()).toBeVisible();
-    await expect(page.getByText("Technician", { exact: true })).toBeVisible();
+      await expect(
+        page.getByRole("region", { name: "Staff roles" }).getByText(role, { exact: true }),
+      ).toBeVisible();
+    await expect(
+      page.getByRole("region", { name: "Provider roles" }).getByText("Technician", { exact: true }),
+    ).toBeVisible();
     await expectNoA11yViolations(page);
   });
 });
