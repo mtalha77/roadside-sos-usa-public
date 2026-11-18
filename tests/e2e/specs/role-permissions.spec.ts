@@ -64,10 +64,14 @@ test.describe("roles and permissions", () => {
       "Viewer",
     ])
       await expect(
-        page.getByRole("region", { name: "Staff roles" }).getByText(role, { exact: true }),
+        // The name shares a line with its "n people" badge: match the start of that line.
+        page
+          .getByRole("region", { name: "Staff roles" })
+          .getByText(new RegExp(`^${role}\\s*\\d`))
+          .first(),
       ).toBeVisible();
     await expect(
-      page.getByRole("region", { name: "Provider roles" }).getByText("Technician", { exact: true }),
+      page.getByRole("region", { name: "Provider roles" }).getByText("Technician").first(),
     ).toBeVisible();
     await expectNoA11yViolations(page);
   });
