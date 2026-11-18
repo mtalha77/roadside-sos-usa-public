@@ -33,7 +33,7 @@ export async function EmergencyHero({
     <section
       data-hero
       aria-labelledby="hero-title"
-      className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pt-5 pb-8 sm:gap-5 sm:pt-12"
+      className="mx-auto flex max-w-6xl flex-col gap-3 px-4 pt-3 pb-8 sm:gap-5 sm:pt-12"
     >
       <h1
         id="hero-title"
@@ -41,7 +41,7 @@ export async function EmergencyHero({
       >
         {headline}
       </h1>
-      <p className="max-w-2xl text-lg text-muted-foreground">{t("sub")}</p>
+      <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">{t("sub")}</p>
       {city && providerCount ? (
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium">
           <span className="inline-flex items-center gap-2">
@@ -54,14 +54,14 @@ export async function EmergencyHero({
         </p>
       ) : null}
       <h2 className="sr-only">{t("tilesTitle")}</h2>
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:max-w-4xl">
+      <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:max-w-4xl">
         {services.map((s) => {
           const Glyph = serviceIcons[s.icon_key as ServiceIconKey];
           return (
             <li key={s.slug}>
               <Link
                 href={withMarket(`/get-help?service=${s.slug}`)}
-                className="flex h-full min-h-24 flex-col justify-between gap-2 rounded-2xl border-2 border-border bg-surface p-4 text-lg leading-tight font-semibold shadow-sm transition-[border-color,box-shadow,transform] duration-150 ease-standard hover:border-input hover:shadow-md active:scale-[0.98] motion-reduce:transition-none"
+                className="flex h-full min-h-24 flex-col justify-between gap-2 rounded-2xl border-2 border-border bg-surface p-3 text-lg sm:p-4 leading-tight font-semibold shadow-sm transition-[border-color,box-shadow,transform] duration-150 ease-standard hover:border-input hover:shadow-md active:scale-[0.98] motion-reduce:transition-none"
               >
                 <span
                   aria-hidden="true"
@@ -77,7 +77,7 @@ export async function EmergencyHero({
       </ul>
       <Link
         href={withMarket("/get-help")}
-        className={`${ui.button.primary} min-h-14 w-full text-lg lg:max-w-4xl`}
+        className={`${ui.button.primary} min-h-13 w-full text-lg lg:max-w-4xl`}
       >
         {t("getHelp")}
       </Link>
