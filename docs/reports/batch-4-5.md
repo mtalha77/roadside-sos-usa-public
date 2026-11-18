@@ -10,11 +10,13 @@
 | ------------------------------------------------- | ----------- | -------------------------------------------------------------------- |
 | RSOS-100 Emergency-first website home, city pages | Merged      | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184) |
 | RSOS-101 Get Help flow, faster and calmer         | Merged      | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186) |
-| RSOS-102 Roles and permissions in the admin       | In review   |                                                                      |
-| RSOS-103 Admin rebuild (Today, navigation, board) | Not started |                                                                      |
+| RSOS-102 Roles and permissions in the admin       | Merged      | [#187](https://github.com/mtalha77/roadside-sos-usa-public/pull/187) |
+| RSOS-103 Admin rebuild (Today, navigation, board) | In review   |                                                                      |
 | RSOS-104 Provider portal polish                   | Not started |                                                                      |
 | RSOS-105 Skippable guided tours                   | Not started |                                                                      |
 | RSOS-106 QA pass and walkthrough                  | Not started |                                                                      |
+
+RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at the owner's request ([#188](https://github.com/mtalha77/roadside-sos-usa-public/pull/188), report in `docs/reports/batch-4-6.md`).
 
 ## Tickets
 
