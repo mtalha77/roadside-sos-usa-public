@@ -1,3 +1,4 @@
+import { providerCanSee, providerHome, providerSectionForPath } from "@rsos/config/permissions";
 import { buildCsp, createNonce } from "@rsos/config/security";
 import { type AccessDecision, providerAccess, withSessionState } from "@rsos/db/claims";
 import { strictCookieOptions } from "@rsos/db/cookies";
@@ -64,6 +65,14 @@ export async function proxy(request: NextRequest) {
         for (const c of request.cookies.getAll())
           if (isAuthCookie(c.name)) response.cookies.delete(c.name);
       }
+    } else {
+      // RSOS-104: each role opens only its sections; technicians land on their jobs.
+      const role = state.claims?.providers?.[0]?.role;
+      const section = providerSectionForPath(path);
+      if (section && !providerCanSee(role, section))
+        response = NextResponse.redirect(
+          new URL(role === "operator" ? providerHome(role) : "/no-access", request.url),
+        );
     }
   }
 

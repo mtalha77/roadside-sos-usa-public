@@ -1,21 +1,28 @@
 import { TIMING } from "@rsos/core/demo";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { OfferScreen, type OfferView } from "@/components/offer/offer-screen";
 import { PageHead, pageMain } from "@/components/shell/page-head";
-import { getPortalContext, getPortalData } from "@/lib/portal";
+import { getPortalContext, getPortalData, getPriceTable } from "@/lib/portal";
 
 export const dynamic = "force-dynamic";
 
 async function load() {
   const ctx = await getPortalContext();
   const now = Date.now();
-  const { data, pricing } = await getPortalData(ctx, now);
-  return { now, data, pricing };
+  const [{ data, pricing }, table] = await Promise.all([
+    getPortalData(ctx, now),
+    getPriceTable(ctx.providerId),
+  ]);
+  return { now, data, pricing, table };
 }
 
-/** Incoming requests (RSOS-054), from the shared live demo stream for this company's market. */
+/**
+ * Incoming requests (RSOS-054, full screen in RSOS-104), from the shared live demo stream for this
+ * company's market. The suggested price is the company's own price for the service when it has one.
+ */
 export default async function OfferPage() {
-  const [t, ts, { now, data, pricing }] = await Promise.all([
+  const [t, ts, { now, data, pricing, table }] = await Promise.all([
     getTranslations("portal.offer"),
     getTranslations("site.services"),
     load(),
@@ -41,7 +48,7 @@ export default async function OfferPage() {
       safe: r.safety.safe,
       expiresAt: o.expiresAt,
       pickAt: r.createdAt + TIMING.pickAt * 1000,
-      suggestedCents: o.suggestedCents,
+      suggestedCents: table[r.serviceSlug] ?? o.suggestedCents,
       minCents: range?.price_min_cents ?? 5000,
       maxCents: range?.price_max_cents ?? 20000,
       feeCents: o.feeCents,
@@ -49,9 +56,26 @@ export default async function OfferPage() {
     };
   });
   return (
-    <main id="main" className={pageMain}>
-      <PageHead title={t("title")} subtitle={t("subtitle")} />
-      <OfferScreen offers={offers} now={now} />
+    // Full screen on every device: the offer covers the tabs and side menu until it is handled.
+    <main
+      id="main"
+      className="fixed inset-0 z-50 overflow-y-auto bg-background pb-[env(safe-area-inset-bottom)]"
+    >
+      <div className={`${pageMain} max-w-2xl pb-8`}>
+        <PageHead
+          title={t("title")}
+          subtitle={t("subtitle")}
+          action={
+            <Link
+              href="/"
+              className="inline-flex min-h-touch items-center rounded-lg border px-4 font-medium hover:bg-accent"
+            >
+              {t("close")}
+            </Link>
+          }
+        />
+        <OfferScreen offers={offers} now={now} />
+      </div>
     </main>
   );
 }

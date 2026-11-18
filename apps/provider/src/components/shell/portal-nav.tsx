@@ -16,6 +16,7 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import { providerCanSee, providerSectionForPath } from "@rsos/config/permissions";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { isBuilt } from "@/lib/routes";
@@ -37,7 +38,8 @@ export type NavLabels = Record<
   | "account"
   | "install"
   | "theme"
-  | "signOut",
+  | "signOut"
+  | "myJobs",
   string
 >;
 
@@ -46,27 +48,59 @@ const isActive = (path: string, href: string) =>
 
 /**
  * Bottom tabs on phones (Home, Jobs, Wallet, Profile, More) and a side navigation on desktop for
- * office staff (RSOS-051). Operators don't see the wallet (owner and manager only).
+ * office staff (RSOS-051), filtered by role (RSOS-104). Technicians get a simple top bar with
+ * only "My jobs" and their account: their phone shows the job, nothing else.
  */
 export function PortalNav({
   labels,
   company,
   companyLogo,
-  canSeeMoney,
+  role,
 }: {
   labels: NavLabels;
   company: string;
   companyLogo?: ProviderLogoData | null;
-  canSeeMoney: boolean;
+  role: string;
 }) {
   const path = usePathname();
+  const allowed = (href: string) => {
+    const section = providerSectionForPath(href);
+    return isBuilt(href) && (section === null || providerCanSee(role, section));
+  };
+  if (role === "operator")
+    return (
+      <header className="fixed inset-x-0 top-0 z-40 flex min-h-14 items-center gap-2 border-b bg-background/95 px-3 pt-[env(safe-area-inset-top)] backdrop-blur">
+        <p className="flex min-w-0 flex-1 items-center gap-2 font-semibold">
+          {companyLogo ? <ProviderLogo logo={companyLogo} size={28} /> : null}
+          <span className="truncate">{company}</span>
+        </p>
+        <nav aria-label={labels.label} className="flex items-center gap-1">
+          <Link
+            href="/jobs"
+            aria-current={isActive(path, "/jobs") ? "page" : undefined}
+            className="flex min-h-touch items-center gap-2 rounded-lg px-3 font-medium aria-[current=page]:bg-accent"
+          >
+            <Briefcase aria-hidden="true" className="size-5" />
+            {labels.myJobs}
+          </Link>
+          <Link
+            href="/account"
+            aria-label={labels.account}
+            aria-current={isActive(path, "/account") ? "page" : undefined}
+            className="grid min-h-touch min-w-touch place-items-center rounded-lg aria-[current=page]:bg-accent"
+          >
+            <User aria-hidden="true" className="size-5" />
+          </Link>
+        </nav>
+      </header>
+    );
   const tabs = [
     { href: "/", label: labels.home, icon: Home },
     { href: "/jobs", label: labels.jobs, icon: Briefcase },
-    ...(canSeeMoney ? [{ href: "/wallet", label: labels.wallet, icon: Wallet }] : []),
+    { href: "/wallet", label: labels.wallet, icon: Wallet },
     { href: "/profile", label: labels.profile, icon: User },
     { href: "/more", label: labels.more, icon: Menu },
-  ].filter((t) => isBuilt(t.href));
+  ].filter((t) => allowed(t.href));
   const side = [
     ...tabs.filter((t) => t.href !== "/more"),
     { href: "/services", label: labels.services, icon: Tag },
@@ -76,7 +110,7 @@ export function PortalNav({
     { href: "/help", label: labels.help, icon: LifeBuoy },
     { href: "/account", label: labels.account, icon: Settings2 },
     { href: "/install", label: labels.install, icon: Smartphone },
-  ].filter((t) => isBuilt(t.href));
+  ].filter((t) => allowed(t.href));
   const item =
     "flex min-h-touch items-center gap-3 rounded-lg px-3 font-medium hover:bg-accent aria-[current=page]:bg-accent aria-[current=page]:text-foreground";
   return (
@@ -93,7 +127,6 @@ export function PortalNav({
           <Link
             key={t.href}
             href={t.href}
-            prefetch={false}
             aria-current={isActive(path, t.href) ? "page" : undefined}
             className={item}
           >
@@ -118,7 +151,6 @@ export function PortalNav({
           <Link
             key={t.href}
             href={t.href}
-            prefetch={false}
             aria-current={isActive(path, t.href) ? "page" : undefined}
             className="flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium text-muted-foreground aria-[current=page]:text-foreground"
           >

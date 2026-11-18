@@ -95,3 +95,20 @@ export async function getWalletBalance(providerId: string | null): Promise<numbe
     .maybeSingle();
   return data?.balance_cents ?? null;
 }
+
+/** The company's own prices per service (its price table), in cents; empty when it has none. */
+export async function getPriceTable(providerId: string | null): Promise<Record<string, number>> {
+  if (!providerId) return {};
+  const supabase = await getServerSupabase();
+  const { data } = await supabase
+    .from("provider_service_prices")
+    .select("price_cents, active, services(slug)")
+    .eq("provider_id", providerId)
+    .eq("active", true);
+  return Object.fromEntries(
+    (data ?? []).flatMap((r) => {
+      const slug = (r.services as { slug?: string } | null)?.slug;
+      return slug ? [[slug, r.price_cents]] : [];
+    }),
+  );
+}

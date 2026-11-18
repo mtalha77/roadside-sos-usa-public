@@ -7,7 +7,8 @@ import {
   test,
 } from "../support/fixtures";
 
-// RSOS-054: incoming request, quote sent in one tap with the defaults (demo scenario).
+// RSOS-054 + 104: full-screen incoming request; price from the price table, arrival chips, one
+// "Send quote" button (demo scenario).
 const base = appUrls.provider;
 
 test.describe("provider incoming request", () => {
@@ -22,10 +23,19 @@ test.describe("provider incoming request", () => {
     await expectNoA11yViolations(page);
     await expectNoHorizontalScroll(page);
     await page.screenshot({ path: info.outputPath("provider-offer.png"), fullPage: true });
+    // Arrival chips: 15, 30, 45 and 60 minutes; one is always chosen.
+    for (const m of ["15 min", "30 min", "45 min", "60 min"])
+      await expect(page.getByRole("radio", { name: m }).first()).toBeAttached();
+    await page.getByText("30 min", { exact: true }).first().click();
+    await expect(
+      page.getByRole("button", { name: /^Send quote · .* · 30 min$/ }).first(),
+    ).toBeEnabled();
     await page
-      .getByRole("button", { name: /^Send / })
+      .getByRole("button", { name: /^Send quote/ })
       .first()
       .click();
-    await expect(page.getByText(/Quote sent: .*Waiting for the driver to choose\./)).toBeVisible();
+    await expect(
+      page.getByText(/Quote sent: .*Waiting for the customer to choose\./),
+    ).toBeVisible();
   });
 });

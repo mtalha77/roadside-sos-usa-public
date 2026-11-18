@@ -3,6 +3,7 @@
 import { Alert } from "@rsos/ui/alert";
 import { Button } from "@rsos/ui/button";
 import { CountdownRing } from "@rsos/ui/countdown-ring";
+import { CurrencyInput } from "@rsos/ui/currency-input";
 import { LiteMap } from "@rsos/ui/lite-map";
 import { PartyPopper } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
@@ -36,6 +37,10 @@ export type OfferView = {
 
 type Sent = { priceCents: number; eta: number };
 const KEY = "rsos_offer_sent";
+/** Arrival times a provider picks with one tap (RSOS-104). */
+export const ETA_CHIPS = [15, 30, 45, 60] as const;
+const nearestChip = (m: number) =>
+  ETA_CHIPS.reduce((a, b) => (Math.abs(b - m) < Math.abs(a - m) ? b : a), ETA_CHIPS[0]);
 
 /** One-tap tone and vibration when a new request arrives (only after the first tap: browsers block autoplay). */
 function alertOnce() {
@@ -57,8 +62,9 @@ function alertOnce() {
 }
 
 /**
- * Incoming request (RSOS-054): full screen with countdown, the job, a pre-filled quote sent in one
- * tap, price and ETA adjustable within the market's limits, decline with a reason, then the outcome.
+ * Incoming request (RSOS-054, polished in RSOS-104): full screen with the countdown ring, the job,
+ * a big price box pre-filled from the company's price table, arrival chips (15, 30, 45, 60 min)
+ * and one "Send quote" button; decline with a reason is secondary; then the outcome.
  */
 export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; now: number }) {
   const t = useTranslations("portal.offer");
@@ -73,7 +79,6 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
   const [index, setIndex] = useState(0);
   const [sent, setSent] = useState<Record<string, Sent>>({});
   const [declined, setDeclined] = useState<string[]>([]);
-  const [adjust, setAdjust] = useState(false);
   const [price, setPrice] = useState<number | null>(null);
   const [eta, setEta] = useState<number | null>(null);
   const alerted = useRef<string | null>(null);
@@ -103,11 +108,11 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
   if (!offer) return <p className="text-lg text-muted-foreground">{t("none")}</p>;
   const mine = sent[offer.id];
   const p = price ?? offer.suggestedCents;
-  const e = eta ?? offer.driveMinutes;
+  const e = eta ?? nearestChip(offer.driveMinutes);
+  const inRange = p >= offer.minCents && p <= offer.maxCents;
   const send = () => {
     const next = { ...sent, [offer.id]: { priceCents: p, eta: e } };
     setSent(next);
-    setAdjust(false);
     try {
       localStorage.setItem(KEY, JSON.stringify(next));
     } catch {
@@ -239,55 +244,59 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
           )
         ) : (
           <>
-            <dl className="grid grid-cols-3 gap-2 rounded-xl bg-muted p-3 text-center">
-              <div>
-                <dt className="text-xs text-muted-foreground">{t("yourPrice")}</dt>
-                <dd className="text-xl font-semibold tabular-nums">{money(p)}</dd>
+            <label className="flex flex-col gap-2 font-semibold" htmlFor={`price-${offer.id}`}>
+              {t("yourPrice")}
+              <CurrencyInput
+                key={offer.id}
+                id={`price-${offer.id}`}
+                value={p}
+                onValueChange={(c) => setPrice(c ?? 0)}
+                aria-describedby={`price-hint-${offer.id}`}
+                className="min-h-16 text-3xl font-semibold"
+              />
+              <span
+                id={`price-hint-${offer.id}`}
+                className={`text-sm font-normal ${inRange ? "text-muted-foreground" : "text-critical-strong"}`}
+              >
+                {inRange
+                  ? t("suggested", {
+                      price: money(offer.suggestedCents),
+                      fee: money(offer.feeCents),
+                    })
+                  : t("outOfRange", { min: money(offer.minCents), max: money(offer.maxCents) })}
+              </span>
+            </label>
+            <fieldset className="flex flex-col gap-2">
+              <legend className="mb-2 font-semibold">{t("arrival")}</legend>
+              <div className="grid grid-cols-4 gap-2">
+                {ETA_CHIPS.map((m) => (
+                  <label
+                    key={m}
+                    className="flex min-h-14 cursor-pointer items-center justify-center rounded-xl border-2 text-lg font-semibold tabular-nums has-checked:border-primary has-checked:bg-primary/10 has-focus-visible:outline-2 has-focus-visible:outline-ring"
+                  >
+                    <input
+                      type="radio"
+                      name={`eta-${offer.id}`}
+                      value={m}
+                      checked={e === m}
+                      onChange={() => setEta(m)}
+                      className="sr-only"
+                    />
+                    {t("minutes", { minutes: m })}
+                  </label>
+                ))}
               </div>
-              <div>
-                <dt className="text-xs text-muted-foreground">{t("ourFee")}</dt>
-                <dd className="text-xl font-semibold tabular-nums">{money(offer.feeCents)}</dd>
-              </div>
-              <div>
-                <dt className="text-xs text-muted-foreground">{t("driverPays")}</dt>
-                <dd className="text-xl font-semibold tabular-nums">{money(p)}</dd>
-              </div>
-            </dl>
-            {adjust ? (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="flex flex-col gap-2 font-medium">
-                  {t("price", { min: money(offer.minCents), max: money(offer.maxCents) })}
-                  <input
-                    type="range"
-                    min={offer.minCents}
-                    max={offer.maxCents}
-                    step={500}
-                    value={p}
-                    onChange={(ev) => setPrice(Number(ev.target.value))}
-                    className="accent-[var(--primary)]"
-                  />
-                </label>
-                <label className="flex flex-col gap-2 font-medium">
-                  {t("eta", { minutes: e })}
-                  <input
-                    type="range"
-                    min={5}
-                    max={90}
-                    step={5}
-                    value={e}
-                    onChange={(ev) => setEta(Number(ev.target.value))}
-                    className="accent-[var(--primary)]"
-                  />
-                </label>
-              </div>
-            ) : null}
-            <Button type="button" size="lg" className="min-h-16 text-lg" onClick={send}>
+            </fieldset>
+            <Button
+              type="button"
+              size="lg"
+              className="min-h-16 text-lg"
+              disabled={!inRange}
+              onClick={send}
+            >
               {t("send", { price: money(p), minutes: e })}
             </Button>
             <div className="flex flex-wrap gap-2">
-              <Button type="button" variant="outline" onClick={() => setAdjust((v) => !v)}>
-                {t("adjust")}
-              </Button>
               <form
                 className="flex flex-wrap items-center gap-2"
                 onSubmit={(ev) => {

@@ -7,6 +7,8 @@ import { getPortalContext, getPortalData } from "@/lib/portal";
 export const dynamic = "force-dynamic";
 
 const TABS = ["active", "won", "lost", "cancelled"] as const;
+/** Technicians see only what is theirs to do and what they finished (RSOS-104). */
+const TECH_TABS = ["active", "won"] as const;
 const PAGE = 20;
 
 async function load() {
@@ -27,7 +29,10 @@ export default async function JobsPage({
     getLocale(),
     load(),
   ]);
-  const tab = TABS.find((x) => x === sp.tab) ?? "active";
+  const tech = ctx.role === "operator";
+  const tabs: readonly (typeof TABS)[number][] = tech ? TECH_TABS : TABS;
+  const tab = tabs.find((x) => x === sp.tab) ?? "active";
+  const current = tech ? data.activeJobs[0] : undefined;
   const svc = sp.service ?? "";
   const all = tab === "active" ? data.activeJobs : data.history.filter((j) => j.status === tab);
   const list = all.filter((j) => !svc || j.serviceSlug === svc);
@@ -42,9 +47,24 @@ export default async function JobsPage({
   });
   return (
     <main id="main" className={pageMain}>
-      <PageHead title={t("title")} />
+      <PageHead title={tech ? t("mine") : t("title")} />
+      {current ? (
+        <Link
+          href={`/jobs/${encodeURIComponent(current.id)}/active`}
+          className="flex flex-col gap-1 rounded-2xl border-2 border-primary bg-card p-4 hover:bg-accent"
+        >
+          <span className="text-sm font-medium text-muted-foreground">{t("activeNow")}</span>
+          <span className="text-xl font-semibold">
+            {name(current.serviceSlug)} · {current.area}
+          </span>
+          <span className="text-sm text-muted-foreground tabular-nums">{current.code}</span>
+          <span className="mt-2 inline-flex min-h-touch items-center justify-center rounded-lg bg-primary px-4 font-semibold text-primary-foreground">
+            {t("openActive")}
+          </span>
+        </Link>
+      ) : null}
       <nav aria-label={t("title")} className="flex gap-1 overflow-x-auto border-b">
-        {TABS.map((x) => (
+        {tabs.map((x) => (
           <Link
             key={x}
             href={`/jobs?tab=${x}${svc ? `&service=${svc}` : ""}`}
@@ -55,7 +75,7 @@ export default async function JobsPage({
           </Link>
         ))}
       </nav>
-      <form className="flex flex-wrap items-end gap-2">
+      <form className={tech ? "hidden" : "flex flex-wrap items-end gap-2"}>
         <input type="hidden" name="tab" value={tab} />
         <label className="flex flex-col gap-1 text-sm font-medium">
           {t("filter")}

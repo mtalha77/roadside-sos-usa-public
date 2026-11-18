@@ -3050,7 +3050,8 @@
       "install": "Install the app",
       "onboarding": "Setup",
       "theme": "Day or night mode",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "myJobs": "My jobs"
     },
     "shell": {
       "offline": "You're offline. New requests will appear when you're back online.",
@@ -3136,7 +3137,7 @@
         "description": "About your company",
         "topUp": "First top-up",
         "terms": "I agree to the provider terms.",
-        "fees": "I understand the fee is charged only when a driver picks me."
+        "fees": "I understand the fee is charged only when a customer picks me."
       },
       "nextTitle": "Thanks! Here's what happens next",
       "next1": "We check your documents, usually within one business day.",
@@ -3148,7 +3149,7 @@
     },
     "offer": {
       "title": "Incoming requests",
-      "subtitle": "Send a quote in one tap. The exact address shows once the driver picks you.",
+      "subtitle": "Send a quote in one tap. The exact address shows once the customer picks you.",
       "none": "No requests waiting right now. Stay online: new ones appear here.",
       "stack": "Requests waiting",
       "ev": "Electric",
@@ -3161,18 +3162,13 @@
       "minutes": "{minutes} min",
       "flags": {
         "highway": "On a highway",
-        "unsafe": "Driver not in a safe place",
+        "unsafe": "Customer not in a safe place",
         "passengers": "{count, plural, one {# passenger} other {# passengers}}"
       },
       "mapLabel": "Approximate area of the request",
       "addressHidden": "Exact address hidden until you're picked.",
       "yourPrice": "Your price",
-      "ourFee": "Fee if picked",
-      "driverPays": "Driver pays you",
-      "price": "Price ({min} to {max})",
-      "eta": "Arrival: {minutes} min",
-      "send": "Send {price} · {minutes} min",
-      "adjust": "Adjust price or time",
+      "send": "Send quote · {price} · {minutes} min",
       "decline": "Decline",
       "declineReason": "Reason for declining",
       "reasons": {
@@ -3181,10 +3177,14 @@
         "no_equipment": "Not the right equipment",
         "price": "Price range too low"
       },
-      "waiting": "Quote sent: {price}, {minutes} min. Waiting for the driver to choose.",
+      "waiting": "Quote sent: {price}, {minutes} min. Waiting for the customer to choose.",
       "won": "You were picked!",
       "wonBody": "Head out now: the job is in Jobs with the exact address.",
-      "lost": "The driver chose another provider this time."
+      "lost": "The customer chose another provider this time.",
+      "close": "Close",
+      "arrival": "Arrival time",
+      "suggested": "From your price table: {price}. Fee if picked: {fee}.",
+      "outOfRange": "Enter a price from {min} to {max}."
     },
     "jobs": {
       "title": "Jobs",
@@ -3200,14 +3200,17 @@
       "more": "Show more",
       "fee": "Fee {fee}",
       "rated": "Rated {stars}",
-      "open": "Open job"
+      "open": "Open job",
+      "mine": "My jobs",
+      "activeNow": "Your job now",
+      "openActive": "Open the job"
     },
     "job": {
       "title": "Job {code}",
       "timeline": "Timeline",
       "price": "Price",
       "fee": "Fee charged",
-      "driver": "Driver",
+      "driver": "Customer",
       "vehicle": "Vehicle",
       "operator": "Operator",
       "review": "Review",
@@ -3219,7 +3222,7 @@
       "stages": {
         "searching": "Request sent",
         "quoting": "Quote sent",
-        "picked": "Picked by the driver",
+        "picked": "Picked by the customer",
         "en_route": "On the way",
         "on_site": "Arrived",
         "completed": "Completed",
@@ -3242,8 +3245,8 @@
         "apple": "Apple Maps",
         "waze": "Waze"
       },
-      "call": "Call driver",
-      "text": "Text driver",
+      "call": "Call customer",
+      "text": "Text customer",
       "masked": "Calls and texts use a private number.",
       "photosBefore": "Before photos",
       "photosAfter": "After photos",
@@ -3252,13 +3255,13 @@
       "cancel": "Cancel job",
       "cancelReason": "Reason",
       "cancelReasons": {
-        "driver_no_show": "Driver not there",
+        "driver_no_show": "Customer not there",
         "vehicle_not_found": "Can't find the vehicle",
         "unsafe": "Unsafe location",
         "equipment": "Equipment problem"
       },
       "assign": "Assign to",
-      "done": "Job completed. The driver can now rate you.",
+      "done": "Job completed. The customer can now rate you.",
       "addressLine": "Address: {address}",
       "photoAlt": "Photo {n}"
     },
@@ -3315,7 +3318,7 @@
       "range": "Market range {min} to {max}",
       "prices": "Your prices",
       "offer": "your price",
-      "preview": "Driver sees",
+      "preview": "Customer sees",
       "fee": "fee if picked",
       "outside": "Outside the market range",
       "area": "Service area",
@@ -3335,13 +3338,13 @@
     },
     "profile": {
       "title": "Public profile",
-      "subtitle": "What drivers see when they compare quotes.",
+      "subtitle": "What customers see when they compare quotes.",
       "photos": "Photos",
       "addPhoto": "Add photos",
       "photoAlt": "Company photo",
       "description": "About your company",
       "descriptionHint": "Two or three sentences: experience, equipment, what makes you reliable.",
-      "hours": "Hours shown to drivers",
+      "hours": "Hours shown to customers",
       "payments": "Payment methods you accept",
       "methods": {
         "card": "Card",
@@ -3353,7 +3356,7 @@
       "trucksShown": "Trucks shown",
       "preview": "Live preview",
       "profileCard": "Profile card",
-      "quoteCard": "Quote drivers see",
+      "quoteCard": "Quote customers see",
       "strength": "Profile strength",
       "tips": "Tips",
       "tipPhoto": "Add a photo of your truck",
@@ -3458,11 +3461,11 @@
       "articles": {
         "quotes": {
           "title": "How quotes work",
-          "body": "When a driver near you asks for help, you get an offer. Send your price and arrival time; the driver picks one provider."
+          "body": "When a customer near you asks for help, you get an offer. Send your price and arrival time; the customer picks one provider."
         },
         "fees": {
           "title": "Our fee",
-          "body": "You pay a fee only when a driver picks you. It's shown before you send a quote."
+          "body": "You pay a fee only when a customer picks you. It's shown before you send a quote."
         },
         "wallet": {
           "title": "Wallet and top-ups",
@@ -3474,7 +3477,7 @@
         },
         "photos": {
           "title": "Before and after photos",
-          "body": "Add photos in the job flow. They protect you if a driver reports damage."
+          "body": "Add photos in the job flow. They protect you if a customer reports damage."
         },
         "disputes": {
           "title": "Disputing a fee",
@@ -3489,6 +3492,12 @@
           "body": "Keep your documents current. An expired document pauses new requests."
         }
       }
+    },
+    "states": {
+      "loading": "Loading…",
+      "errorTitle": "This page didn't load",
+      "errorBody": "Something went wrong on our side. Your jobs and wallet are safe. Try again, or call provider support if it keeps happening.",
+      "retry": "Try again"
     }
   },
   "voice": {
