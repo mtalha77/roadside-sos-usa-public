@@ -2326,7 +2326,7 @@
       "terms": "Driver Terms",
       "privacy": "Privacy Policy",
       "email": "Email (optional)",
-      "emailHint": "We email you a 6-digit code and your request link. No email? We confirm your request on the call."
+      "emailHint": "We email you the link to your request. No email? The link is on the next screen."
     },
     "errors": {
       "required": "Choose an answer, then tap Continue.",

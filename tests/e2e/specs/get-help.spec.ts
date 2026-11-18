@@ -74,6 +74,10 @@ test.describe("get help flow", () => {
     await page.getByLabel("Street address or cross streets").fill("500 Commerce St");
     await page.getByRole("button", { name: "Continue" }).click();
     await page.getByLabel("Your name").fill("E2E Customer");
+    // Empty required fields are caught by the browser; a short number reaches our own check.
+    await page.getByLabel("Mobile number").fill("210555");
+    await page.getByLabel("Make").fill("Toyota");
+    await page.getByRole("radio", { name: "Off the road, in a safe place" }).check();
     await page.getByRole("button", { name: "Send my request" }).click();
     await expect(page.getByText(/Enter a 10-digit US mobile number/)).toBeVisible();
     await expect(page.getByLabel("Your name")).toHaveValue("E2E Customer");

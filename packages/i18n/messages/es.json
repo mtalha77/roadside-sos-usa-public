@@ -2326,7 +2326,7 @@
       "terms": "Términos para conductores",
       "privacy": "Política de privacidad",
       "email": "Email (opcional)",
-      "emailHint": "Te enviamos por email un código de 6 dígitos y el enlace de tu solicitud. ¿Sin email? Confirmamos tu solicitud en la llamada."
+      "emailHint": "Te enviamos por email el enlace de tu solicitud. ¿Sin email? El enlace está en la siguiente pantalla."
     },
     "errors": {
       "required": "Elige una respuesta y toca Continuar.",
