@@ -15,7 +15,7 @@ const roles = [
   { app: "admin", role: "Viewer", landing: "Today" },
   { app: "provider", role: "Provider owner", landing: "Today" },
   { app: "provider", role: "Provider dispatcher", landing: "Today" },
-  { app: "provider", role: "Technician", landing: "Today" },
+  { app: "provider", role: "Technician", landing: "My jobs" },
 ] as const;
 
 test.describe("demo sign-in @smoke", () => {
