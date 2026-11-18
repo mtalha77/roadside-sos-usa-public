@@ -6,13 +6,13 @@ import { appUrls, expect, test } from "../support/fixtures";
 // fails, so Release QA catches it before anything ships. Tagged @smoke.
 
 const roles = [
-  { app: "admin", role: "Owner", landing: "Admin dashboard" },
-  { app: "admin", role: "Operations manager", landing: "Admin dashboard" },
-  { app: "admin", role: "Dispatcher", landing: "Admin dashboard" },
-  { app: "admin", role: "Provider success", landing: "Admin dashboard" },
-  { app: "admin", role: "Finance", landing: "Admin dashboard" },
-  { app: "admin", role: "Marketing", landing: "Admin dashboard" },
-  { app: "admin", role: "Viewer", landing: "Admin dashboard" },
+  { app: "admin", role: "Owner", landing: "Today" },
+  { app: "admin", role: "Operations manager", landing: "Today" },
+  { app: "admin", role: "Dispatcher", landing: "Today" },
+  { app: "admin", role: "Provider success", landing: "Today" },
+  { app: "admin", role: "Finance", landing: "Today" },
+  { app: "admin", role: "Marketing", landing: "Today" },
+  { app: "admin", role: "Viewer", landing: "Today" },
   { app: "provider", role: "Provider owner", landing: "Today" },
   { app: "provider", role: "Provider dispatcher", landing: "Today" },
   { app: "provider", role: "Technician", landing: "Today" },
