@@ -31,15 +31,17 @@ test.describe("admin analytics", () => {
       "aria-current",
       "page",
     );
-    await expect(page.getByText("Demo data", { exact: true })).toHaveCount(0);
-    await expect(page.getByText("Model estimate", { exact: true })).toHaveCount(0);
+    // (The site-wide demo strip says "Demo data" too: look only at the page itself.)
+    const main = page.getByRole("main");
+    await expect(main.getByText("Demo data", { exact: true })).toHaveCount(0);
+    await expect(main.getByText("Model estimate", { exact: true })).toHaveCount(0);
     await percentsAtMost100(page);
     await expectNoA11yViolations(page);
     await expectNoHorizontalScroll(page);
     await page.screenshot({ path: info.outputPath("analytics-real.png"), fullPage: true });
 
     await page.getByRole("link", { name: "Model", exact: true }).click();
-    await expect(page.getByText("Model estimate", { exact: true }).first()).toBeVisible();
+    await expect(main.getByText("Model estimate", { exact: true }).first()).toBeVisible();
     await page.getByRole("link", { name: "Last 30 days" }).click();
     await expect(page.getByRole("link", { name: "Last 30 days" })).toHaveAttribute(
       "aria-current",
@@ -51,8 +53,8 @@ test.describe("admin analytics", () => {
       await expect(page.getByRole("heading", { name })).toBeVisible();
 
     await page.getByRole("link", { name: "Demo", exact: true }).click();
-    await expect(page.getByText("Demo data", { exact: true }).first()).toBeVisible();
-    await expect(page.getByText("Model estimate", { exact: true })).toHaveCount(0);
+    await expect(main.getByText("Demo data", { exact: true }).first()).toBeVisible();
+    await expect(main.getByText("Model estimate", { exact: true })).toHaveCount(0);
     await percentsAtMost100(page);
     await expectNoA11yViolations(page);
   });

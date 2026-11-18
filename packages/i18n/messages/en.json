@@ -1408,7 +1408,9 @@
           "save": "Could not save. Try again.",
           "forbidden": "Only owners and operations managers can change the model."
         }
-      }
+      },
+      "sharedStateOn": ": on",
+      "sharedStateOff": ": off"
     }
   },
   "emails": {

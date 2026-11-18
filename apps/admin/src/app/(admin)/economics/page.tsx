@@ -93,8 +93,8 @@ export default async function EconomicsPage({
         </div>
         <Link
           href={shared ? "/economics" : "/economics?shared=1"}
-          aria-pressed={shared}
-          className="inline-flex min-h-12 items-center gap-2 rounded-lg border px-4 text-sm font-medium hover:bg-accent aria-pressed:border-primary aria-pressed:bg-primary/10"
+          data-on={shared}
+          className="inline-flex min-h-12 items-center gap-2 rounded-lg border px-4 text-sm font-medium hover:bg-accent data-[on=true]:border-primary data-[on=true]:bg-primary/10"
         >
           {shared ? (
             <CheckSquare aria-hidden="true" className="size-5" />
@@ -102,6 +102,7 @@ export default async function EconomicsPage({
             <Square aria-hidden="true" className="size-5" />
           )}
           {t("shared")}
+          <span className="sr-only">{shared ? t("sharedStateOn") : t("sharedStateOff")}</span>
         </Link>
       </header>
 

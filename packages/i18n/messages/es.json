@@ -1408,7 +1408,9 @@
           "save": "No se pudo guardar. Inténtalo de nuevo.",
           "forbidden": "Solo propietarios y gerentes de operaciones pueden cambiar el modelo."
         }
-      }
+      },
+      "sharedStateOn": ": activado",
+      "sharedStateOff": ": desactivado"
     }
   },
   "emails": {
