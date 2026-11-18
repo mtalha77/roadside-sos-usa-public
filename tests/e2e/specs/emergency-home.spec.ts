@@ -34,9 +34,9 @@ test.describe("emergency-first home", () => {
     // The bottom bar is hidden while the hero is on screen, and shows after scrolling past it.
     const bar = page.locator("[data-mobile-bar]");
     await expect(bar).toBeHidden();
-    await page.mouse.wheel(0, 1600);
+    await page.evaluate(() => window.scrollTo(0, 1600));
     await expect(bar).toBeVisible();
-    await page.mouse.wheel(0, -4000);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await expect(bar).toBeHidden();
 
     const started = Date.now();
