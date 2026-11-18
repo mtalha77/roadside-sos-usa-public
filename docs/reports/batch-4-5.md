@@ -200,3 +200,38 @@ RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at t
 - Tests: `provider-roles.spec.ts` (technician sees only My jobs and is sent back from office
   pages; a provider dispatcher quotes but cannot open Team), `provider-offer.spec.ts` (chips and
   Send quote), unit tests for the provider permission map.
+
+### RSOS-105: Skippable guided tours
+
+- **Our own tour component** (`packages/ui/src/components/tour.tsx`, no tour library): one
+  element spotlighted at a time with a short title and one sentence, **Back**, **Next**, **Skip
+  tour** and **Don't show again**. It is a modal dialog: focus moves into the card and stays
+  there, Escape skips, arrow keys move between steps; on phones the card sits at the bottom;
+  smooth scrolling and transitions are off with reduced motion. Light and dark.
+- **Admin**: a role tour on first sign-in. Owner and operations manager: Today, Team and roles,
+  Markets, Finance, search, Take the tour (6 steps). Dispatcher: Inbox, claiming a request, the
+  Dispatch board, assigning a provider, calling, Take the tour (6 steps). Other roles: a short
+  3-step tour. Today, Dispatch board and Inbox each have a **?** button for a tour of that page.
+  **Take the tour** at the bottom of the menu restarts the role tour any time; on a phone it
+  closes the menu first.
+- **Provider portal**: a tour per role on first sign-in (going online, receiving an offer,
+  sending a quote, job status, and the wallet for owners; technicians: My jobs, status updates,
+  account). **Take the tour** is in the side menu, in More on phones, and on My jobs for
+  technicians.
+- **Progress is saved per person in the database** (`tour_progress`, migration
+  `20261118020000_tour_progress.sql`): started, done, skipped or hidden, so "Don't show again"
+  follows the person across devices. Each person reads and writes only their own rows
+  (`supabase/tests/028_tour_progress.test.sql`: own rows allowed, someone else's refused,
+  visitors refused, values checked).
+- **Website**: no tour ever starts on its own (a customer may be in an emergency). **See how it
+  works** (in How it works) opens `/how-it-works/demo`: a 30-second demo with made-up data in 5
+  parts, playing on its own with **Pause** and **Skip demo**, and **Get help now** pinned at the
+  bottom the whole time. The home page JavaScript does not change (the demo is its own page).
+- **Run full demo** gains a step list (Quotes arrive, Customer picks, On the way, On site, Done
+  and review) and **Skip to the next step**; they move the admin scenario clock. The website and
+  the provider portal keep real time (noted on the page).
+- Tests: unit tests for the tour (Next, Back, Done, Skip, Escape, Don't show again), the RLS test
+  above, and `guided-tours.spec.ts` (admin Owner and Dispatcher: start, skip, don't show again,
+  restart; a page tour from ?; provider owner and technician: start and skip; the website demo:
+  plays, pauses, skips, Get help now visible). Automated tests switch first-sign-in tours off
+  (the demo accounts are shared); the tour tests start them by hand.
