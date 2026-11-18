@@ -2,6 +2,7 @@ import { formatCurrency, type Locale } from "@rsos/i18n";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { card, PageHead, pageMain } from "@/components/shell/page-head";
+import { TakeTourButton } from "@/components/tours/portal-tour";
 import { getPortalContext, getPortalData } from "@/lib/portal";
 
 export const dynamic = "force-dynamic";
@@ -23,8 +24,9 @@ export default async function JobsPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const sp = await searchParams;
-  const [t, ts, locale, { ctx, data, pricing }] = await Promise.all([
+  const [t, tt, ts, locale, { ctx, data, pricing }] = await Promise.all([
     getTranslations("portal.jobs"),
+    getTranslations("tours.labels"),
     getTranslations("site.services"),
     getLocale(),
     load(),
@@ -47,10 +49,22 @@ export default async function JobsPage({
   });
   return (
     <main id="main" className={pageMain}>
-      <PageHead title={tech ? t("mine") : t("title")} />
+      <PageHead
+        title={tech ? t("mine") : t("title")}
+        action={
+          tech ? (
+            <TakeTourButton
+              tour="provider.operator"
+              label={tt("take")}
+              className="inline-flex min-h-touch items-center gap-2 rounded-lg border px-3 font-medium hover:bg-accent"
+            />
+          ) : undefined
+        }
+      />
       {current ? (
         <Link
           href={`/jobs/${encodeURIComponent(current.id)}/active`}
+          data-tour="tech-active"
           className="flex flex-col gap-1 rounded-2xl border-2 border-primary bg-card p-4 hover:bg-accent"
         >
           <span className="text-sm font-medium text-muted-foreground">{t("activeNow")}</span>

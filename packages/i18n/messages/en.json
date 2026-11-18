@@ -134,7 +134,8 @@
       "phone": "Phone",
       "where": "Where",
       "provider": "Provider",
-      "kind": "Type"
+      "kind": "Type",
+      "pageTour": "Tour of this page"
     },
     "requests": {
       "title": "Requests",
@@ -954,6 +955,16 @@
           "title": "Settings",
           "hint": "Users, audit log, templates, flags and integrations."
         }
+      },
+      "stepsTitle": "Jump to a step",
+      "stepsHint": "Moves the admin screens to that point of the demo job. The website and the provider portal keep real time.",
+      "skip": "Skip to the next step",
+      "stage": {
+        "quotes": "Quotes arrive",
+        "picked": "Customer picks",
+        "onTheWay": "On the way",
+        "onSite": "On site",
+        "done": "Done and review"
       }
     },
     "softphone": {
@@ -3442,5 +3453,231 @@
     "codeIntro": "Type the 6-digit code the dispatcher read to you.",
     "code": "6-digit code",
     "codeSubmit": "Continue"
+  },
+  "tours": {
+    "labels": {
+      "back": "Back",
+      "next": "Next",
+      "done": "Done",
+      "skip": "Skip tour",
+      "hide": "Don't show again",
+      "step": "Step {n} of {total}",
+      "take": "Take the tour",
+      "page": "Tour of this page"
+    },
+    "admin": {
+      "owner": [
+        {
+          "title": "Today",
+          "body": "Start here: what needs a person now, the most urgent items and today's numbers."
+        },
+        {
+          "title": "Team and roles",
+          "body": "Invite people and give each one a role; the menu shows each role only what it needs."
+        },
+        {
+          "title": "Markets",
+          "body": "Launch and pause cities, set their phone numbers and service areas."
+        },
+        {
+          "title": "Finance",
+          "body": "Fees earned, provider wallets and refunds, by market."
+        },
+        {
+          "title": "Search anything",
+          "body": "Press ⌘K (Ctrl K) to jump to a page, a request code, a phone or a provider."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "This button restarts the tour any time."
+        }
+      ],
+      "dispatcher": [
+        {
+          "title": "Inbox",
+          "body": "Everything a person must act on now: new requests, missed calls and texts."
+        },
+        {
+          "title": "Claim a request",
+          "body": "Open an item and tap Claim so nobody else works it; it frees up after 10 minutes without action."
+        },
+        {
+          "title": "Dispatch board",
+          "body": "Live map and lanes for one market at a time. Amber at 3 minutes without a quote, red at 10."
+        },
+        {
+          "title": "Assign a provider",
+          "body": "Open a card (or press A) to assign a provider by hand when nobody has quoted."
+        },
+        {
+          "title": "Calls",
+          "body": "The call log; call a customer back from here or press C on a board card."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "This button restarts the tour any time."
+        }
+      ],
+      "staff": [
+        {
+          "title": "Today",
+          "body": "Start here: what is happening in your markets today."
+        },
+        {
+          "title": "Search anything",
+          "body": "Press ⌘K (Ctrl K) to jump to a page, a request or a provider."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "This button restarts the tour any time."
+        }
+      ],
+      "page": {
+        "today": [
+          {
+            "title": "Right now",
+            "body": "Needs action, unanswered calls, requests with no quote and providers available."
+          },
+          {
+            "title": "Most urgent",
+            "body": "The ten items that need a person first, each with one action."
+          },
+          {
+            "title": "Today by market",
+            "body": "Requests, fill rate, time to assign and completed jobs since midnight."
+          },
+          {
+            "title": "Alerts",
+            "body": "Stale requests and markets with nobody available."
+          }
+        ],
+        "dispatch": [
+          {
+            "title": "One market at a time",
+            "body": "Choose the market; the map and lanes follow."
+          },
+          {
+            "title": "Real, Demo or Both",
+            "body": "Real is the default everywhere. Demo cards carry a Demo tag."
+          },
+          {
+            "title": "Map",
+            "body": "Pins sit at the real spots; close pins merge into one numbered marker."
+          },
+          {
+            "title": "Lanes",
+            "body": "New to On site, plus Needs closing after 2 hours. J and K move, Enter opens."
+          }
+        ],
+        "inbox": [
+          {
+            "title": "The inbox",
+            "body": "Urgent first, then the longest wait. Claim an item to work it."
+          },
+          {
+            "title": "Log a call",
+            "body": "Taking a request by phone? Start here."
+          }
+        ]
+      }
+    },
+    "provider": {
+      "owner": [
+        {
+          "title": "Go online",
+          "body": "Turn this on to receive requests near you; turn it off when you can't take jobs."
+        },
+        {
+          "title": "Incoming requests",
+          "body": "New requests ring here with a 3-minute countdown."
+        },
+        {
+          "title": "Send a quote",
+          "body": "Your price from your price table is filled in: pick the arrival time and send."
+        },
+        {
+          "title": "Job status",
+          "body": "Open a job to mark On the way, On site and Done; the customer sees each step."
+        },
+        {
+          "title": "Wallet",
+          "body": "Fees come out of your prepaid wallet only when a customer picks you."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "Find it in More any time."
+        }
+      ],
+      "manager": [
+        {
+          "title": "Go online",
+          "body": "Turn this on to receive requests near you."
+        },
+        {
+          "title": "Incoming requests",
+          "body": "New requests ring here with a 3-minute countdown."
+        },
+        {
+          "title": "Send a quote",
+          "body": "Your price is filled in: pick the arrival time and send."
+        },
+        {
+          "title": "Job status",
+          "body": "Open a job to update its status; the customer sees each step."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "Find it in More any time."
+        }
+      ],
+      "operator": [
+        {
+          "title": "My jobs",
+          "body": "Your active job is at the top. Tap it to open the map and the customer's details."
+        },
+        {
+          "title": "Update the status",
+          "body": "On the job, tap On the way, On site and Done; the customer sees each step."
+        },
+        {
+          "title": "Your account",
+          "body": "Sign out and security settings live here."
+        }
+      ]
+    },
+    "web": {
+      "see": "See how it works",
+      "title": "How it works, in 30 seconds",
+      "lead": "A demo with made-up data. You can skip it at any time.",
+      "pause": "Pause",
+      "play": "Play",
+      "skip": "Skip demo",
+      "progress": "Demo progress",
+      "slide": "Part {n} of {total}",
+      "slides": [
+        {
+          "title": "Tell us what happened",
+          "body": "Tap your problem: tow, flat tire, locked out, out of gas or won't start."
+        },
+        {
+          "title": "Share where you are",
+          "body": "One tap shares your location. No account, no app."
+        },
+        {
+          "title": "Quotes arrive in minutes",
+          "body": "Verified providers near you send their price and arrival time."
+        },
+        {
+          "title": "Pick the one you want",
+          "body": "Choose by price, arrival time or rating. You pay the provider directly."
+        },
+        {
+          "title": "Track the truck",
+          "body": "Watch it come to you and call the provider from the same page."
+        }
+      ],
+      "eta": "{minutes} min away",
+      "picked": "Picked"
+    }
   }
 }

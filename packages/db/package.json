@@ -13,7 +13,8 @@
     "./public": "./src/public.ts",
     "./key-check": "./src/key-check.ts",
     "./health": "./src/health.ts",
-    "./usage": "./src/usage.ts"
+    "./usage": "./src/usage.ts",
+    "./tours": "./src/tours.ts"
   },
   "scripts": {
     "lint": "eslint .",

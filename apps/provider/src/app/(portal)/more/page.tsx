@@ -3,12 +3,18 @@ import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { pageMain } from "@/components/shell/page-head";
 import { ThemeSwitch } from "@/components/shell/theme-switch";
+import { TakeTourButton } from "@/components/tours/portal-tour";
+import { getPortalContext } from "@/lib/portal";
 import { signOutAction } from "@/lib/auth-actions";
 import { isBuilt } from "@/lib/routes";
 
 /** Phones: everything not in the bottom tabs. */
 export default async function MorePage() {
-  const t = await getTranslations("portal.nav");
+  const [t, tt, ctx] = await Promise.all([
+    getTranslations("portal.nav"),
+    getTranslations("tours.labels"),
+    getPortalContext(),
+  ]);
   const items = (
     [
       ["/services", t("services")],
@@ -35,6 +41,13 @@ export default async function MorePage() {
             </Link>
           </li>
         ))}
+        <li>
+          <TakeTourButton
+            tour={`provider.${ctx.role}`}
+            label={tt("take")}
+            className="flex min-h-14 w-full items-center gap-3 px-4 text-left font-medium"
+          />
+        </li>
         <li>
           <ThemeSwitch
             label={t("theme")}

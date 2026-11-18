@@ -54,6 +54,7 @@ const KEYS = [
   "where",
   "provider",
   "kind",
+  "pageTour",
 ] as const;
 
 const Source = z.enum(["real", "demo", "both"]).catch("real");

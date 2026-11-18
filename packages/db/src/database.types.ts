@@ -1943,6 +1943,30 @@ export type Database = {
         }
         Relationships: []
       }
+      tour_progress: {
+        Row: {
+          status: string
+          step: number
+          tour: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          status: string
+          step?: number
+          tour: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          status?: string
+          step?: number
+          tour?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       trusted_devices: {
         Row: {
           created_at: string

@@ -2,6 +2,7 @@ import { QuoteCard } from "@rsos/ui/quote-card";
 import { StatusPill } from "@rsos/ui/status-pill";
 import { Timeline } from "@rsos/ui/timeline";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { demoMarkets } from "@rsos/config/demo-fixtures";
 
 /**
@@ -11,7 +12,7 @@ import { demoMarkets } from "@rsos/config/demo-fixtures";
  */
 const sample = Object.values(demoMarkets)[0]!.providers[0]!;
 export async function HowItWorks({ examplePriceCents }: { examplePriceCents: number | null }) {
-  const t = await getTranslations("home");
+  const [t, tw] = await Promise.all([getTranslations("home"), getTranslations("tours.web")]);
   const steps = [
     { n: 1, title: t("how.step1"), body: t("how.step1Body") },
     { n: 2, title: t("how.step2"), body: t("how.step2Body") },
@@ -20,9 +21,18 @@ export async function HowItWorks({ examplePriceCents }: { examplePriceCents: num
   const statuses = ["submitted", "quoted", "accepted", "en_route"] as const;
   return (
     <section aria-labelledby="how-title" className="flex flex-col gap-6">
-      <h2 id="how-title" className="text-3xl font-semibold">
-        {t("how.title")}
-      </h2>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <h2 id="how-title" className="text-3xl font-semibold">
+          {t("how.title")}
+        </h2>
+        {/* A demo the visitor chooses to watch: tours never start on their own on the website. */}
+        <Link
+          href="/how-it-works/demo"
+          className="inline-flex min-h-touch items-center rounded-lg border px-4 font-semibold hover:bg-accent"
+        >
+          {tw("see")}
+        </Link>
+      </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <ol className="flex min-w-0 flex-col gap-5">
           {steps.map((s) => (
