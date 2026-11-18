@@ -37,7 +37,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       suppressHydrationWarning
     >
       <body>
-        {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}
+        {isDemoMode() ? <DemoBadge label={demoLabel} strip /> : null}
         <NextIntlClientProvider>
           <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
         </NextIntlClientProvider>
