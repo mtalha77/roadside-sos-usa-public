@@ -67,7 +67,7 @@ export default async function CityPage({ params }: Params) {
     <SitePage marketSlug={market.slug}>
       <Breadcrumbs items={[{ href: path, label: cityLabel(market) }]} />
       <EmergencyHero
-        headline={page?.headline ?? t("city.heroHeadline", vars)}
+        headline={t("city.heroHeadline", vars)}
         services={orderTiles(
           enabled.map((s) => ({
             slug: s.service_slug,
@@ -81,7 +81,14 @@ export default async function CityPage({ params }: Params) {
       />
       <div className="mx-auto flex max-w-6xl flex-col gap-14 px-4">
         <Reassurance />
-        {page ? <p className="max-w-3xl text-lg text-muted-foreground">{page.intro}</p> : null}
+        {page ? (
+          <section aria-labelledby="city-intro" className="flex max-w-3xl flex-col gap-2">
+            <h2 id="city-intro" className="text-2xl font-semibold text-balance">
+              {page.headline}
+            </h2>
+            <p className="text-lg text-muted-foreground">{page.intro}</p>
+          </section>
+        ) : null}
         <PriceList services={services} city={market.name} hrefFor={(s) => `${path}/${s}`} />
         {page ? (
           <div className="grid gap-10 md:grid-cols-2">
