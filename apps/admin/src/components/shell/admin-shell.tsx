@@ -320,6 +320,7 @@ export function AdminShell({
           <MarketSwitcher markets={markets} selected={selected} labels={labels} />
           <button
             type="button"
+            data-tour="search"
             onClick={() => setPalette(true)}
             className="flex min-h-12 flex-1 items-center gap-2 rounded-lg border px-3 text-sm text-muted-foreground hover:bg-accent sm:max-w-sm"
           >
@@ -338,6 +339,7 @@ export function AdminShell({
           </span>
           <button
             type="button"
+            data-tour="menu"
             onClick={() => setMenu(true)}
             className="order-first flex min-h-12 items-center gap-2 rounded-lg border px-3 text-sm font-medium hover:bg-accent md:hidden"
           >

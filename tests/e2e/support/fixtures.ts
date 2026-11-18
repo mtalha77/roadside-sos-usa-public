@@ -21,7 +21,26 @@ export const test = base.extend<{
   consoleErrors: string[];
   presetConsent: boolean;
   consentCookie: void;
+  autoTours: boolean;
+  toursOff: void;
 }>({
+  /** Set true in a test to let guided tours start on their own (RSOS-105 tour tests). */
+  autoTours: [false, { option: true }],
+  // The demo accounts are shared: a first-sign-in tour would cover pages in unrelated tests.
+  toursOff: [
+    async ({ context, autoTours }, use) => {
+      if (!autoTours)
+        await context.addInitScript(() => {
+          try {
+            localStorage.setItem("rsos_tours_off", "1");
+          } catch {
+            /* storage unavailable */
+          }
+        });
+      await use();
+    },
+    { auto: true },
+  ],
   /** Set false in a test to see the cookie banner (RSOS-028 consent tests). */
   presetConsent: [true, { option: true }],
   // Most tests start with cookie choices already made (all rejected) so the banner does not cover

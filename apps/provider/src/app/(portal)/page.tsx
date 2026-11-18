@@ -82,7 +82,7 @@ export default async function ProviderHome() {
         </section>
       ) : null}
       <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
-        <section className={card}>
+        <section className={card} data-tour="online">
           <OnlinePanel
             labels={{
               online: t("online"),
@@ -94,7 +94,7 @@ export default async function ProviderHome() {
             trucks={data.team.map((m) => `${m.truck} · ${m.name}`)}
           />
         </section>
-        <section className={`${card} flex flex-col gap-3`}>
+        <section className={`${card} flex flex-col gap-3`} data-tour="offers">
           <LiteMap
             label={t("map")}
             radius={{ center: p.home, miles: 20 }}

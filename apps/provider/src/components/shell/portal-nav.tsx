@@ -56,11 +56,14 @@ export function PortalNav({
   company,
   companyLogo,
   role,
+  extra,
 }: {
   labels: NavLabels;
   company: string;
   companyLogo?: ProviderLogoData | null;
   role: string;
+  /** Extra items at the bottom of the side menu ("Take the tour"). */
+  extra?: React.ReactNode;
 }) {
   const path = usePathname();
   const allowed = (href: string) => {
@@ -77,6 +80,7 @@ export function PortalNav({
         <nav aria-label={labels.label} className="flex items-center gap-1">
           <Link
             href="/jobs"
+            data-tour="nav-jobs"
             aria-current={isActive(path, "/jobs") ? "page" : undefined}
             className="flex min-h-touch items-center gap-2 rounded-lg px-3 font-medium aria-[current=page]:bg-accent"
           >
@@ -85,6 +89,7 @@ export function PortalNav({
           </Link>
           <Link
             href="/account"
+            data-tour="nav-account"
             aria-label={labels.account}
             aria-current={isActive(path, "/account") ? "page" : undefined}
             className="grid min-h-touch min-w-touch place-items-center rounded-lg aria-[current=page]:bg-accent"
@@ -127,6 +132,7 @@ export function PortalNav({
           <Link
             key={t.href}
             href={t.href}
+            data-tour={`nav-${t.href === "/" ? "home" : t.href.slice(1)}`}
             aria-current={isActive(path, t.href) ? "page" : undefined}
             className={item}
           >
@@ -134,7 +140,8 @@ export function PortalNav({
             {t.label}
           </Link>
         ))}
-        <ThemeSwitch label={labels.theme} className={`${item} mt-auto text-left`} />
+        <div className="mt-auto">{extra}</div>
+        <ThemeSwitch label={labels.theme} className={`${item} text-left`} />
         <form action={signOutAction}>
           <button type="submit" className={`${item} w-full text-left`}>
             <LogOut aria-hidden="true" className="size-5 text-muted-foreground" />
@@ -151,6 +158,7 @@ export function PortalNav({
           <Link
             key={t.href}
             href={t.href}
+            data-tour={`nav-${t.href === "/" ? "home" : t.href.slice(1)}`}
             aria-current={isActive(path, t.href) ? "page" : undefined}
             className="flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium text-muted-foreground aria-[current=page]:text-foreground"
           >

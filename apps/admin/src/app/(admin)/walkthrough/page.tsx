@@ -88,10 +88,22 @@ export default async function WalkthroughPage() {
           admin: href(STEPS.admin[2]!),
         }}
         labels={Object.fromEntries(
-          ["run", "runHint", "openWeb", "openProvider", "openAdmin", "started"].map((k) => [
-            k,
-            t(k),
-          ]),
+          [
+            "run",
+            "runHint",
+            "openWeb",
+            "openProvider",
+            "openAdmin",
+            "started",
+            "stepsTitle",
+            "stepsHint",
+            "skip",
+            "stage.quotes",
+            "stage.picked",
+            "stage.onTheWay",
+            "stage.onSite",
+            "stage.done",
+          ].map((k) => [k, t(k)]),
         )}
       />
       {(["driver", "provider", "admin"] as const).map((group) => (
