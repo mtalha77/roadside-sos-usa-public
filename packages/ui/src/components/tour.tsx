@@ -162,7 +162,7 @@ export function Tour({
           "fixed flex flex-col gap-3 rounded-2xl border bg-popover p-4 text-popover-foreground shadow-lg outline-none",
           place
             ? "w-[22rem]"
-            : "inset-x-3 bottom-3 sm:inset-x-auto sm:top-1/2 sm:left-1/2 sm:w-[24rem] sm:-translate-x-1/2 sm:-translate-y-1/2",
+            : "inset-x-3 bottom-3 sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:w-[24rem] sm:-translate-x-1/2 sm:-translate-y-1/2",
           place ? "" : "pb-[max(1rem,env(safe-area-inset-bottom))]",
         )}
         style={place ?? undefined}
