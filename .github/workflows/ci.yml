@@ -191,7 +191,14 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Install browsers (while Vercel builds the previews)
-        run: pnpm --filter @rsos/e2e exec playwright install --with-deps chromium webkit
+        # An Ubuntu package mirror can stall for the whole job (twice on 2026-11-18): each attempt
+        # gets 7 minutes, then it tries again, so a slow mirror costs minutes, not the job.
+        run: |
+          for attempt in 1 2 3; do
+            timeout 420 pnpm --filter @rsos/e2e exec playwright install --with-deps chromium webkit && exit 0
+            echo "::warning::Browser install attempt $attempt did not finish; retrying."
+          done
+          exit 1
       - name: Wait for Vercel previews
         id: previews
         run: scripts/ci/wait-for-previews.sh "${{ github.event.pull_request.head.sha }}" "${{ github.head_ref }}"
