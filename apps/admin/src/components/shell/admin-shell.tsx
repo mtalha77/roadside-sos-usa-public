@@ -3,6 +3,7 @@
 import type { CommandAction } from "@rsos/ui/command-palette";
 import { Dialog, DialogContent } from "@rsos/ui/dialog";
 import { SidePanel, SidePanelContent } from "@rsos/ui/side-panel";
+import { TOUR_EVENT } from "@rsos/ui/tour-runner";
 import { ThemeToggle } from "@rsos/ui/theme-toggle";
 import {
   Activity,
@@ -123,6 +124,13 @@ export function AdminShell({
   const [palette, setPalette] = useState(false);
   const [help, setHelp] = useState(false);
   const [menu, setMenu] = useState(false);
+  // A tour started from the phone menu closes it first (the menu is a modal: it would block the
+  // tour's buttons); the spotlight then points at the Menu button.
+  useEffect(() => {
+    const close = () => setMenu(false);
+    window.addEventListener(TOUR_EVENT, close);
+    return () => window.removeEventListener(TOUR_EVENT, close);
+  }, []);
   const [query, setQuery] = useState("");
   const foldedRaw = useSyncExternalStore(subscribeFolded, readFolded, () => "[]");
   const folded = useMemo(() => {
