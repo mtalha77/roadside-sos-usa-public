@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { signOutAction } from "@/lib/auth-actions";
 import { getAdminContext } from "@/lib/admin";
-import { builtSections } from "@/lib/nav";
+import { sectionsFor } from "@/lib/nav";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +47,7 @@ export default async function AdminHome() {
           {t("overview.sections")}
         </h2>
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {builtSections().map((s) => (
+          {sectionsFor(ctx.role).map((s) => (
             <li key={s.href}>
               <Link
                 href={s.href}

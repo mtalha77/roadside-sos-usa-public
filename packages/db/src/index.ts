@@ -3,7 +3,7 @@ import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "./database.types";
 import { readPublicSupabaseEnv } from "./env";
 
-export type { Database } from "./database.types";
+export type { Database, Json } from "./database.types";
 export { PublicSupabaseEnvSchema, ServerSupabaseEnvSchema } from "./env";
 
 /** Supabase client for Client Components. Uses the publishable key; RLS applies. */

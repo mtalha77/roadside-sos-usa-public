@@ -68,7 +68,7 @@ test.describe("Twilio voice webhooks", () => {
     test.setTimeout(120_000);
     const trackingNumber = newTrackingNumber();
     // A super admin adds a staging test number for the first market.
-    await signInAsDemo(page, appUrls.admin!, "Super admin");
+    await signInAsDemo(page, appUrls.admin!, "Owner");
     await page.goto(new URL("/settings?tab=phones", appUrls.admin).toString());
     await page.getByRole("textbox", { name: "Number", exact: true }).fill(trackingNumber);
     await page.getByLabel("Source").selectOption("staging_test");

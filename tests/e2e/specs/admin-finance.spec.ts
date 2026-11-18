@@ -16,7 +16,7 @@ test.describe("admin finance", () => {
 
   test("ledger, revenue and export", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(url("/finance"));
     await expect(page.getByRole("heading", { name: "Finance", level: 1 })).toBeVisible();
     await expect(page.getByRole("table", { name: "Ledger" })).toBeVisible();

@@ -45,7 +45,7 @@ test.describe("links stay in the current environment", () => {
     const base = appUrls.admin;
     test.skip(!base || isProductionRun(base), "Production run or no admin URL");
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     for (const path of ["/walkthrough", "/dispatch", "/requests", "/settings?tab=integrations"]) {
       await page.goto(new URL(path, base).toString());
       expect(await productionLinks(page), `production links on ${path}`).toEqual([]);

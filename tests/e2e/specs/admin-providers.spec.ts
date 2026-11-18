@@ -16,7 +16,7 @@ test.describe("admin providers", () => {
 
   test("table, map, review queue and detail", async ({ page }, info) => {
     test.setTimeout(120_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(url("/providers"));
     await expect(page.getByRole("heading", { name: "Providers", level: 1 })).toBeVisible();
     await expectNoA11yViolations(page);

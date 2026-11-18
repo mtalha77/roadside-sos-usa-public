@@ -9,7 +9,7 @@ import { SoftphoneDock } from "@/components/softphone/softphone-dock";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { getAdminContext } from "@/lib/admin";
 import { readDemoClock } from "@/lib/demo-clock";
-import { BUILT, builtSections } from "@/lib/nav";
+import { BUILT, sectionsFor } from "@/lib/nav";
 
 const WALKTHROUGH_BUILT = BUILT.has("/walkthrough");
 
@@ -56,6 +56,11 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     readDemoClock(),
   ]);
   const labels = Object.fromEntries(SHELL_KEYS.map((k) => [k, t(`shell.${k}`)]));
+  // "Dispatcher · San Antonio, Houston": the role and the markets this person may see (RSOS-102).
+  const roleLabel = t.has(`roles.${ctx.role}.name`) ? t(`roles.${ctx.role}.name`) : ctx.role;
+  const identity = `${roleLabel} · ${
+    ctx.allMarkets ? t("roles.allMarkets") : ctx.markets.map((m) => m.name).join(", ")
+  }`;
   // Everyone who answers calls gets the softphone dock (RSOS-074b).
   const dispatches = ["super_admin", "ops_manager", "dispatcher"].includes(ctx.role);
   // RSOS-035: until A2P 10DLC is approved (or overridden), texts to real drivers are held.
@@ -84,7 +89,8 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     : { data: null };
   return (
     <AdminShell
-      sections={builtSections().map((s) => ({ ...s, label: t(`sections.${s.key}`) }))}
+      sections={sectionsFor(ctx.role).map((s) => ({ ...s, label: t(`sections.${s.key}`) }))}
+      identity={identity}
       markets={ctx.markets.map((m) => ({ slug: m.slug, name: m.name }))}
       selected={ctx.selected}
       labels={labels}

@@ -9,7 +9,7 @@ test.describe("test campaign kit", () => {
 
   test("launch checklist, status control and campaign analytics", async ({ page }) => {
     test.setTimeout(120_000);
-    await signInAsDemo(page, appUrls.admin!, "Super admin");
+    await signInAsDemo(page, appUrls.admin!, "Owner");
     await page.goto(new URL("/markets", appUrls.admin).toString());
     const first = page.locator('a[href^="/markets/"]').first();
     await first.click();

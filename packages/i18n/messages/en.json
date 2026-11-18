@@ -37,7 +37,10 @@
       "intake": "Phone intake",
       "inbox": "Inbox",
       "marketing": "Marketing",
-      "campaign": "Test campaign"
+      "campaign": "Test campaign",
+      "team": "Team & roles",
+      "calls": "Calls",
+      "today": "Today"
     },
     "shell": {
       "nav": "Admin",
@@ -1209,6 +1212,97 @@
         "perCompleted": "Cost per completed job"
       },
       "note": "Times are medians. Fill rate = requests with a provider assigned / requests. Fees are recorded as manual_test and nobody is charged. Spend comes from Marketing > Ad spend."
+    },
+    "roles": {
+      "super_admin": {
+        "name": "Owner",
+        "who": "The business owner.",
+        "can": "Everything: team and roles, finance, payouts, settings and deleting data. At least one owner must always exist."
+      },
+      "ops_manager": {
+        "name": "Operations manager",
+        "who": "Runs day-to-day operations.",
+        "can": "Everything except changing owners, billing settings and deleting data."
+      },
+      "dispatcher": {
+        "name": "Dispatcher",
+        "who": "Handles live requests and calls.",
+        "can": "Inbox, dispatch, requests and calls; read-only providers (contact, services, prices, status). Assigns providers and updates request status. No finance, pricing, content or settings."
+      },
+      "support": {
+        "name": "Provider success",
+        "who": "Recruits and manages providers.",
+        "can": "Recruitment, providers (edit) and reviews; read-only markets."
+      },
+      "finance": {
+        "name": "Finance",
+        "who": "Money.",
+        "can": "Finance, wallet ledger, fees, refunds and exports; read-only requests."
+      },
+      "marketing": {
+        "name": "Marketing",
+        "who": "Ads and content.",
+        "can": "Marketing, test campaign, analytics, content and city pages. Customer phone numbers are masked."
+      },
+      "read_only": {
+        "name": "Viewer",
+        "who": "Investors and auditors.",
+        "can": "Read-only dashboards and reports. Customer data is masked."
+      },
+      "allMarkets": "All markets"
+    },
+    "providerRoles": {
+      "owner": {
+        "name": "Provider owner",
+        "who": "Owner of the towing or roadside business.",
+        "can": "Profile, services and prices, wallet and billing, team, all jobs and insights."
+      },
+      "manager": {
+        "name": "Dispatcher (provider side)",
+        "who": "Office staff at the provider.",
+        "can": "Receives offers, sends quotes and assigns jobs to technicians. No wallet or billing changes."
+      },
+      "operator": {
+        "name": "Technician",
+        "who": "The truck driver going to the customer.",
+        "can": "Only jobs assigned to them: navigation, status steps (on the way, arrived, done) and photos. Sees the customer's number only for their own active job."
+      }
+    },
+    "team": {
+      "title": "Team and roles",
+      "intro": "Who works here, what each role can see and do, and in which markets.",
+      "staffRoles": "Staff roles",
+      "people": "{count, plural, one {# person} other {# people}}",
+      "opens": "Opens: {sections}",
+      "members": "Team members",
+      "inactive": "Inactive",
+      "edit": "Change role or markets",
+      "role": "Role",
+      "markets": "Markets",
+      "marketsHint": "Leave all unchecked for every market.",
+      "save": "Save",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "inviteTitle": "Invite someone",
+      "email": "Email",
+      "name": "Name",
+      "invite": "Send invite",
+      "demoLink": "Test environment: no email is sent. Invite link:",
+      "providerRoles": "Provider roles",
+      "providerRolesIntro": "People at provider companies, set in the provider portal by the provider owner.",
+      "errors": {
+        "invalid": "Check the fields and try again.",
+        "forbidden": "Your role can't make this change.",
+        "lastOwner": "There must always be at least one active owner.",
+        "self": "You can't deactivate yourself.",
+        "generic": "Something went wrong. Try again."
+      },
+      "done": {
+        "invited": "Invite sent. They appear below with their role.",
+        "saved": "Saved.",
+        "deactivated": "Deactivated. They can't sign in any more.",
+        "reactivated": "Reactivated."
+      }
     }
   },
   "emails": {
@@ -2230,9 +2324,15 @@
     "signInBody": "Staging and previews only. Uses fictional accounts and data.",
     "roles": {
       "provider_owner": "Provider owner",
-      "provider_operator": "Provider operator",
-      "admin_super": "Super admin",
-      "admin_dispatcher": "Dispatcher"
+      "provider_manager": "Provider dispatcher",
+      "provider_operator": "Technician",
+      "admin_super": "Owner",
+      "admin_ops": "Operations manager",
+      "admin_dispatcher": "Dispatcher",
+      "admin_success": "Provider success",
+      "admin_finance": "Finance",
+      "admin_marketing": "Marketing",
+      "admin_viewer": "Viewer"
     }
   },
   "getHelp": {

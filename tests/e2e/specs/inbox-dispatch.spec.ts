@@ -27,7 +27,7 @@ test.describe("inbox and manual dispatch", () => {
   }) => {
     test.skip(readOnly, "Writes to the database");
     test.setTimeout(180_000);
-    await signInAsDemo(page, appUrls.admin!, "Super admin");
+    await signInAsDemo(page, appUrls.admin!, "Owner");
 
     // A tracking number for this test (fictional 555-01xx numbers).
     const tracking = `+1210555${rand(4).replace(/^./, "0")}`;

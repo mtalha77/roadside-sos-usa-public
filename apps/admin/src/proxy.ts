@@ -1,4 +1,5 @@
 import { buildCsp, createNonce } from "@rsos/config/security";
+import { canOpenPath } from "@rsos/config/permissions";
 import { type AccessDecision, adminAccess, withSessionState } from "@rsos/db/claims";
 import { strictCookieOptions } from "@rsos/db/cookies";
 import { getSessionState, isAuthCookie } from "@rsos/db/session";
@@ -58,7 +59,13 @@ export async function proxy(request: NextRequest) {
     const decision = withSessionState(adminAccess(state.claims), state, {
       requireSecondStep: false,
     });
-    if (decision !== "ok") {
+    // Role guard (RSOS-102): a page or API outside the role's sections is refused here, not only
+    // hidden from the menu. RLS still checks every row in the database.
+    if (decision === "ok" && !canOpenPath(state.claims?.staff_role, path)) {
+      response = path.startsWith("/api/")
+        ? NextResponse.json({ error: "forbidden" }, { status: 403 })
+        : NextResponse.redirect(new URL("/no-access", request.url));
+    } else if (decision !== "ok") {
       const target = new URL(REDIRECT[decision], request.url);
       if (decision === "sign-in" || decision === "second-step")
         target.searchParams.set("next", path);

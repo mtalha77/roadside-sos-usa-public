@@ -8,6 +8,7 @@
     "./server": "./src/server/index.ts",
     "./components/*": "./src/components/*.tsx",
     "./demo": "./src/server/demo.ts",
+    "./demo-roles": "./src/server/demo-roles.ts",
     "./email-sign-in": "./src/server/email-sign-in.ts"
   },
   "scripts": {

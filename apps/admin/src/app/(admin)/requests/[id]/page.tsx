@@ -1,3 +1,4 @@
+import { maskPhone, masksCustomerData } from "@rsos/config/permissions";
 import { formatCurrency, type Locale } from "@rsos/i18n";
 import { CallButton } from "@/components/softphone/call-button";
 import { Badge } from "@rsos/ui/badge";
@@ -26,7 +27,7 @@ async function load(id: string) {
  */
 export default async function RequestDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [t, ts, locale, { r }] = await Promise.all([
+  const [t, ts, locale, { r, ctx }] = await Promise.all([
     getTranslations("admin.requests"),
     getTranslations("site.services"),
     getLocale(),
@@ -56,7 +57,7 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
               <dd>{ts.has(`${r.service}.name`) ? ts(`${r.service}.name`) : r.service}</dd>
               <dt className="text-muted-foreground">{t("driver")}</dt>
               <dd className="flex flex-wrap items-center gap-2">
-                {r.driver} · {r.phone}
+                {r.driver} · {masksCustomerData(ctx.role) ? maskPhone(r.phone) : r.phone}
                 {!r.demo && /^\+1\d{10}$/.test(r.phone) ? (
                   <CallButton
                     label={t("callDriver")}
