@@ -4,9 +4,13 @@ create extension if not exists pgtap with schema extensions;
 set local search_path = extensions, public;
 select plan(9);
 
+-- Changes are attributed to the signed-in person, so the test signs in as a real user row.
+insert into auth.users (id, email, aud, role)
+values ('00000000-0000-4000-8000-0000000113b1', 'econ-test@example.test', 'authenticated', 'authenticated');
 create function pg_temp.as_role(r text) returns void language sql as $$
-  select set_config('request.jwt.claims', jsonb_build_object('sub', gen_random_uuid(), 'role', 'authenticated',
-    'aal', 'aal2', 'app_role', 'staff', 'staff_role', r)::text, true), set_config('role', 'authenticated', true);
+  select set_config('request.jwt.claims', jsonb_build_object('sub', '00000000-0000-4000-8000-0000000113b1',
+    'role', 'authenticated', 'aal', 'aal2', 'app_role', 'staff', 'staff_role', r)::text, true),
+    set_config('role', 'authenticated', true);
 $$;
 
 -- A market of its own, so the counts do not depend on other rows.
