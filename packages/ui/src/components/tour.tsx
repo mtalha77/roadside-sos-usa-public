@@ -81,7 +81,11 @@ export function Tour({
 
   // Focus the card on every step so screen readers read the new title and sentence.
   useEffect(() => {
-    if (open) card.current?.focus();
+    if (!open) return;
+    card.current?.focus();
+    // Again after a closing menu or dialog has returned focus to its trigger.
+    const t = setTimeout(() => card.current?.focus(), 150);
+    return () => clearTimeout(t);
   }, [open, i]);
 
   if (!open || !step || typeof document === "undefined") return null;
