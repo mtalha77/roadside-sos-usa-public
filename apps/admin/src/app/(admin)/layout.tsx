@@ -1,6 +1,6 @@
 import { canSee } from "@rsos/config/permissions";
 import { textingEnabled } from "@rsos/core/adapters";
-import { Map as MapIcon } from "lucide-react";
+import { LogOut, Map as MapIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import { SoftphoneDock } from "@/components/softphone/softphone-dock";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { getAdminContext } from "@/lib/admin";
 import { readDemoClock } from "@/lib/demo-clock";
+import { signOutAction } from "@/lib/auth-actions";
 import { NAV_GROUPS, sectionsFor } from "@/lib/nav";
 
 const SHELL_KEYS = [
@@ -54,10 +55,26 @@ const DEMO_KEYS = [
   "loadOn",
 ] as const;
 
+/** Sign out, at the bottom of the menu for every role (the overview page used to hold it). */
+function SignOut({ label }: { label: string }) {
+  return (
+    <form action={signOutAction}>
+      <button
+        type="submit"
+        className="flex min-h-12 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted-foreground hover:bg-accent"
+      >
+        <LogOut aria-hidden="true" className="size-5 shrink-0" />
+        <span>{label}</span>
+      </button>
+    </form>
+  );
+}
+
 /** Admin shell for every signed-in screen (RSOS-071). The proxy already requires staff with aal2. */
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const [t, ctx, clock, jar] = await Promise.all([
+  const [t, ta, ctx, clock, jar] = await Promise.all([
     getTranslations("admin"),
+    getTranslations("auth"),
     getAdminContext(),
     readDemoClock(),
     cookies(),
@@ -121,8 +138,11 @@ export default async function AdminLayout({ children }: { children: ReactNode })
               loadTest={jar.get("rsos_demo_load")?.value === "1"}
               labels={Object.fromEntries(DEMO_KEYS.map((k) => [k, t(`demoControls.${k}`)]))}
             />
+            <SignOut label={ta("signOut")} />
           </>
-        ) : null
+        ) : (
+          <SignOut label={ta("signOut")} />
+        )
       }
     >
       {textingLimited ? (
