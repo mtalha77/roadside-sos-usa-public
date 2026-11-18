@@ -556,6 +556,73 @@ export type Database = {
         }
         Relationships: []
       }
+      economics_model_history: {
+        Row: {
+          changed_at: string
+          changed_by: string | null
+          id: number
+          inputs: Json
+          market_id: string
+          scenario: string
+        }
+        Insert: {
+          changed_at?: string
+          changed_by?: string | null
+          id?: never
+          inputs: Json
+          market_id: string
+          scenario: string
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string | null
+          id?: never
+          inputs?: Json
+          market_id?: string
+          scenario?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "economics_model_history_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      economics_models: {
+        Row: {
+          inputs: Json
+          market_id: string
+          scenario: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          inputs: Json
+          market_id: string
+          scenario: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          inputs?: Json
+          market_id?: string
+          scenario?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "economics_models_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dispatch_attempts: {
         Row: {
           created_at: string

@@ -7,7 +7,9 @@
     ".": "./src/index.ts",
     "./security": "./src/security/index.ts",
     "./demo": "./src/demo/index.ts",
-    "./adapters": "./src/adapters/index.ts"
+    "./adapters": "./src/adapters/index.ts",
+    "./economics": "./src/economics.ts",
+    "./analytics-sources": "./src/analytics-sources.ts"
   },
   "scripts": {
     "lint": "eslint .",

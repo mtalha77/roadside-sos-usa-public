@@ -5,6 +5,7 @@ import { Dialog, DialogContent } from "@rsos/ui/dialog";
 import { ThemeToggle } from "@rsos/ui/theme-toggle";
 import {
   BarChart3,
+  Calculator,
   ChevronsLeft,
   ChevronsRight,
   DollarSign,
@@ -39,6 +40,7 @@ const ICONS = {
   recruitment: UserPlus,
   markets: MapIcon,
   pricing: DollarSign,
+  economics: Calculator,
   finance: Wallet,
   reviews: Star,
   analytics: BarChart3,
