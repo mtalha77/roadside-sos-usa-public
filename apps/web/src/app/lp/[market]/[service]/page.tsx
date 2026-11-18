@@ -14,6 +14,7 @@ import { ServiceLinks } from "@/components/site/service-links";
 import { cityLabel, formatPhone } from "@/lib/market";
 import { pageMetadata } from "@/lib/seo";
 import { getMarkets, getMarketServices } from "@/lib/site-data";
+import { phonesEnabled } from "@/lib/phones";
 import { ui } from "@/lib/ui-classes";
 
 export const dynamic = "force-dynamic";
@@ -28,8 +29,10 @@ const LP_HEADLINES = ["fast", "price", "local", "stuck"] as const;
 
 async function load(p: Params["params"]) {
   const { market, service } = await p;
-  const m = (await getMarkets()).find((x) => x.slug === market);
-  if (!m) return null;
+  const found = (await getMarkets()).find((x) => x.slug === market);
+  if (!found) return null;
+  // No "Call" in production until phones are really connected (RSOS-100).
+  const m = phonesEnabled() ? found : { ...found, phone: null };
   const services = await getMarketServices(m.slug);
   const svc = services.find((s) => s.service_slug === service && s.enabled);
   return svc ? { m, svc, services: services.filter((s) => s.enabled) } : null;

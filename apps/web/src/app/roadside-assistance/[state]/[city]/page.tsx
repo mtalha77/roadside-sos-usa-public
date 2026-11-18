@@ -1,7 +1,5 @@
 import { brand } from "@rsos/config/brand";
 import { getSiteUrl } from "@rsos/config/site";
-import { Button } from "@rsos/ui/button";
-import { Phone } from "lucide-react";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -10,12 +8,12 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { FaqList } from "@/components/site/faq-list";
 import { JsonLd } from "@/components/site/json-ld";
-import { LiveProof } from "@/components/site/live-proof";
+import { EmergencyHero, Reassurance } from "@/components/site/emergency-hero";
 import { PriceList } from "@/components/site/price-list";
 import { serviceName } from "@/components/site/service-label";
-import { ServiceLinks } from "@/components/site/service-links";
 import { SitePage } from "@/components/site/site-page";
-import { cityLabel, formatPhone, marketPath, nearestMarkets } from "@/lib/market";
+import { cityLabel, marketPath, nearestMarkets } from "@/lib/market";
+import { orderTiles } from "@/lib/tiles";
 import {
   getMarketByPath,
   getMarketPage,
@@ -51,7 +49,10 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return pageMetadata({ title: t("title", vars), description: t("description", vars), path });
 }
 
-/** City page: one per published market, copy and prices from the database. */
+/**
+ * City page: one per published market, copy and prices from the database. Emergency first
+ * (RSOS-100): the same hero and tiles as the home page, with this city's headline.
+ */
 export default async function CityPage({ params }: Params) {
   const data = await load(params);
   if (!data) notFound();
@@ -65,42 +66,22 @@ export default async function CityPage({ params }: Params) {
   return (
     <SitePage marketSlug={market.slug}>
       <Breadcrumbs items={[{ href: path, label: cityLabel(market) }]} />
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pt-6 pb-8 sm:pt-10">
-        <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-          {page?.headline ?? t("city.title", vars)}
-        </h1>
-        {page ? <p className="max-w-3xl text-lg text-muted-foreground">{page.intro}</p> : null}
-        <div className="flex flex-wrap gap-3">
-          <Button asChild size="lg">
-            <Link href={`/get-help?market=${market.slug}`}>{t("nav.getHelp")}</Link>
-          </Button>
-          {market.phone ? (
-            <Button asChild size="lg" variant="outline">
-              <a href={`tel:${market.phone}`} data-dni={market.slug}>
-                <Phone aria-hidden="true" className="size-5" />
-                <span className="tabular-nums">
-                  {t("city.call", { phone: formatPhone(market.phone) })}
-                </span>
-              </a>
-            </Button>
-          ) : null}
-        </div>
-      </div>
+      <EmergencyHero
+        headline={page?.headline ?? t("city.heroHeadline", vars)}
+        services={orderTiles(
+          enabled.map((s) => ({
+            slug: s.service_slug,
+            name: s.service_name,
+            icon_key: s.icon_key,
+          })),
+        )}
+        marketSlug={market.slug}
+        city={market.name}
+        providerCount={stats?.provider_count ?? null}
+      />
       <div className="mx-auto flex max-w-6xl flex-col gap-14 px-4">
-        <section aria-labelledby="city-services" className="flex flex-col gap-4">
-          <h2 id="city-services" className="text-2xl font-semibold">
-            {t("city.servicesTitle", vars)}
-          </h2>
-          <ServiceLinks
-            services={enabled.map((s) => ({
-              slug: s.service_slug,
-              name: s.service_name,
-              icon_key: s.icon_key,
-            }))}
-            marketSlug={market.slug}
-          />
-        </section>
-        <LiveProof stats={stats} city={market.name} />
+        <Reassurance />
+        {page ? <p className="max-w-3xl text-lg text-muted-foreground">{page.intro}</p> : null}
         <PriceList services={services} city={market.name} hrefFor={(s) => `${path}/${s}`} />
         {page ? (
           <div className="grid gap-10 md:grid-cols-2">

@@ -1,7 +1,6 @@
 import { buildMetadata } from "@rsos/config/metadata";
 import { themeColor } from "@rsos/config/theme-colors";
 import { getSiteEnv } from "@rsos/config/site";
-import { ThemeProvider } from "@rsos/ui/theme-provider";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -14,6 +13,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cookies } from "next/headers";
 import { ConsentBanner } from "@/components/site/consent-banner";
 import { CONSENT_COOKIE, consentHeadScript, parseConsent } from "@/lib/consent";
+import { SITE_SCRIPT } from "@/lib/site-script";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -40,6 +40,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang={locale} className={GeistSans.variable} suppressHydrationWarning>
       <head>
+        {/* Theme (with the night default), menus and the phone action bar: no bundle (RSOS-100). */}
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: SITE_SCRIPT }} />
         {/* Consent Mode defaults run before anything else: Google tags start denied (RSOS-028). */}
         <script
           nonce={nonce}
@@ -50,7 +52,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body>
         {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}
-        <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
+        {children}
         <ConsentBanner />
         {analytics ? (
           <>

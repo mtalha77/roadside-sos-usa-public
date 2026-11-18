@@ -98,12 +98,15 @@ test.describe("home page", () => {
 
   test("services are the main action and nothing is invented", async ({ page }) => {
     await page.goto(url("/"));
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "What do you need?" })).toBeVisible();
-    // The example quote is labelled as an example and shows no rating or review count.
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Stuck on the road? Help is on the way.",
+    );
+    await expect(page.getByText("In danger or on a busy highway? Call 911 first.")).toBeVisible();
+    // The example quote uses a demo provider, is labelled as an example and shows no rating.
     const example = page.getByRole("figure", { name: "Example of a quote" });
-    await expect(example).toContainText("Example only");
+    await expect(example).toContainText("Example with a demo provider");
     await expect(example).toContainText("New provider");
+    await expect(example).not.toContainText("Arrival time");
     await expect(page.getByText(/reviews?\b/i)).toHaveCount(0);
     await expect(page.getByText(/★|stars?\b/i)).toHaveCount(0);
     await expectNoA11yViolations(page);

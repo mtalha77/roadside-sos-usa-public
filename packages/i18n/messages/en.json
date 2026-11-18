@@ -1569,7 +1569,8 @@
       },
       "winch-out": {
         "name": "Winch out",
-        "short": "Pulled out of mud, sand or a ditch"
+        "short": "Pulled out of mud, sand or a ditch",
+        "tile": "Stuck or winch-out"
       }
     },
     "placeholder": {
@@ -1599,7 +1600,8 @@
       "tipsTitle": "Tips for drivers in {city}",
       "faqTitle": "{city} questions",
       "nearbyTitle": "Other cities we serve",
-      "serviceIn": "{service} in {city}"
+      "serviceIn": "{service} in {city}",
+      "heroHeadline": "Stuck on the road in {city}? Help is on the way."
     },
     "cityService": {
       "title": "{service} in {city}"
@@ -1629,17 +1631,6 @@
   "home": {
     "title": "Roadside help with real quotes in minutes",
     "metaDescription": "Stuck on the road? Share where you are and what happened. Verified local providers send quotes with price and arrival time, and you pick one. No membership.",
-    "eyebrow": "Flat tire, dead battery, lockout, fuel or tow",
-    "headline": "Stuck? Get quotes from local roadside pros in minutes.",
-    "lead": "Tell us where you are and what happened. Verified providers nearby send a price and arrival time. You pick one and pay them directly.",
-    "pickService": "What do you need?",
-    "callNow": "Or call {phone}",
-    "trust": {
-      "label": "Why drivers use us",
-      "insured": "Insured, verified providers",
-      "fast": "Quotes in about 3 minutes",
-      "noMembership": "No membership or sign-up"
-    },
     "how": {
       "title": "How it works",
       "step1": "Tell us what happened",
@@ -1649,10 +1640,9 @@
       "step3": "Track your help",
       "step3Body": "Choose one and follow their arrival. You pay the provider directly.",
       "exampleLabel": "Example of a quote",
-      "exampleProvider": "A verified provider near you",
-      "exampleEta": "Arrival time",
-      "exampleEtaSr": "Their arrival time appears here",
-      "exampleNote": "Example only. Real quotes come from providers in your area.",
+      "exampleEta": "{minutes} min",
+      "exampleEtaSr": "Arrives in about {minutes} minutes",
+      "exampleNote": "Example with a demo provider. Real quotes come from verified providers in your area.",
       "trackingLabel": "Example of tracking",
       "labels": {
         "insured": "Insured",
@@ -1667,12 +1657,6 @@
       "accepted": "You picked a provider",
       "en_route": "On the way",
       "on_site": "Arrived"
-    },
-    "proof": {
-      "title": "Live in {city}",
-      "providers": "{count, plural, one {# verified provider} other {# verified providers}}",
-      "eta": "Average arrival: {minutes} min",
-      "basis": "From {count} completed jobs in the last 90 days."
     },
     "prices": {
       "title": "Typical prices in {city}",
@@ -1725,6 +1709,21 @@
       "quoted": "Quoted",
       "accepted": "Picked",
       "en_route": "On the way"
+    },
+    "hero": {
+      "headline": "Stuck on the road? Help is on the way.",
+      "sub": "Tell us where you are. Nearby tow and roadside pros reply with a price and arrival time in about 3 minutes.",
+      "available": "{count, plural, one {# verified provider} other {# verified providers}} near {city}",
+      "changeCity": "Change city",
+      "tilesTitle": "What happened?",
+      "getHelp": "Get help now",
+      "safety": "In danger or on a busy highway? Call 911 first."
+    },
+    "reassure": {
+      "label": "Good to know",
+      "noSignup": "No sign-up",
+      "noMembership": "No membership",
+      "payDirect": "You pay the provider directly"
     }
   },
   "pages": {

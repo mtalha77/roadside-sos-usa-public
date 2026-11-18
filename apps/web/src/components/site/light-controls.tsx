@@ -1,14 +1,11 @@
-"use client";
-
-import { useTheme } from "next-themes";
 import { ui } from "@/lib/ui-classes";
 
 /**
- * Light and dark mode switch for the public website: plain button and inline icons, so it adds
- * almost no JavaScript (RSOS-033). Icons swap with CSS, so server and client markup match.
+ * Light and dark mode switch for the public website: a plain server-rendered button with inline
+ * icons, handled by the site script (`lib/site-script.ts`), so it adds no JavaScript bundle
+ * (RSOS-033, RSOS-100). Icons swap with CSS.
  */
 export function LightThemeToggle({ label }: { label: string }) {
-  const { resolvedTheme, setTheme } = useTheme();
   const icon = {
     width: 20,
     height: 20,
@@ -24,7 +21,7 @@ export function LightThemeToggle({ label }: { label: string }) {
       type="button"
       aria-label={label}
       title={label}
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      data-theme-toggle
       className={`${ui.button.ghost} min-w-touch px-0`}
     >
       <svg {...icon} aria-hidden="true" className="hidden dark:block">

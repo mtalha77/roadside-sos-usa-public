@@ -2,11 +2,14 @@ import { QuoteCard } from "@rsos/ui/quote-card";
 import { StatusPill } from "@rsos/ui/status-pill";
 import { Timeline } from "@rsos/ui/timeline";
 import { getTranslations } from "next-intl/server";
+import { demoMarkets } from "@rsos/config/demo-fixtures";
 
 /**
- * Three steps shown with the real product components. The quote is clearly an example: its price
- * is a real local price (from the market's range) and it shows no invented rating or arrival time.
+ * Three steps shown with the real product components (RSOS-100: never placeholder text). The quote
+ * is labelled as an example: a fictional demo provider with a realistic arrival time and a real
+ * local price (the low end of the market's range). No invented rating: that would be fake proof.
  */
+const sample = Object.values(demoMarkets)[0]!.providers[0]!;
 export async function HowItWorks({ examplePriceCents }: { examplePriceCents: number | null }) {
   const t = await getTranslations("home");
   const steps = [
@@ -44,18 +47,19 @@ export async function HowItWorks({ examplePriceCents }: { examplePriceCents: num
                 quote={{
                   id: "example",
                   provider: {
-                    name: t("how.exampleProvider"),
+                    name: sample.name.replace(/\s*\(demo\)$/, ""),
+                    logo: sample.logo,
                     rating: null,
                     reviewCount: 0,
                     insured: true,
                     licensed: true,
                   },
                   priceCents: examplePriceCents,
-                  etaMinutes: 0,
+                  etaMinutes: 24,
                 }}
                 labels={{
-                  eta: () => t("how.exampleEta"),
-                  etaSr: () => t("how.exampleEtaSr"),
+                  eta: (m) => t("how.exampleEta", { minutes: m }),
+                  etaSr: (m) => t("how.exampleEtaSr", { minutes: m }),
                   insured: t("how.labels.insured"),
                   licensed: t("how.labels.licensed"),
                   noRatings: t("how.labels.noRatings"),
