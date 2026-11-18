@@ -48,7 +48,7 @@ export async function EmergencyHero({
             <span aria-hidden="true" className="size-2 rounded-full bg-success" />
             {t("available", { count: providerCount, city })}
           </span>
-          <a href="#cities-title" className="underline underline-offset-4">
+          <a href="/#cities-title" className="underline underline-offset-4">
             {t("changeCity")}
           </a>
         </p>

@@ -43,6 +43,15 @@
   theme the site is dark between 7pm and 6am local time.
 - **Less JavaScript**: the theme provider, theme toggle and menu closer were replaced by one small
   inline script (`apps/web/src/lib/site-script.ts`).
+- **Demo badge on the website** is now a slim strip at the top of the page: as a fixed corner
+  badge it covered the 911 line on phones.
+- Tiles show the services enabled in the market (or anywhere, without a market). Winch-out is not
+  enabled in any market yet, so five tiles show today; the sixth appears when a market enables it.
+- **JavaScript on the home page** (mobile, transferred): 146.9 KB before, about 139 KB after
+  (theme provider, toggle and menu closer replaced by an inline script; Vercel Analytics loaded
+  only when it is used). The spec's 120 KB target is below what Next.js 16 itself needs: React DOM,
+  the router and the runtime are about 137 KB on every page. Reaching 120 KB would mean leaving
+  Next.js for the home page, so it is recorded as **partial** for the owner to decide.
 - Note: the spec's availability line says "online now". There is no provider presence data yet
   (going online arrives with the provider portal work), so the line shows the real count of
   verified providers serving the market, never invented numbers.

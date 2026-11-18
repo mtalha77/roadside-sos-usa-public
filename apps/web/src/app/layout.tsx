@@ -8,8 +8,6 @@ import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { isDemoMode } from "@rsos/config/demo";
 import { DemoBadge } from "@rsos/ui/demo-badge";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cookies } from "next/headers";
 import { ConsentBanner } from "@/components/site/consent-banner";
 import { CONSENT_COOKIE, consentHeadScript, parseConsent } from "@/lib/consent";
@@ -51,16 +49,28 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         />
       </head>
       <body>
-        {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}
+        {isDemoMode() ? <DemoBadge label={demoLabel} strip /> : null}
         {children}
         <ConsentBanner />
-        {analytics ? (
-          <>
-            <Analytics />
-            <SpeedInsights />
-          </>
-        ) : null}
+        {analytics ? <VercelAnalytics /> : null}
       </body>
     </html>
+  );
+}
+
+/**
+ * Vercel Analytics and Speed Insights, imported only when they are used (production, with
+ * analytics consent), so their script is not in every visitor's download (RSOS-100 budget).
+ */
+async function VercelAnalytics() {
+  const [{ Analytics }, { SpeedInsights }] = await Promise.all([
+    import("@vercel/analytics/next"),
+    import("@vercel/speed-insights/next"),
+  ]);
+  return (
+    <>
+      <Analytics />
+      <SpeedInsights />
+    </>
   );
 }
