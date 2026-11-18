@@ -15,7 +15,7 @@ test.describe("admin analytics", () => {
 
   test("funnel and economics across date ranges", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(new URL("/analytics", base).toString());
     await expect(page.getByRole("heading", { name: "Analytics", level: 1 })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Funnel" })).toBeVisible();

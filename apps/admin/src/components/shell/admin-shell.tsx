@@ -22,6 +22,7 @@ import {
   Star,
   Truck,
   UserPlus,
+  Users,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
@@ -44,6 +45,7 @@ const ICONS = {
   marketing: Megaphone,
   campaign: Target,
   content: FileText,
+  team: Users,
   settings: Settings,
 } as const;
 
@@ -63,8 +65,11 @@ export function AdminShell({
   selected,
   labels,
   footer,
+  identity,
   children,
 }: {
+  /** "Dispatcher · San Antonio, Houston": the role and market scope (RSOS-102). */
+  identity: string;
   sections: Section[];
   markets: { slug: string; name: string }[];
   selected: string[];
@@ -219,6 +224,12 @@ export function AdminShell({
             {labels.search}
             <kbd className="ml-auto rounded border px-1.5 text-xs">{PALETTE_KEYS}</kbd>
           </button>
+          <Link
+            href="/account"
+            className="hidden min-h-12 items-center rounded-lg px-3 text-sm text-muted-foreground hover:bg-accent lg:flex"
+          >
+            {identity}
+          </Link>
           <span data-theme-toggle-wrap>
             <ThemeToggle label={labels.toggleTheme!} />
           </span>

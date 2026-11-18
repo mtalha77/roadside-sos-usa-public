@@ -18,7 +18,7 @@ test.describe("admin content and settings", () => {
 
   test("city intro preview and publish", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(url("/content"));
     await expect(page.getByRole("heading", { name: "Content", level: 1 })).toBeVisible();
     await expectNoA11yViolations(page);
@@ -39,7 +39,7 @@ test.describe("admin content and settings", () => {
 
   test("users, audit log, templates, flags and integrations", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(url("/settings"));
     await expect(page.getByRole("heading", { name: "Settings", level: 1 })).toBeVisible();
     await expectNoA11yViolations(page);

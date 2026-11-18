@@ -1,5 +1,6 @@
 import { Alert } from "@rsos/ui/alert";
 import { DemoSignIn } from "@rsos/account/components/demo-sign-in";
+import { ADMIN_DEMO_ROLES } from "@rsos/account/demo-roles";
 import { EmailCodeSignIn } from "@rsos/account/components/email-code-sign-in";
 import { AuthShell } from "@rsos/ui/auth-shell";
 import { getTranslations } from "next-intl/server";
@@ -26,7 +27,7 @@ export default async function SignInPage({
           <EmailCodeSignIn />
         </div>
       </details>
-      <DemoSignIn roles={["admin_super", "admin_dispatcher"]} />
+      <DemoSignIn roles={[...ADMIN_DEMO_ROLES]} />
       <a
         href="/forgot-password"
         className="inline-flex min-h-touch items-center self-center underline underline-offset-4"

@@ -17,7 +17,7 @@ test.describe("admin walkthrough", () => {
     page,
   }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(new URL("/walkthrough", base).toString());
     await expect(
       page.getByRole("heading", { name: "Staging walkthrough", level: 1 }),

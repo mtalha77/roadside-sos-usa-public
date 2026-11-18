@@ -28,7 +28,7 @@ test.describe("location link", () => {
     test.skip(readOnly, "Writes to the database");
     test.skip(info.project.name !== "desktop-chrome", "One browser is enough for this flow");
     test.setTimeout(180_000);
-    await signInAsDemo(page, appUrls.admin!, "Super admin");
+    await signInAsDemo(page, appUrls.admin!, "Owner");
     const tracking = fake555();
     const driver = fake555();
     await page.goto(new URL("/settings?tab=phones", appUrls.admin).toString());

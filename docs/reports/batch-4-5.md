@@ -9,8 +9,8 @@
 | Ticket                                            | Status      | Pull request                                                         |
 | ------------------------------------------------- | ----------- | -------------------------------------------------------------------- |
 | RSOS-100 Emergency-first website home, city pages | Merged      | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184) |
-| RSOS-101 Get Help flow, faster and calmer         | In review   |                                                                      |
-| RSOS-102 Roles and permissions in the admin       | Not started |                                                                      |
+| RSOS-101 Get Help flow, faster and calmer         | Merged      | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186) |
+| RSOS-102 Roles and permissions in the admin       | In review   |                                                                      |
 | RSOS-103 Admin rebuild (Today, navigation, board) | Not started |                                                                      |
 | RSOS-104 Provider portal polish                   | Not started |                                                                      |
 | RSOS-105 Skippable guided tours                   | Not started |                                                                      |
@@ -79,3 +79,30 @@
   highway, keep the phone on, call 911 if unsafe), and the call link only where phones are enabled.
 - The action bar is hidden on the request screens so the send button is the only thing pinned to
   the bottom of the phone.
+
+### RSOS-102: Roles and permissions, defined in the admin
+
+- **Roles** (database names kept, labels changed): Owner (`super_admin`), Operations manager
+  (`ops_manager`), Dispatcher (`dispatcher`), Provider success (`support`), Finance (`finance`),
+  Marketing (`marketing`), Viewer (`read_only`). Provider side: Provider owner (`owner`),
+  Dispatcher (`manager`), Technician (`operator`).
+- **One permission map** (`packages/config/src/permissions.ts`) drives the menu, the command
+  palette and the shortcuts, and the **admin proxy refuses** any page or API outside the role's
+  sections (`/no-access`, or 403 for APIs), so hiding menu items is not the only guard.
+- **Database (RLS)**, migration `20261118010000_role_permissions.sql`: dispatchers read providers
+  but can no longer edit them or see fee rows; provider success edits provider details and prices;
+  fee rows are for owners, operations managers, finance and viewers.
+- **Admin > Team & roles** (`/team`): every role with who it is for, what it can do and which
+  sections it opens; team members with role and market scope; invite by email (production: the
+  Supabase invite email; demo hosts: the invite link shown on screen); change role and markets;
+  deactivate (the sign-in token stops carrying the role). Owners manage everyone, operations
+  managers everyone except owners, and at least one active owner must remain. Every change is
+  written to the audit log.
+- **Profile**: the header shows "Dispatcher · San Antonio, Houston" (role and market scope).
+- **Customer data**: phone numbers are masked for Marketing and Viewers on request pages.
+- **Demo sign-in** offers all seven staff roles and the three provider roles.
+- Tested:
+  - unit `permissions.test.ts` (the role table, path guard, who manages whom, masking);
+  - pgTAP `027_role_permissions` (per role: providers, fee rows, staff);
+  - e2e `role-permissions.spec.ts` (allowed and refused sections and the menu per role, the Team
+    and roles page) and `demo-sign-in.spec.ts` (all ten demo roles).

@@ -43,7 +43,7 @@ test.describe("ad tracking and attribution", () => {
     await driver.close();
 
     // Marketing downloads today's offline conversion file: the gclid is there.
-    await signInAsDemo(page, appUrls.admin!, "Super admin");
+    await signInAsDemo(page, appUrls.admin!, "Owner");
     const day = new Date().toISOString().slice(0, 10);
     await expect(async () => {
       const res = await page.request.get(

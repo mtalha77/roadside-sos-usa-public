@@ -15,7 +15,7 @@ test.describe("admin shell", () => {
 
   test("palette, cheat sheet, market switcher and demo controls", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expectNoA11yViolations(page);
     await expectNoHorizontalScroll(page);

@@ -37,6 +37,8 @@ export async function getAdminContext() {
     email: claims?.email ?? "",
     userId: claims?.sub ?? "",
     role: claims?.staff_role ?? "",
+    /** No market limit on this staff member (all markets). */
+    allMarkets: !claims?.staff_markets,
     markets,
     selected: chosen.length ? chosen : markets.map((m) => m.slug),
     demo: isDemoMode(),

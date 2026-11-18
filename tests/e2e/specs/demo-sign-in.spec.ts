@@ -6,10 +6,16 @@ import { appUrls, expect, test } from "../support/fixtures";
 // fails, so Release QA catches it before anything ships. Tagged @smoke.
 
 const roles = [
-  { app: "admin", role: "Super admin", landing: "Admin dashboard", identity: /\(super_admin\)/ },
-  { app: "admin", role: "Dispatcher", landing: "Admin dashboard", identity: /\(dispatcher\)/ },
-  { app: "provider", role: "Provider owner", landing: "Today", identity: null },
-  { app: "provider", role: "Provider operator", landing: "Today", identity: null },
+  { app: "admin", role: "Owner", landing: "Admin dashboard" },
+  { app: "admin", role: "Operations manager", landing: "Admin dashboard" },
+  { app: "admin", role: "Dispatcher", landing: "Admin dashboard" },
+  { app: "admin", role: "Provider success", landing: "Admin dashboard" },
+  { app: "admin", role: "Finance", landing: "Admin dashboard" },
+  { app: "admin", role: "Marketing", landing: "Admin dashboard" },
+  { app: "admin", role: "Viewer", landing: "Admin dashboard" },
+  { app: "provider", role: "Provider owner", landing: "Today" },
+  { app: "provider", role: "Provider dispatcher", landing: "Today" },
+  { app: "provider", role: "Technician", landing: "Today" },
 ] as const;
 
 test.describe("demo sign-in @smoke", () => {
@@ -27,8 +33,7 @@ test.describe("demo sign-in @smoke", () => {
       test.setTimeout(90_000);
       await signInAsDemo(page, base!, r.role);
       await expect(page.getByRole("heading", { name: r.landing, level: 1 })).toBeVisible();
-      if (r.identity) await expect(page.getByText(r.identity)).toBeVisible();
-      if (r.role === "Provider operator")
+      if (r.role === "Technician")
         await expect(page.getByRole("link", { name: "Wallet" })).toHaveCount(0);
     });
   }

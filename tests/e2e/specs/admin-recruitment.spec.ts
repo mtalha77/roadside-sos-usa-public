@@ -15,7 +15,7 @@ test.describe("admin recruitment", () => {
 
   test("board, table, CSV import and coverage", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(new URL("/recruitment", base).toString());
     await expect(page.getByRole("heading", { name: "Recruitment", level: 1 })).toBeVisible();
     await expect(page.getByText(/of 12 live providers/).first()).toBeVisible();

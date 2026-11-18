@@ -37,7 +37,10 @@
       "intake": "Recepción telefónica",
       "inbox": "Bandeja",
       "marketing": "Marketing",
-      "campaign": "Campaña de prueba"
+      "campaign": "Campaña de prueba",
+      "team": "Equipo y roles",
+      "calls": "Llamadas",
+      "today": "Hoy"
     },
     "shell": {
       "nav": "Administración",
@@ -1209,6 +1212,97 @@
         "perCompleted": "Costo por trabajo terminado"
       },
       "note": "Los tiempos son medianas. Tasa de cobertura = solicitudes con proveedor asignado / solicitudes. Las comisiones se registran como manual_test y no se cobra a nadie. El gasto viene de Marketing > Gasto en anuncios."
+    },
+    "roles": {
+      "super_admin": {
+        "name": "Dueño",
+        "who": "El dueño del negocio.",
+        "can": "Todo: equipo y roles, finanzas, pagos, configuración y borrar datos. Siempre debe existir al menos un dueño."
+      },
+      "ops_manager": {
+        "name": "Gerente de operaciones",
+        "who": "Lleva la operación diaria.",
+        "can": "Todo excepto cambiar dueños, la configuración de facturación y borrar datos."
+      },
+      "dispatcher": {
+        "name": "Despachador",
+        "who": "Atiende solicitudes y llamadas en vivo.",
+        "can": "Bandeja, despacho, solicitudes y llamadas; proveedores solo lectura (contacto, servicios, precios, estado). Asigna proveedores y actualiza el estado. Sin finanzas, precios, contenido ni configuración."
+      },
+      "support": {
+        "name": "Éxito de proveedores",
+        "who": "Recluta y gestiona proveedores.",
+        "can": "Reclutamiento, proveedores (editar) y reseñas; mercados solo lectura."
+      },
+      "finance": {
+        "name": "Finanzas",
+        "who": "Dinero.",
+        "can": "Finanzas, libro de la billetera, comisiones, reembolsos y exportaciones; solicitudes solo lectura."
+      },
+      "marketing": {
+        "name": "Marketing",
+        "who": "Anuncios y contenido.",
+        "can": "Marketing, campaña de prueba, analítica, contenido y páginas de ciudad. Los teléfonos de clientes se ocultan."
+      },
+      "read_only": {
+        "name": "Lector",
+        "who": "Inversionistas y auditores.",
+        "can": "Tableros e informes solo lectura. Los datos de clientes se ocultan."
+      },
+      "allMarkets": "Todos los mercados"
+    },
+    "providerRoles": {
+      "owner": {
+        "name": "Dueño del proveedor",
+        "who": "Dueño del negocio de grúas o asistencia.",
+        "can": "Perfil, servicios y precios, billetera y facturación, equipo, todos los trabajos e indicadores."
+      },
+      "manager": {
+        "name": "Despachador (del proveedor)",
+        "who": "Personal de oficina del proveedor.",
+        "can": "Recibe ofertas, envía cotizaciones y asigna trabajos a técnicos. Sin cambios de billetera ni facturación."
+      },
+      "operator": {
+        "name": "Técnico",
+        "who": "El conductor de la grúa que va con el cliente.",
+        "can": "Solo los trabajos que tiene asignados: navegación, pasos de estado (en camino, llegué, terminado) y fotos. Ve el número del cliente solo en su trabajo activo."
+      }
+    },
+    "team": {
+      "title": "Equipo y roles",
+      "intro": "Quién trabaja aquí, qué puede ver y hacer cada rol, y en qué mercados.",
+      "staffRoles": "Roles del personal",
+      "people": "{count, plural, one {# persona} other {# personas}}",
+      "opens": "Abre: {sections}",
+      "members": "Miembros del equipo",
+      "inactive": "Inactivo",
+      "edit": "Cambiar rol o mercados",
+      "role": "Rol",
+      "markets": "Mercados",
+      "marketsHint": "Deja todo sin marcar para todos los mercados.",
+      "save": "Guardar",
+      "deactivate": "Desactivar",
+      "reactivate": "Reactivar",
+      "inviteTitle": "Invitar a alguien",
+      "email": "Email",
+      "name": "Nombre",
+      "invite": "Enviar invitación",
+      "demoLink": "Entorno de prueba: no se envía ningún email. Enlace de invitación:",
+      "providerRoles": "Roles de proveedores",
+      "providerRolesIntro": "Personas de las empresas proveedoras, asignadas en el portal por el dueño del proveedor.",
+      "errors": {
+        "invalid": "Revisa los campos e inténtalo de nuevo.",
+        "forbidden": "Tu rol no puede hacer este cambio.",
+        "lastOwner": "Siempre debe haber al menos un dueño activo.",
+        "self": "No puedes desactivarte a ti mismo.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      },
+      "done": {
+        "invited": "Invitación enviada. Aparece abajo con su rol.",
+        "saved": "Guardado.",
+        "deactivated": "Desactivado. Ya no puede iniciar sesión.",
+        "reactivated": "Reactivado."
+      }
     }
   },
   "emails": {
@@ -2230,9 +2324,15 @@
     "signInBody": "Solo en staging y vistas previas. Usa cuentas y datos ficticios.",
     "roles": {
       "provider_owner": "Dueño del proveedor",
-      "provider_operator": "Operador del proveedor",
-      "admin_super": "Superadministrador",
-      "admin_dispatcher": "Despachador"
+      "provider_manager": "Despachador del proveedor",
+      "provider_operator": "Técnico",
+      "admin_super": "Dueño",
+      "admin_ops": "Gerente de operaciones",
+      "admin_dispatcher": "Despachador",
+      "admin_success": "Éxito de proveedores",
+      "admin_finance": "Finanzas",
+      "admin_marketing": "Marketing",
+      "admin_viewer": "Lector"
     }
   },
   "getHelp": {

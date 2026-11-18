@@ -15,7 +15,7 @@ test.describe("admin reviews", () => {
 
   test("moderate a review and see quality scores", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(new URL("/reviews", base).toString());
     await expect(
       page.getByRole("heading", { name: "Reviews and quality", level: 1 }),

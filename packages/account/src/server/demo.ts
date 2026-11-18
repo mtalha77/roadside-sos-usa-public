@@ -8,18 +8,29 @@ import { z } from "zod";
 import { getAccountSupabase } from "./client";
 import { totp } from "./totp";
 
-import { DEMO_ROLES, type DemoRole } from "./demo-roles";
+import { DEMO_PROVIDER_ROLE, DEMO_ROLES, DEMO_STAFF_ROLE, type DemoRole } from "./demo-roles";
 
 const LABELS: Record<DemoRole, string> = {
   provider_owner: "Demo Owner",
-  provider_operator: "Demo Operator",
-  admin_super: "Demo Super Admin",
+  provider_manager: "Demo Provider Dispatcher",
+  provider_operator: "Demo Technician",
+  admin_super: "Demo Owner (admin)",
+  admin_ops: "Demo Operations Manager",
   admin_dispatcher: "Demo Dispatcher",
+  admin_success: "Demo Provider Success",
+  admin_finance: "Demo Finance",
+  admin_marketing: "Demo Marketing",
+  admin_viewer: "Demo Viewer",
 };
 
 /** Demo accounts use reserved example.com addresses and 555-01xx numbers: nothing real. */
 const emailFor = (role: DemoRole) => `demo-${role.replace("_", "-")}@example.com`;
-const phoneFor = (role: DemoRole) => (role === "provider_owner" ? "+12105550191" : "+12105550192");
+const phoneFor = (role: DemoRole) =>
+  role === "provider_owner"
+    ? "+12105550191"
+    : role === "provider_manager"
+      ? "+12105550193"
+      : "+12105550192";
 
 /**
  * "Sign in as demo" (batch 3). Development, previews and staging only: refuses in production
@@ -87,7 +98,7 @@ export async function demoSignInAction(form: FormData): Promise<void> {
     await admin.from("provider_members").upsert({
       user_id: userId,
       provider_id: company!.id,
-      role: role === "provider_owner" ? "owner" : "operator",
+      role: DEMO_PROVIDER_ROLE[role as keyof typeof DEMO_PROVIDER_ROLE],
     });
     await admin
       .from("provider_wallets")
@@ -98,7 +109,7 @@ export async function demoSignInAction(form: FormData): Promise<void> {
   } else {
     await admin.from("staff_members").upsert({
       user_id: userId,
-      role: role === "admin_super" ? "super_admin" : "dispatcher",
+      role: DEMO_STAFF_ROLE[role as keyof typeof DEMO_STAFF_ROLE],
       display_name: LABELS[role],
       is_active: true,
     });

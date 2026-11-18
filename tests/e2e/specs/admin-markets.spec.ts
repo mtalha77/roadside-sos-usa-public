@@ -15,7 +15,7 @@ test.describe("admin markets", () => {
 
   test("market list and detail", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(new URL("/markets", base).toString());
     await expect(page.getByRole("heading", { name: "Markets", level: 1 })).toBeVisible();
     await expectNoA11yViolations(page);

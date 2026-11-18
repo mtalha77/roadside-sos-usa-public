@@ -8,11 +8,21 @@ import { type Page, test } from "@playwright/test";
 export async function signInAsDemo(
   page: Page,
   base: string,
-  role: "Provider owner" | "Provider operator" | "Super admin" | "Dispatcher",
+  role:
+    | "Owner"
+    | "Operations manager"
+    | "Dispatcher"
+    | "Provider success"
+    | "Finance"
+    | "Marketing"
+    | "Viewer"
+    | "Provider owner"
+    | "Provider dispatcher"
+    | "Technician",
 ) {
   for (let attempt = 1; ; attempt++) {
     await page.goto(new URL("/sign-in", base).toString());
-    await page.getByRole("button", { name: role }).click();
+    await page.getByRole("button", { name: role, exact: true }).click();
     try {
       await page.waitForURL((u) => !u.pathname.startsWith("/sign-in"), { timeout: 50_000 });
       break;

@@ -15,7 +15,7 @@ test.describe("admin pricing", () => {
 
   test("current prices and a scheduled change approved", async ({ page }, info) => {
     test.setTimeout(90_000);
-    await signInAsDemo(page, base!, "Super admin");
+    await signInAsDemo(page, base!, "Owner");
     await page.goto(new URL("/pricing", base).toString());
     await expect(page.getByRole("heading", { name: "Pricing and fees", level: 1 })).toBeVisible();
     await expect(page.getByRole("columnheader", { name: "Our fee" }).first()).toBeVisible();
