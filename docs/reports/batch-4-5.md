@@ -9,8 +9,8 @@
 | Ticket                                            | Status      | Pull request                                                         |
 | ------------------------------------------------- | ----------- | -------------------------------------------------------------------- |
 | RSOS-100 Emergency-first website home, city pages | Merged      | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184) |
-| RSOS-101 Get Help flow, faster and calmer         | In review   |                                                                      |
-| RSOS-102 Roles and permissions in the admin       | Not started |                                                                      |
+| RSOS-101 Get Help flow, faster and calmer         | Merged      | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186) |
+| RSOS-102 Roles and permissions in the admin       | In review   |                                                                      |
 | RSOS-103 Admin rebuild (Today, navigation, board) | Not started |                                                                      |
 | RSOS-104 Provider portal polish                   | Not started |                                                                      |
 | RSOS-105 Skippable guided tours                   | Not started |                                                                      |
