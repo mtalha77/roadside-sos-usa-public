@@ -68,8 +68,10 @@ test.describe("get help flow", () => {
     await expect(
       page.getByRole("alert").filter({ hasText: /Type a street address/ }),
     ).toBeVisible();
+    // Still on the location screen, with what was typed kept.
+    await expect(page.getByText("Step 2 of 3")).toBeVisible();
+    await expect(page.getByLabel("Street address or cross streets")).toHaveValue("somewhere");
     await page.getByLabel("Street address or cross streets").fill("500 Commerce St");
-    await page.getByLabel("City").selectOption({ index: 1 });
     await page.getByRole("button", { name: "Continue" }).click();
     await page.getByLabel("Your name").fill("E2E Customer");
     await page.getByRole("button", { name: "Send my request" }).click();

@@ -93,6 +93,24 @@ export async function POST(request: NextRequest) {
         !(form.get("fix") === "saved" && str("address").length >= 3);
       const chosen = markets.find((m) => m.slug === str("market"));
       const placeId = str("placeId", 300);
+      // An error keeps what was typed: the tile's service, the address and the city are saved
+      // to the draft first, so the location screen comes back filled in (not the first screen).
+      const keep = async (error: string) => {
+        const posted = str("service", 40);
+        const patch: Draft = {
+          ...(/^[a-z-]{2,40}$/.test(posted) && !draft.service ? { service: posted } : {}),
+          ...(chosen ? { market: chosen.slug } : {}),
+          ...(str("address").length ? { address: str("address"), approx: true } : {}),
+        };
+        if (!Object.keys(patch).length) return fail("location", error);
+        const { data, error: saveError } = await rpc("save_request_draft", {
+          p_token: cookieToken,
+          p_patch: patch,
+        });
+        return saveError
+          ? fail("location", error)
+          : go(`/get-help?step=location&error=${error}`, String(data));
+      };
       let market: string | null;
       let point: { lat: number; lng: number };
       let precise = gps;
@@ -107,7 +125,7 @@ export async function POST(request: NextRequest) {
           address = near.highway ? `${near.address} (${near.highway})` : near.address;
       } else if (chosen && address.length >= 3) {
         // A typed address is checked for format only (no geocoding while Google Maps is off).
-        if (!placeId && !isPlausibleAddress(address)) return fail("location", "address");
+        if (!placeId && !isPlausibleAddress(address)) return keep("address");
         market = chosen.slug;
         point = { lat: chosen.center_lat, lng: chosen.center_lng };
         // A suggestion picked from Places Autocomplete gives the exact point.
@@ -122,7 +140,7 @@ export async function POST(request: NextRequest) {
             precise = true;
           }
         }
-      } else return fail("location", "location");
+      } else return keep("location");
       const service = str("service", 40);
       const attribution = Object.fromEntries(
         [
@@ -158,7 +176,7 @@ export async function POST(request: NextRequest) {
             destMiles: z.enum(Object.keys(MILE_RANGES) as [keyof typeof MILE_RANGES]),
           })
           .safeParse({ destAddress: str("destAddress"), destMiles: str("destMiles") || "lt5" });
-        if (!d.success) return fail("location", "destination");
+        if (!d.success) return keep("destination");
         destination = d.data;
       }
       return save(
