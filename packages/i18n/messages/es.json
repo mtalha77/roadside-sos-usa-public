@@ -40,7 +40,8 @@
       "campaign": "Campaña de prueba",
       "team": "Equipo y roles",
       "calls": "Llamadas",
-      "today": "Hoy"
+      "today": "Hoy",
+      "economics": "Modelo económico"
     },
     "shell": {
       "nav": "Administración",
@@ -74,7 +75,10 @@
       "pause": "Pausar",
       "resume": "Reanudar",
       "skip": "Adelantar 5 minutos",
-      "reset": "Volver a ahora"
+      "reset": "Volver a ahora",
+      "scenario": "Economía de demostración",
+      "scenarioBase": "Escenario base",
+      "scenarioStrong": "Escenario fuerte"
     },
     "overview": {
       "markets": "Mercados a la vista",
@@ -478,13 +482,41 @@
       "title": "Analítica",
       "range": "Rango de fechas",
       "days": "{count, plural, one {Hoy} other {Últimos # días}}",
-      "demo": "Datos de demostración, escalados desde el flujo demo en vivo; {real} solicitudes reales en este rango.",
-      "realRequests": "Solicitudes reales",
-      "firstQuote": "Tiempo a la primera cotización",
-      "seconds": "{s} s",
-      "costPerRequest": "Costo por solicitud pagada",
-      "contribution": "Contribución",
+      "viewLabel": "Datos mostrados",
+      "views": {
+        "real": "Reales",
+        "demo": "Demostración",
+        "model": "Modelo"
+      },
+      "marketLabel": "Mercados",
+      "allMarkets": "Todos los mercados",
+      "viewNote": {
+        "real": "Solo datos reales: solicitudes, visitas, gasto en anuncios y comisiones registrados en la base de datos.",
+        "demo": "Datos de demostración generados con el modelo económico (escenario {scenario}). Nunca se mezclan con números reales.",
+        "model": "Estimación del modelo: lo que el modelo económico (escenario {scenario}) espera para este rango."
+      },
+      "scenarios": {
+        "base": "base",
+        "strong": "fuerte"
+      },
+      "notEnough": "Aún no hay suficientes datos reales.",
+      "demoTag": "Datos de demostración",
+      "modelTag": "Estimación del modelo",
+      "cardsTitle": "Números clave",
+      "cards": {
+        "requests": "Solicitudes",
+        "accepted": "Aceptadas",
+        "adCostPerAccepted": "Costo de anuncios por solicitud aceptada",
+        "feeRevenue": "Ingresos por comisiones",
+        "contribution": "Contribución",
+        "profit": "Ganancia tras costos fijos"
+      },
+      "vsModel": "Modelo: {value}",
       "funnel": "Embudo",
+      "funnelNote": "Cada paso como parte del anterior; pasa el cursor para ver la parte de las visitas.",
+      "funnelRealNote": "Solicitudes web hechas en este rango (las telefónicas están en la tabla de canales). Los pasos siguientes cuentan solo estas solicitudes.",
+      "dataWarning": "Revisión de datos: {steps} salió más alto que el paso anterior, así que se muestra limitado. Hay que revisar los datos.",
+      "ofVisits": "{value} de las visitas",
       "steps": {
         "visits": "Visitas",
         "started": "Iniciadas",
@@ -493,18 +525,34 @@
         "picked": "Elegidas",
         "completed": "Completadas"
       },
-      "bySource": "Solicitudes por origen",
+      "bySource": "Solicitudes por fuente",
+      "byChannel": "Solicitudes por canal",
+      "total": "Total",
       "sources": {
-        "web": "Sitio web",
-        "phone": "Teléfono",
         "google_ads": "Google Ads",
         "meta": "Meta",
-        "organic": "Orgánico"
+        "microsoft_ads": "Microsoft Ads",
+        "organic": "Búsqueda orgánica",
+        "direct": "Directo",
+        "referral": "Referido"
+      },
+      "channels": {
+        "website": "Sitio web",
+        "phone": "Teléfono"
       },
       "economics": "Economía",
-      "adSpend": "Gasto en anuncios",
-      "feeRevenue": "Ingresos por cargos",
-      "assumptions": "Usa supuestos provisionales (costo por clic, tasas de conversión, parte del cargo) en packages/config hasta recibir el modelo de economía unitaria."
+      "money": {
+        "adSpend": "Gasto en anuncios",
+        "feeRevenue": "Ingresos por comisiones",
+        "paymentFees": "Comisiones de pago y créditos por leads disputados",
+        "subscriptions": "Suscripciones y destacados, neto",
+        "contribution": "Contribución",
+        "fixedCosts": "Costos fijos",
+        "profit": "Ganancia tras costos fijos"
+      },
+      "moneyRealNote": "Gasto en anuncios según Marketing; comisiones de solicitudes elegidas en este rango; comisiones de pago a la tasa del modelo. Suscripciones y costos fijos vienen del modelo para este rango hasta que se registren.",
+      "moneyModelNote": "Del modelo económico para este rango.",
+      "editModel": "Editar el modelo"
     },
     "content": {
       "title": "Contenido",
@@ -1303,6 +1351,66 @@
         "deactivated": "Desactivado. Ya no puede iniciar sesión.",
         "reactivated": "Reactivado."
       }
+    },
+    "economics": {
+      "title": "Modelo económico",
+      "lead": "Datos por mercado para los escenarios base y fuerte, y lo que significan cada mes. Analítica compara los números reales con esto.",
+      "shared": "Costos fijos compartidos entre mercados",
+      "sharedOn": "Costos fijos: un solo monto repartido entre los mercados mostrados.",
+      "sharedOff": "Costos fijos: cargados a cada mercado.",
+      "formula": "Clics = presupuesto ÷ costo por clic; solicitudes = clics × clic a solicitud; aceptadas = solicitudes × aceptación; contribución = comisiones + suscripciones − anuncios − comisiones de pago; ganancia = contribución − costos fijos.",
+      "results": "Resultados mensuales",
+      "market": "Mercado",
+      "scenario": "Escenario",
+      "allMarkets": "Todos los mercados",
+      "scenarios": {
+        "base": "Base",
+        "strong": "Fuerte"
+      },
+      "cols": {
+        "clicks": "Clics",
+        "requests": "Solicitudes",
+        "accepted": "Aceptadas",
+        "feeRevenue": "Comisiones",
+        "contribution": "Contribución",
+        "profit": "Ganancia tras costos fijos",
+        "adCostPerAccepted": "Anuncios por aceptada",
+        "breakEvenAccepted": "Aceptadas para equilibrio"
+      },
+      "emptyTitle": "Aún no hay modelo",
+      "empty": "Ningún mercado mostrado tiene modelo económico.",
+      "updated": "Guardado {at}",
+      "history": "Historial de cambios",
+      "seeded": "Cargado del informe",
+      "form": {
+        "budget": "Presupuesto mensual de anuncios",
+        "cpc": "Costo por clic",
+        "clickToRequest": "Clics que se vuelven solicitud",
+        "acceptance": "Solicitudes aceptadas y facturables",
+        "paymentFees": "Comisiones de pago y créditos por leads disputados",
+        "subscriptions": "Suscripciones y destacados, neto",
+        "fixed": "Costos fijos",
+        "usd": "USD",
+        "usdMonth": "USD por mes",
+        "mixAndFees": "Mezcla de servicios y nuestra comisión por servicio",
+        "mix": "Parte %",
+        "fee": "Comisión USD",
+        "assumptions": "Supuestos del embudo (no están en el informe)",
+        "assumptionsHint": "Solo dibujan los embudos del modelo y la demostración; no cambian el dinero.",
+        "startToSubmit": "Solicitudes iniciadas que se envían",
+        "quoteRate": "Solicitudes enviadas que reciben cotización",
+        "completionRate": "Trabajos aceptados que se completan",
+        "save": "Guardar",
+        "saved": "Guardado. Analítica ya usa los números nuevos.",
+        "error": {
+          "invalid": "Revisa los números: cada campo necesita un número válido.",
+          "mix": "La mezcla de servicios debe sumar 100%.",
+          "save": "No se pudo guardar. Inténtalo de nuevo.",
+          "forbidden": "Solo propietarios y gerentes de operaciones pueden cambiar el modelo."
+        }
+      },
+      "sharedStateOn": ": activado",
+      "sharedStateOff": ": desactivado"
     }
   },
   "emails": {

@@ -1,6 +1,7 @@
 import { textingEnabled } from "@rsos/core/adapters";
 import { Map as MapIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AdminShell } from "@/components/shell/admin-shell";
@@ -46,14 +47,18 @@ const DEMO_KEYS = [
   "resume",
   "skip",
   "reset",
+  "scenario",
+  "scenarioBase",
+  "scenarioStrong",
 ] as const;
 
 /** Admin shell for every signed-in screen (RSOS-071). The proxy already requires staff with aal2. */
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const [t, ctx, clock] = await Promise.all([
+  const [t, ctx, clock, jar] = await Promise.all([
     getTranslations("admin"),
     getAdminContext(),
     readDemoClock(),
+    cookies(),
   ]);
   const labels = Object.fromEntries(SHELL_KEYS.map((k) => [k, t(`shell.${k}`)]));
   // "Dispatcher · San Antonio, Houston": the role and the markets this person may see (RSOS-102).
@@ -108,6 +113,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             ) : null}
             <DemoControls
               initial={clock}
+              scenario={jar.get("rsos_demo_scenario")?.value === "strong" ? "strong" : "base"}
               labels={Object.fromEntries(DEMO_KEYS.map((k) => [k, t(`demoControls.${k}`)]))}
             />
           </>

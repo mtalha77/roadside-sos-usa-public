@@ -40,7 +40,8 @@
       "campaign": "Test campaign",
       "team": "Team & roles",
       "calls": "Calls",
-      "today": "Today"
+      "today": "Today",
+      "economics": "Economics model"
     },
     "shell": {
       "nav": "Admin",
@@ -74,7 +75,10 @@
       "pause": "Pause",
       "resume": "Resume",
       "skip": "Skip ahead 5 minutes",
-      "reset": "Reset to now"
+      "reset": "Reset to now",
+      "scenario": "Demo economics",
+      "scenarioBase": "Base scenario",
+      "scenarioStrong": "Strong scenario"
     },
     "overview": {
       "markets": "Markets in view",
@@ -478,13 +482,41 @@
       "title": "Analytics",
       "range": "Date range",
       "days": "{count, plural, one {Today} other {Last # days}}",
-      "demo": "Demo data, scaled from the live demo stream; {real} real requests in this range.",
-      "realRequests": "Real requests",
-      "firstQuote": "Time to first quote",
-      "seconds": "{s} s",
-      "costPerRequest": "Cost per paid request",
-      "contribution": "Contribution",
+      "viewLabel": "Data shown",
+      "views": {
+        "real": "Real",
+        "demo": "Demo",
+        "model": "Model"
+      },
+      "marketLabel": "Markets",
+      "allMarkets": "All markets",
+      "viewNote": {
+        "real": "Real data only: requests, visits, ad spend and fees recorded in the database.",
+        "demo": "Demo data generated from the Economics model ({scenario} scenario). Never mixed with real numbers.",
+        "model": "Model estimate: what the Economics model ({scenario} scenario) expects for this range."
+      },
+      "scenarios": {
+        "base": "base",
+        "strong": "strong"
+      },
+      "notEnough": "Not enough real data yet.",
+      "demoTag": "Demo data",
+      "modelTag": "Model estimate",
+      "cardsTitle": "Key numbers",
+      "cards": {
+        "requests": "Requests",
+        "accepted": "Accepted",
+        "adCostPerAccepted": "Ad cost per accepted request",
+        "feeRevenue": "Fee revenue",
+        "contribution": "Contribution",
+        "profit": "Profit after fixed costs"
+      },
+      "vsModel": "Model: {value}",
       "funnel": "Funnel",
+      "funnelNote": "Each step as a share of the step before it; hover for the share of visits.",
+      "funnelRealNote": "Website requests made in this range (phone requests are in the channel table). Later steps count only these requests.",
+      "dataWarning": "Data check: {steps} came out higher than the step before it, so it is shown capped. The underlying data needs a look.",
+      "ofVisits": "{value} of visits",
       "steps": {
         "visits": "Visits",
         "started": "Started",
@@ -494,17 +526,33 @@
         "completed": "Completed"
       },
       "bySource": "Requests by source",
+      "byChannel": "Requests by channel",
+      "total": "Total",
       "sources": {
-        "web": "Website",
-        "phone": "Phone",
         "google_ads": "Google Ads",
         "meta": "Meta",
-        "organic": "Organic"
+        "microsoft_ads": "Microsoft Ads",
+        "organic": "Organic search",
+        "direct": "Direct",
+        "referral": "Referral"
+      },
+      "channels": {
+        "website": "Website",
+        "phone": "Phone"
       },
       "economics": "Economics",
-      "adSpend": "Ad spend",
-      "feeRevenue": "Fee revenue",
-      "assumptions": "Uses placeholder assumptions (cost per click, conversion rates, fee share) in packages/config until the unit economics model is shared."
+      "money": {
+        "adSpend": "Ad spend",
+        "feeRevenue": "Fee revenue",
+        "paymentFees": "Payment fees and disputed-lead credits",
+        "subscriptions": "Subscriptions and featured, net",
+        "contribution": "Contribution",
+        "fixedCosts": "Fixed costs",
+        "profit": "Profit after fixed costs"
+      },
+      "moneyRealNote": "Ad spend as entered in Marketing; fees of requests picked in this range; payment fees at the model's rate. Subscriptions and fixed costs come from the model for this range until they are recorded.",
+      "moneyModelNote": "From the Economics model for this range.",
+      "editModel": "Edit the model"
     },
     "content": {
       "title": "Content",
@@ -1303,6 +1351,66 @@
         "deactivated": "Deactivated. They can't sign in any more.",
         "reactivated": "Reactivated."
       }
+    },
+    "economics": {
+      "title": "Economics model",
+      "lead": "Per-market inputs for the base and strong scenarios, and what they mean each month. Analytics compares real numbers against this.",
+      "shared": "Fixed costs shared across markets",
+      "sharedOn": "Fixed costs: one amount spread across the markets shown.",
+      "sharedOff": "Fixed costs: charged to each market.",
+      "formula": "Clicks = budget ÷ cost per click; requests = clicks × click-to-request; accepted = requests × acceptance; contribution = fee revenue + subscriptions − ad spend − payment fees; profit = contribution − fixed costs.",
+      "results": "Monthly results",
+      "market": "Market",
+      "scenario": "Scenario",
+      "allMarkets": "All markets",
+      "scenarios": {
+        "base": "Base",
+        "strong": "Strong"
+      },
+      "cols": {
+        "clicks": "Clicks",
+        "requests": "Requests",
+        "accepted": "Accepted",
+        "feeRevenue": "Fee revenue",
+        "contribution": "Contribution",
+        "profit": "Profit after fixed costs",
+        "adCostPerAccepted": "Ad cost per accepted",
+        "breakEvenAccepted": "Break-even accepted"
+      },
+      "emptyTitle": "No model yet",
+      "empty": "No market in view has an economics model.",
+      "updated": "Saved {at}",
+      "history": "Change history",
+      "seeded": "Seeded from the brief",
+      "form": {
+        "budget": "Monthly ad budget",
+        "cpc": "Cost per click",
+        "clickToRequest": "Clicks that become a request",
+        "acceptance": "Requests accepted and billable",
+        "paymentFees": "Payment fees and disputed-lead credits",
+        "subscriptions": "Subscriptions and featured, net",
+        "fixed": "Fixed costs",
+        "usd": "USD",
+        "usdMonth": "USD per month",
+        "mixAndFees": "Service mix and our fee per service",
+        "mix": "Share %",
+        "fee": "Fee USD",
+        "assumptions": "Funnel assumptions (not in the brief)",
+        "assumptionsHint": "Used only to draw the Model and Demo funnels; they do not change the money.",
+        "startToSubmit": "Started requests that are sent",
+        "quoteRate": "Sent requests that get a quote",
+        "completionRate": "Accepted jobs that are completed",
+        "save": "Save",
+        "saved": "Saved. Analytics uses the new numbers now.",
+        "error": {
+          "invalid": "Check the numbers: every field needs a number in range.",
+          "mix": "The service mix must add up to 100%.",
+          "save": "Could not save. Try again.",
+          "forbidden": "Only owners and operations managers can change the model."
+        }
+      },
+      "sharedStateOn": ": on",
+      "sharedStateOff": ": off"
     }
   },
   "emails": {
