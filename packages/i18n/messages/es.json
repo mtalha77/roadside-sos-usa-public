@@ -13,7 +13,7 @@
   "provider": {
     "label": "Portal de proveedores",
     "headline": "Recibe trabajos de asistencia vial cerca de ti.",
-    "body": "Ve solicitudes en tu zona, envía una cotización con tu precio y hora de llegada, y cobra directamente al conductor.",
+    "body": "Ve solicitudes en tu zona, envía una cotización con tu precio y hora de llegada, y cobra directamente al cliente.",
     "cta": "Hazte proveedor"
   },
   "admin": {
@@ -1661,7 +1661,7 @@
       "sendLink": "Enviarme un enlace",
       "linkSent": "Revisa tu correo para ver el enlace. Vence en 1 hora.",
       "phoneTitle": "Verifica tu teléfono",
-      "phoneBody": "Te enviamos un código de 6 dígitos al teléfono donde te contactarán conductores y despacho.",
+      "phoneBody": "Te enviamos un código de 6 dígitos al teléfono donde te contactarán clientes y despacho.",
       "phone": "Teléfono móvil",
       "sendCode": "Enviarme un código",
       "codeSent": "Enviamos un código a {phone}.",
@@ -1829,7 +1829,7 @@
       "current": "Mostrando ayuda para {city}",
       "none": "Elige tu ciudad",
       "outsideTitle": "Todavía no estamos en tu zona",
-      "outsideBody": "Abrimos ciudad por ciudad. Déjanos tu correo y te avisaremos cuando los conductores cerca de ti puedan recibir cotizaciones.",
+      "outsideBody": "Abrimos ciudad por ciudad. Déjanos tu correo y te avisaremos cuando abramos cerca de ti.",
       "outsideBodyCity": "Todavía no estamos en {city}. Déjanos tu correo y te avisaremos cuando abramos cerca de ti.",
       "emergency": "Si estás en peligro o bloqueando el tráfico, llama primero al 911.",
       "email": "Correo electrónico",
@@ -1865,7 +1865,7 @@
       "cookies": "Política de cookies",
       "accessibility": "Accesibilidad",
       "privacyChoices": "Tus opciones de privacidad",
-      "tagline": "Un mercado que conecta a conductores con proveedores independientes y verificados de asistencia en carretera. Los proveedores fijan sus precios y los conductores les pagan directamente.",
+      "tagline": "Un mercado que conecta a clientes con proveedores independientes y verificados de asistencia en carretera. Los proveedores fijan sus precios y los clientes les pagan directamente.",
       "rights": "© {year} {brand}"
     },
     "services": {
@@ -1919,7 +1919,7 @@
       "call": "Llamar al {phone}",
       "areasTitle": "Zonas que cubrimos",
       "highwaysTitle": "Autopistas y vías principales",
-      "tipsTitle": "Consejos para conductores en {city}",
+      "tipsTitle": "Consejos en carretera para {city}",
       "faqTitle": "Preguntas sobre {city}",
       "nearbyTitle": "Otras ciudades donde estamos",
       "serviceIn": "{service} en {city}",
@@ -1990,7 +1990,7 @@
     },
     "cities": {
       "title": "Dónde ayudamos",
-      "body": "Abrimos ciudad por ciudad para que cada conductor reciba ayuda local y rápida."
+      "body": "Abrimos ciudad por ciudad para que cada cliente reciba ayuda local y rápida."
     },
     "services": {
       "title": "Servicios"
@@ -2000,7 +2000,7 @@
       "items": {
         "cost": {
           "q": "¿Cuánto cuesta?",
-          "a": "Cada proveedor cotiza un precio total antes de que elijas. Solo le pagas al proveedor que eliges, directamente. Usar este sitio es gratis para los conductores."
+          "a": "Cada proveedor cotiza un precio total antes de que elijas. Solo le pagas al proveedor que eliges, directamente. Usar este sitio es gratis para los clientes."
         },
         "fast": {
           "q": "¿Qué tan rápido llega alguien?",
@@ -2022,7 +2022,7 @@
     },
     "providers": {
       "title": "¿Tienes una empresa de grúas o asistencia?",
-      "body": "Recibe trabajos pagados de conductores cerca de ti. Fija tus precios, cotiza cuando quieras y paga una tarifa fija solo cuando un conductor te elige.",
+      "body": "Recibe trabajos pagados de clientes cerca de ti. Fija tus precios, cotiza cuando quieras y paga una tarifa fija solo cuando un cliente te elige.",
       "cta": "Conoce cómo unirte"
     },
     "getHelp": "Pedir ayuda ahora",
@@ -2051,8 +2051,8 @@
   "pages": {
     "how": {
       "title": "Cómo funciona",
-      "intro": "Los conductores reciben cotizaciones de proveedores cercanos y eligen una. Los proveedores reciben trabajos pagados y fijan sus precios.",
-      "drivers": "Para conductores",
+      "intro": "Los clientes reciben cotizaciones de proveedores cercanos y eligen una. Los proveedores reciben trabajos pagados y fijan sus precios.",
+      "drivers": "Para clientes",
       "providers": "Para proveedores",
       "driverSteps": [
         [
@@ -2083,7 +2083,7 @@
         ]
       ],
       "payTitle": "Quién le paga a quién",
-      "payBody": "Los conductores les pagan directamente a los proveedores por el trabajo. Los proveedores nos pagan una tarifa fija por cada solicitud en la que los eligen, de un saldo prepagado. Nunca manejamos el pago del trabajo.",
+      "payBody": "Los clientes les pagan directamente a los proveedores por el trabajo. Los proveedores nos pagan una tarifa fija por cada solicitud en la que los eligen, de un saldo prepagado. Nunca manejamos el pago del trabajo.",
       "cta": "Pedir ayuda ahora",
       "providerCta": "Conoce cómo unirte"
     },
@@ -2160,12 +2160,12 @@
     },
     "about": {
       "title": "Quiénes somos",
-      "intro": "Conectamos a conductores varados con proveedores independientes de asistencia cercanos, rápido y con precios claros.",
+      "intro": "Conectamos a clientes varados con proveedores independientes de asistencia cercanos, rápido y con precios claros.",
       "mission": "Por qué existimos",
       "missionBody": "Quedarse varado es estresante. Llamar a varios lugares para una grúa o un paso de corriente toma tiempo, y los precios suelen ser una sorpresa. Dejamos que los proveedores cercanos compitan con un precio claro y una hora de llegada, para que elijas con confianza.",
       "how": "Cómo trabajamos",
-      "howBody": "Somos un mercado, no una empresa de grúas. Proveedores independientes y asegurados hacen el trabajo y fijan sus precios. Los conductores les pagan directamente. Los proveedores nos pagan una pequeña tarifa fija cuando un conductor los elige.",
-      "cities": "Abrimos ciudad por ciudad para que cada conductor reciba ayuda local y rápida.",
+      "howBody": "Somos un mercado, no una empresa de grúas. Proveedores independientes y asegurados hacen el trabajo y fijan sus precios. Los clientes les pagan directamente. Los proveedores nos pagan una pequeña tarifa fija cuando un cliente los elige.",
+      "cities": "Abrimos ciudad por ciudad para que cada cliente reciba ayuda local y rápida.",
       "contact": "¿Preguntas? Contáctanos."
     },
     "contact": {
@@ -2228,8 +2228,8 @@
     }
   },
   "forProviders": {
-    "title": "Recibe trabajos de asistencia de conductores cercanos",
-    "intro": "Únete a proveedores locales verificados que reciben trabajos pagados de conductores varados. Tú fijas tus precios, eliges los trabajos y solo pagas cuando un conductor te elige.",
+    "title": "Recibe trabajos de asistencia de clientes cercanos",
+    "intro": "Únete a proveedores locales verificados que reciben trabajos pagados de clientes varados. Tú fijas tus precios, eliges los trabajos y solo pagas cuando un cliente te elige.",
     "apply": "Solicitar unirse",
     "how": {
       "title": "Cómo llegan los trabajos",
@@ -2248,8 +2248,8 @@
     "money": {
       "title": "Cómo funciona el dinero",
       "yourPrices": "Tú fijas tus precios para cada trabajo.",
-      "direct": "Los conductores te pagan directamente. Nunca tocamos el pago del trabajo.",
-      "fee": "Cobramos una tarifa fija solo cuando un conductor te elige, de un saldo prepagado que recargas.",
+      "direct": "Los clientes te pagan directamente. Nunca tocamos el pago del trabajo.",
+      "fee": "Cobramos una tarifa fija solo cuando un cliente te elige, de un saldo prepagado que recargas.",
       "noMonthly": "Unirse no tiene costo mensual."
     },
     "fees": {
@@ -2770,7 +2770,7 @@
       },
       "reviewSamples": [
         "Llegó antes de lo cotizado y en minutos ya estaba de nuevo en camino.",
-        "Conductor amable, precio claro, sin sorpresas al final.",
+        "Cliente amable, precio claro, sin sorpresas al final.",
         "Llamó para avisar dónde estaba. Me sentí seguro todo el tiempo.",
         "Cuidadoso con mi carro y explicó todo antes de empezar.",
         "Muy tarde en la noche y aun así rápido. Lo usaría otra vez.",
@@ -2929,7 +2929,7 @@
     "address": "Tu dirección o cruce de calles en {city}",
     "continue": "Continuar",
     "trust": {
-      "label": "Por qué nos usan los conductores",
+      "label": "Por qué nos usan los clientes",
       "insured": "Proveedores verificados y asegurados",
       "fast": "Cotizaciones en unos 3 minutos",
       "noMembership": "Sin membresía"
