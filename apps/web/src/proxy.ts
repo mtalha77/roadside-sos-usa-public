@@ -61,8 +61,10 @@ export async function proxy(request: NextRequest) {
   requestHeaders.set("x-nonce", nonce);
   // Booking funnel session (RSOS-111): when the visitor landed and a random id, for this browser
   // session only. The page sees it on this very request too.
+  // Known bots and headless browsers get no funnel session, so they never count as customers.
+  const bot = /bot|crawl|spider|lighthouse|headless/i.test(request.headers.get("user-agent") ?? "");
   const flow =
-    isPage && !readFlow(request.cookies.get(FLOW_COOKIE)?.value) ? newFlowCookie() : null;
+    isPage && !bot && !readFlow(request.cookies.get(FLOW_COOKIE)?.value) ? newFlowCookie() : null;
   if (flow) {
     const jar = request.headers.get("cookie");
     requestHeaders.set("cookie", `${jar ? `${jar}; ` : ""}${FLOW_COOKIE}=${flow}`);
