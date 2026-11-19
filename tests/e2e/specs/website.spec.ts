@@ -36,7 +36,7 @@ test.describe("website structure", () => {
       .getByRole("link", { name: /Flat tire/ })
       .first();
     await tile.click();
-    await expect(page).toHaveURL(/\/get-help\?service=flat-tire/);
+    await expect(page).toHaveURL(/\/get-help\/flat-tire\/problem/);
     await expect(page.locator("input[name=service][value='flat-tire']")).toHaveCount(1);
     await expectNoA11yViolations(page);
   });
@@ -57,7 +57,7 @@ test.describe("website structure", () => {
     await page.getByRole("main").locator('a[href$="/tow"]').first().click();
     await expect(page).toHaveURL(new RegExp(`${city}/tow$`));
     await page.getByRole("main").getByRole("link", { name: "Get help now" }).click();
-    await expect(page).toHaveURL(/\/get-help\?service=tow&market=[a-z-]+$/);
+    await expect(page).toHaveURL(/\/get-help\/tow\/problem\?market=[a-z-]+$/);
     await expect(page.locator("select[name=market]")).not.toHaveValue("");
     expect((await page.request.get(url("/roadside-assistance/tx/not-a-city"))).status()).toBe(404);
   });

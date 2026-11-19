@@ -200,7 +200,16 @@ export function FlowForm({
         // request page returns to the page the customer started from.
         const back = (s?.steps.length ?? 1) - 1;
         if (back > 0) {
-          addEventListener("popstate", () => location.replace(to), { once: true });
+          // Caught before the app router's own handler, so it doesn't render (and redirect) the
+          // emptied step while the request page loads.
+          addEventListener(
+            "popstate",
+            (ev) => {
+              ev.stopImmediatePropagation();
+              location.replace(to);
+            },
+            { once: true, capture: true },
+          );
           history.go(-back);
         } else location.replace(to);
         return;
