@@ -1,0 +1,57 @@
+name: Ads sync
+
+# RSOS-107: runs the ad sync jobs on a schedule Vercel Hobby cannot (hourly and every 5 minutes).
+# Every 5 minutes: auto-pause. At the top of each hour: spend import, conversion upload and the
+# owner's daily email check. The nightly 7-day spend re-pull runs on Vercel Cron.
+# Does nothing until the owner sets the repository variable ADS_SYNC_ADMIN_URLS (space-separated
+# admin base URLs, for example the staging and production admin hosts) and the secret CRON_SECRET.
+# Platforms without keys are skipped by the app itself, so this is safe to run before any keys exist.
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "One job to run now (spend, spend-full, conversions, autopause, daily-email)"
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ads-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TARGETS: ${{ vars.ADS_SYNC_ADMIN_URLS }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
+      BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      ONE_JOB: ${{ github.event.inputs.job }}
+    steps:
+      - name: Run the due jobs
+        run: |
+          set -u
+          if [ -z "$TARGETS" ] || [ -z "$CRON_SECRET" ]; then
+            echo "::notice::ADS_SYNC_ADMIN_URLS or CRON_SECRET is not set: nothing to do."
+            exit 0
+          fi
+          jobs="autopause"
+          minute=$(date -u +%M)
+          if [ "$minute" -lt 5 ]; then jobs="$jobs spend conversions daily-email"; fi
+          if [ -n "$ONE_JOB" ]; then jobs="$ONE_JOB"; fi
+          failed=0
+          for base in $TARGETS; do
+            for job in $jobs; do
+              code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 55 \
+                -H "Authorization: Bearer $CRON_SECRET" \
+                ${BYPASS:+-H "x-vercel-protection-bypass: $BYPASS"} \
+                "$base/api/cron/ads/$job")
+              echo "$base $job -> $code"
+              [ "$code" = "200" ] || failed=1
+            done
+          done
+          exit $failed

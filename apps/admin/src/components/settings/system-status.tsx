@@ -1,3 +1,4 @@
+import { syncHealth } from "@rsos/core/ads";
 import "server-only";
 import { ADAPTER_KEYS, type AdapterName } from "@rsos/config/adapters";
 import { appUrl } from "@rsos/config/site";
@@ -207,6 +208,53 @@ export async function SystemStatus() {
           })}
         </ul>
       </section>
+      <AdSyncHealth />
     </div>
+  );
+}
+
+/** Ad sync health (RSOS-107): last success per job and failures in a row (alert at 3). */
+async function AdSyncHealth() {
+  const t = await getTranslations("admin.ads.health");
+  const { data } = await (
+    await getServerSupabase()
+  )
+    .from("sync_runs")
+    .select("job, ok, started_at")
+    .order("started_at", { ascending: false })
+    .limit(300);
+  const health = syncHealth(
+    (data ?? []).map((r) => ({ job: r.job, ok: r.ok, at: Date.parse(r.started_at) })),
+  );
+  const when = (at: number | null) =>
+    at === null
+      ? "–"
+      : new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(at);
+  return (
+    <section className="rounded-2xl border bg-card p-4" aria-labelledby="ads-health-h">
+      <h3 id="ads-health-h" className="mb-1 font-semibold">
+        {t("title")}
+      </h3>
+      <p className="mb-3 text-sm text-muted-foreground">{t("note")}</p>
+      {health.length === 0 ? (
+        <p className="text-sm text-muted-foreground">{t("none")}</p>
+      ) : (
+        <ul className="divide-y text-sm">
+          {health.map((h) => (
+            <li key={h.job} className="flex flex-wrap items-center justify-between gap-2 py-2">
+              <span className="font-mono">{h.job}</span>
+              <span className="flex items-center gap-2">
+                <span className="text-muted-foreground">
+                  {t("lastOk")}: {when(h.lastOk)}
+                </span>
+                <Badge tone={h.alert ? "critical" : h.failures ? "warning" : "success"}>
+                  {t("failures")}: {h.failures}
+                </Badge>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

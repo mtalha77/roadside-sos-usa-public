@@ -52,6 +52,162 @@ export type Database = {
           },
         ]
       }
+      ad_campaigns: {
+        Row: {
+          campaign_id: string
+          mapped_by_hand: boolean
+          market_id: string | null
+          name: string
+          paused_by_auto: boolean
+          platform: string
+          seen_at: string
+          service_slug: string | null
+        }
+        Insert: {
+          campaign_id: string
+          mapped_by_hand?: boolean
+          market_id?: string | null
+          name: string
+          paused_by_auto?: boolean
+          platform: string
+          seen_at?: string
+          service_slug?: string | null
+        }
+        Update: {
+          campaign_id?: string
+          mapped_by_hand?: boolean
+          market_id?: string | null
+          name?: string
+          paused_by_auto?: boolean
+          platform?: string
+          seen_at?: string
+          service_slug?: string | null
+        }
+        Relationships: []
+      }
+      ad_connections: {
+        Row: {
+          account_name: string | null
+          enabled: boolean
+          last_error: string | null
+          last_sync_at: string | null
+          platform: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          account_name?: string | null
+          enabled?: boolean
+          last_error?: string | null
+          last_sync_at?: string | null
+          platform: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          account_name?: string | null
+          enabled?: boolean
+          last_error?: string | null
+          last_sync_at?: string | null
+          platform?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      ad_conversion_uploads: {
+        Row: {
+          attempts: number
+          event_id: string
+          last_attempt_at: string
+          next_attempt_at: string | null
+          platform: string
+          response: Json | null
+          status: string
+        }
+        Insert: {
+          attempts?: number
+          event_id: string
+          last_attempt_at?: string
+          next_attempt_at?: string | null
+          platform: string
+          response?: Json | null
+          status: string
+        }
+        Update: {
+          attempts?: number
+          event_id?: string
+          last_attempt_at?: string
+          next_attempt_at?: string | null
+          platform?: string
+          response?: Json | null
+          status?: string
+        }
+        Relationships: []
+      }
+      ad_pause_events: {
+        Row: {
+          action: string
+          at: string
+          campaigns: string[]
+          id: number
+          market_id: string
+          service_slug: string
+        }
+        Insert: {
+          action: string
+          at?: string
+          campaigns?: string[]
+          id?: number
+          market_id: string
+          service_slug: string
+        }
+        Update: {
+          action?: string
+          at?: string
+          campaigns?: string[]
+          id?: number
+          market_id?: string
+          service_slug?: string
+        }
+        Relationships: []
+      }
+      ad_pause_rules: {
+        Row: {
+          enabled: boolean
+          end_hour: number
+          grace_minutes: number
+          market_id: string
+          min_providers: number
+          start_hour: number
+          state: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          enabled?: boolean
+          end_hour?: number
+          grace_minutes?: number
+          market_id: string
+          min_providers?: number
+          start_hour?: number
+          state?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          enabled?: boolean
+          end_hour?: number
+          grace_minutes?: number
+          market_id?: string
+          min_providers?: number
+          start_hour?: number
+          state?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       ad_spend: {
         Row: {
           amount_cents: number
@@ -83,6 +239,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ad_spend_daily: {
+        Row: {
+          campaign_id: string
+          clicks: number
+          day: string
+          imported_at: string
+          impressions: number
+          market_id: string | null
+          platform: string
+          service_slug: string | null
+          spend_cents: number
+        }
+        Insert: {
+          campaign_id: string
+          clicks?: number
+          day: string
+          imported_at?: string
+          impressions?: number
+          market_id?: string | null
+          platform: string
+          service_slug?: string | null
+          spend_cents: number
+        }
+        Update: {
+          campaign_id?: string
+          clicks?: number
+          day?: string
+          imported_at?: string
+          impressions?: number
+          market_id?: string | null
+          platform?: string
+          service_slug?: string | null
+          spend_cents?: number
+        }
+        Relationships: []
       }
       api_usage: {
         Row: {
@@ -1244,6 +1436,7 @@ export type Database = {
       }
       markets: {
         Row: {
+          ad_code: string | null
           boundary: unknown
           call_recording_enabled: boolean
           center: unknown
@@ -1262,6 +1455,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ad_code?: string | null
           boundary: unknown
           call_recording_enabled?: boolean
           center: unknown
@@ -1280,6 +1474,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ad_code?: string | null
           boundary?: unknown
           call_recording_enabled?: boolean
           center?: unknown
@@ -2349,6 +2544,36 @@ export type Database = {
           role?: Database["public"]["Enums"]["staff_role"]
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      sync_runs: {
+        Row: {
+          details: Json
+          error: string | null
+          finished_at: string
+          id: number
+          job: string
+          ok: boolean
+          started_at: string
+        }
+        Insert: {
+          details?: Json
+          error?: string | null
+          finished_at?: string
+          id?: number
+          job: string
+          ok: boolean
+          started_at?: string
+        }
+        Update: {
+          details?: Json
+          error?: string | null
+          finished_at?: string
+          id?: number
+          job?: string
+          ok?: boolean
+          started_at?: string
         }
         Relationships: []
       }

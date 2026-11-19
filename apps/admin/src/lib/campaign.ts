@@ -20,11 +20,16 @@ export async function loadCampaign(
       .select("market_id, direction, outcome")
       .in("market_id", ids)
       .gte("created_at", from.toISOString()),
-    supabase
-      .from("ad_spend")
-      .select("market_id, amount_cents")
-      .in("market_id", ids)
-      .gte("day", from.toISOString().slice(0, 10)),
+    // RSOS-107: imported spend per day, the manual form only for days with no import.
+    (
+      supabase.rpc as unknown as (
+        f: string,
+        x: object,
+      ) => PromiseLike<{ data: { market_id: string; spend_cents: number }[] | null }>
+    )("ad_dashboard", {
+      p_from: from.toISOString().slice(0, 10),
+      p_to: to.toISOString().slice(0, 10),
+    }),
   ]);
   const ms = (v: string | null) => (v ? Date.parse(v) : null);
   const rows = campaignMetrics(
@@ -44,7 +49,9 @@ export async function loadCampaign(
       direction: c.direction,
       outcome: c.outcome,
     })),
-    (spend ?? []).map((s) => ({ marketId: s.market_id, amountCents: s.amount_cents })),
+    (spend ?? [])
+      .filter((s) => ids.includes(s.market_id))
+      .map((s) => ({ marketId: s.market_id, amountCents: Number(s.spend_cents) })),
   );
   return rows.map((r) => ({ ...r, market: markets.find((m) => m.id === r.marketId)?.name ?? "" }));
 }

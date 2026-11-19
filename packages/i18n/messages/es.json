@@ -1863,6 +1863,99 @@
       "requiredNo": "Opcional",
       "order": "Orden (menor primero)",
       "save": "Guardar"
+    },
+    "ads": {
+      "back": "Volver a Marketing",
+      "title": "Conexiones de anuncios",
+      "lead": "Importación de gasto, envío de conversiones y pausa automática por plataforma. Una plataforma funciona solo con sus claves en el servidor y su interruptor encendido aquí; las claves nunca se muestran.",
+      "saved": "Guardado.",
+      "forbidden": "No puedes cambiar esto. Lo hacen el dueño y marketing.",
+      "invalid": "Revisa el formulario: falta algo o está fuera de rango.",
+      "test": {
+        "button": "Probar conexión",
+        "ok": "La conexión funciona.",
+        "failed": "La conexión falló: mira el error en la tarjeta.",
+        "missing": "Sin conectar: sus claves no están en el servidor."
+      },
+      "platformsTitle": "Plataformas",
+      "platforms": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads"
+      },
+      "status": {
+        "not_connected": "Sin conectar",
+        "off": "Apagada",
+        "connected": "Conectada",
+        "error": "Error"
+      },
+      "account": "Cuenta",
+      "lastSync": "Última sincronización",
+      "lastError": "Último error",
+      "never": "Nunca",
+      "needKeys": "Agrega sus claves en Vercel (ver docs/runbooks/ads-connections.md) y enciéndela aquí.",
+      "turnOn": "Encender",
+      "turnOff": "Apagar",
+      "codesTitle": "Códigos de mercado para nombres de campaña",
+      "codesNote": "Las campañas llamadas \"CÓDIGO | Servicio | Tipo\" (por ejemplo el código del mercado, luego Grúa y luego Búsqueda) se asignan al mercado y servicio automáticamente.",
+      "save": "Guardar",
+      "campaignsTitle": "Campañas",
+      "campaignsNote": "Campañas importadas y su mercado. {unmapped, plural, =0 {Todas tienen mercado.} one {# campaña no tiene mercado: asígnalo a mano.} other {# campañas no tienen mercado: asígnalo a mano.}}",
+      "noCampaigns": "Todavía no hay campañas importadas.",
+      "market": "Mercado",
+      "service": "Servicio",
+      "anyService": "Cualquier servicio",
+      "unmapped": "Sin asignar",
+      "byHand": "asignada a mano",
+      "pausedByAuto": "pausada automáticamente",
+      "pauseTitle": "Pausa automática",
+      "pauseNote": "Cada 5 minutos: si hay menos proveedores que el mínimo para un servicio en horario de anuncios, después del periodo de gracia se pausan las campañas de ese servicio en el mercado; se reanudan cuando vuelven. Cada cambio se registra y se envía al dueño. Apagada por defecto.",
+      "on": "Activa",
+      "off": "Apagada",
+      "pauseOn": "Pausa automática activa",
+      "minProviders": "Mínimo de proveedores",
+      "grace": "Periodo de gracia (minutos)",
+      "startHour": "Anuncios desde",
+      "endHour": "Anuncios hasta",
+      "saveRule": "Guardar regla",
+      "pauseLog": "Pausas y reanudaciones recientes",
+      "paused": "pausada",
+      "resumed": "reanudada",
+      "dashTitle": "Anuncios por mercado y canal",
+      "dashNote": "Gasto de las plataformas (el formulario manual solo cubre días sin importación). Las tarifas ganadas son nuestras tarifas de trabajos asignados; el retorno es tarifas ganadas entre gasto.",
+      "connections": "Conexiones de anuncios",
+      "csv": "Descargar CSV",
+      "cols": {
+        "market": "Mercado",
+        "channel": "Canal",
+        "trend": "Tendencia de gasto",
+        "spend": "Gasto",
+        "clicks": "Clics",
+        "calls": "Llamadas",
+        "qualified": "Llamadas calificadas",
+        "requests": "Solicitudes",
+        "assigned": "Asignados",
+        "completed": "Completados",
+        "perRequest": "Costo por solicitud",
+        "perCompleted": "Costo por trabajo completado",
+        "fees": "Tarifas ganadas",
+        "roas": "Retorno de la inversión"
+      },
+      "noData": "No hay datos de anuncios en este periodo.",
+      "channels": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads",
+        "other": "Otro"
+      },
+      "health": {
+        "title": "Salud de la sincronización",
+        "note": "Última ejecución correcta por tarea y fallas seguidas; el dueño recibe un correo después de 3 fallas.",
+        "job": "Tarea",
+        "lastOk": "Último éxito",
+        "failures": "Fallas seguidas",
+        "none": "Todavía no se ha ejecutado ninguna sincronización."
+      }
     }
   },
   "emails": {
@@ -1960,6 +2053,20 @@
       "intro": "Hola, {company}:",
       "body": "{amount} de crédito de bonificación en tu billetera vence el {date}. Paga tus tarifas por trabajo automáticamente, así que conectarte y ganar trabajos antes de esa fecha lo aprovecha.",
       "note": "El crédito de bonificación no es dinero y no se puede retirar."
+    },
+    "ads": {
+      "failingTitle": "La sincronización de anuncios falla: {job}",
+      "failingBody": "3 ejecuciones fallidas seguidas. Último error: {error}",
+      "pausedTitle": "Anuncios pausados: {service} en {market}",
+      "resumedTitle": "Anuncios reanudados: {service} en {market}",
+      "pausedBody": "Ningún proveedor disponible para {service} durante {minutes} minutos en horario de anuncios: {count} campaña(s) pausada(s).",
+      "resumedBody": "Vuelve a haber proveedores para {service}: {count} campaña(s) reanudada(s).",
+      "dailyTitle": "Anuncios de ayer ({day})",
+      "dailyRow": "{market}: gasto {spend}, solicitudes {requests}, trabajos completados {completed}, tarifas {fees}",
+      "unusualSpend": "{market}: gasto sin solicitudes",
+      "unusualCost": "{market}: costo por trabajo completado mayor a {max}",
+      "unusualSync": "Sincronización con fallas: {job}",
+      "nothingUnusual": "Nada fuera de lo normal."
     }
   },
   "auth": {
