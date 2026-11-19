@@ -207,7 +207,7 @@ export default async function AnalyticsPage({
         <dl className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           {cards.map(([k, value, expected, tone]) => (
             <div key={k} className="flex flex-col gap-1 rounded-xl border bg-card p-4">
-              <dt className="flex items-center justify-between gap-2 text-sm text-muted-foreground">
+              <dt className="flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground">
                 {t(`cards.${k}`)}
                 {tag}
               </dt>
