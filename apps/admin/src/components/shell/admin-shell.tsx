@@ -3,6 +3,7 @@
 import type { CommandAction } from "@rsos/ui/command-palette";
 import { Dialog, DialogContent } from "@rsos/ui/dialog";
 import { SidePanel, SidePanelContent } from "@rsos/ui/side-panel";
+import { TOUR_EVENT } from "@rsos/ui/tour-runner";
 import { ThemeToggle } from "@rsos/ui/theme-toggle";
 import {
   Activity,
@@ -123,6 +124,13 @@ export function AdminShell({
   const [palette, setPalette] = useState(false);
   const [help, setHelp] = useState(false);
   const [menu, setMenu] = useState(false);
+  // A tour started from the phone menu closes it first (the menu is a modal: it would block the
+  // tour's buttons); the spotlight then points at the Menu button.
+  useEffect(() => {
+    const close = () => setMenu(false);
+    window.addEventListener(TOUR_EVENT, close);
+    return () => window.removeEventListener(TOUR_EVENT, close);
+  }, []);
   const [query, setQuery] = useState("");
   const foldedRaw = useSyncExternalStore(subscribeFolded, readFolded, () => "[]");
   const folded = useMemo(() => {
@@ -269,6 +277,7 @@ export function AdminShell({
                   <li key={s.href}>
                     <Link
                       href={s.href}
+                      data-tour={where === "side" ? `nav-${s.key}` : undefined}
                       className={item}
                       onClick={where === "menu" ? () => setMenu(false) : undefined}
                       aria-current={current(s.href) ? "page" : undefined}
@@ -320,6 +329,7 @@ export function AdminShell({
           <MarketSwitcher markets={markets} selected={selected} labels={labels} />
           <button
             type="button"
+            data-tour="search"
             onClick={() => setPalette(true)}
             className="flex min-h-12 flex-1 items-center gap-2 rounded-lg border px-3 text-sm text-muted-foreground hover:bg-accent sm:max-w-sm"
           >
@@ -338,6 +348,7 @@ export function AdminShell({
           </span>
           <button
             type="button"
+            data-tour="menu"
             onClick={() => setMenu(true)}
             className="order-first flex min-h-12 items-center gap-2 rounded-lg border px-3 text-sm font-medium hover:bg-accent md:hidden"
           >

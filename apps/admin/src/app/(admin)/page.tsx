@@ -5,6 +5,7 @@ import { EmptyState } from "@rsos/ui/empty-state";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { AutoRefresh } from "@/components/today/auto-refresh";
+import { PageTourButton } from "@/components/tours/admin-tours";
 import { getAdminContext } from "@/lib/admin";
 import { formatAge } from "@/lib/board-time";
 import { demoNow } from "@/lib/demo-clock";
@@ -17,9 +18,10 @@ export const dynamic = "force-dynamic";
  * one action each, today's numbers per market and alerts. Calm and small: no decorative charts.
  */
 export default async function TodayPage() {
-  const [t, td, locale, ctx, now] = await Promise.all([
+  const [t, td, tt, locale, ctx, now] = await Promise.all([
     getTranslations("admin"),
     getTranslations("admin.today"),
+    getTranslations("tours.labels"),
     getLocale(),
     getAdminContext(),
     demoNow(),
@@ -51,12 +53,15 @@ export default async function TodayPage() {
   return (
     <main id="main" className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6">
       <AutoRefresh />
-      <header>
-        <h1 className="text-2xl font-semibold">{t("sections.today")}</h1>
-        <p className="text-sm text-muted-foreground">{td("lead")}</p>
+      <header className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold">{t("sections.today")}</h1>
+          <p className="text-sm text-muted-foreground">{td("lead")}</p>
+        </div>
+        <PageTourButton tour="admin.page.today" label={tt("page")} />
       </header>
 
-      <section aria-labelledby="strip-h">
+      <section aria-labelledby="strip-h" data-tour="today-strip">
         <h2 id="strip-h" className="sr-only">
           {td("strip.title")}
         </h2>
@@ -75,7 +80,11 @@ export default async function TodayPage() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <section aria-labelledby="urgent-h" className="flex flex-col gap-2">
+        <section
+          aria-labelledby="urgent-h"
+          data-tour="today-urgent"
+          className="flex flex-col gap-2"
+        >
           <h2 id="urgent-h" className="text-lg font-semibold">
             {td("urgent.title")}
           </h2>
@@ -110,7 +119,11 @@ export default async function TodayPage() {
           )}
         </section>
 
-        <section aria-labelledby="alerts-h" className="flex flex-col gap-2">
+        <section
+          aria-labelledby="alerts-h"
+          data-tour="today-alerts"
+          className="flex flex-col gap-2"
+        >
           <h2 id="alerts-h" className="text-lg font-semibold">
             {td("alerts.title")}
           </h2>
@@ -140,7 +153,11 @@ export default async function TodayPage() {
         </section>
       </div>
 
-      <section aria-labelledby="numbers-h" className="flex flex-col gap-2">
+      <section
+        aria-labelledby="numbers-h"
+        data-tour="today-numbers"
+        className="flex flex-col gap-2"
+      >
         <h2 id="numbers-h" className="text-lg font-semibold">
           {td("numbers.title")}
         </h2>

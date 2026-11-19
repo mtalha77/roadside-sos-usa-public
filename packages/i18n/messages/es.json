@@ -141,7 +141,8 @@
       "phone": "Teléfono",
       "where": "Dónde",
       "provider": "Proveedor",
-      "kind": "Tipo"
+      "kind": "Tipo",
+      "pageTour": "Recorrido de esta página"
     },
     "requests": {
       "title": "Solicitudes",
@@ -1005,6 +1006,16 @@
           "title": "Ajustes",
           "hint": "Usuarios, auditoría, plantillas, funciones e integraciones."
         }
+      },
+      "stepsTitle": "Ir a un paso",
+      "stepsHint": "Lleva las pantallas de administración a ese punto del trabajo demo. El sitio web y el portal de proveedores siguen la hora real.",
+      "skip": "Saltar al siguiente paso",
+      "stage": {
+        "quotes": "Llegan cotizaciones",
+        "picked": "El cliente elige",
+        "onTheWay": "En camino",
+        "onSite": "En el lugar",
+        "done": "Listo y reseña"
       }
     },
     "softphone": {
@@ -3553,5 +3564,231 @@
     "codeIntro": "Escribe el código de 6 dígitos que te leyó el despachador.",
     "code": "Código de 6 dígitos",
     "codeSubmit": "Continuar"
+  },
+  "tours": {
+    "labels": {
+      "back": "Atrás",
+      "next": "Siguiente",
+      "done": "Listo",
+      "skip": "Saltar recorrido",
+      "hide": "No mostrar otra vez",
+      "step": "Paso {n} de {total}",
+      "take": "Hacer el recorrido",
+      "page": "Recorrido de esta página"
+    },
+    "admin": {
+      "owner": [
+        {
+          "title": "Hoy",
+          "body": "Empieza aquí: lo que necesita a una persona, lo más urgente y los números de hoy."
+        },
+        {
+          "title": "Equipo y roles",
+          "body": "Invita personas y dale a cada una un rol; el menú muestra a cada rol solo lo que necesita."
+        },
+        {
+          "title": "Mercados",
+          "body": "Lanza y pausa ciudades, sus números de teléfono y áreas de servicio."
+        },
+        {
+          "title": "Finanzas",
+          "body": "Comisiones, saldos de proveedores y reembolsos, por mercado."
+        },
+        {
+          "title": "Busca lo que sea",
+          "body": "Pulsa ⌘K (Ctrl K) para ir a una página, un código, un teléfono o un proveedor."
+        },
+        {
+          "title": "Repite el recorrido",
+          "body": "Este botón reinicia el recorrido cuando quieras."
+        }
+      ],
+      "dispatcher": [
+        {
+          "title": "Bandeja",
+          "body": "Todo lo que una persona debe atender ahora: solicitudes, llamadas perdidas y textos."
+        },
+        {
+          "title": "Toma una solicitud",
+          "body": "Abre un elemento y toca Tomar para que nadie más lo atienda; se libera tras 10 minutos sin acción."
+        },
+        {
+          "title": "Tablero de despacho",
+          "body": "Mapa y carriles en vivo, un mercado a la vez. Ámbar a los 3 minutos sin cotización, rojo a los 10."
+        },
+        {
+          "title": "Asigna un proveedor",
+          "body": "Abre una tarjeta (o pulsa A) para asignar a mano cuando nadie ha cotizado."
+        },
+        {
+          "title": "Llamadas",
+          "body": "El registro de llamadas; devuelve la llamada desde aquí o pulsa C en una tarjeta."
+        },
+        {
+          "title": "Repite el recorrido",
+          "body": "Este botón reinicia el recorrido cuando quieras."
+        }
+      ],
+      "staff": [
+        {
+          "title": "Hoy",
+          "body": "Empieza aquí: lo que pasa hoy en tus mercados."
+        },
+        {
+          "title": "Busca lo que sea",
+          "body": "Pulsa ⌘K (Ctrl K) para ir a una página, una solicitud o un proveedor."
+        },
+        {
+          "title": "Repite el recorrido",
+          "body": "Este botón reinicia el recorrido cuando quieras."
+        }
+      ],
+      "page": {
+        "today": [
+          {
+            "title": "Ahora mismo",
+            "body": "Lo que requiere acción, llamadas sin atender, solicitudes sin cotización y proveedores disponibles."
+          },
+          {
+            "title": "Lo más urgente",
+            "body": "Los diez elementos que primero necesitan a una persona, cada uno con una acción."
+          },
+          {
+            "title": "Hoy por mercado",
+            "body": "Solicitudes, atendidas, tiempo para asignar y completadas desde la medianoche."
+          },
+          {
+            "title": "Alertas",
+            "body": "Solicitudes atrasadas y mercados sin nadie disponible."
+          }
+        ],
+        "dispatch": [
+          {
+            "title": "Un mercado a la vez",
+            "body": "Elige el mercado; el mapa y los carriles lo siguen."
+          },
+          {
+            "title": "Reales, demostración o ambas",
+            "body": "Reales es lo predeterminado. Las de demostración llevan su etiqueta."
+          },
+          {
+            "title": "Mapa",
+            "body": "Los pines están en su lugar real; los cercanos se unen en un marcador con número."
+          },
+          {
+            "title": "Carriles",
+            "body": "De Nuevas a En el lugar, más Por cerrar tras 2 horas. J y K mueven, Enter abre."
+          }
+        ],
+        "inbox": [
+          {
+            "title": "La bandeja",
+            "body": "Primero lo urgente, luego la espera más larga. Toma un elemento para atenderlo."
+          },
+          {
+            "title": "Registrar una llamada",
+            "body": "¿Tomas una solicitud por teléfono? Empieza aquí."
+          }
+        ]
+      }
+    },
+    "provider": {
+      "owner": [
+        {
+          "title": "Conéctate",
+          "body": "Actívalo para recibir solicitudes cerca; apágalo cuando no puedas tomar trabajos."
+        },
+        {
+          "title": "Solicitudes entrantes",
+          "body": "Las nuevas suenan aquí con una cuenta regresiva de 3 minutos."
+        },
+        {
+          "title": "Envía una cotización",
+          "body": "Tu precio de tu tabla ya está puesto: elige el tiempo de llegada y envía."
+        },
+        {
+          "title": "Estado del trabajo",
+          "body": "Abre un trabajo para marcar En camino, En el lugar y Listo; el cliente ve cada paso."
+        },
+        {
+          "title": "Saldo",
+          "body": "Las comisiones salen de tu saldo prepagado solo cuando un cliente te elige."
+        },
+        {
+          "title": "Repite el recorrido",
+          "body": "Lo encuentras en Más cuando quieras."
+        }
+      ],
+      "manager": [
+        {
+          "title": "Conéctate",
+          "body": "Actívalo para recibir solicitudes cerca."
+        },
+        {
+          "title": "Solicitudes entrantes",
+          "body": "Las nuevas suenan aquí con una cuenta regresiva de 3 minutos."
+        },
+        {
+          "title": "Envía una cotización",
+          "body": "Tu precio ya está puesto: elige el tiempo de llegada y envía."
+        },
+        {
+          "title": "Estado del trabajo",
+          "body": "Abre un trabajo para actualizar su estado; el cliente ve cada paso."
+        },
+        {
+          "title": "Repite el recorrido",
+          "body": "Lo encuentras en Más cuando quieras."
+        }
+      ],
+      "operator": [
+        {
+          "title": "Mis trabajos",
+          "body": "Tu trabajo activo está arriba. Tócalo para abrir el mapa y los datos del cliente."
+        },
+        {
+          "title": "Actualiza el estado",
+          "body": "En el trabajo, toca En camino, En el lugar y Listo; el cliente ve cada paso."
+        },
+        {
+          "title": "Tu cuenta",
+          "body": "Aquí cierras sesión y ves la seguridad."
+        }
+      ]
+    },
+    "web": {
+      "see": "Mira cómo funciona",
+      "title": "Cómo funciona, en 30 segundos",
+      "lead": "Una demostración con datos inventados. Puedes saltarla cuando quieras.",
+      "pause": "Pausa",
+      "play": "Reproducir",
+      "skip": "Saltar demostración",
+      "progress": "Avance de la demostración",
+      "slide": "Parte {n} de {total}",
+      "slides": [
+        {
+          "title": "Dinos qué pasó",
+          "body": "Toca tu problema: grúa, llanta ponchada, llaves adentro, sin gasolina o no arranca."
+        },
+        {
+          "title": "Comparte dónde estás",
+          "body": "Un toque comparte tu ubicación. Sin cuenta, sin app."
+        },
+        {
+          "title": "Llegan cotizaciones en minutos",
+          "body": "Proveedores verificados cerca te envían precio y tiempo de llegada."
+        },
+        {
+          "title": "Elige el que quieras",
+          "body": "Por precio, tiempo de llegada o calificación. Pagas directo al proveedor."
+        },
+        {
+          "title": "Sigue la grúa",
+          "body": "Mírala llegar y llama al proveedor desde la misma página."
+        }
+      ],
+      "eta": "A {minutes} min",
+      "picked": "Elegido"
+    }
   }
 }

@@ -1,12 +1,33 @@
 "use client";
 
 import { Button } from "@rsos/ui/button";
-import { Play } from "lucide-react";
+import { TIMING } from "@rsos/core/demo";
+import { Play, SkipForward } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+/** Points in the demo job, in seconds after it starts (from the shared demo timing). */
+const STAGES = [
+  { key: "quotes", at: 0 },
+  { key: "picked", at: TIMING.pickAt },
+  { key: "onTheWay", at: TIMING.pickAt + 30 },
+  { key: "onSite", at: TIMING.pickAt + TIMING.travelSec },
+  { key: "done", at: TIMING.pickAt + TIMING.travelSec + TIMING.workSec },
+] as const;
+
+/** Sets the admin scenario clock so the demo job is `atSec` seconds old; returns its start. */
+function setDemoClock(startedAt: number | null, atSec: number): number {
+  const now = Date.now();
+  const start = startedAt ?? now;
+  const offset = start + atSec * 1000 - now;
+  document.cookie = `rsos_demo_clock=${encodeURIComponent(JSON.stringify({ offset, paused: null }))}; path=/; max-age=86400; samesite=lax; secure`;
+  return start;
+}
 
 /**
  * "Run full demo": resets the admin scenario clock to now and opens the same fresh demo job in the
- * website (driver), the provider portal and the admin request page, side by side.
+ * website (customer), the provider portal and the admin request page, side by side. A step list
+ * (RSOS-105) jumps the admin scenario to any point, and Skip moves to the next one.
  */
 export function RunFullDemo({
   links,
@@ -15,9 +36,18 @@ export function RunFullDemo({
   links: { web: string; provider: string; admin: string };
   labels: Record<string, string>;
 }) {
+  const router = useRouter();
   const [started, setStarted] = useState(false);
+  const [startedAt, setStartedAt] = useState<number | null>(null);
+  const [stage, setStage] = useState(0);
+  const jump = (n: number) => {
+    setDemoClock(startedAt, STAGES[n]!.at);
+    setStage(n);
+    router.refresh();
+  };
   const run = () => {
-    document.cookie = `rsos_demo_clock=${encodeURIComponent(JSON.stringify({ offset: 0, paused: null }))}; path=/; max-age=86400; samesite=lax; secure`;
+    setStartedAt(setDemoClock(null, 0));
+    setStage(0);
     for (const url of [links.web, links.provider, links.admin])
       window.open(url, "_blank", "noopener");
     setStarted(true);
@@ -40,6 +70,33 @@ export function RunFullDemo({
           {l.started}
         </p>
       ) : null}
+      <div className="flex flex-col gap-2">
+        <h3 className="font-semibold">{l.stepsTitle}</h3>
+        <ol className="flex flex-wrap gap-2">
+          {STAGES.map((s, n) => (
+            <li key={s.key}>
+              <Button
+                variant={stage === n ? "default" : "outline"}
+                size="sm"
+                aria-current={stage === n ? "step" : undefined}
+                onClick={() => jump(n)}
+              >
+                {l[`stage.${s.key}`]}
+              </Button>
+            </li>
+          ))}
+        </ol>
+        <Button
+          variant="outline"
+          className="self-start"
+          disabled={stage >= STAGES.length - 1}
+          onClick={() => jump(stage + 1)}
+        >
+          <SkipForward aria-hidden="true" />
+          {l.skip}
+        </Button>
+        <p className="text-sm text-muted-foreground">{l.stepsHint}</p>
+      </div>
       <ul className="flex flex-wrap gap-3 text-sm">
         <li>
           <a

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { Board, BoardCard } from "@/lib/board";
 import { ageTone, formatAge, LANES, type Lane } from "@/lib/board-time";
+import { PageTourButton } from "@/components/tours/admin-tours";
 import { BoardCardView } from "./board-card";
 
 const POLL_MS = 2000;
@@ -217,7 +218,7 @@ export function DispatchBoard({
     <main id="main" className="flex flex-col gap-4 px-4 py-4">
       <header className="flex flex-wrap items-center gap-3">
         <h1 className="mr-auto text-2xl font-semibold">{labels.title}</h1>
-        <label className="flex items-center gap-2 text-sm">
+        <label data-tour="board-market" className="flex items-center gap-2 text-sm">
           <span className="text-muted-foreground">{labels.market}</span>
           <select
             value={market}
@@ -231,7 +232,12 @@ export function DispatchBoard({
             ))}
           </select>
         </label>
-        <div role="group" aria-label={labels.source} className="flex rounded-lg border p-1">
+        <div
+          role="group"
+          aria-label={labels.source}
+          data-tour="board-source"
+          className="flex rounded-lg border p-1"
+        >
           {SOURCES.map((s) => (
             <button
               key={s}
@@ -244,6 +250,7 @@ export function DispatchBoard({
             </button>
           ))}
         </div>
+        <PageTourButton tour="admin.page.dispatch" label={labels.pageTour!} />
       </header>
       <p role="status" className="-mt-2 text-sm text-muted-foreground">
         {error
@@ -251,7 +258,11 @@ export function DispatchBoard({
           : `${labels.live} · ${labels.count?.replace("{count}", String(cards.length))} · ${labels.keys}`}
       </p>
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <section aria-labelledby="map-h" className="rounded-2xl border bg-card p-3">
+        <section
+          aria-labelledby="map-h"
+          data-tour="board-map"
+          className="rounded-2xl border bg-card p-3"
+        >
           <h2 id="map-h" className="sr-only">
             {labels.map}
           </h2>
@@ -290,7 +301,10 @@ export function DispatchBoard({
           )}
         </section>
       </div>
-      <div className="grid gap-3 pb-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
+      <div
+        data-tour="board-lanes"
+        className="grid gap-3 pb-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6"
+      >
         {LANES.map((lane) => {
           const list = byLane.get(lane)!;
           return (
