@@ -41,6 +41,8 @@ test.describe("guided tours", () => {
       await page.getByRole("button", { name: "Take the tour" }).click();
       await page.getByRole("button", { name: "Don't show again" }).click();
       await expect(page.getByRole("dialog", { name: first })).toBeHidden();
+      // Let the save reach the server before reloading.
+      await page.waitForLoadState("networkidle").catch(() => {});
       await page.reload();
       await page.waitForTimeout(1500);
       await expect(page.locator("[data-tour-open]")).toHaveCount(0);
@@ -66,6 +68,8 @@ test.describe("guided tours", () => {
       test.skip(!provider, "No provider URL");
       test.setTimeout(120_000);
       await signInAsDemo(page, provider!, role);
+      // Technicians are sent to My jobs after sign-in: wait for that before going anywhere.
+      if (role === "Technician") await expect(page).toHaveURL(/\/jobs/);
       // Owners: side menu on desktop, More on phones. Technicians: on My jobs.
       const take = page.getByRole("button", { name: "Take the tour" });
       if (!(await take.isVisible()))

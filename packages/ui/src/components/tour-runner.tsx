@@ -29,6 +29,11 @@ export function TourRunner({
   save: (tour: string, status: "started" | TourEnd, step: number) => Promise<void>;
 }) {
   const [open, setOpen] = useState(false);
+  // Saving is best effort: a save cut short (a reload, a lost connection) must never surface as
+  // an error; the tour simply shows again next time.
+  const keep = (tour: string, status: "started" | TourEnd, step: number) => {
+    save(tour, status, step).catch(() => {});
+  };
   const [run, setRun] = useState(0);
   useEffect(() => {
     // Automated tests switch first-sign-in tours off (the demo accounts are shared).
@@ -44,7 +49,7 @@ export function TourRunner({
       if ((e as CustomEvent<string>).detail !== id) return;
       setRun((r) => r + 1);
       setOpen(true);
-      void save(id, "started", 0);
+      save(id, "started", 0).catch(() => {});
     };
     window.addEventListener(TOUR_EVENT, onStart);
     return () => {
@@ -58,10 +63,10 @@ export function TourRunner({
       steps={steps}
       open={open}
       labels={labels}
-      onStep={(s) => void save(id, "started", s)}
+      onStep={(s) => keep(id, "started", s)}
       onEnd={(how, s) => {
         setOpen(false);
-        void save(id, how, s);
+        keep(id, how, s);
       }}
     />
   );
