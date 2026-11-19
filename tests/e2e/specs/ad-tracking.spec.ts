@@ -24,7 +24,7 @@ test.describe("ad tracking and attribution", () => {
 
     // The driver browses to Get Help later (no gclid in that URL) and sends a request.
     await web.goto(new URL("/get-help", appUrls.web).toString());
-    await web.getByRole("link", { name: "Flat tire" }).click();
+    await web.getByRole("main").getByRole("link", { name: "Flat tire" }).first().click();
     await answerScreenOne(web, "flat-tire");
     await web.getByLabel("Street address or cross streets").fill("1200 Main St");
     await web.getByLabel("City").selectOption({ index: 1 });

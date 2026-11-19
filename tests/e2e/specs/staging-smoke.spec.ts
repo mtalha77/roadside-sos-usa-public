@@ -40,7 +40,7 @@ test.describe("staging smoke @staging", () => {
     const url = (p: string) => new URL(p, web).toString();
     // Three screens (RSOS-101): what happened, where, who and which vehicle.
     await page.goto(url("/get-help"));
-    await page.getByRole("link", { name: "Flat tire" }).click();
+    await page.getByRole("main").getByRole("link", { name: "Flat tire" }).first().click();
     await answerScreenOne(page, "flat-tire");
     await page.getByLabel("Street address or cross streets").fill("1200 Main St");
     await page.getByLabel("City").selectOption({ index: 1 });

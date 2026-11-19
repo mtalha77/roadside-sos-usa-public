@@ -173,7 +173,8 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
       : null;
     const all = await getServices();
     const svcRow = all.find((s) => s.slug === svc);
-    if (!svcRow) notFound();
+    // A service no market offers has no screen (a stale link gets a "not found" page).
+    if (!svcRow || svcRow.market_count === 0) notFound();
     const missing = (sp.missing ?? "").split(",").filter(Boolean);
     const locale = (await getLocale()) as Locale;
     const formatUsd = (c: number) => formatCurrency(c, locale);
