@@ -1819,7 +1819,8 @@
       "home": "Inicio",
       "allServices": "Todos los servicios",
       "allCities": "Todas las ciudades",
-      "breadcrumb": "Ruta de navegación"
+      "breadcrumb": "Ruta de navegación",
+      "preferCall": "¿Prefieres llamar?"
     },
     "market": {
       "label": "Tu zona",
@@ -2034,12 +2035,13 @@
     },
     "hero": {
       "headline": "¿Varado en el camino? La ayuda va en camino.",
-      "sub": "Dinos dónde estás. Grúas y asistencia cercanas responden con precio y hora de llegada en unos 3 minutos.",
+      "sub": "Pide ayuda en menos de un minuto: profesionales de grúa y asistencia cercanos te envían precio y hora de llegada en unos 3 minutos.",
       "available": "{count, plural, one {# proveedor verificado} other {# proveedores verificados}} cerca de {city}",
       "changeCity": "Cambiar ciudad",
       "tilesTitle": "¿Qué pasó?",
       "getHelp": "Pedir ayuda ahora",
-      "safety": "¿En peligro o en una autopista con tráfico? Llama primero al 911."
+      "safety": "¿En peligro o en una autopista con tráfico? Llama primero al 911.",
+      "bookSpeed": "Tiempo típico para reservar en {city}: {minutes} min"
     },
     "reassure": {
       "label": "Bueno saber",
@@ -2921,7 +2923,6 @@
       "local": "Proveedores locales de {city}, listos ahora.",
       "stuck": "¿Varado en {city}? La ayuda va en camino."
     },
-    "callNow": "Llama ahora al {phone}",
     "startTitle": "Empieza tu solicitud",
     "useLocation": "Usar mi ubicación",
     "locating": "Buscándote…",
@@ -2949,7 +2950,9 @@
         "q": "¿Necesito una membresía?",
         "a": "No. Sin membresía, registro ni suscripción."
       }
-    }
+    },
+    "preferCall": "¿Prefieres llamar?",
+    "bookNow": "Pedir ayuda ahora"
   },
   "driverAccount": {
     "title": "Tu cuenta",

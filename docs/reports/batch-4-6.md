@@ -1,7 +1,14 @@
 # Batch 4.6 run report
 
 Run started 2026-11-18. RSOS-113 (analytics with correct numbers, `docs/batches/rsos-analytics-fix.md`)
-ran first, at the owner's request, between batch 4.5 tickets.
+ran first, at the owner's request, between batch 4.5 tickets. The batch itself
+(`docs/batches/rsos-batch-4-6.md`) started 2026-11-19, after batch 4.5 finished.
+
+**Prerequisite check: BLOCKED (RSOS-107).** The batch asks for RSOS-107 (automatic ad sync) first if
+`docs/batches/rsos-batch-4-5.md` does not contain it, from the newest `rsos-batch-4-5-ux.md` in
+Downloads. Neither file contains RSOS-107, and no other file in Downloads mentions it, so there is
+no specification to build from. The batch continues without it; RSOS-111's "match the ad conversion
+events from RSOS-107" is limited to the existing conversion events (RSOS-031).
 
 ## Summary
 
@@ -50,3 +57,27 @@ ran first, at the owner's request, between batch 4.5 tickets.
     the model for the range (said on the page).
   - The unit tests call the three markets A, B and C (the repo forbids real city names in tests);
     the inputs are the brief's.
+
+### RSOS-108: Website leads with online booking
+
+- **Booking is the first action everywhere.** The home and city pages already open with the
+  service tiles and Get help now (RSOS-100); service pages keep Get help now right under the
+  title; city service pages now put Get help now (full width on phones) directly under the title,
+  above the summary and the price; landing pages show the booking form first and their sticky bar
+  is now "Book help now".
+- **Calling is a small backup.** The top bar shows a small text link ("Call" on phones, "Prefer to
+  call? (number)" on wider screens); the sticky phone bar is one full-width Get help now with a
+  small "Prefer to call?" link under it; the big "Call now" buttons on landing pages and the
+  outlined call button on city service pages are gone. All of these appear only when phones are
+  enabled and the market has a number.
+- **Booking-first copy**: the hero now reads "Book help in under a minute: nearby tow and roadside
+  pros send a price and arrival time in about 3 minutes."
+- **Speed promise from real data only**: "Typical time to book in {city}: N min" next to the
+  availability line on the home and city pages, from `market_booking_speed` (migration
+  `20261119030000_booking_speed.sql`): the median minutes from a request being sent to a provider
+  being booked, over the last 30 days, real requests only (fictional 555-01xx numbers and
+  test-cleanup requests never count). Fewer than 10 bookings: the line is hidden. Today no market
+  has 10 real bookings, so it does not show yet. Tested in `supabase/tests/030_booking_speed.test.sql`.
+- Test: `booking-first.spec.ts` checks home, city, service, city service and landing pages at
+  375 px: a booking link is the first primary action and above the fold, and any call link is
+  plain small text.
