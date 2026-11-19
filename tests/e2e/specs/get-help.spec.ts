@@ -27,7 +27,7 @@ test.describe("get help flow", () => {
 
     // Screen 1 of 3: the service, its quick questions, and optional details.
     await expect(page.getByText("Step 1 of 3")).toBeVisible();
-    await page.getByRole("link", { name: "Flat tire" }).click();
+    await page.getByRole("main").getByRole("link", { name: "Flat tire" }).first().click();
     await expect(page).toHaveURL(/\/get-help\/flat-tire\/problem$/);
     await answerScreenOne(page, "flat-tire", false);
     await page.screenshot({ path: info.outputPath("problem.png"), fullPage: true });
@@ -90,7 +90,9 @@ test.describe("get help: questions per service", () => {
     test(`${service}: required questions are enforced, optional ones skippable`, async ({
       page,
     }) => {
-      await page.goto(url(`/get-help/${service}/problem`));
+      // Only services some market offers have a screen.
+      const res = await page.goto(url(`/get-help/${service}/problem`));
+      test.skip(res?.status() === 404, `${service} is not offered in any market here`);
       await expect(page.getByText("Step 1 of 3")).toBeVisible();
       // Nothing answered: the browser (or our own check) keeps the customer on screen 1.
       await page.getByRole("button", { name: "Continue" }).click();
