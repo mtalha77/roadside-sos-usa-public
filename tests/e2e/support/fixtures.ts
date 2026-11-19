@@ -60,7 +60,7 @@ export const test = base.extend<{
     { auto: true },
   ],
   consoleErrors: [
-    async ({ page }, use) => {
+    async ({ page, browserName }, use) => {
       const errors: string[] = [];
       page.on("console", (msg) => {
         if (msg.type() !== "error") return;
@@ -80,6 +80,9 @@ export const test = base.extend<{
           .filter((u): u is string => Boolean(u))
           .map((u) => new URL(u).host);
         if (cancelled && ownHosts.some((h) => err.message.includes(`${h}/`))) return;
+        // WebKit's bare "Load failed" (no URL, no stack from our code) is the same cancelled
+        // request when a navigation interrupts a Next.js fetch. Only on WebKit, only that text.
+        if (browserName === "webkit" && err.message === "Load failed") return;
         errors.push(`pageerror: ${err.message}`);
       });
       await use(errors);
