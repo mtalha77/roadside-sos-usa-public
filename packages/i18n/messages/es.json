@@ -43,7 +43,8 @@
       "today": "Hoy",
       "economics": "Modelo económico",
       "status": "Estado del sistema",
-      "credits": "Créditos de billetera"
+      "credits": "Créditos de billetera",
+      "services": "Servicios"
     },
     "shell": {
       "nav": "Administración",
@@ -1829,6 +1830,38 @@
         "flagged": "Bono de registro en espera: este negocio comparte un identificador con otro.",
         "review": "Revisarlo en Créditos de billetera"
       }
+    },
+    "answers": {
+      "title": "Respuestas",
+      "none": "Sin respuestas (antes de RSOS-116, o por teléfono).",
+      "tags": "Datos clave",
+      "scheduled": "Programado para {at}",
+      "photos": "Fotos",
+      "photo": "Foto {n}"
+    },
+    "servicesForm": {
+      "title": "Servicios y preguntas",
+      "lead": "Las preguntas de Pedir ayuda por servicio. Oculta una pregunta, hazla obligatoria u opcional, o cambia su orden en un mercado o en todos. Las etiquetas y opciones son las mismas en todos los mercados (cámbialas en las traducciones).",
+      "saved": "Pregunta guardada.",
+      "error": "No se pudo guardar: revisa los valores.",
+      "market": "Mercado",
+      "allMarkets": "Todos los mercados",
+      "service": "Servicio",
+      "viewOnly": "Puedes ver estas preguntas. Los dueños y gerentes de operaciones las cambian.",
+      "ownerOnly": "Solo el dueño cambia preguntas para todos los mercados; elige un mercado para cambiarla ahí.",
+      "shown": "Visible",
+      "hidden": "Oculta",
+      "requiredDefault": "Obligatoria por diseño",
+      "optionalDefault": "Opcional por diseño",
+      "common": "Todas las solicitudes",
+      "safetyAlways": "Siempre se pregunta y es obligatoria: decide el aviso \"Llama al 911 ahora\".",
+      "hide": "Ocultar",
+      "required": "Obligatoria",
+      "asDesigned": "Como está diseñada",
+      "requiredYes": "Obligatoria",
+      "requiredNo": "Opcional",
+      "order": "Orden (menor primero)",
+      "save": "Guardar"
     }
   },
   "emails": {
@@ -2956,7 +2989,9 @@
         "Red": "Rojo",
         "Green": "Verde",
         "Other": "Otro"
-      }
+      },
+      "yearOptional": "Año (opcional)",
+      "plateOptional": "Placa (opcional)"
     },
     "safety": {
       "unsafe": "Si estás en peligro o bloqueando el tráfico, llama primero al 911. Quédate en el vehículo con el cinturón puesto si estás en una autopista.",
@@ -2994,6 +3029,256 @@
     "details": {
       "title": "¿A quién debe buscar el proveedor?",
       "submit": "Enviar mi solicitud"
+    },
+    "q": {
+      "optional": "(opcional)",
+      "required": "Elige una respuesta para continuar.",
+      "safety": {
+        "label": "¿Estás en un lugar seguro?",
+        "options": {
+          "safe": "Lugar seguro (estacionamiento, entrada)",
+          "shoulder": "Acotamiento",
+          "lane": "En un carril de tráfico"
+        }
+      },
+      "when": {
+        "label": "¿Cuándo necesitas ayuda?",
+        "options": {
+          "now": "Ahora",
+          "later": "Programar para después"
+        }
+      },
+      "whenAt": {
+        "label": "Fecha y hora"
+      },
+      "people": {
+        "label": "Personas con el vehículo"
+      },
+      "vehicleType": {
+        "label": "Tipo de vehículo",
+        "options": {
+          "car": "Auto",
+          "suv": "SUV",
+          "pickup": "Pickup",
+          "van": "Van",
+          "motorcycle": "Motocicleta",
+          "rv": "Casa rodante o pesado"
+        }
+      },
+      "rolls": {
+        "label": "¿Rueda y gira el volante?",
+        "options": {
+          "yes": "Sí",
+          "no": "No",
+          "unsure": "No estoy seguro"
+        }
+      },
+      "awd": {
+        "label": "¿Tracción integral o 4x4?",
+        "options": {
+          "yes": "Sí",
+          "no": "No",
+          "unsure": "No estoy seguro"
+        }
+      },
+      "accident": {
+        "label": "¿Hubo un accidente?",
+        "options": {
+          "yes": "Sí",
+          "no": "No"
+        }
+      },
+      "police": {
+        "label": "¿Ya llamaron a la policía?",
+        "options": {
+          "yes": "Sí",
+          "no": "No"
+        }
+      },
+      "keys": {
+        "label": "¿Tienes las llaves?",
+        "options": {
+          "yes": "Sí",
+          "no": "No"
+        }
+      },
+      "parked": {
+        "label": "¿Dónde está estacionado?",
+        "options": {
+          "street": "Calle",
+          "lot": "Estacionamiento",
+          "garage": "Estacionamiento techado",
+          "offroad": "Zanja o fuera del camino"
+        }
+      },
+      "heightLimit": {
+        "label": "Altura máxima del estacionamiento"
+      },
+      "riders": {
+        "label": "Pasajeros que necesitan transporte (las grúas tienen pocos asientos)"
+      },
+      "turnKey": {
+        "label": "¿Qué pasa al girar la llave?",
+        "options": {
+          "clicking": "Hace clic",
+          "nothing": "Nada",
+          "cranks": "Intenta arrancar pero no enciende",
+          "unsure": "No estoy seguro"
+        }
+      },
+      "electric": {
+        "label": "¿Eléctrico o híbrido?",
+        "options": {
+          "yes": "Sí",
+          "no": "No"
+        }
+      },
+      "battery": {
+        "label": "¿Quieres batería nueva si hace falta? (se cotiza aparte)",
+        "options": {
+          "yes": "Sí",
+          "no": "No"
+        }
+      },
+      "flats": {
+        "label": "¿Cuántas llantas ponchadas?",
+        "options": {
+          "one": "1",
+          "twoPlus": "2 o más"
+        }
+      },
+      "whichTire": {
+        "label": "¿Cuál llanta?",
+        "options": {
+          "fl": "Delantera izquierda",
+          "fr": "Delantera derecha",
+          "rl": "Trasera izquierda",
+          "rr": "Trasera derecha"
+        }
+      },
+      "spare": {
+        "label": "¿Tienes llanta de repuesto?",
+        "options": {
+          "full": "De tamaño completo",
+          "donut": "Pequeña (\"dona\")",
+          "none": "Sin repuesto",
+          "unsure": "No estoy seguro"
+        }
+      },
+      "wheelLock": {
+        "label": "¿Tienes la llave de los birlos de seguridad?",
+        "options": {
+          "yes": "Sí",
+          "no": "No",
+          "none": "No tiene birlos de seguridad"
+        }
+      },
+      "keysWhere": {
+        "label": "¿Dónde están las llaves?",
+        "options": {
+          "inside": "Adentro, bajo llave",
+          "lost": "Perdidas",
+          "broken": "Rotas en la cerradura",
+          "trunk": "En la cajuela"
+        }
+      },
+      "childInside": {
+        "label": "¿Hay un niño o mascota adentro?",
+        "options": {
+          "yes": "Sí",
+          "no": "No"
+        }
+      },
+      "keyType": {
+        "label": "Tipo de llave",
+        "options": {
+          "regular": "Llave normal",
+          "fob": "Control remoto",
+          "push": "Botón de encendido",
+          "unsure": "No estoy seguro"
+        }
+      },
+      "fuel": {
+        "label": "Tipo de combustible",
+        "options": {
+          "regular": "Regular",
+          "premium": "Premium",
+          "diesel": "Diésel",
+          "electric": "Eléctrico (sin carga)"
+        }
+      },
+      "gallons": {
+        "label": "¿Cuánto combustible?",
+        "options": {
+          "2": "2 galones",
+          "3": "3 galones",
+          "5": "5 galones"
+        }
+      },
+      "stuckIn": {
+        "label": "Atascado en",
+        "options": {
+          "mud": "Lodo",
+          "sand": "Arena",
+          "snow": "Nieve o hielo",
+          "ditch": "Zanja",
+          "other": "Otro"
+        }
+      },
+      "distance": {
+        "label": "Distancia del camino",
+        "options": {
+          "lt10": "Menos de 10 pies",
+          "10to50": "10 a 50 pies",
+          "gt50": "Más de 50 pies"
+        }
+      },
+      "upright": {
+        "label": "¿El vehículo está sobre sus ruedas?",
+        "options": {
+          "yes": "Sí",
+          "no": "No"
+        }
+      }
+    },
+    "banner": {
+      "call911": {
+        "button": "Llamar al 911",
+        "safety-lane": "Llama al 911 ahora. Sal del carril solo si es seguro y aléjate del camino. Puedes continuar después de llamar.",
+        "childInside-yes": "Llama al 911 ahora: un niño o mascota en un auto cerrado puede estar en peligro en minutos. Marcamos tu solicitud como urgente; puedes continuar después de llamar."
+      },
+      "suggestTow": {
+        "flats-twoPlus": "Con dos o más llantas ponchadas, una grúa suele ser lo más rápido.",
+        "spare-none": "Sin repuesto, normalmente se necesita una grúa (o entrega de llanta).",
+        "upright-no": "Un vehículo volcado necesita grúa con rescate."
+      },
+      "suggestWinch": {
+        "parked-offroad": "¿En una zanja o fuera del camino? Quizá necesitas un rescate con malacate."
+      },
+      "evNoJump": {
+        "electric-yes": "La mayoría de los autos eléctricos no se pueden pasar corriente: enviaremos una grúa o un cargador móvil."
+      },
+      "evCharge": {
+        "fuel-electric": "Sin carga: enviaremos una grúa o un cargador móvil."
+      },
+      "switchTow": "Cambiar a grúa",
+      "switchWinch": "Cambiar a rescate con malacate"
+    },
+    "changeService": "Cambiar servicio",
+    "typicalPrice": "{service} en {city} suele costar de {min} a {max}.",
+    "typicalPriceTow": "Las grúas en {city} suelen costar de {min} a {max} más millaje.",
+    "addDetails": "Agregar detalles (opcional)",
+    "notes": "Notas para el proveedor",
+    "notesHint": "Lo que ayude: código de entrada, lugar exacto, qué pasó.",
+    "photos": "Fotos (hasta 3: vehículo, daño, lugar)",
+    "photosHint": "Las fotos son privadas: solo las ven el proveedor y nuestro equipo.",
+    "photosSaved": "{count, plural, one {# foto guardada} other {# fotos guardadas}}. Si eliges otras, las reemplazan.",
+    "notices": {
+      "lockedOut": "El proveedor pedirá una identificación y prueba de que el vehículo es tuyo (registro o tarjeta del seguro).",
+      "fuel": "El combustible se paga aparte, a precio de bomba."
+    },
+    "picker": {
+      "title": "¿Qué pasó?"
     }
   },
   "track": {
@@ -3528,7 +3813,8 @@
       "arrival": "Tiempo de llegada",
       "suggested": "De tu tabla de precios: {price}. Comisión si te eligen: {fee}.",
       "outOfRange": "Escribe un precio de {min} a {max}.",
-      "instant": "Reserva instantánea: acepta a {price} o menos y el trabajo es tuyo."
+      "instant": "Reserva instantánea: acepta a {price} o menos y el trabajo es tuyo.",
+      "answers": "Lo que nos dijo el cliente"
     },
     "jobs": {
       "title": "Trabajos",
@@ -4146,5 +4432,34 @@
       "eta": "A {minutes} min",
       "picked": "Elegido"
     }
+  },
+  "serviceTags": {
+    "inLane": "En un carril de tráfico",
+    "shoulder": "En el acotamiento",
+    "scheduled": "Programado",
+    "motorcycle": "Motocicleta",
+    "heavy": "Casa rodante o pesado",
+    "noRoll": "No rueda",
+    "flatbed": "Necesita plataforma",
+    "accident": "Accidente",
+    "police": "Policía avisada",
+    "noKeys": "Sin llaves",
+    "garage": "Estacionamiento techado",
+    "offroad": "Fuera del camino",
+    "cranks": "Intenta arrancar",
+    "ev": "Eléctrico o híbrido",
+    "battery": "Quiere batería",
+    "twoFlats": "2+ ponchadas",
+    "noSpare": "Sin repuesto",
+    "donut": "Repuesto pequeño",
+    "noLockKey": "Sin llave de birlos",
+    "keysLost": "Llaves perdidas",
+    "keyBroken": "Llave rota en la cerradura",
+    "childInside": "Niño adentro: urgente",
+    "diesel": "Diésel",
+    "premium": "Premium",
+    "evCharge": "Sin carga",
+    "farFromRoad": "A 50+ pies del camino",
+    "notUpright": "Volcado"
   }
 }

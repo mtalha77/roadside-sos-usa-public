@@ -35,6 +35,8 @@ export type OfferView = {
   winningEta: number;
   /** Instant book (RSOS-109): the customer books the first provider at or below this price. */
   instantMaxCents: number | null;
+  /** RSOS-116: the customer's answers as short tags, shown above the price. */
+  tags: string[];
 };
 
 type Sent = { priceCents: number; eta: number };
@@ -207,6 +209,18 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
           <p className="rounded-xl border-2 border-primary bg-primary/10 px-3 py-2 font-semibold">
             {t("instant", { price: money(offer.instantMaxCents) })}
           </p>
+        ) : null}
+        {offer.tags.length ? (
+          <ul className="flex flex-wrap gap-2" aria-label={t("answers")}>
+            {offer.tags.map((g) => (
+              <li
+                key={g}
+                className="rounded-full border-2 border-primary px-3 py-1 text-sm font-semibold"
+              >
+                {g}
+              </li>
+            ))}
+          </ul>
         ) : null}
         <ul className="flex flex-wrap gap-2">
           {offer.onHighway ? (

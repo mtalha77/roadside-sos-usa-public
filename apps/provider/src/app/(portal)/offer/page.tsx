@@ -1,3 +1,4 @@
+import { tagsOf } from "@rsos/core/service-questions";
 import { TIMING } from "@rsos/core/demo";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
@@ -22,9 +23,10 @@ async function load() {
  * company's market. The suggested price is the company's own price for the service when it has one.
  */
 export default async function OfferPage() {
-  const [t, ts, { now, data, pricing, table }] = await Promise.all([
+  const [t, ts, tt, { now, data, pricing, table }] = await Promise.all([
     getTranslations("portal.offer"),
     getTranslations("site.services"),
+    getTranslations("serviceTags"),
     load(),
   ]);
   const offers: OfferView[] = data.offers.map((o) => {
@@ -54,6 +56,8 @@ export default async function OfferPage() {
       feeCents: o.feeCents,
       winningEta: fastest?.etaMinutes ?? 30,
       instantMaxCents: r.instant?.maxCents ?? null,
+      // RSOS-116: the customer's answers as short tags ("Flatbed needed", "No spare").
+      tags: tagsOf(r.serviceSlug, r.answers).map((g) => tt(g as never)),
     };
   });
   return (

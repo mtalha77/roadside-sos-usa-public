@@ -43,7 +43,8 @@
       "today": "Today",
       "economics": "Economics model",
       "status": "System status",
-      "credits": "Wallet credits"
+      "credits": "Wallet credits",
+      "services": "Services"
     },
     "shell": {
       "nav": "Admin",
@@ -1829,6 +1830,38 @@
         "flagged": "Signup bonus waiting: this business shares an identifier with another one.",
         "review": "Review it in Wallet credits"
       }
+    },
+    "answers": {
+      "title": "Answers",
+      "none": "No answers (asked before RSOS-116, or by phone).",
+      "tags": "Key details",
+      "scheduled": "Scheduled for {at}",
+      "photos": "Photos",
+      "photo": "Photo {n}"
+    },
+    "servicesForm": {
+      "title": "Services and questions",
+      "lead": "The Get Help questions per service. Hide a question, make it required or optional, or change its order for one market or every market. Labels and chip options are the same in every market (edit the translations to change them).",
+      "saved": "Question saved.",
+      "error": "Could not save: check the values.",
+      "market": "Market",
+      "allMarkets": "Every market",
+      "service": "Service",
+      "viewOnly": "You can view these questions. Owners and operations managers change them.",
+      "ownerOnly": "Only the owner changes questions for every market; choose a market to change it there.",
+      "shown": "Shown",
+      "hidden": "Hidden",
+      "requiredDefault": "Required by design",
+      "optionalDefault": "Optional by design",
+      "common": "Every request",
+      "safetyAlways": "Always asked and required: it decides the \"Call 911 now\" banner.",
+      "hide": "Hide",
+      "required": "Required",
+      "asDesigned": "As designed",
+      "requiredYes": "Required",
+      "requiredNo": "Optional",
+      "order": "Order (lower first)",
+      "save": "Save"
     }
   },
   "emails": {
@@ -2956,7 +2989,9 @@
         "Red": "Red",
         "Green": "Green",
         "Other": "Other"
-      }
+      },
+      "yearOptional": "Year (optional)",
+      "plateOptional": "Plate (optional)"
     },
     "safety": {
       "unsafe": "If you're in danger or blocking traffic, call 911 first. Stay in your vehicle with your seatbelt on if you're on a highway.",
@@ -2994,6 +3029,256 @@
     "details": {
       "title": "Who should the provider look for?",
       "submit": "Send my request"
+    },
+    "q": {
+      "optional": "(optional)",
+      "required": "Choose an answer to continue.",
+      "safety": {
+        "label": "Are you in a safe place?",
+        "options": {
+          "safe": "Safe spot (parking lot, driveway)",
+          "shoulder": "Road shoulder",
+          "lane": "In a traffic lane"
+        }
+      },
+      "when": {
+        "label": "When do you need help?",
+        "options": {
+          "now": "Now",
+          "later": "Schedule for later"
+        }
+      },
+      "whenAt": {
+        "label": "Date and time"
+      },
+      "people": {
+        "label": "People with the vehicle"
+      },
+      "vehicleType": {
+        "label": "Vehicle type",
+        "options": {
+          "car": "Car",
+          "suv": "SUV",
+          "pickup": "Pickup",
+          "van": "Van",
+          "motorcycle": "Motorcycle",
+          "rv": "RV or heavy"
+        }
+      },
+      "rolls": {
+        "label": "Does it roll and steer?",
+        "options": {
+          "yes": "Yes",
+          "no": "No",
+          "unsure": "Not sure"
+        }
+      },
+      "awd": {
+        "label": "All-wheel or 4-wheel drive?",
+        "options": {
+          "yes": "Yes",
+          "no": "No",
+          "unsure": "Not sure"
+        }
+      },
+      "accident": {
+        "label": "Was there an accident?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "police": {
+        "label": "Have police been called?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "keys": {
+        "label": "Keys with you?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "parked": {
+        "label": "Where is it parked?",
+        "options": {
+          "street": "Street",
+          "lot": "Parking lot",
+          "garage": "Parking garage",
+          "offroad": "Ditch or off-road"
+        }
+      },
+      "heightLimit": {
+        "label": "Garage height limit"
+      },
+      "riders": {
+        "label": "Riders needing a lift (tow trucks have limited seats)"
+      },
+      "turnKey": {
+        "label": "What happens when you turn the key?",
+        "options": {
+          "clicking": "Clicking",
+          "nothing": "Nothing at all",
+          "cranks": "Cranks but won't start",
+          "unsure": "Not sure"
+        }
+      },
+      "electric": {
+        "label": "Electric or hybrid?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "battery": {
+        "label": "Want a new battery if needed? (quoted separately)",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "flats": {
+        "label": "How many flat tires?",
+        "options": {
+          "one": "1",
+          "twoPlus": "2 or more"
+        }
+      },
+      "whichTire": {
+        "label": "Which tire?",
+        "options": {
+          "fl": "Front left",
+          "fr": "Front right",
+          "rl": "Rear left",
+          "rr": "Rear right"
+        }
+      },
+      "spare": {
+        "label": "Do you have a spare?",
+        "options": {
+          "full": "Full-size",
+          "donut": "Small \"donut\"",
+          "none": "No spare",
+          "unsure": "Not sure"
+        }
+      },
+      "wheelLock": {
+        "label": "Wheel lock key available?",
+        "options": {
+          "yes": "Yes",
+          "no": "No",
+          "none": "No wheel locks"
+        }
+      },
+      "keysWhere": {
+        "label": "Where are the keys?",
+        "options": {
+          "inside": "Locked inside",
+          "lost": "Lost",
+          "broken": "Broken in the lock",
+          "trunk": "In the trunk"
+        }
+      },
+      "childInside": {
+        "label": "Is a child or pet inside?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "keyType": {
+        "label": "Key type",
+        "options": {
+          "regular": "Regular key",
+          "fob": "Key fob",
+          "push": "Push-button start",
+          "unsure": "Not sure"
+        }
+      },
+      "fuel": {
+        "label": "Fuel type",
+        "options": {
+          "regular": "Regular",
+          "premium": "Premium",
+          "diesel": "Diesel",
+          "electric": "Electric (out of charge)"
+        }
+      },
+      "gallons": {
+        "label": "How much fuel?",
+        "options": {
+          "2": "2 gallons",
+          "3": "3 gallons",
+          "5": "5 gallons"
+        }
+      },
+      "stuckIn": {
+        "label": "Stuck in",
+        "options": {
+          "mud": "Mud",
+          "sand": "Sand",
+          "snow": "Snow or ice",
+          "ditch": "Ditch",
+          "other": "Other"
+        }
+      },
+      "distance": {
+        "label": "Distance from the road",
+        "options": {
+          "lt10": "Under 10 ft",
+          "10to50": "10 to 50 ft",
+          "gt50": "More than 50 ft"
+        }
+      },
+      "upright": {
+        "label": "Is the vehicle upright on its wheels?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      }
+    },
+    "banner": {
+      "call911": {
+        "button": "Call 911",
+        "safety-lane": "Call 911 now. Get out of the traffic lane only if it is safe, and stand away from the road. You can continue after calling.",
+        "childInside-yes": "Call 911 now: a child or pet inside a locked car can be in danger within minutes. We mark your request urgent; you can continue after calling."
+      },
+      "suggestTow": {
+        "flats-twoPlus": "With two or more flat tires, a tow is usually the fastest fix.",
+        "spare-none": "Without a spare, a tow (or tire delivery) is usually needed.",
+        "upright-no": "A vehicle on its side needs a tow with recovery."
+      },
+      "suggestWinch": {
+        "parked-offroad": "In a ditch or off-road? A winch-out may be what you need."
+      },
+      "evNoJump": {
+        "electric-yes": "Most electric cars can't be jump started: we'll send a tow or a mobile charger."
+      },
+      "evCharge": {
+        "fuel-electric": "Out of charge: we'll send a tow or a mobile charger."
+      },
+      "switchTow": "Switch to Tow",
+      "switchWinch": "Switch to winch-out"
+    },
+    "changeService": "Change service",
+    "typicalPrice": "{service} in {city} usually costs {min} to {max}.",
+    "typicalPriceTow": "Tows in {city} usually cost {min} to {max} plus mileage.",
+    "addDetails": "Add details (optional)",
+    "notes": "Notes for the provider",
+    "notesHint": "Anything that helps: gate code, exact spot, what happened.",
+    "photos": "Photos (up to 3: vehicle, damage, location)",
+    "photosHint": "Photos are private: only the provider and our team see them.",
+    "photosSaved": "{count, plural, one {# photo saved} other {# photos saved}}. Choosing new ones replaces them.",
+    "notices": {
+      "lockedOut": "The provider will ask for ID and proof the vehicle is yours (registration or insurance card).",
+      "fuel": "Fuel is paid separately at pump price."
+    },
+    "picker": {
+      "title": "What happened?"
     }
   },
   "track": {
@@ -3528,7 +3813,8 @@
       "arrival": "Arrival time",
       "suggested": "From your price table: {price}. Fee if picked: {fee}.",
       "outOfRange": "Enter a price from {min} to {max}.",
-      "instant": "Instant book: accept at {price} or less and the job is yours."
+      "instant": "Instant book: accept at {price} or less and the job is yours.",
+      "answers": "What the customer told us"
     },
     "jobs": {
       "title": "Jobs",
@@ -4146,5 +4432,34 @@
       "eta": "{minutes} min away",
       "picked": "Picked"
     }
+  },
+  "serviceTags": {
+    "inLane": "In a traffic lane",
+    "shoulder": "On the shoulder",
+    "scheduled": "Scheduled",
+    "motorcycle": "Motorcycle",
+    "heavy": "RV or heavy",
+    "noRoll": "Doesn't roll",
+    "flatbed": "Flatbed needed",
+    "accident": "Accident",
+    "police": "Police called",
+    "noKeys": "No keys",
+    "garage": "Parking garage",
+    "offroad": "Off-road",
+    "cranks": "Cranks",
+    "ev": "Electric or hybrid",
+    "battery": "Wants a battery",
+    "twoFlats": "2+ flats",
+    "noSpare": "No spare",
+    "donut": "Donut spare",
+    "noLockKey": "No wheel lock key",
+    "keysLost": "Keys lost",
+    "keyBroken": "Key broken in lock",
+    "childInside": "Child inside: urgent",
+    "diesel": "Diesel",
+    "premium": "Premium",
+    "evCharge": "Out of charge",
+    "farFromRoad": "50+ ft from road",
+    "notUpright": "Not upright"
   }
 }

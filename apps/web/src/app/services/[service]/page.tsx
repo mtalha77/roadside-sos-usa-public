@@ -57,7 +57,7 @@ export default async function ServicePageRoute({ params }: Params) {
         {/* Booking first, above the fold (RSOS-108). */}
         {offered ? (
           <Button asChild size="lg" className="w-full sm:w-auto sm:self-start">
-            <Link href={`/get-help?service=${svc.slug}`}>{t("nav.getHelp")}</Link>
+            <Link href={`/get-help/${svc.slug}/problem`}>{t("nav.getHelp")}</Link>
           </Button>
         ) : null}
         <p className="max-w-3xl text-lg text-muted-foreground">

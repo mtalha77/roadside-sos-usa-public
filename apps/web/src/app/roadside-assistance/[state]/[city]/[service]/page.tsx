@@ -84,7 +84,7 @@ export default async function CityServicePage({ params }: Params) {
           {start ? (
             <Button asChild size="lg" className="w-full sm:w-auto">
               <Link
-                href={`/get-help?service=${start}&market=${market.slug}`}
+                href={`/get-help/${start}/problem?market=${market.slug}`}
                 data-flow-service={start}
                 data-flow-market={market.slug}
               >

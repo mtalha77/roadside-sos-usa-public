@@ -1,3 +1,4 @@
+import { answerScreenOne } from "../support/get-help";
 import { signInAsDemo } from "../support/demo";
 import { appUrls, expect, readOnly, test } from "../support/fixtures";
 
@@ -23,9 +24,8 @@ test.describe("ad tracking and attribution", () => {
 
     // The driver browses to Get Help later (no gclid in that URL) and sends a request.
     await web.goto(new URL("/get-help", appUrls.web).toString());
-    await web.locator("label").filter({ hasText: "Flat tire" }).click();
-    await web.getByRole("radio", { name: "Yes" }).check();
-    await web.getByRole("button", { name: "Continue" }).click();
+    await web.getByRole("link", { name: "Flat tire" }).click();
+    await answerScreenOne(web, "flat-tire");
     await web.getByLabel("Street address or cross streets").fill("1200 Main St");
     await web.getByLabel("City").selectOption({ index: 1 });
     await web.getByRole("button", { name: "Continue" }).click();
@@ -34,7 +34,6 @@ test.describe("ad tracking and attribution", () => {
       .getByLabel("Mobile number")
       .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
     await web.getByLabel("Make").fill("Toyota");
-    await web.getByRole("radio", { name: "Off the road, in a safe place" }).check();
     await expect(web.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,
     });

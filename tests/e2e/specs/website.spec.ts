@@ -1,3 +1,4 @@
+import { answerScreenOne } from "../support/get-help";
 import {
   readOnly,
   appUrls,
@@ -69,8 +70,9 @@ test.describe("website structure", () => {
     // A plain form post that comes back to this page with the choice remembered.
     await page.getByRole("button", { name: "Use this area" }).click();
     await expect(page.getByRole("combobox", { name: "Change area" })).toHaveValue(value!);
-    // The city is asked on the location screen (a tile already chose the service).
-    await page.goto(url("/get-help?service=tow"));
+    // The city is asked on the location screen, after the tow's quick questions.
+    await page.goto(url("/get-help/tow/problem"));
+    await answerScreenOne(page, "tow");
     await expect(page.locator("select[name=market]")).toHaveValue(value!);
   });
 
