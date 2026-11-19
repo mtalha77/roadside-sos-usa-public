@@ -8,13 +8,22 @@ const url = (p: string) => new URL(p, web).toString();
 
 async function bookingFirst(page: Page) {
   const fold = page.viewportSize()!.height;
-  const book = page
-    .getByRole("main")
-    .getByRole("link", { name: /^(Get help now|Book help now|Request a tow instead)$/ })
-    .first();
-  await expect(book).toBeVisible();
-  const box = await book.boundingBox();
-  expect(box!.y + box!.height, "the booking action is above the fold").toBeLessThanOrEqual(fold);
+  // The first booking action: Get help now (or Book help now), or a service tile that starts Get
+  // Help with that service (on city pages the breadcrumb puts the tiles first on a small phone).
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("link", { name: /^(Get help now|Book help now|Request a tow instead)$/ })
+      .first(),
+  ).toBeVisible();
+  const links = page.getByRole("main").locator('a[href^="/get-help"], a[href="#start"]');
+  let top = Infinity;
+  for (const link of await links.all()) {
+    if (!(await link.isVisible())) continue;
+    const box = await link.boundingBox();
+    if (box) top = Math.min(top, box.y + box.height);
+  }
+  expect(top, "a booking action is above the fold").toBeLessThanOrEqual(fold);
   // Any call link is plain text: no filled background, normal height.
   for (const call of await page.locator('a[href^="tel:"]').all()) {
     if (!(await call.isVisible())) continue;
