@@ -41,13 +41,13 @@
       "team": "Team & roles",
       "calls": "Calls",
       "today": "Today",
-      "economics": "Economics model"
+      "economics": "Economics model",
+      "status": "System status"
     },
     "shell": {
       "nav": "Admin",
       "navMobile": "Sections",
       "skip": "Skip to content",
-      "overview": "Overview",
       "account": "Account and security",
       "collapse": "Collapse sidebar",
       "search": "Search or jump to…",
@@ -64,7 +64,14 @@
       "close": "Close",
       "allMarkets": "All markets",
       "marketsCount": "markets",
-      "marketLabel": "Markets in view"
+      "marketLabel": "Markets in view",
+      "groups": {
+        "operate": "Operate",
+        "network": "Network",
+        "business": "Business",
+        "system": "System"
+      },
+      "menu": "Menu"
     },
     "demoControls": {
       "title": "Demo controls",
@@ -78,22 +85,15 @@
       "reset": "Reset to now",
       "scenario": "Demo economics",
       "scenarioBase": "Base scenario",
-      "scenarioStrong": "Strong scenario"
+      "scenarioStrong": "Strong scenario",
+      "load": "Load test: 200 demo requests on the dispatch board",
+      "loadOn": "Load test on"
     },
     "overview": {
-      "markets": "Markets in view",
-      "sections": "Sections",
-      "shortcut": "Shortcut: {keys}",
-      "tip": "Press ⌘K (Ctrl K) to search anywhere, ? for all shortcuts.",
-      "status": {
-        "draft": "Draft",
-        "test": "Testing",
-        "active": "Live",
-        "paused": "Paused"
-      }
+      "status": {}
     },
     "dispatch": {
-      "title": "Live dispatch",
+      "title": "Dispatch board",
       "map": "Live map of requests and trucks",
       "supply": "Supply by area",
       "gap": "No one online",
@@ -102,33 +102,46 @@
         "new": "New",
         "quoting": "Quoting",
         "picked": "Picked",
-        "en_route": "En route",
-        "on_site": "On site"
+        "en_route": "On the way",
+        "on_site": "On site",
+        "closing": "Needs closing"
       },
       "demo": "Demo",
       "real": "Real",
       "quotes": "{count} quotes",
       "waiting": "No quote",
-      "call": "Call driver or provider",
+      "call": "Call customer",
       "push": "Push to more providers",
       "assign": "Assign manually",
       "note": "Add a note",
       "cancel": "Cancel request",
-      "open": "Open",
+      "open": "Open full request",
       "empty": "Supply appears here once providers are online.",
       "count": "{count} open requests",
       "live": "Live, updates every 2 seconds",
-      "paused": "Paused",
       "pushed": "Sent to more providers (simulated).",
       "noted": "Note saved.",
-      "cancelled": "Request cancelled.",
       "assigned": "Assignment started (simulated).",
       "softphone": "Softphone opens here once phone service is connected.",
-      "actions": "Actions for",
-      "load": "Load test: 200 demo requests",
-      "loadOn": "Load test on",
       "error": "Connection lost. Retrying…",
-      "more": "+{count} more"
+      "more": "+{count} more",
+      "laneEmpty": "Nothing here.",
+      "quotesLabel": "Quotes",
+      "stale": "Stale",
+      "market": "Market",
+      "source": "Show requests",
+      "sources": {
+        "real": "Real",
+        "demo": "Demo",
+        "both": "Both"
+      },
+      "keys": "Keys: J/K move, Enter opens, A assigns, C calls",
+      "close": "Close",
+      "customer": "Customer",
+      "phone": "Phone",
+      "where": "Where",
+      "provider": "Provider",
+      "kind": "Type"
     },
     "requests": {
       "title": "Requests",
@@ -139,7 +152,7 @@
       "service": "Service",
       "market": "Market",
       "status": "Status",
-      "driver": "Driver",
+      "driver": "Customer",
       "created": "Created",
       "demo": "Demo",
       "statuses": {
@@ -156,7 +169,7 @@
         "expired": "Expired"
       },
       "detailTitle": "Request {code}",
-      "inputs": "What the driver told us",
+      "inputs": "What the customer told us",
       "location": "Location",
       "vehicle": "Vehicle",
       "safety": "Safety",
@@ -180,13 +193,13 @@
       "actions": "Notes and actions",
       "note": "Note",
       "addNote": "Add note",
-      "call": "Call the driver (softphone placeholder)",
+      "call": "Call the customer (softphone placeholder)",
       "credit": "Credit the provider's fee",
       "dispute": "Open a dispute",
       "logged": "Action log",
       "review": "Review",
       "noReview": "No review yet.",
-      "callDriver": "Call driver"
+      "callDriver": "Call customer"
     },
     "intake": {
       "title": "Phone intake",
@@ -210,7 +223,7 @@
       "history": "Past requests",
       "noHistory": "No past requests.",
       "form": "New phone request",
-      "name": "Driver's name",
+      "name": "Customer's name",
       "phone": "Callback number",
       "market": "Market",
       "service": "Service",
@@ -391,7 +404,7 @@
       "current": "Current prices in {market}",
       "cols": {
         "service": "Service",
-        "range": "Driver price range",
+        "range": "Customer price range",
         "fee": "Our fee",
         "proFee": "Pro fee",
         "featured": "Featured slot",
@@ -467,7 +480,7 @@
       "queue": "Moderation queue (lowest first)",
       "approve": "Approve",
       "hide": "Hide",
-      "followUp": "Follow up with the driver",
+      "followUp": "Follow up with the customer",
       "approved": "Published.",
       "hidden": "Hidden from the profile.",
       "followed": "Follow-up task created.",
@@ -615,7 +628,7 @@
           "value": "10, 20, then 35 miles"
         },
         "maxQuotes": {
-          "label": "Most quotes shown to a driver",
+          "label": "Most quotes shown to a customer",
           "value": "5"
         },
         "autoExpire": {
@@ -623,7 +636,7 @@
           "value": "15 minutes"
         },
         "cancelFee": {
-          "label": "Fee when the driver cancels after pick",
+          "label": "Fee when the customer cancels after pick",
           "value": "None (decision pending)"
         }
       },
@@ -639,15 +652,15 @@
         },
         "auto_pick": {
           "label": "Get help fastest",
-          "hint": "Drivers can let us pick the fastest quote."
+          "hint": "Customers can let us pick the fastest quote."
         },
         "featured_slots": {
           "label": "Featured slots",
           "hint": "Featured providers on city pages."
         },
         "driver_accounts": {
-          "label": "Driver accounts",
-          "hint": "Drivers can sign in to see history."
+          "label": "Customer accounts",
+          "hint": "Customers can sign in to see history."
         }
       },
       "flagSaved": "{flag} updated on this page.",
@@ -823,7 +836,7 @@
       },
       "texts": {
         "a2pTitle": "Carrier registration (A2P 10DLC)",
-        "a2pBody": "US carriers require our brand and texting campaign to be registered before we text drivers at scale. Until it is approved, texts to anyone but test numbers (OWNER_TEST_PHONE and staff mobiles) are held, unless you turn on the override. See docs/runbooks/a2p-10dlc.md.",
+        "a2pBody": "US carriers require our brand and texting campaign to be registered before we text customers at scale. Until it is approved, texts to anyone but test numbers (OWNER_TEST_PHONE and staff mobiles) are held, unless you turn on the override. See docs/runbooks/a2p-10dlc.md.",
         "a2p": {
           "pending": "Registration pending",
           "approved": "Approved",
@@ -882,19 +895,19 @@
       "subtitle": "Every screen of the three apps, in the order a real job happens. Links open in new tabs.",
       "run": "Run full demo",
       "runHint": "Opens one fresh demo job in the website, the provider portal and here, side by side. It plays out over about 18 minutes; use Demo controls to skip ahead.",
-      "openWeb": "Open the driver's view",
+      "openWeb": "Open the customer's view",
       "openProvider": "Open the provider's view",
       "openAdmin": "Open the admin view",
       "started": "Started. If your browser blocked the extra tabs, use the three links.",
       "groups": {
-        "driver": "1. Driver",
+        "driver": "1. Customer",
         "provider": "2. Provider",
         "admin": "3. Admin"
       },
       "steps": {
         "home": {
           "title": "Website home",
-          "hint": "Where a stranded driver lands."
+          "hint": "Where a stranded customer lands."
         },
         "city": {
           "title": "City page",
@@ -906,10 +919,10 @@
         },
         "tracking": {
           "title": "Quotes, pick and tracking",
-          "hint": "The same demo job the provider and admin see: quotes arrive, the driver picks, the truck moves, then the review."
+          "hint": "The same demo job the provider and admin see: quotes arrive, the customer picks, the truck moves, then the review."
         },
         "account": {
-          "title": "Driver account",
+          "title": "Customer account",
           "hint": "History, saved vehicles and quick requests (demo sign-in by phone code)."
         },
         "signIn": {
@@ -1049,7 +1062,7 @@
       "unclaimed": "Not claimed",
       "claimLapsed": "Claim lapsed after 10 minutes",
       "newItem": "New in the inbox",
-      "pick": "Pick an item to see the request, call the driver and dispatch a provider.",
+      "pick": "Pick an item to see the request, call the customer and dispatch a provider.",
       "status": {
         "phone_intake": "Phone intake",
         "submitted": "New",
@@ -1101,14 +1114,14 @@
       "claimTaken": "Another dispatcher is handling it.",
       "reason": "Reason (required)",
       "fullDetail": "Full detail",
-      "driver": "Driver",
+      "driver": "Customer",
       "service": "Service",
       "location": "Location",
       "noLocation": "Not shared yet",
       "vehicle": "Vehicle",
       "notes": "Notes",
       "source": "Source",
-      "map": "Map of the driver's location",
+      "map": "Map of the customer's location",
       "handling": "Handling",
       "endReason": "Reason: {reason}",
       "intakeTitle": "Intake details",
@@ -1139,12 +1152,12 @@
         "call_answered": "Answered in the browser",
         "call_outbound": "Outbound call",
         "call_transferred": "Call transferred",
-        "location_shared": "Driver shared location",
+        "location_shared": "Customer shared location",
         "call_inbound": "Incoming call: {outcome}",
-        "text_inbound": "Text from the driver",
-        "text_outbound": "Text to the driver",
-        "driver_told": "Driver told",
-        "driver_emailed": "Driver emailed"
+        "text_inbound": "Text from the customer",
+        "text_outbound": "Text to the customer",
+        "driver_told": "Customer told",
+        "driver_emailed": "Customer emailed"
       },
       "intake": {
         "name": "Name",
@@ -1178,20 +1191,21 @@
         }
       },
       "tell": {
-        "title": "Tell the driver",
+        "title": "Tell the customer",
         "email": "Email: {email}",
         "noEmail": "No email on this request: read the words below on the call.",
-        "emailed": "Emailed to the driver and logged on the timeline.",
-        "readAloud": "Read this to the driver, then log it:",
-        "logRead": "I read it to the driver",
+        "emailed": "Emailed to the customer and logged on the timeline.",
+        "readAloud": "Read this to the customer, then log it:",
+        "logRead": "I read it to the customer",
         "sendLink": "Location link",
         "assignedScript": "{provider} is on the way. Quoted price {price}, about {eta} minutes.",
         "linkScript": "Open this link and tap Share my location: {link}",
         "logged": "Logged on the timeline.",
         "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
-      }
+      },
+      "logCall": "Log a call"
     },
-    "textingLimited": "Texting limited: carrier registration pending. Texts to drivers are held until it's approved.",
+    "textingLimited": "Texting limited: carrier registration pending. Texts to customers are held until it's approved.",
     "marketing": {
       "title": "Marketing",
       "from": "From",
@@ -1312,7 +1326,7 @@
       },
       "operator": {
         "name": "Technician",
-        "who": "The truck driver going to the customer.",
+        "who": "The technician going to the customer.",
         "can": "Only jobs assigned to them: navigation, status steps (on the way, arrived, done) and photos. Sees the customer's number only for their own active job."
       }
     },
@@ -1411,6 +1425,101 @@
       },
       "sharedStateOn": ": on",
       "sharedStateOff": ": off"
+    },
+    "today": {
+      "lead": "What needs a person now, and how today is going in your markets.",
+      "strip": {
+        "title": "Right now",
+        "needAction": "Needs action now",
+        "oldest": "Oldest waiting {age}",
+        "none": "Nobody is waiting",
+        "missedCalls": "Unanswered calls",
+        "last24h": "Last 24 hours, not called back",
+        "noQuote": "No quote after 3 minutes",
+        "noQuoteHint": "Amber at 3 minutes, red at 10",
+        "online": "Providers online",
+        "verified": "Verified providers"
+      },
+      "urgent": {
+        "title": "Most urgent",
+        "emptyTitle": "All clear",
+        "empty": "Nothing is waiting for a person right now."
+      },
+      "reasons": {
+        "noQuote": "No quote yet",
+        "unclaimed": "Nobody has claimed it",
+        "missedCall": "Missed call",
+        "closing": "No progress for 2 hours"
+      },
+      "do": {
+        "claim": "Claim",
+        "callBack": "Call back",
+        "assign": "Assign",
+        "close": "Close"
+      },
+      "alerts": {
+        "title": "Alerts",
+        "stale": "{count, plural, one {# request has} other {# requests have}} had no progress for 2 hours.",
+        "noProviders": "{market}: no providers available.",
+        "none": "No alerts.",
+        "webhooks": "Failed webhooks show here once error monitoring is connected."
+      },
+      "numbers": {
+        "title": "Today by market",
+        "market": "Market",
+        "requests": "Requests",
+        "fill": "Filled",
+        "assign": "Median to assign",
+        "completed": "Completed",
+        "fees": "Fees earned",
+        "note": "Since midnight in each market's time zone. Real requests only."
+      }
+    },
+    "calls": {
+      "title": "Calls",
+      "lead": "Every call in your markets over the last 7 days.",
+      "log": "Log a call",
+      "filter": "Filter by outcome",
+      "all": "All",
+      "emptyTitle": "No calls yet",
+      "emptyBody": "Calls to your market numbers appear here as they happen.",
+      "directions": {
+        "inbound": "Incoming",
+        "outbound": "Outgoing"
+      },
+      "outcomes": {
+        "ringing": "Ringing",
+        "answered": "Answered",
+        "missed": "Missed",
+        "voicemail": "Voicemail",
+        "busy": "Busy",
+        "failed": "Failed",
+        "completed": "Completed"
+      },
+      "table": {
+        "caption": "Calls",
+        "time": "Time",
+        "direction": "Direction",
+        "outcome": "Outcome",
+        "from": "From",
+        "to": "To",
+        "duration": "Length",
+        "market": "Market",
+        "request": "Request",
+        "search": "Search calls",
+        "columns": "Columns",
+        "empty": "No calls match.",
+        "previous": "Previous page",
+        "next": "Next page",
+        "page": "Page {page} of {pages}",
+        "sortBy": "Sort by {column}"
+      }
+    },
+    "states": {
+      "loading": "Loading…",
+      "errorTitle": "This page didn't load",
+      "errorBody": "Something went wrong on our side. Your data is safe. Try again, and if it keeps happening, tell the team in the ops channel.",
+      "retry": "Try again"
     }
   },
   "emails": {

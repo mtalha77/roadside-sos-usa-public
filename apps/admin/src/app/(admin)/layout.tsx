@@ -1,5 +1,6 @@
+import { canSee } from "@rsos/config/permissions";
 import { textingEnabled } from "@rsos/core/adapters";
-import { Map as MapIcon } from "lucide-react";
+import { LogOut, Map as MapIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -10,15 +11,14 @@ import { SoftphoneDock } from "@/components/softphone/softphone-dock";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { getAdminContext } from "@/lib/admin";
 import { readDemoClock } from "@/lib/demo-clock";
-import { BUILT, sectionsFor } from "@/lib/nav";
-
-const WALKTHROUGH_BUILT = BUILT.has("/walkthrough");
+import { signOutAction } from "@/lib/auth-actions";
+import { NAV_GROUPS, sectionsFor } from "@/lib/nav";
 
 const SHELL_KEYS = [
   "nav",
   "navMobile",
+  "menu",
   "skip",
-  "overview",
   "account",
   "collapse",
   "search",
@@ -50,12 +50,31 @@ const DEMO_KEYS = [
   "scenario",
   "scenarioBase",
   "scenarioStrong",
+
+  "load",
+  "loadOn",
 ] as const;
+
+/** Sign out, at the bottom of the menu for every role (the overview page used to hold it). */
+function SignOut({ label }: { label: string }) {
+  return (
+    <form action={signOutAction}>
+      <button
+        type="submit"
+        className="flex min-h-12 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted-foreground hover:bg-accent"
+      >
+        <LogOut aria-hidden="true" className="size-5 shrink-0" />
+        <span>{label}</span>
+      </button>
+    </form>
+  );
+}
 
 /** Admin shell for every signed-in screen (RSOS-071). The proxy already requires staff with aal2. */
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const [t, ctx, clock, jar] = await Promise.all([
+  const [t, ta, ctx, clock, jar] = await Promise.all([
     getTranslations("admin"),
+    getTranslations("auth"),
     getAdminContext(),
     readDemoClock(),
     cookies(),
@@ -95,6 +114,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   return (
     <AdminShell
       sections={sectionsFor(ctx.role).map((s) => ({ ...s, label: t(`sections.${s.key}`) }))}
+      groups={Object.fromEntries(NAV_GROUPS.map((g) => [g, t(`shell.groups.${g}`)]))}
       identity={identity}
       markets={ctx.markets.map((m) => ({ slug: m.slug, name: m.name }))}
       selected={ctx.selected}
@@ -102,7 +122,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
       footer={
         ctx.demo ? (
           <>
-            {WALKTHROUGH_BUILT ? (
+            {canSee(ctx.role, "walkthrough") ? (
               <Link
                 href="/walkthrough"
                 className="flex min-h-12 items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted-foreground hover:bg-accent"
@@ -114,10 +134,15 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             <DemoControls
               initial={clock}
               scenario={jar.get("rsos_demo_scenario")?.value === "strong" ? "strong" : "base"}
+
+              loadTest={jar.get("rsos_demo_load")?.value === "1"}
               labels={Object.fromEntries(DEMO_KEYS.map((k) => [k, t(`demoControls.${k}`)]))}
             />
+            <SignOut label={ta("signOut")} />
           </>
-        ) : null
+        ) : (
+          <SignOut label={ta("signOut")} />
+        )
       }
     >
       {textingLimited ? (

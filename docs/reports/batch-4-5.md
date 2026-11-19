@@ -10,11 +10,13 @@
 | ------------------------------------------------- | ----------- | -------------------------------------------------------------------- |
 | RSOS-100 Emergency-first website home, city pages | Merged      | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184) |
 | RSOS-101 Get Help flow, faster and calmer         | Merged      | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186) |
-| RSOS-102 Roles and permissions in the admin       | In review   |                                                                      |
-| RSOS-103 Admin rebuild (Today, navigation, board) | Not started |                                                                      |
+| RSOS-102 Roles and permissions in the admin       | Merged      | [#187](https://github.com/mtalha77/roadside-sos-usa-public/pull/187) |
+| RSOS-103 Admin rebuild (Today, navigation, board) | In review   |                                                                      |
 | RSOS-104 Provider portal polish                   | Not started |                                                                      |
 | RSOS-105 Skippable guided tours                   | Not started |                                                                      |
 | RSOS-106 QA pass and walkthrough                  | Not started |                                                                      |
+
+RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at the owner's request ([#188](https://github.com/mtalha77/roadside-sos-usa-public/pull/188), report in `docs/reports/batch-4-6.md`).
 
 ## Tickets
 
@@ -106,3 +108,66 @@
   - pgTAP `027_role_permissions` (per role: providers, fee rows, staff);
   - e2e `role-permissions.spec.ts` (allowed and refused sections and the menu per role, the Team
     and roles page) and `demo-sign-in.spec.ts` (all ten demo roles).
+
+### RSOS-103: Admin rebuild (Today, navigation, dispatch board)
+
+- **Navigation**, grouped and filtered by role (RSOS-102), each group folds and the choice is
+  remembered: **Operate** (Today, Inbox, Dispatch board, Requests, Calls), **Network**
+  (Providers, Recruitment, Reviews), **Business** (Markets, Pricing, Finance, Marketing, Test
+  campaign, Analytics), **System** (Content, Team & roles, Settings, System status). On phones the
+  same menu opens from a **Menu** button (the old strip of 16 links is gone).
+- **Phone intake merged**: no longer a menu item; "Log a call" opens it from the Inbox and from
+  Calls. Inbox = what a person must act on now; Dispatch board = live map and lanes; Requests =
+  searchable history; Calls = the call log.
+- **Today** replaces the overview:
+  - top strip: needs action now (with the oldest wait), unanswered calls (missed or voicemail,
+    not called back), requests with no quote after 3 minutes, providers available per market;
+  - the 10 most urgent items, each with one action (Claim, Call back, Assign, Close);
+  - today by market since local midnight: requests, filled, median time to assign, completed,
+    and fees earned (owners, operations and finance only);
+  - alerts: stale requests and markets with nobody available.
+- **Calls**: the 7-day call log in a sortable table (36 px rows, sticky header, search, columns),
+  outcome filters, row click opens the request, virtual scrolling past 100 rows.
+- **Dispatch board**:
+  - one market at a time (defaults to the first of the dispatcher's markets, kept in the address);
+  - the map shows that market's neighbourhood names, pins at their coordinates, and pins closer
+    than 22 map units merge into one numbered marker (no overlapping markers);
+  - lanes New, Quoting, Picked, On the way, On site, plus **Needs closing** for anything with no
+    progress for 2 hours;
+  - timers read "45s", "12m 30s", "2h 14m", then "Stale · 2d"; amber at 3 minutes without a quote,
+    red at 10 (with a "No quote" tag, never colour alone);
+  - **Real / Demo / Both**, Real by default everywhere; demo cards carry a Demo tag;
+  - the load test moved into Demo controls;
+  - a card opens a side panel with the details and actions; J/K move, Enter opens, A assigns, C
+    calls.
+- **Every admin page** has a skeleton while loading and an error page with a retry; the new
+  pages have empty states.
+- **Customer wording** in the admin ("Call customer", "Customer's name"; the truck driver is the
+  technician).
+- **Demo badge** in the admin is the slim top strip (the corner badge covered a menu item).
+- **Staging data cleanup**: 5 real requests stuck at "submitted" for more than 24 hours were
+  closed as cancelled with reason "test cleanup", each with a request event and an audit log
+  entry (`request.test_cleanup`). Nothing was sent to anyone.
+- Timer formatting and colours are unit tested (`apps/admin/test/board-time.test.ts`).
+- **Not done (recorded)**: failed webhooks are not tracked anywhere yet (only idempotency rows
+  exist), so the alert says it appears once error monitoring is connected. The existing tables
+  (Requests, Providers and others) keep their current layout; only Calls uses the new table.
+- **Sign out** sits at the bottom of the menu for every role (it used to be on the overview).
+- **Speed, measured** on this pull request's preview (Vercel, signed in as Owner, desktop Chrome,
+  from the developer's machine; median of 3 client-side changes from Today):
+
+  | Route     | JS over the network (compressed, cold) | First response | Page ready |
+  | --------- | -------------------------------------- | -------------- | ---------- |
+  | Today `/` | 208.6 KB                               | n/a            | n/a        |
+  | Inbox     | 312.0 KB                               | 52 ms          | 1411 ms    |
+  | Dispatch  | 214.2 KB                               | 62 ms          | 1546 ms    |
+  | Requests  | 207.9 KB                               | 51 ms          | 1419 ms    |
+  | Calls     | 247.7 KB                               | 51 ms          | 1606 ms    |
+  | Providers | 209.3 KB                               | 51 ms          | 1573 ms    |
+  | Team      | 209.9 KB                               | 49 ms          | 1411 ms    |
+
+  Menu links now prefetch, so a click shows the page's skeleton in about 50 ms (under the 200 ms
+  target); the data itself takes 1.4 to 1.6 s (server render plus database round trips from the
+  preview region). The command palette loads on first open. JavaScript is about 208 KB on most
+  routes against the 200 KB target, 312 KB on Inbox (live updates) and 248 KB on Calls (the
+  table): **partial**, recorded for the owner.

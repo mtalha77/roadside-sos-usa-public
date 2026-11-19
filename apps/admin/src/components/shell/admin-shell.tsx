@@ -1,22 +1,26 @@
 "use client";
 
-import { CommandPalette, type CommandAction } from "@rsos/ui/command-palette";
+import type { CommandAction } from "@rsos/ui/command-palette";
 import { Dialog, DialogContent } from "@rsos/ui/dialog";
+import { SidePanel, SidePanelContent } from "@rsos/ui/side-panel";
 import { ThemeToggle } from "@rsos/ui/theme-toggle";
 import {
+  Activity,
   BarChart3,
   Calculator,
+  ChevronDown,
   ChevronsLeft,
   ChevronsRight,
   DollarSign,
   FileText,
   Gauge,
   Inbox,
+  Menu,
   MessagesSquare,
   Map as MapIcon,
   Megaphone,
   Target,
-  Phone,
+  PhoneCall,
   Radio,
   Search,
   Settings,
@@ -26,16 +30,18 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { MarketSwitcher } from "./market-switcher";
 
 const ICONS = {
+  today: Gauge,
   inbox: MessagesSquare,
   dispatch: Radio,
   requests: Inbox,
-  intake: Phone,
+  calls: PhoneCall,
   providers: Truck,
   recruitment: UserPlus,
   markets: MapIcon,
@@ -49,20 +55,50 @@ const ICONS = {
   content: FileText,
   team: Users,
   settings: Settings,
+  status: Activity,
 } as const;
+
+// The palette (cmdk) loads on first open, not with every page (RSOS-103 speed).
+const CommandPalette = dynamic(() =>
+  import("@rsos/ui/command-palette").then((m) => m.CommandPalette),
+);
 
 const PALETTE_KEYS = "⌘K";
 const HELP_KEY = "?";
 
-type Section = { href: string; key: keyof typeof ICONS; label: string; shortcut: string };
+type Section = {
+  href: string;
+  key: keyof typeof ICONS;
+  group: string;
+  label: string;
+  shortcut: string;
+};
+const FOLDED = "rsos_nav_folded";
+const subscribeFolded = (cb: () => void) => {
+  window.addEventListener(FOLDED, cb);
+  window.addEventListener("storage", cb);
+  return () => {
+    window.removeEventListener(FOLDED, cb);
+    window.removeEventListener("storage", cb);
+  };
+};
+const readFolded = () => {
+  try {
+    return localStorage.getItem(FOLDED) ?? "[]";
+  } catch {
+    return "[]";
+  }
+};
 
 /**
- * Admin shell (RSOS-071): collapsible sidebar, market switcher, Cmd+K command palette (pages,
- * find a request by code or phone, a provider by name), "g then letter" shortcuts and a "?"
- * cheat sheet. Light and dark.
+ * Admin shell (RSOS-071, regrouped in RSOS-103): sidebar grouped into Operate, Network, Business
+ * and System (each group folds; the choice is remembered), only the sections the role may open,
+ * market switcher, Cmd+K command palette (pages, find a request by code or phone, a provider by
+ * name), "g then letter" shortcuts and a "?" cheat sheet. Light and dark.
  */
 export function AdminShell({
   sections,
+  groups,
   markets,
   selected,
   labels,
@@ -73,6 +109,8 @@ export function AdminShell({
   /** "Dispatcher · San Antonio, Houston": the role and market scope (RSOS-102). */
   identity: string;
   sections: Section[];
+  /** Group key to its translated heading, in menu order. */
+  groups: Record<string, string>;
   markets: { slug: string; name: string }[];
   selected: string[];
   labels: Record<string, string>;
@@ -84,7 +122,31 @@ export function AdminShell({
   const [collapsed, setCollapsed] = useState(false);
   const [palette, setPalette] = useState(false);
   const [help, setHelp] = useState(false);
+  const [menu, setMenu] = useState(false);
   const [query, setQuery] = useState("");
+  const foldedRaw = useSyncExternalStore(subscribeFolded, readFolded, () => "[]");
+  const folded = useMemo(() => {
+    try {
+      const v = JSON.parse(foldedRaw) as unknown;
+      return Array.isArray(v) ? v.filter((g): g is string => typeof g === "string") : [];
+    } catch {
+      return [];
+    }
+  }, [foldedRaw]);
+  const fold = (g: string) => {
+    const next = folded.includes(g) ? folded.filter((x) => x !== g) : [...folded, g];
+    try {
+      localStorage.setItem(FOLDED, JSON.stringify(next));
+    } catch {
+      /* storage unavailable */
+    }
+    window.dispatchEvent(new Event(FOLDED));
+  };
+  const current = (href: string) => {
+    const base = href.split("?")[0]!;
+    if (href.includes("?")) return false;
+    return base === "/" ? path === "/" : path === base || path.startsWith(`${base}/`);
+  };
   useEffect(() => {
     let lead = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -115,6 +177,18 @@ export function AdminShell({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [sections, router]);
+  // Cmd+K (Ctrl+K) opens the palette before its code has loaded; once open, it handles the keys.
+  useEffect(() => {
+    if (palette) return;
+    const onK = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setPalette(true);
+      }
+    };
+    window.addEventListener("keydown", onK);
+    return () => window.removeEventListener("keydown", onK);
+  }, [palette]);
   const q = query.trim();
   const actions: CommandAction[] = [
     ...sections.map((s) => ({
@@ -124,7 +198,6 @@ export function AdminShell({
       shortcut: s.shortcut,
       onSelect: () => router.push(s.href),
     })),
-    { id: "/", label: labels.overview!, group: labels.pages!, onSelect: () => router.push("/") },
     {
       id: "/account",
       label: labels.account!,
@@ -166,6 +239,52 @@ export function AdminShell({
   ];
   const item =
     "flex min-h-12 items-center gap-3 rounded-lg px-3 text-sm font-medium hover:bg-accent aria-[current=page]:bg-accent aria-[current=page]:text-foreground";
+  const navGroups = (slim: boolean, where: "side" | "menu") => (
+    <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto">
+      {Object.entries(groups).map(([g, heading]) => {
+        const list = sections.filter((s) => s.group === g);
+        if (!list.length) return null;
+        const open = slim || !folded.includes(g);
+        return (
+          <div key={g} className="flex flex-col gap-1">
+            {slim ? null : (
+              <button
+                type="button"
+                aria-expanded={open}
+                aria-controls={`nav-${where}-${g}`}
+                onClick={() => fold(g)}
+                className="flex min-h-10 items-center justify-between rounded-lg px-3 pt-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase hover:text-foreground"
+              >
+                {heading}
+                <ChevronDown
+                  aria-hidden="true"
+                  className={`size-4 transition-transform motion-reduce:transition-none ${open ? "" : "-rotate-90"}`}
+                />
+              </button>
+            )}
+            <ul id={`nav-${where}-${g}`} hidden={!open} className="flex flex-col gap-1">
+              {list.map((s) => {
+                const Icon = ICONS[s.key];
+                return (
+                  <li key={s.href}>
+                    <Link
+                      href={s.href}
+                      className={item}
+                      onClick={where === "menu" ? () => setMenu(false) : undefined}
+                      aria-current={current(s.href) ? "page" : undefined}
+                    >
+                      <Icon aria-hidden="true" className="size-5 shrink-0" />
+                      <span className={slim ? "sr-only" : undefined}>{s.label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
+  );
   return (
     <div className="flex min-h-dvh">
       <a
@@ -178,26 +297,8 @@ export function AdminShell({
         aria-label={labels.nav}
         className={`sticky top-0 hidden h-dvh shrink-0 flex-col gap-1 border-r bg-card p-3 md:flex ${collapsed ? "w-[4.5rem]" : "w-60"}`}
       >
-        <Link href="/" className={item} aria-current={path === "/" ? "page" : undefined}>
-          <Gauge aria-hidden="true" className="size-5 shrink-0" />
-          <span className={collapsed ? "sr-only" : undefined}>{labels.overview}</span>
-        </Link>
-        {sections.map((s) => {
-          const Icon = ICONS[s.key];
-          return (
-            <Link
-              key={s.href}
-              href={s.href}
-              prefetch={false}
-              className={item}
-              aria-current={path === s.href || path.startsWith(`${s.href}/`) ? "page" : undefined}
-            >
-              <Icon aria-hidden="true" className="size-5 shrink-0" />
-              <span className={collapsed ? "sr-only" : undefined}>{s.label}</span>
-            </Link>
-          );
-        })}
-        <div className="mt-auto flex flex-col gap-1">
+        {navGroups(collapsed, "side")}
+        <div className="flex flex-col gap-1 border-t pt-2">
           {footer}
           <button
             type="button"
@@ -235,37 +336,39 @@ export function AdminShell({
           <span data-theme-toggle-wrap>
             <ThemeToggle label={labels.toggleTheme!} />
           </span>
-          <nav
-            aria-label={labels.navMobile}
-            className="flex w-full gap-1 overflow-x-auto md:hidden"
+          <button
+            type="button"
+            onClick={() => setMenu(true)}
+            className="order-first flex min-h-12 items-center gap-2 rounded-lg border px-3 text-sm font-medium hover:bg-accent md:hidden"
           >
-            {sections.map((s) => (
-              <Link
-                key={s.href}
-                href={s.href}
-                prefetch={false}
-                className="flex min-h-12 shrink-0 items-center rounded-lg px-3 text-sm font-medium aria-[current=page]:bg-accent"
-                aria-current={path.startsWith(s.href) ? "page" : undefined}
-              >
-                {s.label}
-              </Link>
-            ))}
-          </nav>
+            <Menu aria-hidden="true" className="size-5" />
+            {labels.menu}
+          </button>
         </header>
         <div className="min-w-0 flex-1">{children}</div>
       </div>
-      <CommandPalette
-        open={palette}
-        onOpenChange={(o) => {
-          setPalette(o);
-          if (!o) setQuery("");
-        }}
-        actions={actions}
-        label={labels.palette}
-        placeholder={labels.paletteHint}
-        emptyText={labels.empty}
-        onQueryChange={setQuery}
-      />
+      <SidePanel open={menu} onOpenChange={setMenu}>
+        <SidePanelContent title={labels.navMobile} closeLabel={labels.close!}>
+          <nav aria-label={labels.navMobile} className="flex flex-col gap-1">
+            {navGroups(false, "menu")}
+            <div className="mt-2 flex flex-col gap-1 border-t pt-2">{footer}</div>
+          </nav>
+        </SidePanelContent>
+      </SidePanel>
+      {palette ? (
+        <CommandPalette
+          open={palette}
+          onOpenChange={(o) => {
+            setPalette(o);
+            if (!o) setQuery("");
+          }}
+          actions={actions}
+          label={labels.palette}
+          placeholder={labels.paletteHint}
+          emptyText={labels.empty}
+          onQueryChange={setQuery}
+        />
+      ) : null}
       <Dialog open={help} onOpenChange={setHelp}>
         <DialogContent title={labels.shortcuts} closeLabel={labels.close}>
           <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">

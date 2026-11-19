@@ -35,6 +35,7 @@ export function LiteMap({
   className,
   label,
   animate = true,
+  cluster,
 }: {
   points: LiteMapPoint[];
   route?: { from: { lat: number; lng: number }; to: { lat: number; lng: number } };
@@ -43,6 +44,11 @@ export function LiteMap({
   label: string;
   /** Drive a truck along the route (only with a route; never with reduced motion). */
   animate?: boolean;
+  /**
+   * Group request pins closer than this many map units (the map is 400 wide) into one numbered
+   * marker, so pins never overlap on a busy board (RSOS-103).
+   */
+  cluster?: number;
 }) {
   const all = [
     ...points,
@@ -62,6 +68,37 @@ export function LiteMap({
   const spanLng = Math.max(maxLng - minLng, 0.01);
   const x = (lng: number) => ((lng - minLng) / spanLng) * W;
   const y = (lat: number) => H - ((lat - minLat) / spanLat) * H;
+  const RANK = { critical: 3, warning: 2, info: 1, success: 1, neutral: 0 } as const;
+  const shown: (LiteMapPoint & { count?: number })[] = [];
+  if (cluster) {
+    const cells = new Map<string, (LiteMapPoint & { count?: number })[]>();
+    for (const p of points) {
+      if (p.kind !== "request") {
+        shown.push(p);
+        continue;
+      }
+      const key = `${Math.floor(x(p.lng) / cluster)}:${Math.floor(y(p.lat) / cluster)}`;
+      cells.set(key, [...(cells.get(key) ?? []), p]);
+    }
+    for (const [key, group] of cells) {
+      if (group.length === 1) {
+        shown.push(group[0]!);
+        continue;
+      }
+      const worst = group.reduce((a, b) =>
+        RANK[b.tone ?? "critical"] > RANK[a.tone ?? "critical"] ? b : a,
+      );
+      shown.push({
+        id: `cluster-${key}`,
+        kind: "request",
+        lat: group.reduce((n, p) => n + p.lat, 0) / group.length,
+        lng: group.reduce((n, p) => n + p.lng, 0) / group.length,
+        tone: worst.tone,
+        label: group.map((p) => p.label).join(", "),
+        count: group.length,
+      });
+    }
+  } else shown.push(...points);
   const tone = {
     neutral: "fill-foreground",
     warning: "fill-warning",
@@ -125,10 +162,25 @@ export function LiteMap({
           />
         </g>
       ) : null}
-      {points.map((p) => (
+      {shown.map((p) => (
         <g key={p.id} transform={`translate(${x(p.lng)} ${y(p.lat)})`}>
           <title>{p.label}</title>
-          {p.kind === "truck" ? (
+          {p.count ? (
+            <g>
+              <circle
+                r={p.count > 9 ? 13 : 11}
+                className={cn(tone[p.tone ?? "critical"], "stroke-background")}
+                strokeWidth="2"
+              />
+              <text
+                textAnchor="middle"
+                dy="4"
+                className="fill-background text-[11px] font-semibold tabular-nums"
+              >
+                {p.count}
+              </text>
+            </g>
+          ) : p.kind === "truck" ? (
             <Truck />
           ) : p.kind === "destination" ? (
             <rect

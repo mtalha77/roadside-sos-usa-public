@@ -1,9 +1,10 @@
-import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
+import { z } from "zod";
 import { DispatchBoard } from "@/components/dispatch/dispatch-board";
 import { getAdminContext } from "@/lib/admin";
 import { getBoard } from "@/lib/board";
 import { demoNow } from "@/lib/demo-clock";
+import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +19,14 @@ const KEYS = [
   "lanes.picked",
   "lanes.en_route",
   "lanes.on_site",
+  "lanes.closing",
+  "laneEmpty",
   "demo",
   "real",
   "quotes",
+  "quotesLabel",
   "waiting",
+  "stale",
   "call",
   "push",
   "assign",
@@ -31,40 +36,54 @@ const KEYS = [
   "empty",
   "count",
   "live",
-  "paused",
   "pushed",
   "noted",
-  "cancelled",
   "assigned",
   "softphone",
-  "actions",
-  "load",
-  "loadOn",
   "error",
   "more",
+  "market",
+  "source",
+  "sources.real",
+  "sources.demo",
+  "sources.both",
+  "keys",
+  "close",
+  "customer",
+  "phone",
+  "where",
+  "provider",
+  "kind",
 ] as const;
 
-async function load() {
-  const [ctx, now, jar] = await Promise.all([getAdminContext(), demoNow(), cookies()]);
-  const loadTest = ctx.demo && jar.get("rsos_demo_load")?.value === "1";
-  return {
-    ctx,
-    loadTest,
-    board: await getBoard({ now, markets: ctx.selected, demo: ctx.demo, load: loadTest }),
-  };
-}
+const Source = z.enum(["real", "demo", "both"]).catch("real");
 
 /**
- * Live dispatch board (RSOS-034 + 072): map and lanes (new, quoting, picked, en route, on site),
- * SLA timers (amber after 2 minutes without a quote, red after 3, with a sound), card actions and
- * the supply panel. Real requests appear within 2 seconds; demo ones are labelled.
+ * Live dispatch board (RSOS-034 + 072, rebuilt in RSOS-103): one market at a time, lanes plus
+ * "Needs closing", Real / Demo / Both (Real by default everywhere), a side panel per request and
+ * keyboard control. Real requests appear within 2 seconds; demo ones carry a Demo tag.
  */
-export default async function DispatchPage() {
-  const [t, ts, { ctx, loadTest, board }] = await Promise.all([
+export default async function DispatchPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ market?: string; source?: string }>;
+}) {
+  const [t, ts, ctx, now, jar, sp] = await Promise.all([
     getTranslations("admin.dispatch"),
     getTranslations("site.services"),
-    load(),
+    getAdminContext(),
+    demoNow(),
+    cookies(),
+    searchParams,
   ]);
+  const board = await getBoard({
+    now,
+    markets: ctx.selected,
+    demo: ctx.demo,
+    load: ctx.demo && jar.get("rsos_demo_load")?.value === "1",
+  });
+  const inView = ctx.markets.filter((m) => ctx.selected.includes(m.slug));
+  const market = inView.some((m) => m.slug === sp.market) ? sp.market! : (inView[0]?.slug ?? "");
   const services = Object.fromEntries(
     [...new Set(board.cards.map((c) => c.service))].map((s) => [
       s,
@@ -74,10 +93,10 @@ export default async function DispatchPage() {
   return (
     <DispatchBoard
       initial={board}
-      demo={ctx.demo}
-      loadTest={loadTest}
+      market={market}
+      source={Source.parse(sp.source)}
       services={services}
-      markets={Object.fromEntries(ctx.markets.map((m) => [m.slug, m.name]))}
+      markets={Object.fromEntries(inView.map((m) => [m.slug, m.name]))}
       labels={Object.fromEntries(KEYS.map((k) => [k, String(t.raw(k))]))}
     />
   );

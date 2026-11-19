@@ -53,7 +53,7 @@ test.describe("links stay in the current environment", () => {
     // The walkthrough's driver links point at this environment's website.
     await page.goto(new URL("/walkthrough", base).toString());
     const driver = await page
-      .getByRole("link", { name: "Open the driver's view" })
+      .getByRole("link", { name: "Open the customer's view" })
       .getAttribute("href");
     expect(PROD.has(new URL(driver!).host)).toBe(false);
   });
