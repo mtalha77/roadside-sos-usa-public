@@ -64,8 +64,14 @@ export default async function MarketDetailPage({ params }: { params: Promise<{ s
   const features: BoundaryFeature[] = shape?.boundary
     ? [{ geometry: shape.boundary as BoundaryFeature["geometry"] }]
     : [];
-  const checklist = checks.map((c) => ({ key: c.item, ok: c.ok, detail: c.detail }));
-  const ready = checklist.length > 0 && checklist.every((c) => c.ok);
+  const checklist = checks.map((c) => ({
+    key: c.item,
+    ok: c.ok,
+    detail: c.detail,
+    required: c.required,
+  }));
+  // Only the required items block going live; phone numbers are optional (RSOS-110).
+  const ready = checklist.length > 0 && checklist.every((c) => c.ok || !c.required);
   const fx = demoMarkets[slug];
   return (
     <main id="main" className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6">
@@ -165,7 +171,13 @@ export default async function MarketDetailPage({ params }: { params: Promise<{ s
                   )}
                   <span>
                     {t(`checks.${c.key}`)}
+                    {c.required ? null : (
+                      <span className="ml-1 text-muted-foreground">{t("optional")}</span>
+                    )}
                     <span className="sr-only"> {c.ok ? t("done") : t("todo")}</span>
+                    {!c.ok && c.key === "booking_test" ? (
+                      <span className="block text-muted-foreground">{t("bookingTestHow")}</span>
+                    ) : null}
                     {!c.ok && c.detail ? (
                       <span className="block text-muted-foreground">
                         {t("missing", { detail: c.detail })}

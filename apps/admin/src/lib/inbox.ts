@@ -100,7 +100,13 @@ export async function getInbox(marketIds: string[]): Promise<{
       lastText: texts[0]?.direction ?? null,
     };
   });
-  items.sort((a, b) => Number(b.urgent) - Number(a.urgent) || a.createdAt - b.createdAt);
+  // Urgent first, then online requests (the main flow, RSOS-110), then the longest wait.
+  items.sort(
+    (a, b) =>
+      Number(b.urgent) - Number(a.urgent) ||
+      Number(a.channel === "phone") - Number(b.channel === "phone") ||
+      a.createdAt - b.createdAt,
+  );
   return {
     items,
     unread: items.filter((i) => i.unread).length,

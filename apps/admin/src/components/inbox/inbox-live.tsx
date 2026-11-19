@@ -158,6 +158,10 @@ export function InboxLive({
                       {i.urgent ? <Badge tone="critical">{t("urgent")}</Badge> : null}
                       {i.unread ? <Badge tone="warning">{t("new")}</Badge> : null}
                       <Badge tone="neutral">{t(`status.${i.status}`)}</Badge>
+                      {/* Where it came from (RSOS-110): online requests are the main flow. */}
+                      <Badge tone="outline">
+                        {i.channel === "phone" ? t("sourceCall") : t("sourceWebsite")}
+                      </Badge>
                       <span className="ml-auto text-sm tabular-nums text-muted-foreground">
                         {t("waiting", { time: waited(now - i.createdAt) })}
                       </span>

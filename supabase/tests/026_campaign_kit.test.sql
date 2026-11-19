@@ -23,7 +23,7 @@ select set_config('test.market', (select id::text from public.markets where slug
 select set_config('test.overrides_before', (select count(*)::text from public.audit_log
   where action = 'market.live_override' and entity_id = current_setting('test.market')), true);
 select pg_temp.as_role('ops_manager');
-select is((select count(*)::int from public.market_launch_checklist(current_setting('test.market')::uuid)), 6, 'six checklist items');
+select is((select count(*)::int from public.market_launch_checklist(current_setting('test.market')::uuid)), 7, 'seven checklist items, two of them optional');
 select ok((select not ok from public.market_launch_checklist(current_setting('test.market')::uuid) where item = 'providers'),
   'a market without enough real providers is not ready');
 select throws_ok($$ select public.set_market_status(current_setting('test.market')::uuid, 'active') $$, '22023', null,

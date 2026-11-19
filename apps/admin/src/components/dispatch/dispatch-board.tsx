@@ -213,6 +213,9 @@ export function DispatchBoard({
   ];
   const supply = board.supply.filter((s) => s.market === market);
   const age = (c: BoardCard) => formatAge(clock - c.createdAt, { stale: labels.stale! });
+  // A person steps in only when online booking has not worked: no quote past the window, or stalled.
+  const needsHand = (c: BoardCard) =>
+    c.lane === "closing" || (c.lane === "new" && ageTone(true, clock - c.createdAt) !== null);
 
   return (
     <main id="main" className="flex flex-col gap-4 px-4 py-4">
@@ -362,12 +365,20 @@ export function DispatchBoard({
             description={`${markets[current.market] ?? current.market} · ${labels[`lanes.${current.lane}`]} · ${mounted ? age(current) : ""}`}
             closeLabel={labels.close!}
             footer={
-              <div className="grid grid-cols-2 gap-2">
-                <Button onClick={actions.assign}>{labels.assign}</Button>
-                <Button variant="outline" onClick={actions.call}>
+              // Manual dispatch is the fallback (RSOS-110): Assign leads only when the request has
+              // no booking after the quote window or has stalled; otherwise it waits in More.
+              needsHand(current) ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <Button onClick={actions.assign}>{labels.assign}</Button>
+                  <Button variant="outline" onClick={actions.call}>
+                    {labels.call}
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="outline" className="w-full" onClick={actions.call}>
                   {labels.call}
                 </Button>
-              </div>
+              )
             }
           >
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
@@ -393,6 +404,14 @@ export function DispatchBoard({
               </p>
             ) : null}
             <div className="mt-6 flex flex-col gap-2">
+              {needsHand(current) ? null : (
+                <p className="text-sm font-semibold text-muted-foreground">{labels.moreActions}</p>
+              )}
+              {needsHand(current) ? null : (
+                <Button variant="outline" onClick={actions.assign}>
+                  {labels.assign}
+                </Button>
+              )}
               <Button variant="outline" onClick={actions.push}>
                 {labels.push}
               </Button>

@@ -16,6 +16,14 @@ export type ProviderRow = {
   lng: number | null;
   area: string | null;
   logo: ProviderLogoData | null;
+  /** RSOS-110, the numbers that drive the product. Null when there is no data. */
+  online: boolean | null;
+  /** Share of offers answered (quoted, assigned or declined) in the last 30 days. */
+  responseRate: number | null;
+  /** Median seconds from the offer to the provider's answer. */
+  medianQuoteSec: number | null;
+  /** Share of answered offers that became a booking (assigned or picked). */
+  bookingRate: number | null;
 };
 export type DocItem = {
   kind: "insurance" | "license" | "w9";
@@ -35,6 +43,28 @@ export async function listProviders(opts: {
     .from("providers")
     .select("id, name, status, market_ids, is_demo")
     .order("name");
+  // Real providers: their dispatch attempts in the last 30 days (there is no live presence yet).
+  const { data: attempts } = await supabase
+    .from("dispatch_attempts")
+    .select("provider_id, outcome, response_sec")
+    .gte("created_at", new Date(Date.now() - 30 * 86_400_000).toISOString())
+    .limit(5000);
+  const statsFor = (id: string) => {
+    const mine = (attempts ?? []).filter((a) => a.provider_id === id);
+    if (!mine.length) return { responseRate: null, medianQuoteSec: null, bookingRate: null };
+    const answered = mine.filter((a) => a.outcome !== "no_answer");
+    const times = answered
+      .map((a) => a.response_sec)
+      .filter((v): v is number => v !== null)
+      .sort((a, b) => a - b);
+    return {
+      responseRate: answered.length / mine.length,
+      medianQuoteSec: times.length ? times[Math.floor(times.length / 2)]! : null,
+      bookingRate: answered.length
+        ? answered.filter((a) => a.outcome === "assigned").length / answered.length
+        : null,
+    };
+  };
   const slugOf = Object.fromEntries(Object.entries(opts.marketIds).map(([slug, id]) => [id, slug]));
   const real: ProviderRow[] = (data ?? [])
     .filter((p) => !p.is_demo)
@@ -50,6 +80,8 @@ export async function listProviders(opts: {
       lng: null,
       area: null,
       logo: null,
+      online: null,
+      ...statsFor(p.id),
     }));
   const demo: ProviderRow[] = opts.demo
     ? opts.markets.flatMap((m) =>
@@ -65,6 +97,7 @@ export async function listProviders(opts: {
           lng: p.home.lng,
           area: p.area,
           logo: p.logo,
+          ...demoStats(p.slug),
         })),
       )
     : [];
@@ -95,4 +128,16 @@ export function demoProviderFromId(id: string) {
     if (p) return p;
   }
   return null;
+}
+
+/** Demo providers' numbers: steady per provider, online changing every 10 minutes (as on the board). */
+function demoStats(slug: string) {
+  const r = rng(seedFrom(slug) ^ 0x2c1b3c6d);
+  const slot = Math.floor(Date.now() / 600_000);
+  return {
+    online: rng(seedFrom(slug) ^ slot)() > 0.3,
+    responseRate: 0.7 + r() * 0.28,
+    medianQuoteSec: Math.round(35 + r() * 90),
+    bookingRate: 0.15 + r() * 0.45,
+  };
 }

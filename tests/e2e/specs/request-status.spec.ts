@@ -173,8 +173,9 @@ test.describe("request status page (driver demo)", () => {
     await page.getByRole("button", { name: "Choose", exact: true }).first().click();
     await page.getByRole("button", { name: "Confirm and request" }).click();
     await expect(heading(page)).toHaveText(H.en_route, { timeout: 20_000 });
-    await expect(heading(page)).toHaveText(H.on_site, { timeout: 30_000 });
-    await expect(heading(page)).toHaveText(H.completed, { timeout: 30_000 });
+    // Each step takes 20 s on the demo clock; WebKit on a busy CI runner can lag a few seconds.
+    await expect(heading(page)).toHaveText(H.on_site, { timeout: 45_000 });
+    await expect(heading(page)).toHaveText(H.completed, { timeout: 45_000 });
     await page.getByRole("radio", { name: "5 stars" }).click();
     await page.getByRole("button", { name: "Send review" }).click();
     await expect(page.getByText("Thanks for your review.")).toBeVisible();

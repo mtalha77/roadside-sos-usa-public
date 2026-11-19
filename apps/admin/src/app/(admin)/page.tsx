@@ -1,4 +1,5 @@
 import { canSee } from "@rsos/config/permissions";
+import { phonesEnabled } from "@rsos/config/phones";
 import { formatCurrency, type Locale } from "@rsos/i18n";
 import { Badge } from "@rsos/ui/badge";
 import { EmptyState } from "@rsos/ui/empty-state";
@@ -41,7 +42,7 @@ export default async function TodayPage() {
           : td("strip.none"),
       tone: today.needAction ? "warning" : null,
     },
-    { label: td("strip.missedCalls"), value: today.missedCalls, hint: td("strip.last24h") },
+    // Online booking first (RSOS-110); unanswered calls only when phones are enabled.
     { label: td("strip.noQuote"), value: today.noQuote, hint: td("strip.noQuoteHint") },
     {
       // Online now where presence is known (demo supply); otherwise verified providers.
@@ -49,6 +50,9 @@ export default async function TodayPage() {
       value: today.days.reduce((n, d) => n + (d.online ?? d.verified), 0),
       hint: today.days.map((d) => `${d.name} ${d.online ?? d.verified}`).join(" · "),
     },
+    ...(phonesEnabled()
+      ? [{ label: td("strip.missedCalls"), value: today.missedCalls, hint: td("strip.last24h") }]
+      : []),
   ];
   return (
     <main id="main" className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6">
@@ -97,6 +101,9 @@ export default async function TodayPage() {
                   <div className="min-w-0 flex-1">
                     <p className="flex flex-wrap items-center gap-2 font-medium">
                       <span className="tabular-nums">{u.code}</span>
+                      <Badge tone="neutral">
+                        {u.channel === "phone" ? td("sourceCall") : td("sourceWebsite")}
+                      </Badge>
                       {u.demo ? <Badge tone="outline">{t("dispatch.demo")}</Badge> : null}
                       <span className="text-sm font-normal text-muted-foreground">
                         {td(`reasons.${u.reason}`)}

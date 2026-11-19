@@ -1497,6 +1497,9 @@ export type Database = {
       }
       requests: {
         Row: {
+          booking_mode: string
+          booking_outcome: string | null
+          instant_max_cents: number | null
           accepted_at: string | null
           assigned_at: string | null
           assigned_dispatcher_id: string | null
@@ -1552,6 +1555,9 @@ export type Database = {
           vehicle_year: number | null
         }
         Insert: {
+          booking_mode?: string
+          booking_outcome?: string | null
+          instant_max_cents?: number | null
           accepted_at?: string | null
           assigned_at?: string | null
           assigned_dispatcher_id?: string | null
@@ -1607,6 +1613,9 @@ export type Database = {
           vehicle_year?: number | null
         }
         Update: {
+          booking_mode?: string
+          booking_outcome?: string | null
+          instant_max_cents?: number | null
           accepted_at?: string | null
           assigned_at?: string | null
           assigned_dispatcher_id?: string | null
@@ -2471,6 +2480,7 @@ export type Database = {
           detail: string
           item: string
           ok: boolean
+          required: boolean
         }[]
       }
       market_phone_for_source: {

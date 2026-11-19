@@ -142,7 +142,11 @@
       "where": "Where",
       "provider": "Provider",
       "kind": "Type",
-      "pageTour": "Tour of this page"
+      "pageTour": "Tour of this page",
+      "moreActions": "More",
+      "sourceWebsite": "Website",
+      "sourceCall": "Call",
+      "instant": "Instant ≤ ${price}"
     },
     "requests": {
       "title": "Requests",
@@ -310,7 +314,14 @@
         "done": "recorded (simulated)",
         "note": "Note",
         "addNote": "Add note"
-      }
+      },
+      "online": "Online now",
+      "onlineYes": "Online",
+      "onlineNo": "Offline",
+      "responseRate": "Response rate",
+      "medianQuote": "Median quote time",
+      "bookingRate": "Booking rate",
+      "seconds": "{s} s"
     },
     "recruitment": {
       "title": "Recruitment",
@@ -380,9 +391,10 @@
         "numbers": "Tracking numbers assigned (website and Google Ads)",
         "providers": "Enough active providers per service",
         "prices": "Prices and fees set for every service",
-        "on_duty": "On-duty schedule covers 24/7",
+        "on_duty": "Phone schedule covers 24/7",
         "landing_pages": "City and landing pages live",
-        "tracking": "Conversion tracking verified (a conversion in the last 30 days)"
+        "tracking": "Conversion tracking verified (a conversion in the last 30 days)",
+        "booking_test": "Booking flow tested end to end (a test booking assigned, then cancelled as \"test\")"
       },
       "done": "(done)",
       "todo": "(to do)",
@@ -397,7 +409,9 @@
         "invalid": "Choose a status.",
         "checklist": "The launch checklist is not complete.",
         "generic": "Something went wrong. Try again."
-      }
+      },
+      "optional": "(optional)",
+      "bookingTestHow": "Send a request in this market from the website, assign a provider in the Inbox, then cancel it with the reason \"test\"."
     },
     "pricing": {
       "title": "Pricing and fees",
@@ -1214,7 +1228,9 @@
         "logged": "Logged on the timeline.",
         "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
       },
-      "logCall": "Log a call"
+      "logCall": "Log a call",
+      "sourceWebsite": "Website",
+      "sourceCall": "Call"
     },
     "textingLimited": "Texting limited: carrier registration pending. Texts to customers are held until it's approved.",
     "marketing": {
@@ -1484,7 +1500,9 @@
         "completed": "Completed",
         "fees": "Fees earned",
         "note": "Since midnight in each market's time zone. Real requests only."
-      }
+      },
+      "sourceWebsite": "Website",
+      "sourceCall": "Call"
     },
     "calls": {
       "title": "Calls",

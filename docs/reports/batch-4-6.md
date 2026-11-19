@@ -113,3 +113,26 @@ events from RSOS-107" is limited to the existing conversion events (RSOS-031).
   (`instant-book.spec.ts`: automatic booking, a higher quote never books then the quotes are
   compared, switching back stops the booking). The "no quotes at all" fallback is covered by unit
   tests (every demo request gets quotes).
+
+### RSOS-110: Admin leads with online bookings
+
+- **Source tags everywhere**: every card on the Dispatch board, every Inbox item and every urgent
+  item on Today carries a small Website or Call tag; Instant book requests also show their ceiling
+  ("Instant ≤ $X"). The Inbox sorts urgent first, then online requests, then the longest wait; on
+  Today the missed-calls card moves after the others and shows only when phones are enabled.
+- **Manual dispatch is the fallback**: in the request side panel, Assign provider is the primary
+  action only when the request has no quote after the window (the amber/red timer) or needs
+  closing; on healthy requests it sits under "More". There is no customer or provider "flag" on a
+  request yet, so "flagged" is not a condition; it can be added when flags exist.
+- **Go-live checklist** (migration `20261119050000_online_first_checklist.sql`): phone numbers and
+  the 24/7 phone schedule are now optional; a new required item checks that the booking flow was
+  tested end to end in that market (a request assigned, then cancelled as "test", in the last 90
+  days). Going live checks only the required items; the page labels optional items and explains
+  how to run the test booking.
+- **Navigation**: Calls stays the last item under Operate and is hidden entirely when phones are
+  not enabled (`phonesEnabled`, now shared from `@rsos/config/phones`).
+- **Providers page**: online status, response rate, median quote time and booking rate per
+  provider (real ones from the last 30 days of dispatch attempts; demo ones from the scenario).
+- Tests: database (`supabase/tests/032_go_live_without_phones.test.sql`: a market with every
+  required item and no phone numbers goes live; without the test booking it cannot) and e2e
+  (`admin-online-first.spec.ts`).
