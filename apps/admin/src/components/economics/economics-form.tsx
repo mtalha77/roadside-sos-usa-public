@@ -54,6 +54,13 @@ export function EconomicsForm({
           labels.usdMonth!,
         )}
         {field("fixedCosts", labels.fixed!, String(inputs?.fixedCosts ?? ""), labels.usdMonth!)}
+        {field("signupBonus", labels.signupBonus!, String(inputs?.signupBonus ?? ""), labels.usd!)}
+        {field(
+          "newProviders",
+          labels.newProviders!,
+          String(inputs?.newProvidersPerMonth ?? ""),
+          labels.perMonth!,
+        )}
       </div>
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-sm font-semibold">{labels.mixAndFees}</legend>
