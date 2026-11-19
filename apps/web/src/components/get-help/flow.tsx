@@ -200,17 +200,19 @@ export function FlowForm({
         // request page returns to the page the customer started from.
         const back = (s?.steps.length ?? 1) - 1;
         if (back > 0) {
-          // Caught before the app router's own handler, so it doesn't render (and redirect) the
-          // emptied step while the request page loads.
-          addEventListener(
-            "popstate",
-            (ev) => {
-              ev.stopImmediatePropagation();
-              location.replace(to);
-            },
-            { once: true, capture: true },
-          );
+          // Keep the app router from rendering (and redirecting) the emptied step meanwhile.
+          addEventListener("popstate", (ev) => ev.stopImmediatePropagation(), {
+            once: true,
+            capture: true,
+          });
+          const first = s!.steps[0];
+          const started = Date.now();
+          const land = () => {
+            if (location.pathname === first || Date.now() - started > 3000) location.replace(to);
+            else setTimeout(land, 30);
+          };
           history.go(-back);
+          setTimeout(land, 30);
         } else location.replace(to);
         return;
       }
