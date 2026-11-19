@@ -26,10 +26,10 @@ export const viewport: Viewport = {
   ],
 };
 
-// Protected preview deployments answer the manifest request (which WebKit sends without the
-// preview's access cookie) with an endless redirect, so only staging and production link it.
-const linkManifest =
-  process.env.VERCEL_ENV !== "preview" || process.env.VERCEL_GIT_COMMIT_REF === "staging";
+// Protected deployments (previews, and staging behind Vercel's login) answer the manifest request
+// (which WebKit sends without the access cookie) with an endless redirect, so only production and
+// local development link it. Installing the app is checked on production.
+const linkManifest = process.env.VERCEL_ENV !== "preview";
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const demoLabel = (await getTranslations("demo"))("badge");
