@@ -12,8 +12,8 @@
 | RSOS-101 Get Help flow, faster and calmer         | Merged      | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186) |
 | RSOS-102 Roles and permissions in the admin       | Merged      | [#187](https://github.com/mtalha77/roadside-sos-usa-public/pull/187) |
 | RSOS-103 Admin rebuild (Today, navigation, board) | Merged      | [#189](https://github.com/mtalha77/roadside-sos-usa-public/pull/189) |
-| RSOS-104 Provider portal polish                   | In review   |                                                                      |
-| RSOS-105 Skippable guided tours                   | Not started |                                                                      |
+| RSOS-104 Provider portal polish                   | Merged      | [#190](https://github.com/mtalha77/roadside-sos-usa-public/pull/190) |
+| RSOS-105 Skippable guided tours                   | In review   |                                                                      |
 | RSOS-106 QA pass and walkthrough                  | Not started |                                                                      |
 
 RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at the owner's request ([#188](https://github.com/mtalha77/roadside-sos-usa-public/pull/188), report in `docs/reports/batch-4-6.md`).
@@ -219,7 +219,7 @@ RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at t
   account). **Take the tour** is in the side menu, in More on phones, and on My jobs for
   technicians.
 - **Progress is saved per person in the database** (`tour_progress`, migration
-  `20261118020000_tour_progress.sql`): started, done, skipped or hidden, so "Don't show again"
+  `20261119020000_tour_progress.sql`): started, done, skipped or hidden, so "Don't show again"
   follows the person across devices. Each person reads and writes only their own rows
   (`supabase/tests/028_tour_progress.test.sql`: own rows allowed, someone else's refused,
   visitors refused, values checked).
