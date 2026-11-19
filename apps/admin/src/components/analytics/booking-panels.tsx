@@ -101,7 +101,7 @@ export async function GroupTable({
   const { t, count, pct } = await fmt();
   if (!groups.length) return <p className="text-sm text-muted-foreground">{t("noData")}</p>;
   return (
-    <div className="overflow-x-auto">
+    <div tabIndex={0} role="group" aria-label={caption} className="overflow-x-auto">
       <table className="w-full min-w-[28rem] text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead>
@@ -143,7 +143,7 @@ export async function GroupTable({
 export async function DropTable({ rows }: { rows: DropRow[] }) {
   const { t, count, pct } = await fmt();
   return (
-    <div className="overflow-x-auto">
+    <div tabIndex={0} role="group" aria-label={t("dropTitle")} className="overflow-x-auto">
       <table className="w-full min-w-[24rem] text-sm">
         <caption className="sr-only">{t("dropTitle")}</caption>
         <thead>

@@ -150,7 +150,13 @@ export async function BookingSpeed({
       </div>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         {groups.map(([g, rows, name]) => (
-          <div key={g} className="overflow-x-auto">
+          <div
+            key={g}
+            tabIndex={0}
+            role="group"
+            aria-label={`${t(g)} · ${t("last7")}`}
+            className="overflow-x-auto"
+          >
             <table className="w-full text-sm">
               <caption className="mb-1 text-left text-xs font-semibold text-muted-foreground">
                 {t(g)} · {t("last7")}

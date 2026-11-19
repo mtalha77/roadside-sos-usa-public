@@ -14,7 +14,7 @@ const base = appUrls.admin;
 const url = (p: string) => new URL(p, base).toString();
 
 async function percentsAtMost100(page: Page) {
-  const text = (await page.getByRole("region", { name: /^Funnel/ }).innerText()) ?? "";
+  const text = (await page.getByRole("region", { name: /^Funnel(?! by)/ }).innerText()) ?? "";
   const values = [...text.matchAll(/·\s*([\d.,]+)%/g)].map((m) => Number(m[1]!.replace(",", "")));
   for (const v of values) expect(v, "a funnel step above 100%").toBeLessThanOrEqual(100);
 }
