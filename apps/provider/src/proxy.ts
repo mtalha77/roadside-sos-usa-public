@@ -69,7 +69,8 @@ export async function proxy(request: NextRequest) {
       // RSOS-104: each role opens only its sections; technicians land on their jobs.
       const role = state.claims?.providers?.[0]?.role;
       const section = providerSectionForPath(path);
-      if (section && !providerCanSee(role, section))
+      // The home page sends technicians to their jobs itself (so the address bar moves too).
+      if (section && section !== "home" && !providerCanSee(role, section))
         response = NextResponse.redirect(
           new URL(role === "operator" ? providerHome(role) : "/no-access", request.url),
         );

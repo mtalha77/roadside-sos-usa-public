@@ -46,6 +46,10 @@ export const test = base.extend<{
       page.on("console", (msg) => {
         if (msg.type() !== "error") return;
         const at = msg.location().url;
+        // Vercel injects its feedback toolbar (vercel.live) into preview deployments only; when
+        // that host is unreachable from CI it is Vercel's network, not our app (never production).
+        if (/^https:\/\/vercel\.live\//.test(at) || /\(https:\/\/vercel\.live\//.test(msg.text()))
+          return;
         errors.push(`console: ${msg.text()}${at ? ` (${at.replace(/[?#].*$/, "")})` : ""}`);
       });
       page.on("pageerror", (err) => {
