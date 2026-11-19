@@ -58,7 +58,8 @@ test.describe("website structure", () => {
     await expect(page).toHaveURL(new RegExp(`${city}/tow$`));
     await page.getByRole("main").getByRole("link", { name: "Get help now" }).click();
     await expect(page).toHaveURL(/\/get-help\/tow\/problem\?market=[a-z-]+$/);
-    await expect(page.locator("select[name=market]")).not.toHaveValue("");
+    // Screen 1 carries the market (the city is chosen again only on the location screen).
+    await expect(page.locator("input[name=market]")).toHaveValue(/^[a-z-]+$/);
     expect((await page.request.get(url("/roadside-assistance/tx/not-a-city"))).status()).toBe(404);
   });
 

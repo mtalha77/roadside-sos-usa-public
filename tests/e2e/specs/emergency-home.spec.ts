@@ -42,7 +42,8 @@ test.describe("emergency-first home", () => {
     const started = Date.now();
     await page.getByRole("link", { name: "Tow" }).first().click();
     // RSOS-116: a tile opens that service's screen 1 (its quick questions).
-    await expect(page.getByRole("heading", { name: "What happened?" })).toBeVisible();
+    await expect(page).toHaveURL(/\/get-help\/tow\/problem/);
+    await expect(page.getByRole("heading", { name: "What happened?", level: 1 })).toBeVisible();
     test.info().annotations.push({
       type: "tow-to-first-step-ms",
       description: String(Date.now() - started),
