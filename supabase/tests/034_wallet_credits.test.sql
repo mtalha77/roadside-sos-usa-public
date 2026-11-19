@@ -72,7 +72,7 @@ select results_eq($$ select bonus_cents, paid_cents from public.charge_wallet('0
 
 -- A won job: the dispatcher assigns, the fee is taken from bonus credit and tied to the request.
 insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone)
-values ('00000000-0000-4000-8000-0000000115c1', 'R-CRD1', current_setting('test.market')::uuid, 2500, 'phone_intake', 'phone', 'Caller', '+12105550143');
+values ('00000000-0000-4000-8000-0000000115c1', 'R-CRDW', current_setting('test.market')::uuid, 2500, 'phone_intake', 'phone', 'Caller', '+12105550143');
 select public.create_bonus_grant('00000000-0000-4000-8000-0000000115b4', 'manual', 5000, now() + interval '30 days', 'test', null);
 select pg_temp.as_staff('dispatcher');
 select lives_ok($$ select public.record_manual_test_fee('00000000-0000-4000-8000-0000000115b4', 2500, '00000000-0000-4000-8000-0000000115c1') $$,
