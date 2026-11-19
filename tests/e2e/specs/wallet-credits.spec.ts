@@ -75,7 +75,10 @@ test.describe("wallet credits", () => {
     await page.goto(new URL("/recruitment", admin).toString());
     const card = page.locator("li", { hasText: company });
     await card.getByRole("button", { name: "Approve" }).click();
-    await expect(page.getByText(new RegExp(`${company}`)).first()).toBeVisible();
+    // Wait for the approval (it creates the provider) before leaving the page.
+    await expect(page.getByText(`Approved and emailed: ${company}`)).toBeVisible({
+      timeout: 30_000,
+    });
     await page.goto(new URL(`/providers?q=${encodeURIComponent(company)}`, admin).toString());
     await page.getByRole("link", { name: company }).first().click();
     await expect(page.getByRole("heading", { name: company, level: 1 })).toBeVisible();
@@ -118,7 +121,8 @@ test.describe("wallet credits", () => {
     await signInAsDemo(page, provider!, "Provider owner");
     await page.goto(new URL("/wallet", provider).toString());
     await expect(page.getByText("Paid balance", { exact: true }).first()).toBeVisible();
-    await expect(page.getByText("Bonus credit", { exact: true }).first()).toBeVisible();
+    // The label may carry a "Demo" tag next to it.
+    await expect(page.getByText(/^Bonus credit/).first()).toBeVisible();
     await expect(page.getByText(/expires on/).first()).toBeVisible();
     await expect(page.getByRole("heading", { name: "Wallet activity" })).toBeVisible();
     await expectNoA11yViolations(page);
