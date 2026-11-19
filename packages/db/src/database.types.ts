@@ -775,6 +775,48 @@ export type Database = {
         }
         Relationships: []
       }
+      funnel_events: {
+        Row: {
+          id: number
+          session_id: string
+          event: string
+          step: string
+          last_field: string | null
+          market_id: string | null
+          source: string | null
+          device: string | null
+          landing_sec: number | null
+          request_id: string | null
+          occurred_at: string
+        }
+        Insert: {
+          id?: number
+          session_id: string
+          event: string
+          step: string
+          last_field?: string | null
+          market_id?: string | null
+          source?: string | null
+          device?: string | null
+          landing_sec?: number | null
+          request_id?: string | null
+          occurred_at?: string
+        }
+        Update: {
+          id?: number
+          session_id?: string
+          event?: string
+          step?: string
+          last_field?: string | null
+          market_id?: string | null
+          source?: string | null
+          device?: string | null
+          landing_sec?: number | null
+          request_id?: string | null
+          occurred_at?: string
+        }
+        Relationships: []
+      }
       location_links: {
         Row: {
           code: string | null
@@ -2577,6 +2619,20 @@ export type Database = {
         }[]
       }
       record_cookie_consent: { Args: { p: Json }; Returns: undefined }
+      record_funnel_event: {
+        Args: {
+          p_device?: string
+          p_event: string
+          p_field?: string
+          p_landing_sec?: number
+          p_market_slug?: string
+          p_request_token?: string
+          p_session: string
+          p_source?: string
+          p_step: string
+        }
+        Returns: undefined
+      }
       record_manual_test_fee: {
         Args: {
           p_amount_cents: number

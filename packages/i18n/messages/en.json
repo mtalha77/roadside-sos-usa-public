@@ -1549,6 +1549,93 @@
       "errorTitle": "This page didn't load",
       "errorBody": "Something went wrong on our side. Your data is safe. Try again, and if it keeps happening, tell the team in the ops channel.",
       "retry": "Try again"
+    },
+    "booking": {
+      "sec": "{n} s",
+      "min": "{n} min",
+      "median": "median",
+      "p90": "90th percentile {value}",
+      "count": "{n} requests",
+      "target": "Target: under {value}",
+      "overTarget": "Slower than the target ({value})",
+      "underTarget": "Within the target ({value})",
+      "dropped": "{value} dropped",
+      "noData": "No requests in this range yet.",
+      "steps": {
+        "visits": "Visits",
+        "started": "Started request",
+        "submitted": "Submitted",
+        "quoted": "First quote",
+        "booked": "Booked",
+        "completed": "Completed"
+      },
+      "bookedShare": "Booked",
+      "dropTitle": "Where people drop",
+      "dropNote": "Per Get Help screen: the share of sessions that left there without sending the request, and the field they touched last.",
+      "screen": "Screen",
+      "reached": "Reached",
+      "leftShare": "Left here",
+      "lastField": "Most common last field",
+      "screens": {
+        "problem": "What happened",
+        "location": "Location",
+        "details": "Your details"
+      },
+      "fields": {
+        "service": "Service",
+        "address": "Address",
+        "destAddress": "Tow destination",
+        "destMiles": "Tow distance",
+        "market": "City",
+        "note": "Note",
+        "spot": "Safe spot",
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email",
+        "make": "Vehicle make",
+        "model": "Vehicle model",
+        "color": "Vehicle colour"
+      },
+      "speedTitle": "Booking speed",
+      "speedNote": "Real requests only. Landing is the first page of the visit; booked is when a provider was booked.",
+      "landingToSubmit": "Landing to request submitted",
+      "submitToBooked": "Request submitted to provider booked",
+      "today": "Today",
+      "last7": "Last 7 days",
+      "byMarket": "By market",
+      "bySource": "By source",
+      "group": "Group",
+      "modeTitle": "Compare quotes vs Instant book",
+      "modes": {
+        "compare": "Compare quotes",
+        "instant": "Instant book"
+      },
+      "funnelTitle": "Booking funnel",
+      "funnelNote": "Website requests: visits, Get Help sessions, then each request's progress. Conversion and drop-off from the step before.",
+      "byTitle": "Funnel by",
+      "by": {
+        "market": "Market",
+        "source": "Source",
+        "service": "Service",
+        "device": "Device"
+      },
+      "devices": {
+        "mobile": "Phone",
+        "desktop": "Desktop",
+        "unknown": "Unknown"
+      },
+      "callsTitle": "Calls funnel",
+      "callsNote": "Inbound calls. Qualified: a conversation of 30 seconds or more, or one that became a request.",
+      "callSteps": {
+        "calls": "Calls",
+        "answered": "Answered",
+        "qualified": "Qualified",
+        "booked": "Booked",
+        "completed": "Completed"
+      },
+      "includeDemo": "Include demo data",
+      "excludeDemo": "Real data only",
+      "demoTag": "Includes demo"
     }
   },
   "emails": {

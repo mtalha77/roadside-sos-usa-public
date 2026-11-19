@@ -60,8 +60,13 @@ test.describe("staging smoke @staging", () => {
     });
     await page.getByRole("button", { name: "Send my request" }).click();
     await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Quotes are coming in/, {
-      timeout: 90_000,
-    });
+    // A fictional number used again within 30 minutes opens that number's open request instead
+    // (the duplicate rule), which other tests may already have moved on.
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      /Quotes are coming in|Finding providers|Provider confirmed|On the way|Provider arrived/,
+      {
+        timeout: 90_000,
+      },
+    );
   });
 });

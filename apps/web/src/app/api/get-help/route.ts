@@ -1,9 +1,9 @@
 import { isDemoMode } from "@rsos/config/demo";
 import { legalDocuments } from "@rsos/config/legal";
-import { isPlausibleAddress } from "@rsos/core/adapters";
+import { isPlausibleAddress, SOURCE_COOKIE } from "@rsos/core/adapters";
 import { checkRateLimits, rateLimitKeys, verifyTurnstile } from "@rsos/core/security";
 import { createPublicSupabase } from "@rsos/db/public";
-import { type NextRequest, NextResponse } from "next/server";
+import { after, type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import {
   COLORS,
@@ -18,6 +18,7 @@ import {
 } from "@/lib/get-help";
 import { maps, rateLimitStore } from "@/lib/adapters";
 import { ATTRIBUTION_COOKIE, decodeAttribution } from "@/lib/attribution";
+import { deviceOf, FLOW_COOKIE, readFlow, recordFunnel } from "@/lib/funnel";
 import { getMarkets, getMarketServices, getServices, marketSlugForPoint } from "@/lib/site-data";
 
 type Rpc = (
@@ -331,6 +332,21 @@ export async function POST(request: NextRequest) {
         return fail(
           "details",
           /service area|not available/.test(error?.message ?? "") ? "service" : "generic",
+        );
+      // Booking funnel (RSOS-111): submitted, with the seconds since this session landed.
+      const flow = readFlow(request.cookies.get(FLOW_COOKIE)?.value);
+      if (flow)
+        after(() =>
+          recordFunnel({
+            session: flow.session,
+            event: "submitted",
+            step: "details",
+            market: draft.market ?? null,
+            source: request.cookies.get(SOURCE_COOKIE)?.value ?? null,
+            device: deviceOf(request.headers.get("user-agent")),
+            landingSec: (Date.now() - flow.landedAt) / 1000,
+            requestToken: row.status_token ?? null,
+          }),
         );
       const res = go(`/r/${row.status_token}`);
       res.cookies.delete(DRAFT_COOKIE);

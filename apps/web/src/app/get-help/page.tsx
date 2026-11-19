@@ -3,14 +3,18 @@ import { serviceIcons, type ServiceIconKey } from "@rsos/ui/icons";
 import { inputClass } from "@rsos/ui/input";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { cookies } from "next/headers";
+import { SOURCE_COOKIE } from "@rsos/core/adapters";
+import { cookies, headers } from "next/headers";
+import { after } from "next/server";
 import Link from "next/link";
 import nextDynamic from "next/dynamic";
 import type { ReactNode } from "react";
 import { Choice } from "@/components/get-help/choice";
 import { LocateButton } from "@/components/get-help/locate-button";
 import { AddressField } from "@/components/get-help/address-field";
+import { FunnelBeacon } from "@/components/get-help/funnel-beacon";
 import { StepShell } from "@/components/get-help/step-shell";
+import { deviceOf, FLOW_COOKIE, readFlow, recordFunnel } from "@/lib/funnel";
 import { MapView } from "@/components/site/map-view";
 import { OutsideArea } from "@/components/site/outside-area";
 import { serviceName } from "@/components/site/service-label";
@@ -109,6 +113,22 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         m.slug ===
         (draft.market ?? (detection.kind === "market" ? detection.market.slug : undefined)),
     ) ?? null;
+  // Booking funnel (RSOS-111): this session saw this screen (one row per session and screen).
+  const jar = await cookies();
+  const flow = readFlow(jar.get(FLOW_COOKIE)?.value);
+  if (flow) {
+    const device = deviceOf((await headers()).get("user-agent"));
+    after(() =>
+      recordFunnel({
+        session: flow.session,
+        event: "step",
+        step,
+        market: market?.slug ?? null,
+        source: jar.get(SOURCE_COOKIE)?.value ?? null,
+        device,
+      }),
+    );
+  }
   const hidden = (name: string, value: string | number | undefined | null) =>
     value === undefined || value === null ? null : (
       <input type="hidden" name={name} value={String(value)} />
@@ -431,6 +451,7 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         error={error}
       >
         {body}
+        <FunnelBeacon step={step} />
       </StepShell>
     </SitePage>
   );
