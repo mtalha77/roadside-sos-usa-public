@@ -2,6 +2,7 @@ import { buildCsp, createNonce } from "@rsos/config/security";
 import { SOURCE_COOKIE, SOURCE_COOKIE_MAX_AGE, sourceForVisit } from "@rsos/core/adapters";
 import { ATTRIBUTION_COOKIE, encodeAttribution, firstTouch } from "./lib/attribution";
 import { FLOW_COOKIE, newFlowCookie, readFlow } from "./lib/funnel";
+import { TEST_HEADER, testTraffic } from "./lib/test-traffic";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -69,11 +70,28 @@ export async function proxy(request: NextRequest) {
     const jar = request.headers.get("cookie");
     requestHeaders.set("cookie", `${jar ? `${jar}; ` : ""}${FLOW_COOKIE}=${flow}`);
   }
+  // Owner decision 2: test traffic (rsos_test link or cookie, test device, test IP, signed-in
+  // staff). Never trust the header from the browser: it is set here only.
+  requestHeaders.delete(TEST_HEADER);
+  const tt = await testTraffic({
+    query: request.nextUrl.searchParams,
+    cookie: (n) => request.cookies.get(n)?.value,
+    ip: (request.headers.get("x-forwarded-for") ?? "").split(",")[0]!.trim() || null,
+  });
+  if (tt.test) requestHeaders.set(TEST_HEADER, "1");
   requestHeaders.set("x-pathname", request.nextUrl.pathname + request.nextUrl.search);
   requestHeaders.set("Content-Security-Policy", csp);
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+  for (const c of tt.set)
+    response.cookies.set(c.name, c.value, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      secure: request.nextUrl.protocol === "https:",
+      ...(c.session ? {} : { maxAge: 365 * 86_400 }),
+    });
   if (flow)
     response.cookies.set(FLOW_COOKIE, flow, {
       path: "/",
@@ -98,7 +116,11 @@ export async function proxy(request: NextRequest) {
       httpOnly: true,
     });
     if (!request.cookies.has(SOURCE_COOKIE)) response.cookies.set(SOURCE_COOKIE, source, cookie);
-    if (!/bot|crawl|spider|lighthouse|headless/i.test(request.headers.get("user-agent") ?? ""))
+    // Bots and test traffic are not counted as visits.
+    if (
+      !tt.test &&
+      !/bot|crawl|spider|lighthouse|headless/i.test(request.headers.get("user-agent") ?? "")
+    )
       void countVisit(attribution.market, source);
   }
   return response;

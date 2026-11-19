@@ -583,7 +583,9 @@
       },
       "moneyRealNote": "Gasto en anuncios según Marketing; comisiones de solicitudes elegidas en este rango; comisiones de pago a la tasa del modelo. Suscripciones y costos fijos vienen del modelo para este rango hasta que se registren.",
       "moneyModelNote": "Del modelo económico para este rango.",
-      "editModel": "Editar el modelo"
+      "editModel": "Editar el modelo",
+      "testOff": "Incluir tráfico de prueba",
+      "testOn": "Incluye tráfico de prueba: mostrar solo tráfico real"
     },
     "content": {
       "title": "Contenido",
@@ -1956,6 +1958,27 @@
         "failures": "Fallas seguidas",
         "none": "Todavía no se ha ejecutado ninguna sincronización."
       }
+    },
+    "testTraffic": {
+      "title": "Tráfico de prueba",
+      "note": "Las visitas desde estas IP y dispositivos son tráfico de prueba: se marcan y quedan fuera de las analíticas y conversiones de anuncios en todos los entornos. También las visitas que empiezan con ?rsos_test=1 y cualquier navegador con sesión de personal en el admin.",
+      "added": "Agregado a la lista de prueba.",
+      "removed": "Quitado de la lista de prueba.",
+      "invalid": "Revisa los valores: una IP o rango, y una etiqueta.",
+      "forbidden": "No puedes cambiar la lista de prueba.",
+      "deviceAdded": "Enlace de dispositivo creado: ábrelo una vez en ese teléfono o computadora.",
+      "addIp": "Agregar una IP o rango",
+      "ip": "IP o rango (CIDR)",
+      "label": "Etiqueta",
+      "add": "Agregar",
+      "addDevice": "Agregar un dispositivo de prueba",
+      "deviceHow": "Crea un enlace: al abrirlo una vez en un teléfono o computadora, ese navegador queda marcado como tráfico de prueba.",
+      "createLink": "Crear enlace",
+      "list": "En la lista",
+      "empty": "Todavía no hay nada en la lista.",
+      "kindIp": "IP",
+      "kindDevice": "Dispositivo",
+      "remove": "Quitar"
     }
   },
   "emails": {

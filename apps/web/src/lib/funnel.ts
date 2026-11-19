@@ -44,8 +44,10 @@ export async function recordFunnel(e: {
   device?: "mobile" | "desktop" | null;
   landingSec?: number | null;
   requestToken?: string | null;
+  /** Test traffic (the database tags the row and leaves it out of analytics). */
+  test?: boolean;
 }): Promise<void> {
-  const supabase = createPublicSupabase();
+  const supabase = createPublicSupabase({ test: e.test ?? false });
   if (!supabase) return;
   await (supabase.rpc as unknown as (f: string, a: object) => PromiseLike<unknown>)(
     "record_funnel_event",

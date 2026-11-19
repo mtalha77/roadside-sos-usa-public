@@ -1137,6 +1137,7 @@ export type Database = {
       }
       funnel_events: {
         Row: {
+          is_test: boolean
           id: number
           session_id: string
           event: string
@@ -1150,6 +1151,7 @@ export type Database = {
           occurred_at: string
         }
         Insert: {
+          is_test?: boolean
           id?: number
           session_id: string
           event: string
@@ -1163,6 +1165,7 @@ export type Database = {
           occurred_at?: string
         }
         Update: {
+          is_test?: boolean
           id?: number
           session_id?: string
           event?: string
@@ -1965,6 +1968,7 @@ export type Database = {
       }
       requests: {
         Row: {
+          is_test: boolean
           booking_mode: string
           booking_outcome: string | null
           instant_max_cents: number | null
@@ -2027,6 +2031,7 @@ export type Database = {
           vehicle_year: number | null
         }
         Insert: {
+          is_test?: boolean
           booking_mode?: string
           booking_outcome?: string | null
           instant_max_cents?: number | null
@@ -2089,6 +2094,7 @@ export type Database = {
           vehicle_year?: number | null
         }
         Update: {
+          is_test?: boolean
           booking_mode?: string
           booking_outcome?: string | null
           instant_max_cents?: number | null
@@ -2595,6 +2601,33 @@ export type Database = {
           updated_at?: string
           updated_by?: string | null
           value?: Json
+        }
+        Relationships: []
+      }
+      test_traffic_rules: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          label: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind: string
+          label: string
+          value: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          label?: string
+          value?: string
         }
         Relationships: []
       }

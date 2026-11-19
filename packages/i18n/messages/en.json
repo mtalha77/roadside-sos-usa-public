@@ -583,7 +583,9 @@
       },
       "moneyRealNote": "Ad spend as entered in Marketing; fees of requests picked in this range; payment fees at the model's rate. Subscriptions and fixed costs come from the model for this range until they are recorded.",
       "moneyModelNote": "From the Economics model for this range.",
-      "editModel": "Edit the model"
+      "editModel": "Edit the model",
+      "testOff": "Include test traffic",
+      "testOn": "Including test traffic: show real traffic only"
     },
     "content": {
       "title": "Content",
@@ -1956,6 +1958,27 @@
         "failures": "Failures in a row",
         "none": "No sync has run yet."
       }
+    },
+    "testTraffic": {
+      "title": "Test traffic",
+      "note": "Visits from these IPs and devices are test traffic: tagged, and left out of analytics and ad conversions in every environment. So are visits started with ?rsos_test=1 and any browser where staff are signed in to the admin.",
+      "added": "Added to the test list.",
+      "removed": "Removed from the test list.",
+      "invalid": "Check the values: an IP address or range, and a label.",
+      "forbidden": "You can't change the test list.",
+      "deviceAdded": "Device link created: open it once on that phone or computer.",
+      "addIp": "Add an IP address or range",
+      "ip": "IP address or range (CIDR)",
+      "label": "Label",
+      "add": "Add",
+      "addDevice": "Add a test device",
+      "deviceHow": "Creates a link: opening it once on a phone or computer marks that browser as test traffic.",
+      "createLink": "Create device link",
+      "list": "On the list",
+      "empty": "Nothing on the list yet.",
+      "kindIp": "IP",
+      "kindDevice": "Device",
+      "remove": "Remove"
     }
   },
   "emails": {

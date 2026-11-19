@@ -32,6 +32,8 @@ export async function getMetricData(opts: {
   from: number;
   to: number;
   includeDemo: boolean;
+  /** Owner decision 2: test traffic is left out unless included on purpose (staging only). */
+  includeTest?: boolean;
 }): Promise<MetricData> {
   const supabase = await getServerSupabase();
   const ids = opts.markets.map((m) => m.id);
@@ -47,6 +49,7 @@ export async function getMetricData(opts: {
           )
           .in("market_id", ids)
           .neq("status", "draft")
+          .in("is_test", opts.includeTest ? [true, false] : [false])
           .gte("created_at", since)
           .limit(10_000)
       : Promise.resolve(none),
@@ -55,6 +58,7 @@ export async function getMetricData(opts: {
       .select(
         "session_id, event, step, last_field, market_id, source, device, landing_sec, request_id, occurred_at",
       )
+      .in("is_test", opts.includeTest ? [true, false] : [false])
       .gte("occurred_at", since)
       .limit(20_000),
     ids.length

@@ -1,6 +1,7 @@
 import { SOURCE_COOKIE } from "@rsos/core/adapters";
 import { type NextRequest, NextResponse } from "next/server";
 import { deviceOf, FLOW_COOKIE, FunnelEvent, readFlow, recordFunnel } from "@/lib/funnel";
+import { isTestHeader } from "@/lib/test-traffic";
 
 /** The leave beacon from the Get Help screens (RSOS-111). Always answers 204. */
 export async function POST(request: NextRequest) {
@@ -19,6 +20,7 @@ export async function POST(request: NextRequest) {
       field: parsed.data.field ?? null,
       source: request.cookies.get(SOURCE_COOKIE)?.value ?? null,
       device: deviceOf(request.headers.get("user-agent")),
+      test: isTestHeader(request.headers),
     });
   return new NextResponse(null, { status: 204 });
 }
