@@ -66,7 +66,7 @@ export async function StepList({
       {rows.map((r) => (
         <li
           key={r.step}
-          className="grid grid-cols-[6.5rem_1fr_auto] items-center gap-2 sm:grid-cols-[9rem_1fr_14rem]"
+          className="grid grid-cols-[6.5rem_minmax(0,1fr)] items-center gap-x-2 gap-y-0.5 sm:grid-cols-[9rem_minmax(0,1fr)_14rem]"
         >
           <span>{stepLabel(r.step)}</span>
           <span
@@ -74,7 +74,7 @@ export async function StepList({
             className="h-4 rounded-full bg-primary/70"
             style={{ width: `${first ? Math.max(1, (r.count / first) * 100) : 1}%` }}
           />
-          <span className="text-right tabular-nums">
+          <span className="col-span-2 text-sm tabular-nums text-muted-foreground sm:col-span-1 sm:text-right sm:text-base sm:text-foreground">
             {count(r.count)}
             {r.conversion !== null
               ? ` · ${pct(r.conversion)} · ${t("dropped", { value: pct(r.dropOff) })}`

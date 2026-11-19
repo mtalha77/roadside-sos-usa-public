@@ -23,6 +23,8 @@ test.describe("booking speed and funnel analytics", () => {
     await expect(speed.getByText("Landing to request submitted").first()).toBeVisible();
     await expect(speed.getByText("Request submitted to provider booked").first()).toBeVisible();
     await expect(speed.getByText("Includes demo")).toHaveCount(0);
+    // Let the page settle first: WebKit reports an aborted fetch as "Load failed".
+    await page.waitForLoadState("networkidle");
     await speed.getByRole("link", { name: "Include demo data" }).click();
     await expect(page).toHaveURL(/demo=1/);
     await expect(

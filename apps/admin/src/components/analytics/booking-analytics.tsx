@@ -86,7 +86,7 @@ export async function BookingAnalytics({
           keyLabel={keyLabel}
         />
       </Panel>
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
         {calls ? (
           <Panel id="bc-h" title={t("callsTitle")} note={t("callsNote")} tag={tag}>
             <StepList
