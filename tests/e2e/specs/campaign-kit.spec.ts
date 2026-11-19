@@ -15,7 +15,7 @@ test.describe("test campaign kit", () => {
     await first.click();
     await expect(page.getByRole("heading", { name: "Launch checklist" })).toBeVisible();
     await expect(page.getByText("Enough active providers per service")).toBeVisible();
-    await expect(page.getByText("On-duty schedule covers 24/7")).toBeVisible();
+    await expect(page.getByText("Phone schedule covers 24/7")).toBeVisible();
     // Choosing "Active" while items are missing asks a super admin for a logged reason.
     const status = page.getByLabel("Market status");
     if ((await status.inputValue()) !== "active") {
