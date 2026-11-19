@@ -25,6 +25,9 @@ jobs:
       E2E_PROVIDER_URL: https://staging-pro.${{ vars.APP_DOMAIN }}
       E2E_ADMIN_URL: https://staging-admin.${{ vars.APP_DOMAIN }}
       VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      # Staging is shared and checked for test data after every deploy (supabase/checks): the
+      # regression suite only reads there. Tests that must write skip themselves in this mode.
+      E2E_READ_ONLY: "1"
     steps:
       - name: Only staging can be released to main
         if: github.event_name == 'pull_request' && github.head_ref != 'staging'
