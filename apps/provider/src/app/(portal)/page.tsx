@@ -38,6 +38,9 @@ export default async function ProviderHome() {
   if (status && ["paused", "suspended", "closed"].includes(status.status))
     redirect("/account-status");
   if (!isPhoneVerified(auth.user, phoneVerifier(supabase).kind)) redirect("/verify-phone");
+  // Technicians have no home page: their jobs are the start (RSOS-104). Redirecting here, not
+  // only in the proxy, also moves the address bar after a sign-in.
+  if (status?.role === "operator") redirect("/jobs");
   const [t, locale, { ctx, data, balance }] = await Promise.all([
     getTranslations("portal.home"),
     getLocale(),

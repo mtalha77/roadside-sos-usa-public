@@ -191,7 +191,10 @@ RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at t
     button turns off and says the allowed range;
   - arrival chips **15, 30, 45 and 60 min** (the nearest to the drive time is chosen);
   - one **Send quote** button; declining with a reason is a small secondary control.
-- **States**: every portal page has a skeleton while loading and an error page with a retry.
+- **States**: every portal page has an error page with a retry. A loading skeleton was tried and
+  removed: the portal's pages have a small server/browser render mismatch, and inside a streaming
+  boundary React then left a hidden second copy of the page (CI found every label twice). The
+  pages render fully on the server as before; fixing the mismatch is left for a follow-up.
 - **Customer wording** in the portal ("Waiting for the customer to choose", "Hours shown to
   customers").
 - Tests: `provider-roles.spec.ts` (technician sees only My jobs and is sent back from office
