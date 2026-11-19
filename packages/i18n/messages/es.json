@@ -2710,7 +2710,6 @@
       "sortFastest": "Más rápida",
       "sortCheapest": "Más barata",
       "sortLabel": "Ordenar cotizaciones",
-      "autoPick": "Ayuda más rápida: elegir por mí la cotización más rápida",
       "newQuote": "Nueva cotización de {provider}: {price}, unos {minutes} minutos",
       "choose": "Elegir",
       "viewProfile": "Ver perfil",
@@ -2913,6 +2912,19 @@
       "minutes": "{minutes} min",
       "miles": "{miles} mi",
       "choose": "Elegir"
+    },
+    "instant": {
+      "title": "¿Cómo quieres reservar?",
+      "compare": "Comparar cotizaciones",
+      "compareHint": "Mira cada precio y hora de llegada, y elige.",
+      "instant": "Reservar al proveedor más rápido automáticamente",
+      "instantHint": "Reservamos al primer proveedor verificado que acepte a tu precio o menos. Puedes cambiar hasta entonces.",
+      "max": "Lo máximo que pagarás",
+      "apply": "Usar este precio",
+      "on": "Reserva instantánea activa: reservamos al primer proveedor a {price} o menos.",
+      "booked": "Reservado automáticamente a {price} o menos.",
+      "fellBack": "Ningún proveedor aceptó a {price} o menos a tiempo. Compara abajo las cotizaciones que llegaron.",
+      "manual": "No llegaron cotizaciones. Nuestros despachadores te están buscando un proveedor; mantén tu teléfono encendido."
     }
   },
   "lp": {
@@ -3198,7 +3210,8 @@
       "close": "Cerrar",
       "arrival": "Tiempo de llegada",
       "suggested": "De tu tabla de precios: {price}. Comisión si te eligen: {fee}.",
-      "outOfRange": "Escribe un precio de {min} a {max}."
+      "outOfRange": "Escribe un precio de {min} a {max}.",
+      "instant": "Reserva instantánea: acepta a {price} o menos y el trabajo es tuyo."
     },
     "jobs": {
       "title": "Trabajos",

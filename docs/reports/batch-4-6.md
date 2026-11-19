@@ -81,3 +81,35 @@ events from RSOS-107" is limited to the existing conversion events (RSOS-031).
 - Test: `booking-first.spec.ts` checks home, city, service, city service and landing pages at
   375 px: a booking link is the first primary action and above the fold, and any call link is
   plain small text.
+
+### RSOS-109: Instant book
+
+- **The customer chooses on the "Finding help" screen**: **Compare quotes** (the default) or **Book
+  the fastest provider automatically**, with "Most you'll pay" pre-filled with the market's typical
+  price for the service (the middle of its price range in the price table) and adjustable. They can
+  switch either way at any time until a provider is booked.
+- **The rule** (`packages/core/src/demo/instant.ts`, unit tested): the first quote, in arrival order,
+  at or below the ceiling and inside the 3-minute quote window is booked the moment it arrives (or
+  the moment the customer switches, if it was already in). A higher quote never books.
+- **Fallback chain**: when the window ends with nothing at or below the ceiling, the page switches
+  to Compare quotes with whatever arrived ("No provider accepted at $X or less in time"); with no
+  quotes at all, our dispatchers take it ("Our dispatchers are finding you a provider").
+- **Provider side**: an Instant book offer says "Instant book: accept at $X or less and the job is
+  yours", the price box starts at or below that price, and sending at or below it shows the booked
+  job at once (no waiting for the customer to choose).
+- **Real requests** (dispatched by hand today; there is no real quote marketplace yet): the choice
+  and the ceiling are saved through the status link (`set_booking_mode`, migration
+  `20261119040000_instant_book.sql`), manual dispatch can never assign above the ceiling (a database
+  rule), and each request records its outcome: booked, fell back or cancelled. Every choice is a
+  request event, so RSOS-111 can split the funnel by Compare quotes and Instant book.
+- **Fees and numbers**: booking through Instant book uses the same pick as choosing a quote, so the
+  RSOS-038 order (fee recorded first, then numbers shared) is unchanged.
+- **Demo**: about a third of demo customers use Instant book at the market's typical price; the
+  scenario engine books them automatically, so it shows on the admin board, in the provider portal
+  and in the walkthrough.
+- Tests: unit (`packages/core/test/instant-book.test.ts`: success, ceiling, switching, both
+  fallbacks, the demo scenario), database (`supabase/tests/031_instant_book.test.sql`: switching by
+  link, ceiling enforced on manual dispatch, outcome recorded, no switching after booking) and e2e
+  (`instant-book.spec.ts`: automatic booking, a higher quote never books then the quotes are
+  compared, switching back stops the booking). The "no quotes at all" fallback is covered by unit
+  tests (every demo request gets quotes).

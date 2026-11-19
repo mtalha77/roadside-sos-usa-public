@@ -2710,7 +2710,6 @@
       "sortFastest": "Fastest",
       "sortCheapest": "Cheapest",
       "sortLabel": "Sort quotes",
-      "autoPick": "Get help fastest: pick the fastest quote for me",
       "newQuote": "New quote from {provider}: {price}, about {minutes} minutes",
       "choose": "Choose",
       "viewProfile": "View profile",
@@ -2913,6 +2912,19 @@
       "minutes": "{minutes} min",
       "miles": "{miles} mi",
       "choose": "Choose"
+    },
+    "instant": {
+      "title": "How do you want to book?",
+      "compare": "Compare quotes",
+      "compareHint": "See every price and arrival time, then choose.",
+      "instant": "Book the fastest provider automatically",
+      "instantHint": "The first verified provider who accepts at or below your price is booked. You can switch until then.",
+      "max": "Most you'll pay",
+      "apply": "Use this price",
+      "on": "Instant book is on: we book the first provider at {price} or less.",
+      "booked": "Booked automatically at or below {price}.",
+      "fellBack": "No provider accepted at {price} or less in time. Compare the quotes that came in below.",
+      "manual": "No quotes came in. Our dispatchers are finding you a provider now; keep your phone on."
     }
   },
   "lp": {
@@ -3198,7 +3210,8 @@
       "close": "Close",
       "arrival": "Arrival time",
       "suggested": "From your price table: {price}. Fee if picked: {fee}.",
-      "outOfRange": "Enter a price from {min} to {max}."
+      "outOfRange": "Enter a price from {min} to {max}.",
+      "instant": "Instant book: accept at {price} or less and the job is yours."
     },
     "jobs": {
       "title": "Jobs",
