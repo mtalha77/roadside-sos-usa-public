@@ -9,7 +9,8 @@
     "./demo": "./src/demo/index.ts",
     "./adapters": "./src/adapters/index.ts",
     "./economics": "./src/economics.ts",
-    "./analytics-sources": "./src/analytics-sources.ts"
+    "./analytics-sources": "./src/analytics-sources.ts",
+    "./wallet": "./src/wallet.ts"
   },
   "scripts": {
     "lint": "eslint .",

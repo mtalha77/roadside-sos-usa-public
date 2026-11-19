@@ -39,6 +39,7 @@ export const SECTIONS = [
     shortcut: "g o",
   },
   { href: "/finance", key: "finance", section: "finance", group: "business", shortcut: "g f" },
+  { href: "/credits", key: "credits", section: "credits", group: "business", shortcut: "g w" },
   {
     href: "/marketing",
     key: "marketing",

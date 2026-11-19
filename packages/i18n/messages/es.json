@@ -42,7 +42,8 @@
       "calls": "Llamadas",
       "today": "Hoy",
       "economics": "Modelo económico",
-      "status": "Estado del sistema"
+      "status": "Estado del sistema",
+      "credits": "Créditos de billetera"
     },
     "shell": {
       "nav": "Administración",
@@ -1383,7 +1384,7 @@
       "shared": "Costos fijos compartidos entre mercados",
       "sharedOn": "Costos fijos: un solo monto repartido entre los mercados mostrados.",
       "sharedOff": "Costos fijos: cargados a cada mercado.",
-      "formula": "Clics = presupuesto ÷ costo por clic; solicitudes = clics × clic a solicitud; aceptadas = solicitudes × aceptación; contribución = comisiones + suscripciones − anuncios − comisiones de pago; ganancia = contribución − costos fijos.",
+      "formula": "Clics = presupuesto ÷ costo por clic; solicitudes = clics × clic a solicitud; aceptadas = solicitudes × aceptación; contribución = comisiones + suscripciones − anuncios − comisiones de pago − créditos de promoción (bono de registro × proveedores nuevos); ingreso neto por tarifas = comisiones − créditos de promoción; ganancia = contribución − costos fijos.",
       "results": "Resultados mensuales",
       "market": "Mercado",
       "scenario": "Escenario",
@@ -1400,7 +1401,9 @@
         "contribution": "Contribución",
         "profit": "Ganancia tras costos fijos",
         "adCostPerAccepted": "Anuncios por aceptada",
-        "breakEvenAccepted": "Aceptadas para equilibrio"
+        "breakEvenAccepted": "Aceptadas para equilibrio",
+        "promotionCredits": "Créditos de promoción usados",
+        "netFeeRevenue": "Ingreso neto por tarifas"
       },
       "emptyTitle": "Aún no hay modelo",
       "empty": "Ningún mercado mostrado tiene modelo económico.",
@@ -1432,7 +1435,10 @@
           "mix": "La mezcla de servicios debe sumar 100%.",
           "save": "No se pudo guardar. Inténtalo de nuevo.",
           "forbidden": "Solo propietarios y gerentes de operaciones pueden cambiar el modelo."
-        }
+        },
+        "signupBonus": "Bono de registro por proveedor",
+        "newProviders": "Proveedores nuevos",
+        "perMonth": "al mes"
       },
       "sharedStateOn": ": activado",
       "sharedStateOff": ": desactivado"
@@ -1531,6 +1537,193 @@
       "errorTitle": "Esta página no cargó",
       "errorBody": "Algo salió mal de nuestro lado. Tus datos están a salvo. Inténtalo de nuevo y, si sigue pasando, avisa al equipo en el canal de operaciones.",
       "retry": "Intentar de nuevo"
+    },
+    "credits": {
+      "title": "Créditos de billetera",
+      "lead": "Saldo gratis para proveedores (crédito de bonificación). Paga nuestras tarifas por trabajo antes que el saldo pagado, vence en su fecha y nunca es dinero.",
+      "viewOnly": "Puedes ver los créditos. Los dueños y gerentes de operaciones hacen cambios.",
+      "on": "Activo",
+      "off": "Inactivo",
+      "amountUsd": "Monto (USD)",
+      "expiryDays": "Vence después de (días)",
+      "starts": "Empieza",
+      "ends": "Termina",
+      "provider": "Proveedor",
+      "choose": "Elige un proveedor",
+      "market": "Mercado",
+      "reason": "Motivo",
+      "noteLabel": "Nota (obligatoria para Otro)",
+      "reasons": {
+        "goodwill": "Buena voluntad",
+        "dispute": "Disputa",
+        "promotion": "Promoción",
+        "test": "Prueba",
+        "other": "Otro"
+      },
+      "sources": {
+        "signup": "Bono de registro",
+        "manual": "Crédito manual",
+        "campaign": "Campaña",
+        "milestone": "Meta",
+        "referral": "Referido",
+        "reactivation": "Reactivación",
+        "refund": "Tarifa reembolsada"
+      },
+      "signup": {
+        "title": "Bono de registro",
+        "note": "Se otorga automáticamente cuando se aprueba un proveedor (verificado y activo), nunca al registrarse. Una vez por negocio: un EIN, teléfono comercial, póliza de seguro, cuenta bancaria o dispositivo duplicado se marca para revisión.",
+        "enabled": "Bono de registro activo",
+        "save": "Guardar {market}"
+      },
+      "grant": {
+        "title": "Crédito manual",
+        "noteOwner": "Da crédito a un proveedor. Aparece en su historial y en el registro de auditoría.",
+        "noteLimit": "Da crédito a un proveedor, hasta {limit} por crédito; por encima, lo otorga el dueño.",
+        "submit": "Otorgar crédito"
+      },
+      "campaign": {
+        "title": "Campaña masiva",
+        "noteOwner": "Crédito para un grupo de proveedores, con un tope de presupuesto. Revisa quién lo recibe y el total antes de confirmar.",
+        "noteLimit": "Crédito para un grupo de proveedores, con un tope de presupuesto de hasta {limit}. Revisa quién lo recibe y el total antes de confirmar.",
+        "name": "Nombre de la campaña",
+        "audience": "Quién lo recibe",
+        "audiences": {
+          "market": "Todos los proveedores del mercado",
+          "service": "Proveedores que ofrecen un servicio",
+          "inactive": "Inactivos 30 días o más",
+          "list": "Una lista pegada"
+        },
+        "service": "Servicio (para \"ofrecen un servicio\")",
+        "anyService": "Cualquier servicio",
+        "list": "Lista pegada (nombres o ids de proveedores, uno por línea)",
+        "budget": "Tope de presupuesto (USD)",
+        "message": "Mensaje para los proveedores",
+        "plan": "El crédito también paga el plan mensual",
+        "preview": "Ver destinatarios",
+        "previewTitle": "Vista previa",
+        "summary": "{count, plural, one {# proveedor recibe} other {# proveedores reciben}} {amount} cada uno: {total} del presupuesto de {budget}.",
+        "leftOut": "{count, plural, one {# proveedor queda} other {# proveedores quedan}} fuera por el tope.",
+        "nobody": "Nadie coincide con este grupo.",
+        "confirm": "Confirmar y otorgar {total}"
+      },
+      "rules": {
+        "title": "Bonos por reglas",
+        "note": "Opcionales e inactivos por defecto. Cada regla tiene monto, vencimiento, tope y activación por mercado.",
+        "enabled": "Regla activa",
+        "threshold": "Trabajos completados",
+        "budget": "Tope (USD) · usado {used}",
+        "save": "Guardar regla",
+        "kinds": {
+          "milestone": "Meta",
+          "referral": "Referido",
+          "reactivation": "Reactivación"
+        },
+        "hints": {
+          "milestone": "Crédito después del trabajo completado número N del proveedor.",
+          "referral": "Crédito para el proveedor que refiere cuando el nuevo completa 3 trabajos (requiere registrar referidos: se guarda ahora y se paga cuando existan).",
+          "reactivation": "Crédito cuando un proveedor vuelve después de 30 días inactivo (requiere registrar la conexión de proveedores reales: se guarda ahora y se paga cuando exista)."
+        }
+      },
+      "limits": {
+        "title": "Límites de aprobación",
+        "note": "Los gerentes de operaciones otorgan hasta estos montos; por encima, debe hacerlo el dueño. El dueño no tiene límite; finanzas puede ver. Solo el dueño los cambia. Vacío significa sin límite.",
+        "perGrant": "Gerente de operaciones, por crédito (USD)",
+        "perCampaign": "Gerente de operaciones, por campaña (USD)",
+        "save": "Guardar límites"
+      },
+      "flags": {
+        "title": "Negocios duplicados por revisar",
+        "note": "Estos proveedores aprobados comparten un identificador con otro negocio, así que su bono espera una decisión.",
+        "grant": "No es duplicado: otorgar el bono",
+        "keep": "Duplicado: sin bono"
+      },
+      "recent": {
+        "title": "Créditos recientes",
+        "empty": "Todavía no hay créditos.",
+        "reversed": "Revertido",
+        "why": "Motivo",
+        "reverse": "Quitar crédito sin usar",
+        "cols": {
+          "date": "Fecha",
+          "provider": "Proveedor",
+          "market": "Mercado",
+          "source": "Origen",
+          "amount": "Monto",
+          "left": "Queda",
+          "expires": "Vence",
+          "action": "Acción"
+        }
+      },
+      "report": {
+        "title": "Informe de campañas",
+        "empty": "Todavía no hay campañas.",
+        "cols": {
+          "name": "Campaña",
+          "market": "Mercado",
+          "granted": "Otorgado",
+          "used": "Usado",
+          "expired": "Vencido",
+          "recipients": "Proveedores",
+          "toppedUp": "Recargaron después",
+          "jobs": "Trabajos con crédito",
+          "revenue": "Tarifas, 60 días siguientes"
+        }
+      },
+      "done": {
+        "signup": "Bono de registro guardado.",
+        "grant": "Crédito otorgado.",
+        "campaign": "Campaña otorgada.",
+        "rule": "Regla guardada.",
+        "limit": "Límites guardados.",
+        "reverse": "Crédito sin usar quitado.",
+        "flag": "Revisión guardada."
+      },
+      "errors": {
+        "limit": "Supera tu límite de aprobación: el dueño debe aprobarlo.",
+        "forbidden": "No puedes hacer este cambio.",
+        "invalid": "Revisa el formulario: falta algo o está fuera de rango."
+      },
+      "finance": {
+        "title": "Crédito de bonificación pendiente",
+        "note": "Crédito otorgado y todavía sin usar, vencer ni quitar: un pasivo, por mercado. El crédito usado en tarifas es un costo de promoción.",
+        "none": "Todavía no se ha otorgado crédito.",
+        "total": "Total",
+        "cols": {
+          "market": "Mercado",
+          "outstanding": "Pendiente",
+          "providers": "Proveedores con crédito",
+          "used": "Usado en tarifas",
+          "expired": "Vencido"
+        }
+      },
+      "timeline": {
+        "ledger": "Historial de billetera",
+        "grantLink": "Otorgar crédito",
+        "noLines": "Todavía no hay movimientos.",
+        "kinds": {
+          "topup": "Recarga",
+          "fee": "Tarifa por trabajo (saldo pagado)",
+          "fee_refund": "Reembolso de tarifa",
+          "bonus_grant": "Crédito agregado",
+          "bonus_use": "Tarifa por trabajo (crédito)",
+          "bonus_expiry": "Crédito vencido",
+          "bonus_reversal": "Crédito quitado",
+          "bonus_refund": "Tarifa reembolsada como crédito"
+        },
+        "status": {
+          "approve": "Aprobar proveedor",
+          "approveHint": "La verificación está completa: el proveedor puede cotizar y recibe el bono de registro del mercado (una vez por negocio).",
+          "pause": "Pausar proveedor",
+          "reason": "Motivo",
+          "done": {
+            "active": "Proveedor aprobado.",
+            "paused": "Proveedor pausado."
+          },
+          "error": "No se pudo cambiar el estado."
+        },
+        "flagged": "Bono de registro en espera: este negocio comparte un identificador con otro.",
+        "review": "Revisarlo en Créditos de billetera"
+      }
     }
   },
   "emails": {
@@ -1621,6 +1814,13 @@
       "none": "Ayer no hubo solicitudes.",
       "line": "{requests} solicitudes, {calls} llamadas ({missed} perdidas), {assigned} asignadas, {completed} terminadas, {noProvider} sin proveedor. Comisiones que se habrían ganado: {fees}.",
       "footer": "Campaña de prueba: las comisiones se registran como manual_test y no se cobra a nadie."
+    },
+    "creditExpiry": {
+      "subjectWeek": "Tu crédito de bonificación de {brand} vence en 7 días",
+      "subjectDay": "Tu crédito de bonificación de {brand} vence mañana",
+      "intro": "Hola, {company}:",
+      "body": "{amount} de crédito de bonificación en tu billetera vence el {date}. Paga tus tarifas por trabajo automáticamente, así que conectarte y ganar trabajos antes de esa fecha lo aprovecha.",
+      "note": "El crédito de bonificación no es dinero y no se puede retirar."
     }
   },
   "auth": {
@@ -2156,7 +2356,11 @@
             "¿Cuánto les cuesta a los proveedores?",
             "Una tarifa fija por cada solicitud en la que el conductor te elige, pagada de un saldo prepagado. Los planes opcionales dan descuentos y mejor visibilidad."
           ],
-          ["¿Yo fijo mis precios?", "Sí. Cotizas cada trabajo a tu precio."]
+          ["¿Yo fijo mis precios?", "Sí. Cotizas cada trabajo a tu precio."],
+          [
+            "¿Qué es el crédito de bonificación?",
+            "Saldo gratis que agregamos para proveedores nuevos y promociones. Paga tarifas por trabajo, se usa antes que tu saldo pagado y vence en la fecha indicada. No es dinero y no se puede retirar."
+          ]
         ]
       }
     },
@@ -2304,7 +2508,11 @@
       },
       "checkField": "Revisa este campo."
     },
-    "smsConfirmation": "{brand}: recibimos tu solicitud para {company}. Te contactaremos en 2 días hábiles. Responde STOP para cancelar."
+    "smsConfirmation": "{brand}: recibimos tu solicitud para {company}. Te contactaremos en 2 días hábiles. Responde STOP para cancelar.",
+    "credit": {
+      "title": "¿Qué es el crédito de bonificación?",
+      "body": "Saldo gratis que agregamos para proveedores nuevos y promociones. Paga tarifas por trabajo, se usa antes que tu saldo pagado y vence en la fecha indicada. No es dinero y no se puede retirar."
+    }
   },
   "legal": {
     "draftBanner": "Borrador para revisión legal. Aún no está vigente.",
@@ -2386,6 +2594,10 @@
           [
             "Suspensión y baja",
             "Podemos pausar o dar de baja a un proveedor por seguro o licencias vencidas, ausencias repetidas, quejas, fraude o incumplir estos términos. Te diremos el motivo y el siguiente paso."
+          ],
+          [
+            "Crédito de bonificación",
+            "Podemos agregar crédito de bonificación gratis a tu billetera al registrarte o en promociones. El crédito paga tarifas por trabajo (y planes solo cuando una promoción lo indique), se usa antes que tu saldo pagado, vence en la fecha indicada y no tiene valor en efectivo: no se puede retirar, reembolsar, vender ni transferir. Podemos quitar crédito sin usar otorgado por error u obtenido mediante fraude o cuentas duplicadas. El crédito usado cuenta como tarifas pagadas. Una tarifa reembolsada que se pagó con crédito vuelve como crédito. (Cláusula en borrador para revisión legal.)"
           ],
           [
             "Cambios y contacto",
@@ -3337,7 +3549,30 @@
       "current": "Tu plan",
       "soon": "Próximamente",
       "ownersOnly": "Solo los dueños y gerentes pueden ver la billetera.",
-      "more": "Ver movimientos anteriores"
+      "more": "Ver movimientos anteriores",
+      "credit": {
+        "available": "Total disponible",
+        "paid": "Saldo pagado",
+        "paidHint": "Tus recargas. Nunca vence.",
+        "bonus": "Crédito de bonificación",
+        "bonusHint": "Crédito gratis de nuestra parte. Paga primero las tarifas.",
+        "expires": "{amount} vence el {date}",
+        "order": "El crédito de bonificación paga primero las tarifas por trabajo (el que vence antes, primero) y luego tu saldo pagado. No es dinero y no se puede retirar.",
+        "demo": "Demostración",
+        "welcome": "Bienvenido. Agregamos {amount} de crédito de bonificación a tu billetera. Paga tus tarifas en tus primeros trabajos y vence el {date}.",
+        "ledger": "Movimientos de la billetera",
+        "noLines": "Todavía no hay movimientos.",
+        "kinds": {
+          "topup": "Recarga",
+          "fee": "Tarifa por trabajo (saldo pagado)",
+          "fee_refund": "Reembolso de tarifa",
+          "bonus_grant": "Crédito agregado",
+          "bonus_use": "Tarifa por trabajo (crédito)",
+          "bonus_expiry": "Crédito vencido",
+          "bonus_reversal": "Crédito quitado",
+          "bonus_refund": "Tarifa reembolsada como crédito"
+        }
+      }
     },
     "services": {
       "title": "Servicios y precios",
