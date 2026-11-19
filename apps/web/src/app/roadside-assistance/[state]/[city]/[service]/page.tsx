@@ -105,7 +105,11 @@ export default async function CityServicePage({ params }: Params) {
             </a>
           ) : null}
         </div>
-        {note ? <p className="max-w-3xl text-lg">{note}</p> : null}
+        {note ? (
+          <p data-local-note className="max-w-3xl text-lg">
+            {note}
+          </p>
+        ) : null}
         {page ? <p className="max-w-3xl text-muted-foreground">{page.summary}</p> : null}
         {!svc.enabled ? (
           <Alert tone="info" title={t("service.notOffered", { city: market.name })}>
