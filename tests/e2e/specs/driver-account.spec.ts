@@ -52,7 +52,7 @@ test.describe("driver account", () => {
     await page.getByRole("button", { name: "Continue" }).click();
     let taps = 0;
     // Saved name, number and vehicle are filled in: one tap for where they are, one to send.
-    await page.getByRole("radio", { name: "Off the road, in a safe place" }).check();
+    await page.getByText("Safe spot (parking lot, driveway)", { exact: true }).click();
     taps++;
     await expect(page.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,

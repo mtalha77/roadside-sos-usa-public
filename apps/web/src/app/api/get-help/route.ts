@@ -1,4 +1,10 @@
 import { isDemoMode } from "@rsos/config/demo";
+import {
+  effectsOf,
+  QUESTIONS_VERSION,
+  tagsOf,
+  validateAnswers,
+} from "@rsos/core/service-questions";
 import { legalDocuments } from "@rsos/config/legal";
 import { isPlausibleAddress } from "@rsos/core/adapters";
 import { checkRateLimits, rateLimitKeys, verifyTurnstile } from "@rsos/core/security";
@@ -10,7 +16,7 @@ import {
   type Draft,
   DraftSchema,
   DRAFT_COOKIE,
-  FOLLOW_UPS,
+  VEHICLE_TYPES,
   MILE_RANGES,
   NEEDS_DESTINATION,
   currentStep,
@@ -18,6 +24,7 @@ import {
 } from "@/lib/get-help";
 import { maps, rateLimitStore } from "@/lib/adapters";
 import { ATTRIBUTION_COOKIE, decodeAttribution } from "@/lib/attribution";
+import { getQuestionOverrides } from "@/lib/questions";
 import { getMarkets, getMarketServices, getServices, marketSlugForPoint } from "@/lib/site-data";
 
 type Rpc = (
@@ -50,8 +57,12 @@ export async function POST(request: NextRequest) {
     ? await rpc("get_request_draft", { p_token: cookieToken })
     : { data: null };
   const draft: Draft = DraftSchema.parse(rawDraft ?? {});
+  // The client flow layer (RSOS-116) asks for JSON so it can push or replace history itself.
+  const asJson = request.headers.get("x-flow") === "1";
   const go = (to: string, token?: string) => {
-    const res = NextResponse.redirect(new URL(to, request.url), 303);
+    const res = asJson
+      ? NextResponse.json({ to })
+      : NextResponse.redirect(new URL(to, request.url), 303);
     if (token)
       res.cookies.set(DRAFT_COOKIE, token, {
         path: "/",
@@ -62,7 +73,9 @@ export async function POST(request: NextRequest) {
       });
     return res;
   };
-  const fail = (s: string, error: string) => go(`/get-help?step=${s}&error=${error}`);
+  const svcOf = () => draft.service || str("service", 40) || "";
+  const stepUrl = (s: string, svc = svcOf()) => (svc ? `/get-help/${svc}/${s}` : "/get-help");
+  const fail = (s: string, error: string, extra = "") => go(`${stepUrl(s)}?error=${error}${extra}`);
   const save = async (patch: Draft, next: string) => {
     const { data, error } = await rpc("save_request_draft", {
       p_token: cookieToken,
@@ -72,7 +85,7 @@ export async function POST(request: NextRequest) {
     // Resume at the first unanswered step (answers already in the draft are not asked again),
     // except when the location step asks to come back to itself (GPS saved: show the pin).
     const resume = next === "stay" ? "location" : currentStep({ ...draft, ...patch });
-    return go(`/get-help?step=${resume}`, String(data));
+    return go(stepUrl(resume, patch.service ?? svcOf()), String(data));
   };
   const str = (k: string, max = 200) =>
     String(form.get(k) ?? "")
@@ -109,7 +122,7 @@ export async function POST(request: NextRequest) {
         });
         return saveError
           ? fail("location", error)
-          : go(`/get-help?step=location&error=${error}`, String(data));
+          : go(`${stepUrl("location")}?error=${error}`, String(data));
       };
       let market: string | null;
       let point: { lat: number; lng: number };
@@ -118,7 +131,7 @@ export async function POST(request: NextRequest) {
       if (gps) {
         market = await marketSlugForPoint(lat, lng);
         point = { lat, lng };
-        if (!market) return go(`/get-help?step=location&outside=1`);
+        if (!market) return go(`${stepUrl("location")}?outside=1`);
         // A readable address and the nearest highway for the provider (real Maps only).
         const near = await maps().reverseGeocode(point);
         if (near && !address)
@@ -201,13 +214,66 @@ export async function POST(request: NextRequest) {
       const offered = market
         ? (await getMarketServices(market)).find((s) => s.service_slug === service && s.enabled)
         : (await getServices()).find((s) => s.slug === service && s.market_count > 0);
-      if (!offered) return fail("problem", "required");
-      const fu = FOLLOW_UPS[service];
-      const followUp = fu ? str(`followUp-${service}`, 20) : "";
-      return save(
-        { service, followUp: fu && fu.options.includes(followUp) ? followUp : "" },
-        "location",
+      if (!offered) return go("/get-help?error=required");
+      // RSOS-116: the service's questions, validated with the market's overrides.
+      const raw = Object.fromEntries(
+        [...form.entries()].flatMap(([k, v]) =>
+          k.startsWith("q.") && typeof v === "string" ? [[k.slice(2), v.slice(0, 200)]] : [],
+        ),
       );
+      const overrides = await getQuestionOverrides(market || null);
+      const checked = validateAnswers(service, raw, overrides);
+      const notes = str("notes", 500);
+      const kept = checked.ok
+        ? checked.answers
+        : (Object.fromEntries(
+            Object.entries(raw).filter(([, v]) => typeof v === "string" && v),
+          ) as Record<string, string>);
+      // Switching service keeps location, vehicle and contact; only the answers change.
+      const patch: Draft = {
+        service,
+        answers: kept,
+        notes,
+        ...(service === "tow" &&
+        kept.vehicleType &&
+        VEHICLE_TYPES.includes(kept.vehicleType as never)
+          ? { vehicleType: kept.vehicleType as Draft["vehicleType"] }
+          : {}),
+        ...(service === "wont-start" && kept.electric ? { ev: kept.electric === "yes" } : {}),
+      };
+      const { data: saved, error: saveError } = await rpc("save_request_draft", {
+        p_token: cookieToken,
+        p_patch: patch,
+      });
+      if (saveError) return fail("problem", "generic");
+      const token = String(saved);
+      // Up to 3 photos (compressed on the device when JavaScript runs), private storage.
+      const photos = form
+        .getAll("photos")
+        .filter((f): f is File => f instanceof File && f.size > 0 && f.size <= 8_000_000)
+        .filter((f) => /^image\/(jpeg|png|webp|heic)$/.test(f.type))
+        .slice(0, 3);
+      if (photos.length) {
+        const supabase = createPublicSupabase();
+        const paths: string[] = [];
+        for (const [n, f] of photos.entries()) {
+          const ext = f.type === "image/jpeg" ? "jpg" : f.type.split("/")[1]!;
+          const path = `draft/${token}/${n}.${ext}`;
+          const up = await supabase?.storage
+            .from("job-photos")
+            .upload(path, f, { contentType: f.type, upsert: true });
+          if (up && !up.error) paths.push(path);
+        }
+        await rpc("save_request_draft", { p_token: token, p_patch: { photos: paths } });
+      }
+      if (!checked.ok) {
+        const r = go(
+          `${stepUrl("problem", service)}?error=required&missing=${checked.missing.join(",")}`,
+          token,
+        );
+        return r;
+      }
+      return go(stepUrl(currentStep({ ...draft, ...patch }), service), token);
     }
     case "details": {
       if (!draft.market || !draft.service || draft.lat === undefined || draft.lng === undefined)
@@ -216,7 +282,6 @@ export async function POST(request: NextRequest) {
       const name = str("name", 120);
       const rawEmail = str("email", 254).toLowerCase();
       const email = rawEmail ? Email.safeParse(rawEmail) : null;
-      const spot = str("spot");
       const vehicle = z
         .object({
           make: z.string().min(1).max(40),
@@ -229,9 +294,8 @@ export async function POST(request: NextRequest) {
         phone: phone ?? "",
         email: email?.success ? email.data : "",
         ...(vehicle.success ? vehicle.data : {}),
-        ...(spot === "safe" || spot === "highway" || spot === "unsafe"
-          ? { safe: spot !== "unsafe", highway: spot !== "safe" }
-          : {}),
+        plate: str("plate", 12).toUpperCase(),
+        ...(/^(19|20)\d{2}$/.test(str("year", 4)) ? { year: Number(str("year", 4)) } : {}),
       };
       // Keep what was typed, even when something is missing (the screen comes back filled in).
       await rpc("save_request_draft", { p_token: cookieToken, p_patch: patch });
@@ -240,7 +304,15 @@ export async function POST(request: NextRequest) {
       if (!phone) return fail("details", "phone");
       if (email && !email.success) return fail("details", "email");
       if (!vehicle.success) return fail("details", "vehicle");
-      if (draft.safe === undefined) return fail("details", "spot");
+      const safety = str("q.safety", 20);
+      if (!draft.answers?.safety && ["safe", "shoulder", "lane"].includes(safety)) {
+        draft.answers = { ...draft.answers, safety };
+        await rpc("save_request_draft", {
+          p_token: cookieToken,
+          p_patch: { answers: draft.answers },
+        });
+      }
+      if (!draft.answers?.safety) return fail("details", "spot", "&missing=safety");
       // 2. Turnstile and the per-IP limit.
       const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
       const token = form.get("cf-turnstile-response");
@@ -265,7 +337,9 @@ export async function POST(request: NextRequest) {
       const { data: existing } = await rpc("find_recent_request", { p_phone: draft.phone });
       if (typeof existing === "string" && existing) return go(`/r/${existing}`);
       // 4. Create it.
-      const followLabel = draft.followUp ? ` (${draft.followUp})` : "";
+      const a = draft.answers ?? {};
+      const effects = effectsOf(draft.service, a);
+      const tags = tagsOf(draft.service, a);
       const { data, error } = await rpc("submit_web_request", {
         p: {
           market_slug: draft.market,
@@ -294,13 +368,25 @@ export async function POST(request: NextRequest) {
             is_ev: draft.ev,
           },
           situation: {
-            safe_spot: draft.safe,
-            on_highway: draft.highway,
-            has_passengers: false,
-            spare_available: draft.service === "flat-tire" ? draft.followUp === "yes" : null,
-            keys_available: draft.service === "locked-out" ? draft.followUp === "inside" : null,
+            safe_spot: a.safety === "safe",
+            on_highway: a.safety === "shoulder" || a.safety === "lane",
+            has_passengers: Number(a.people ?? 0) > 0,
+            spare_available:
+              draft.service === "flat-tire" ? a.spare === "full" || a.spare === "donut" : null,
+            keys_available:
+              draft.service === "locked-out"
+                ? a.keysWhere === "inside" || a.keysWhere === "trunk"
+                : null,
           },
-          notes: `${draft.service}${followLabel}${draft.approx ? "; location typed, not GPS" : ""}`,
+          notes: [
+            draft.service,
+            tags.length ? tags.join(", ") : null,
+            draft.notes || null,
+            draft.plate ? `plate ${draft.plate}` : null,
+            draft.approx ? "location typed, not GPS" : null,
+          ]
+            .filter(Boolean)
+            .join("; "),
           attribution: {
             ...draft.attribution,
             referrer: request.headers.get("referer") ?? null,
@@ -332,11 +418,24 @@ export async function POST(request: NextRequest) {
           "details",
           /service area|not available/.test(error?.message ?? "") ? "service" : "generic",
         );
+      // RSOS-116: the structured answers, photos and timing, attached with the status token.
+      const whenAt = a.when === "later" && a.whenAt ? new Date(a.whenAt) : null;
+      await rpc("set_request_answers", {
+        p_token: row.status_token,
+        p_draft_token: cookieToken,
+        p_answers: a,
+        p_version: QUESTIONS_VERSION,
+        p_photos: (draft.photos ?? []).filter(
+          (x) => cookieToken && x.startsWith(`draft/${cookieToken}/`),
+        ),
+        p_scheduled_for: whenAt && !Number.isNaN(whenAt.getTime()) ? whenAt.toISOString() : null,
+        p_urgent: effects.includes("urgent"),
+      });
       const res = go(`/r/${row.status_token}`);
       res.cookies.delete(DRAFT_COOKIE);
       return res;
     }
     default:
-      return go("/get-help");
+      return go(stepUrl(currentStep(draft)));
   }
 }

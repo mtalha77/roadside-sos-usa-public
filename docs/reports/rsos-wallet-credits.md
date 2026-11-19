@@ -74,3 +74,54 @@ run without it.
   cannot sign in as the newly approved provider (it has no account) and cannot win a real job end
   to end (no real quote marketplace yet), so the fee taken from credit on a won job is proven in
   the database test.
+
+### RSOS-116: Complete request forms per service, and back navigation fix
+
+- **Same three screens, smarter content.** Screen 1: the service (changeable), "Are you in a safe
+  place?", "When do you need help?" (Now by default, or a date and time), people with the vehicle,
+  then 1 to 4 tap questions for the service, the market's typical price from the database ("Tows
+  in your city usually cost ... plus mileage"), and "Add details (optional)": notes for the provider
+  (500 characters) and up to 3 photos. Screen 2: GPS first, typed address, landmark, and the tow
+  destination. Screen 3: name, mobile number, optional email; make, model, color, optional year and
+  plate. Only the questions marked required in the ticket block submit.
+- **Every service's questions** from the ticket (Tow, Won't start, Flat tire, Locked out, Out of
+  gas, Winch-out) are defined once in `packages/core/src/service-questions.ts`, validated with Zod
+  on the server (the browser enforces required chips too) and stored on the request as structured
+  JSON with `answers_version` (migration `20261120020000_service_forms.sql`), so questions can
+  change later without breaking old requests.
+- **Safety banners**: "In a traffic lane" and "Child or pet inside" show a red "Call 911 now" banner
+  with a call button and let the customer continue; both mark the request urgent. Two or more flat
+  tires, no spare and "not upright" suggest Tow; ditch or off-road suggests winch-out; an electric
+  car (won't start or out of charge) explains it needs a tow or mobile charger. The banners and
+  follow-ups (police after an accident, the garage height limit, the scheduled time) work without
+  JavaScript.
+- **Photos**: compressed on the device (1600 px JPEG) before upload when JavaScript runs, stored in
+  the private `job-photos` bucket under the visitor's own draft folder; staff of the request's
+  market see them in the request panel (signed for 10 minutes).
+- **Providers and the admin**: answers become short tags ("Flatbed needed", "Accident", "No spare",
+  "Child inside: urgent") on the admin request panel (with every answer, the scheduled time and
+  the photos) and on the provider offer screen above the price. Provider offers come from the
+  demo scenario (no real quote marketplace yet), so demo requests now carry believable answers.
+- **Admin > Business > Services**: per service, hide a question, make it required or optional, or
+  reorder it, for one market or (owner) every market; "Are you in a safe place?" is always asked.
+  Every change is in the audit log. Question and chip wording is the same in every market and
+  edited in the translations (`packages/i18n`), not on this page.
+- **Navigation**: one flow route, `/get-help/<service>/<step>`; `/get-help` is the service picker,
+  and old links (`?service=`, `?step=`) move to the new URLs. Tiles are plain links (one history
+  entry, no redirect chain). Steps are submitted by a small client layer: the next step is pushed,
+  a correction on the same step replaces it, the next step is prefetched. Back (the link or the
+  phone's gesture) goes to the previous step with the answers kept, and from screen 1 to the exact
+  page the customer came from at the same scroll position. Answers survive a refresh and a return
+  within 2 hours (a draft on the device, plus the server draft). Switching service keeps location,
+  vehicle and contact. After submit, the request page replaces the flow, so Back goes to the
+  starting page. Without JavaScript the forms and links still work (plain posts).
+- The account's quick repeat request skips screen 1 and asks safety on the last screen. An ad
+  landing page asks the address first, then screen 1, then the details.
+- Tests: unit (`packages/core/test/service-questions.test.ts`: required and optional, options and
+  ranges, follow-ups, effects and banners, tags, market overrides, demo answers; the web step
+  order), database (`supabase/tests/035_service_forms.test.sql`: answers once and within 10
+  minutes, photos only from the visitor's draft folder, urgent, overrides by role) and e2e
+  (`get-help.spec.ts`: each service's required and optional questions, both 911 banners, Back
+  from home, a service page and a city page to the same page and scroll, step 3 → Back → Back
+  keeps answers, refresh keeps them, Back after submit goes to the start page;
+  `service-answers.spec.ts`: a tow's answers in the admin request panel).

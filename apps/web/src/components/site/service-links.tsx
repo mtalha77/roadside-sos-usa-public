@@ -20,7 +20,7 @@ export async function ServiceLinks({
   const t = await getTranslations("site");
   const H = headingLevel === 2 ? "h2" : "h3";
   const href = (slug: string) =>
-    hrefFor?.(slug) ?? `/get-help?service=${slug}${marketSlug ? `&market=${marketSlug}` : ""}`;
+    hrefFor?.(slug) ?? `/get-help/${slug}/problem${marketSlug ? `?market=${marketSlug}` : ""}`;
   return (
     <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
       {services.map((s) => {

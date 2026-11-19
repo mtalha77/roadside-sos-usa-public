@@ -1728,6 +1728,10 @@ export type Database = {
       }
       requests: {
         Row: {
+          answers_version: number | null
+          photo_paths: string[]
+          scheduled_for: string | null
+          service_answers: Json | null
           accepted_at: string | null
           assigned_at: string | null
           assigned_dispatcher_id: string | null
@@ -1783,6 +1787,10 @@ export type Database = {
           vehicle_year: number | null
         }
         Insert: {
+          answers_version?: number | null
+          photo_paths?: string[]
+          scheduled_for?: string | null
+          service_answers?: Json | null
           accepted_at?: string | null
           assigned_at?: string | null
           assigned_dispatcher_id?: string | null
@@ -1838,6 +1846,10 @@ export type Database = {
           vehicle_year?: number | null
         }
         Update: {
+          answers_version?: number | null
+          photo_paths?: string[]
+          scheduled_for?: string | null
+          service_answers?: Json | null
           accepted_at?: string | null
           assigned_at?: string | null
           assigned_dispatcher_id?: string | null
@@ -2003,6 +2015,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      service_question_overrides: {
+        Row: {
+          hidden: boolean
+          id: string
+          market_id: string | null
+          question_id: string
+          required: boolean | null
+          service_slug: string
+          sort: number | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          hidden?: boolean
+          id?: string
+          market_id?: string | null
+          question_id: string
+          required?: boolean | null
+          service_slug: string
+          sort?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          hidden?: boolean
+          id?: string
+          market_id?: string | null
+          question_id?: string
+          required?: boolean | null
+          service_slug?: string
+          sort?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
       }
       services: {
         Row: {

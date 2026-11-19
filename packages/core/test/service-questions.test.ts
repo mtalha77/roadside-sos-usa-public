@@ -139,3 +139,14 @@ describe("admin overrides per market", () => {
     expect(validateAnswers("flat-tire", { safety: "safe", flats: "one" }, o, NOW).ok).toBe(true);
   });
 });
+
+describe("demo answers", () => {
+  it("demo requests carry answers, some of them with tags, never the 911 ones", async () => {
+    const { demoStream } = await import("../src/demo");
+    const list = demoStream(Date.UTC(2026, 10, 19, 12), { markets: ["houston"], intervalSec: 30 });
+    expect(list.length).toBeGreaterThan(10);
+    expect(list.every((r) => r.answers.safety && r.answers.safety !== "lane")).toBe(true);
+    expect(list.every((r) => r.answers.childInside !== "yes")).toBe(true);
+    expect(list.some((r) => tagsOf(r.serviceSlug, r.answers).length > 0)).toBe(true);
+  });
+});

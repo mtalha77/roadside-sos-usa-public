@@ -1,3 +1,4 @@
+import { SERVICE_QUESTIONS } from "../service-questions";
 import {
   type DemoMarketFixture,
   demoColors,
@@ -87,6 +88,8 @@ export type DemoRequest = {
   outcome: "completed" | "cancelled" | "expired";
   /** Instant book (RSOS-109): the customer's ceiling, or null when they compare quotes. */
   instant: { maxCents: number } | null;
+  /** RSOS-116: the customer's Get Help answers for the service (demo values). */
+  answers: Record<string, string>;
 };
 
 /** Scenario timing, in seconds after the request was sent (compressed so screens feel alive). */
@@ -191,6 +194,7 @@ export function makeDemoRequest(
     outcome: roll < 0.08 ? "expired" : roll < 0.16 ? "cancelled" : "completed",
     // About a third of demo customers book the fastest provider automatically, at the market's
     // typical price (a separate generator, so every other detail stays the same as before).
+    answers: demoAnswers(service, rng((seed ^ 0x2545f491) >>> 0)),
     instant:
       rng((seed ^ 0x5bd1e995) >>> 0)() < 0.33
         ? { maxCents: round5((range.min + range.max) / 2) }
@@ -420,4 +424,19 @@ export function instantPick(
     .filter((q) => q.priceCents <= maxCents && q.arrivesAtSec <= windowSec)
     .sort((a, b) => a.arrivesAtSec - b.arrivesAtSec)[0];
   return first ? { quoteId: first.id, atSec: Math.max(first.arrivesAtSec, fromSec) } : null;
+}
+
+/**
+ * Believable demo answers (RSOS-116): each question's first option most of the time, so a few
+ * demo requests carry tags such as "Flatbed needed" or "No spare". Never the 911 answers.
+ */
+function demoAnswers(service: string, r: () => number): Record<string, string> {
+  const a: Record<string, string> = { safety: r() < 0.7 ? "safe" : "shoulder", when: "now" };
+  for (const q of SERVICE_QUESTIONS[service] ?? []) {
+    if (q.kind !== "chips" || !q.options?.length || q.showIf) continue;
+    if (!q.required && r() < 0.5) continue;
+    const pick = r() < 0.7 ? q.options[0]! : q.options[Math.floor(r() * q.options.length)]!;
+    a[q.id] = q.id === "childInside" ? "no" : pick;
+  }
+  return a;
 }

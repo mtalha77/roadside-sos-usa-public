@@ -2,15 +2,19 @@ import { brand } from "@rsos/config/brand";
 import { serviceIcons, type ServiceIconKey } from "@rsos/ui/icons";
 import { inputClass } from "@rsos/ui/input";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { formatCurrency, type Locale } from "@rsos/i18n";
+import { getLocale, getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
 import nextDynamic from "next/dynamic";
 import type { ReactNode } from "react";
-import { Choice } from "@/components/get-help/choice";
 import { LocateButton } from "@/components/get-help/locate-button";
 import { AddressField } from "@/components/get-help/address-field";
 import { StepShell } from "@/components/get-help/step-shell";
+import { FlowForm, FlowTracker } from "@/components/get-help/flow";
+import { QuestionFields } from "@/components/get-help/questions";
+import { getQuestionOverrides } from "@/lib/questions";
 import { MapView } from "@/components/site/map-view";
 import { OutsideArea } from "@/components/site/outside-area";
 import { serviceName } from "@/components/site/service-label";
@@ -21,7 +25,6 @@ import {
   type Draft,
   DraftSchema,
   DRAFT_COOKIE,
-  FOLLOW_UPS,
   MILE_RANGES,
   NEEDS_DESTINATION,
   previousStep,
@@ -36,14 +39,7 @@ import { ui } from "@/lib/ui-classes";
 import { getVisitorMarket } from "@/lib/visitor";
 import { mapsEnabled } from "@rsos/core/adapters";
 import { createPublicSupabase } from "@rsos/db/public";
-
-// Written out in full so Tailwind generates them: each follow-up shows when its service is picked.
-const SHOW_WHEN: Record<string, string> = {
-  "flat-tire": "[form:has(#svc-flat-tire:checked)_&]:flex",
-  "locked-out": "[form:has(#svc-locked-out:checked)_&]:flex",
-  "out-of-gas": "[form:has(#svc-out-of-gas:checked)_&]:flex",
-  "wont-start": "[form:has(#svc-wont-start:checked)_&]:flex",
-};
+import { questionsFor } from "@rsos/core/service-questions";
 
 // Only the last step loads the Turnstile widget.
 const Turnstile = nextDynamic(() => import("@/components/site/turnstile").then((m) => m.Turnstile));
@@ -86,6 +82,9 @@ function Submit({ children }: { children: ReactNode }) {
  */
 export default async function GetHelpPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
+  // RSOS-116: one flow route with the step in the URL, /get-help/<service>/<step>. /get-help
+  // itself is the service picker; old links (?service=, ?step=) move to the new URLs.
+  const urlService = sp.__service && /^[a-z-]{2,40}$/.test(sp.__service) ? sp.__service : null;
   const [t, ts, draft, markets, detection] = await Promise.all([
     getTranslations("getHelp"),
     getTranslations("site"),
@@ -93,14 +92,31 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
     getMarkets(),
     getVisitorMarket(sp.market),
   ]);
-  const tileService = sp.service && /^[a-z-]{2,40}$/.test(sp.service) ? sp.service : undefined;
-  // A home tile chose the service: start at the location step with it (no "what happened").
-  const effective: Draft =
-    tileService && !draft.service ? { ...draft, service: tileService } : draft;
-  const step = allowedStep(effective, sp.step);
+  const legacy = sp.service && /^[a-z-]{2,40}$/.test(sp.service) ? sp.service : undefined;
+  if (!urlService && (legacy || (sp.step && draft.service)))
+    redirect(`/get-help/${legacy ?? draft.service}/${legacy ? "problem" : (sp.step ?? "problem")}`);
+  const tileService = urlService ?? undefined;
+  // Switching service keeps location, vehicle and contact; the answers belong to one service.
+  const effective: Draft = urlService
+    ? {
+        ...draft,
+        service: urlService,
+        answers: draft.service === urlService ? draft.answers : {},
+      }
+    : { ...draft, service: undefined };
+  // Screen 1 is always shown for the service (its quick questions), then the rest in order.
+  const wanted = (sp.__step ?? "problem") as string;
+  const step = !urlService
+    ? "problem"
+    : draft.service !== urlService
+      ? "problem"
+      : allowedStep(effective, wanted);
+  if (urlService && step !== wanted) redirect(`/get-help/${urlService}/${step}`);
   const n = STEPS.indexOf(step) + 1;
   const back = previousStep(effective, step);
-  const backHref = back ? `/get-help?step=${back}` : "/";
+  const backHref = back && urlService ? `/get-help/${urlService}/${back}` : "/";
+  const nextStep = STEPS[STEPS.indexOf(step) + 1];
+  const nextHref = urlService && nextStep ? `/get-help/${urlService}/${nextStep}` : null;
   const savedFix = draft.lat !== undefined && draft.lng !== undefined && !draft.approx;
   const error = sp.error ?? null;
   const market =
@@ -114,39 +130,25 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
       <input type="hidden" name={name} value={String(value)} />
     );
   const label = "flex flex-col gap-2 font-medium";
-  const fieldset = "flex flex-col gap-3";
 
   let body;
-  if (step === "problem") {
-    // The market's services when it is known; otherwise every service offered somewhere (the
-    // location step checks it is offered there).
+  if (step === "problem" && !urlService) {
+    // The service picker: each service opens its own screen 1 (one normal link, no redirects).
     const services = market
       ? (await getMarketServices(market.slug))
           .filter((s) => s.enabled)
           .map((s) => ({ slug: s.service_slug, name: s.service_name, icon_key: s.icon_key }))
       : (await getServices()).filter((s) => s.market_count > 0);
     body = (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
-        {hidden("step", "problem")}
-        {hidden("market", market?.slug)}
-        <fieldset className="grid grid-cols-2 gap-3">
-          <legend className="sr-only">{t("problem.title")}</legend>
-          {orderTiles(services).map((s) => {
-            const Glyph = serviceIcons[s.icon_key as ServiceIconKey];
-            return (
-              <label
-                key={s.slug}
-                className="flex min-h-24 cursor-pointer flex-col items-start justify-between gap-2 rounded-2xl border-2 border-border bg-surface p-4 has-[:checked]:border-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring"
+      <ul className="grid grid-cols-2 gap-3">
+        {orderTiles(services).map((s) => {
+          const Glyph = serviceIcons[s.icon_key as ServiceIconKey];
+          return (
+            <li key={s.slug}>
+              <Link
+                href={`/get-help/${s.slug}/problem`}
+                className="flex h-full min-h-24 flex-col items-start justify-between gap-2 rounded-2xl border-2 border-border bg-surface p-4 hover:border-input focus-visible:outline-2 focus-visible:outline-ring"
               >
-                <input
-                  id={`svc-${s.slug}`}
-                  type="radio"
-                  name="service"
-                  value={s.slug}
-                  defaultChecked={draft.service === s.slug}
-                  required
-                  className="sr-only"
-                />
                 <span
                   aria-hidden="true"
                   className="grid size-10 place-items-center rounded-xl bg-muted [&_svg]:size-6"
@@ -156,35 +158,105 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
                 <span className="text-lg leading-tight font-semibold">
                   {serviceName(ts, s, "tile")}
                 </span>
-              </label>
-            );
-          })}
-        </fieldset>
-        {Object.entries(FOLLOW_UPS).map(([slug, fu]) => (
-          <fieldset key={slug} className={`${fieldset} hidden ${SHOW_WHEN[slug] ?? ""}`}>
-            <legend className="mb-1 font-semibold">{t(`problem.${fu.key}.q` as never)}</legend>
-            {fu.options.map((o) => (
-              <Choice
-                key={o}
-                name={`followUp-${slug}`}
-                value={o}
-                checked={draft.service === slug && draft.followUp === o}
-                required={false}
-              >
-                {t(`problem.${fu.key}.${o}` as never)}
-              </Choice>
-            ))}
-          </fieldset>
-        ))}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  } else if (step === "problem") {
+    const svc = urlService!;
+    const overrides = await getQuestionOverrides(market?.slug ?? null);
+    const questions = questionsFor(svc, overrides);
+    const offered = market
+      ? (await getMarketServices(market.slug)).find((s) => s.service_slug === svc && s.enabled)
+      : null;
+    const all = await getServices();
+    const svcRow = all.find((s) => s.slug === svc);
+    if (!svcRow) notFound();
+    const missing = (sp.missing ?? "").split(",").filter(Boolean);
+    const locale = (await getLocale()) as Locale;
+    const formatUsd = (c: number) => formatCurrency(c, locale);
+    body = (
+      <FlowForm step="problem" multipart className="flex flex-col gap-5">
+        {hidden("step", "problem")}
+        {hidden("service", svc)}
+        {hidden("market", market?.slug)}
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span className="text-lg font-semibold">{serviceName(ts, svcRow, "tile")}</span>
+          <Link
+            href="/get-help"
+            className="inline-flex min-h-touch items-center text-sm font-medium underline underline-offset-4"
+          >
+            {t("changeService")}
+          </Link>
+        </p>
+        {offered?.price_min_cents && offered.price_max_cents && market ? (
+          <p className="text-sm text-muted-foreground">
+            {t(svc === "tow" ? "typicalPriceTow" : "typicalPrice", {
+              service: serviceName(ts, svcRow, "tile"),
+              city: market.name,
+              min: formatUsd(offered.price_min_cents),
+              max: formatUsd(offered.price_max_cents),
+            })}
+          </p>
+        ) : null}
+        <QuestionFields
+          service={svc}
+          questions={questions}
+          answers={effective.answers ?? {}}
+          missing={missing}
+        />
+        {svc === "locked-out" ? (
+          <p className="rounded-xl border bg-muted/40 p-3 text-sm">{t("notices.lockedOut")}</p>
+        ) : null}
+        {svc === "out-of-gas" ? (
+          <p className="rounded-xl border bg-muted/40 p-3 text-sm">{t("notices.fuel")}</p>
+        ) : null}
+        <details className="rounded-2xl border p-4" open={Boolean(draft.notes)}>
+          <summary className="min-h-touch cursor-pointer font-semibold">{t("addDetails")}</summary>
+          <div className="mt-3 flex flex-col gap-4">
+            <label className={label}>
+              {t("notes")}
+              <textarea
+                name="notes"
+                rows={3}
+                maxLength={500}
+                defaultValue={draft.notes ?? ""}
+                className={inputClass}
+                aria-describedby="gh-notes-hint"
+              />
+              <span id="gh-notes-hint" className="text-sm font-normal text-muted-foreground">
+                {t("notesHint")}
+              </span>
+            </label>
+            <label className={label}>
+              {t("photos")}
+              <input
+                name="photos"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/heic"
+                multiple
+                className={inputClass}
+                aria-describedby="gh-photos-hint"
+              />
+              <span id="gh-photos-hint" className="text-sm font-normal text-muted-foreground">
+                {(draft.photos?.length ?? 0) > 0
+                  ? t("photosSaved", { count: draft.photos!.length })
+                  : t("photosHint")}
+              </span>
+            </label>
+          </div>
+        </details>
         <Submit>{t("next")}</Submit>
-      </form>
+      </FlowForm>
     );
   } else if (step === "location") {
     const needsDestination = NEEDS_DESTINATION.has(effective.service ?? "");
     body = sp.outside ? (
       <OutsideArea city={null} region={null} markets={markets} />
     ) : (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
+      <FlowForm step="location" className="flex flex-col gap-5">
         {hidden("step", "location")}
         <input type="hidden" name="lat" defaultValue={savedFix ? String(draft.lat) : ""} />
         <input type="hidden" name="lng" defaultValue={savedFix ? String(draft.lng) : ""} />
@@ -300,11 +372,11 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
           </fieldset>
         ) : null}
         <Submit>{t("next")}</Submit>
-      </form>
+      </FlowForm>
     );
   } else {
     body = (
-      <form method="post" action="/api/get-help" className="flex flex-col gap-5">
+      <FlowForm step="details" className="flex flex-col gap-5">
         {hidden("step", "details")}
         <div className="grid gap-4 sm:grid-cols-2">
           <label className={label}>
@@ -360,6 +432,26 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             <input name="model" defaultValue={draft.model ?? ""} className={inputClass} />
           </label>
           <label className={label}>
+            {t("vehicle.yearOptional")}
+            <input
+              name="year"
+              inputMode="numeric"
+              maxLength={4}
+              defaultValue={draft.year ? String(draft.year) : ""}
+              className={inputClass}
+            />
+          </label>
+          <label className={label}>
+            {t("vehicle.plateOptional")}
+            <input
+              name="plate"
+              maxLength={12}
+              autoCapitalize="characters"
+              defaultValue={draft.plate ?? ""}
+              className={inputClass}
+            />
+          </label>
+          <label className={label}>
             {t("contact.email")}
             <input
               name="email"
@@ -374,31 +466,14 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
             </span>
           </label>
         </div>
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 font-semibold">{t("safety.where")}</legend>
-          <Choice name="spot" value="safe" checked={draft.safe === true && draft.highway === false}>
-            {t("safety.spotSafe")}
-          </Choice>
-          <Choice
-            name="spot"
-            value="highway"
-            checked={draft.safe === true && draft.highway === true}
-          >
-            {t("safety.spotHighway")}
-          </Choice>
-          <Choice name="spot" value="unsafe" id="gh-unsafe" checked={draft.safe === false}>
-            {t("safety.spotUnsafe")}
-          </Choice>
-        </fieldset>
-        <div
-          role="alert"
-          className="hidden flex-col gap-3 rounded-2xl border-2 border-critical bg-critical-subtle p-4 [form:has(#gh-unsafe:checked)_&]:flex"
-        >
-          <p className="font-semibold">{t("safety.unsafe")}</p>
-          <a href="tel:911" className={`${ui.button.primary} self-start`}>
-            {t("safety.call911")}
-          </a>
-        </div>
+        {/* A repeat request from the account skips screen 1: safety is asked here instead. */}
+        {!effective.answers?.safety ? (
+          <QuestionFields
+            questions={questionsFor(urlService ?? "").filter((q) => q.id === "safety")}
+            answers={{}}
+            missing={(sp.missing ?? "").split(",").filter(Boolean)}
+          />
+        ) : null}
         <p className="text-sm text-muted-foreground">
           {t.rich("contact.consent", {
             terms: (chunks) => (
@@ -417,7 +492,7 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
           <Turnstile siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} label={brand.name} />
         ) : null}
         <Submit>{t("details.submit")}</Submit>
-      </form>
+      </FlowForm>
     );
   }
 
@@ -426,11 +501,12 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
       <StepShell
         n={n}
         total={STEPS.length}
-        title={t(`${step}.title` as never)}
+        title={t(!urlService ? "picker.title" : (`${step}.title` as never))}
         back={backHref}
         error={error}
       >
         {body}
+        <FlowTracker next={nextHref} />
       </StepShell>
     </SitePage>
   );

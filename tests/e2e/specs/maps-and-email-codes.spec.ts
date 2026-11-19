@@ -1,3 +1,4 @@
+import { answerScreenOne } from "../support/get-help";
 import { signInAsDemo } from "../support/demo";
 import { appUrls, expect, expectNoA11yViolations, test } from "../support/fixtures";
 
@@ -11,8 +12,9 @@ test.describe("typed addresses", () => {
   test("a plain address field: badly formed addresses are refused, good ones continue", async ({
     page,
   }) => {
-    // A tile chose the service, so the flow opens on the location screen.
-    await page.goto(new URL("/get-help?service=flat-tire", appUrls.web).toString());
+    // A tile chose the service: screen 1 asks its quick questions, then the location screen.
+    await page.goto(new URL("/get-help/flat-tire/problem", appUrls.web).toString());
+    await answerScreenOne(page, "flat-tire");
     await page.getByLabel("City").selectOption({ index: 1 });
     const field = page.getByLabel("Street address or cross streets");
     await field.fill("somewhere");

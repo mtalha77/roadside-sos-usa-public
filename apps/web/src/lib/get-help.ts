@@ -93,6 +93,13 @@ export const DraftSchema = z
     attribution: z.record(z.string(), z.string()),
     /** Quick repeat request from the driver account: safety becomes one tap. */
     quick: z.boolean(),
+    /** RSOS-116: the service's answers (packages/core/src/service-questions.ts). */
+    answers: z.record(z.string(), z.string()),
+    /** Notes for the provider (screen 1, optional). */
+    notes: z.string(),
+    /** Private photo paths in job-photos (draft/<token>/n.ext), up to 3. */
+    photos: z.array(z.string()).max(3),
+    plate: z.string(),
   })
   .partial();
 export type Draft = z.infer<typeof DraftSchema>;
@@ -100,7 +107,9 @@ export type Draft = z.infer<typeof DraftSchema>;
 /** First step the draft has not finished: the flow resumes there after a reload. */
 export function currentStep(d: Draft): Step {
   if (!d.service) return "problem";
-  if (d.lat === undefined || !d.market) return "location";
+  if (d.lat === undefined || !d.market) return d.answers ? "location" : "problem";
+  // RSOS-116: screen 1's questions (an ad landing page asks the address first, then these).
+  if (!d.answers) return "problem";
   if (NEEDS_DESTINATION.has(d.service) && !d.destAddress) return "location";
   return "details";
 }
