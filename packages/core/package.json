@@ -11,7 +11,8 @@
     "./economics": "./src/economics.ts",
     "./analytics-sources": "./src/analytics-sources.ts",
     "./booking-metrics": "./src/booking-metrics.ts",
-    "./wallet": "./src/wallet.ts"
+    "./wallet": "./src/wallet.ts",
+    "./service-questions": "./src/service-questions.ts"
   },
   "scripts": {
     "lint": "eslint .",
