@@ -142,7 +142,11 @@
       "where": "Dónde",
       "provider": "Proveedor",
       "kind": "Tipo",
-      "pageTour": "Recorrido de esta página"
+      "pageTour": "Recorrido de esta página",
+      "moreActions": "Más",
+      "sourceWebsite": "Sitio web",
+      "sourceCall": "Llamada",
+      "instant": "Instantánea ≤ ${price}"
     },
     "requests": {
       "title": "Solicitudes",
@@ -310,7 +314,14 @@
         "done": "registrado (simulado)",
         "note": "Nota",
         "addNote": "Agregar nota"
-      }
+      },
+      "online": "En línea ahora",
+      "onlineYes": "En línea",
+      "onlineNo": "Desconectado",
+      "responseRate": "Tasa de respuesta",
+      "medianQuote": "Tiempo mediano de cotización",
+      "bookingRate": "Tasa de reserva",
+      "seconds": "{s} s"
     },
     "recruitment": {
       "title": "Reclutamiento",
@@ -380,9 +391,10 @@
         "numbers": "Números de seguimiento asignados (sitio web y Google Ads)",
         "providers": "Suficientes proveedores activos por servicio",
         "prices": "Precios y comisiones para cada servicio",
-        "on_duty": "Turnos cubren 24/7",
+        "on_duty": "El horario telefónico cubre 24/7",
         "landing_pages": "Páginas de ciudad y de anuncios publicadas",
-        "tracking": "Seguimiento de conversiones verificado (una conversión en los últimos 30 días)"
+        "tracking": "Seguimiento de conversiones verificado (una conversión en los últimos 30 días)",
+        "booking_test": "Flujo de reserva probado de principio a fin (una reserva de prueba asignada y luego cancelada como \"test\")"
       },
       "done": "(hecho)",
       "todo": "(pendiente)",
@@ -397,7 +409,9 @@
         "invalid": "Elige un estado.",
         "checklist": "La lista de lanzamiento no está completa.",
         "generic": "Algo salió mal. Inténtalo de nuevo."
-      }
+      },
+      "optional": "(opcional)",
+      "bookingTestHow": "Envía una solicitud en este mercado desde el sitio web, asigna un proveedor en la Bandeja y luego cancélala con el motivo \"test\"."
     },
     "pricing": {
       "title": "Precios y cargos",
@@ -1214,7 +1228,9 @@
         "logged": "Anotado en el historial.",
         "codeScript": "Entra a {site} y escribe el código {code}, luego toca Compartir mi ubicación."
       },
-      "logCall": "Registrar una llamada"
+      "logCall": "Registrar una llamada",
+      "sourceWebsite": "Sitio web",
+      "sourceCall": "Llamada"
     },
     "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a clientes quedan retenidos hasta su aprobación.",
     "marketing": {
@@ -1484,7 +1500,9 @@
         "completed": "Completadas",
         "fees": "Comisiones ganadas",
         "note": "Desde la medianoche en la zona horaria de cada mercado. Solo solicitudes reales."
-      }
+      },
+      "sourceWebsite": "Sitio web",
+      "sourceCall": "Llamada"
     },
     "calls": {
       "title": "Llamadas",

@@ -27,6 +27,10 @@ export type BoardCard = {
   providerLogo?: ProviderLogoData | null;
   truck: { lat: number; lng: number } | null;
   token: string | null;
+  /** RSOS-110: how the request reached us (the website or a call). */
+  channel: "website" | "phone";
+  /** RSOS-109: the Instant book ceiling in cents, or null when the customer compares quotes. */
+  instantMaxCents: number | null;
 };
 export type MapArea = { market: string; name: string; lat: number; lng: number };
 export type SupplyRow = { market: string; area: string; online: number; trucks: number };
@@ -67,6 +71,9 @@ async function realCards(markets: string[]): Promise<BoardCard[]> {
     en_route_at: string | null;
     on_site_at: string | null;
     status_token: string;
+    channel: string;
+    booking_mode: string | null;
+    instant_max_cents: number | null;
   }[];
   return rows
     .filter((r) => markets.includes(r.market_slug) && LANE_OF[r.status])
@@ -95,6 +102,8 @@ async function realCards(markets: string[]): Promise<BoardCard[]> {
       provider: null,
       truck: null,
       token: r.status_token,
+      channel: r.channel === "phone" ? ("phone" as const) : ("website" as const),
+      instantMaxCents: r.booking_mode === "instant" ? r.instant_max_cents : null,
     }));
 }
 
@@ -126,6 +135,8 @@ function demoCards(now: number, markets: string[], load: boolean): BoardCard[] {
         providerLogo: s.picked?.provider.logo ?? null,
         truck: s.truck,
         token: load ? null : r.token,
+        channel: r.source === "phone" ? "phone" : "website",
+        instantMaxCents: r.instant?.maxCents ?? null,
       };
     })
     .filter((c): c is BoardCard => c !== null);

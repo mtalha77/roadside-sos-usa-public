@@ -52,6 +52,15 @@ export function BoardCardView({
       </span>
       <span className="w-full truncate text-muted-foreground">{c.area}</span>
       <span className="flex w-full flex-wrap items-center gap-2">
+        {/* RSOS-110: every request says where it came from; Instant book shows its ceiling. */}
+        <Badge tone="neutral">
+          {c.channel === "phone" ? labels.sourceCall : labels.sourceWebsite}
+        </Badge>
+        {c.instantMaxCents !== null ? (
+          <Badge tone="info">
+            {labels.instant?.replace("{price}", String(Math.round(c.instantMaxCents / 100)))}
+          </Badge>
+        ) : null}
         {c.demo ? <Badge tone="outline">{labels.demo}</Badge> : null}
         {tone ? (
           <Badge tone={tone === "critical" ? "critical" : "warning"}>{labels.waiting}</Badge>

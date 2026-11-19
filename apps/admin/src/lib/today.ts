@@ -16,6 +16,8 @@ export type UrgentItem = {
   href: string;
   since: number;
   demo: boolean;
+  /** RSOS-110: where it came from (website or a call). */
+  channel: "website" | "phone";
   /** Sort weight: higher is more urgent. */
   weight: number;
 };
@@ -117,6 +119,7 @@ export async function getToday(ctx: AdminContext, now: number) {
       href: c.demo ? `/dispatch?market=${c.market}&source=demo` : `/inbox?id=${c.id}`,
       since: c.createdAt,
       demo: c.demo,
+      channel: c.channel,
       weight: 3,
     })),
     ...missed.map((c) => ({
@@ -128,6 +131,7 @@ export async function getToday(ctx: AdminContext, now: number) {
       href: c.request_id ? `/inbox?id=${c.request_id}` : "/calls?outcome=missed",
       since: Date.parse(c.created_at),
       demo: false,
+      channel: "phone" as const,
       weight: 2,
     })),
     ...unclaimed
@@ -141,6 +145,7 @@ export async function getToday(ctx: AdminContext, now: number) {
         href: `/inbox?id=${i.id}`,
         since: i.createdAt,
         demo: false,
+        channel: i.channel === "phone" ? ("phone" as const) : ("website" as const),
         weight: i.urgent ? 2.5 : 1.5,
       })),
     ...closing.map((c) => ({
@@ -152,6 +157,7 @@ export async function getToday(ctx: AdminContext, now: number) {
       href: c.demo ? `/dispatch?market=${c.market}&source=demo` : `/inbox?id=${c.id}`,
       since: c.progressAt,
       demo: c.demo,
+      channel: c.channel,
       weight: 1,
     })),
   ];

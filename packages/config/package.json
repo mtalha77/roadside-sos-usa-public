@@ -24,7 +24,8 @@
     "./demo": "./src/demo.ts",
     "./demo-fixtures": "./src/demo-fixtures.ts",
     "./adapters": "./src/adapters.ts",
-    "./permissions": "./src/permissions.ts"
+    "./permissions": "./src/permissions.ts",
+    "./phones": "./src/phones.ts"
   },
   "scripts": {
     "lint": "eslint .",

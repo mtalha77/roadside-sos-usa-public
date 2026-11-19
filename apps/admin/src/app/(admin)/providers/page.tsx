@@ -45,6 +45,7 @@ export default async function ProvidersPage({
   const markets = Object.fromEntries(ctx.markets.map((m) => [m.slug, m.name]));
   const queue = all.filter((r) => r.demo && r.status === "onboarding");
   const date = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
+  const pct = (v: number | null) => (v === null ? "—" : `${Math.round(v * 100)}%`);
   return (
     <main id="main" className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6">
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
@@ -145,7 +146,7 @@ export default async function ProvidersPage({
               aria-label={t("title")}
               className="overflow-x-auto rounded-2xl border bg-card"
             >
-              <table className="w-full min-w-[36rem] text-sm">
+              <table className="w-full min-w-[56rem] text-sm">
                 <caption className="sr-only">{t("title")}</caption>
                 <thead className="border-b text-left text-muted-foreground">
                   <tr>
@@ -163,6 +164,18 @@ export default async function ProvidersPage({
                     </th>
                     <th scope="col" className="px-4 py-3 font-medium">
                       {t("rating")}
+                    </th>
+                    <th scope="col" className="px-4 py-3 font-medium">
+                      {t("online")}
+                    </th>
+                    <th scope="col" className="px-4 py-3 font-medium">
+                      {t("responseRate")}
+                    </th>
+                    <th scope="col" className="px-4 py-3 font-medium">
+                      {t("medianQuote")}
+                    </th>
+                    <th scope="col" className="px-4 py-3 font-medium">
+                      {t("bookingRate")}
                     </th>
                   </tr>
                 </thead>
@@ -186,6 +199,14 @@ export default async function ProvidersPage({
                       </td>
                       <td className="px-4 py-2 tabular-nums">{r.trucks ?? "—"}</td>
                       <td className="px-4 py-2 tabular-nums">{r.rating?.toFixed(1) ?? "—"}</td>
+                      <td className="px-4 py-2">
+                        {r.online === null ? "—" : r.online ? t("onlineYes") : t("onlineNo")}
+                      </td>
+                      <td className="px-4 py-2 tabular-nums">{pct(r.responseRate)}</td>
+                      <td className="px-4 py-2 tabular-nums">
+                        {r.medianQuoteSec === null ? "—" : t("seconds", { s: r.medianQuoteSec })}
+                      </td>
+                      <td className="px-4 py-2 tabular-nums">{pct(r.bookingRate)}</td>
                     </tr>
                   ))}
                 </tbody>

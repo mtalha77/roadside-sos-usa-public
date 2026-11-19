@@ -1,4 +1,5 @@
 import { canSee } from "@rsos/config/permissions";
+import { phonesEnabled } from "@rsos/config/phones";
 import { textingEnabled } from "@rsos/core/adapters";
 import { LogOut, Map as MapIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
@@ -143,7 +144,10 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     : { data: null };
   return (
     <AdminShell
-      sections={sectionsFor(ctx.role).map((s) => ({ ...s, label: t(`sections.${s.key}`) }))}
+      sections={sectionsFor(ctx.role)
+        // Calls are a backup channel: hidden entirely when phones are not enabled (RSOS-110).
+        .filter((s) => s.key !== "calls" || phonesEnabled())
+        .map((s) => ({ ...s, label: t(`sections.${s.key}`) }))}
       groups={Object.fromEntries(NAV_GROUPS.map((g) => [g, t(`shell.groups.${g}`)]))}
       identity={identity}
       markets={ctx.markets.map((m) => ({ slug: m.slug, name: m.name }))}
