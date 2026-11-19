@@ -13,7 +13,7 @@ $$;
 insert into auth.users (id, email, aud, role) values ('00000000-0000-4000-8000-0000000116a1', 'forms@example.test', 'authenticated', 'authenticated');
 
 insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone)
-values ('00000000-0000-4000-8000-0000000116c1', 'R-FRM1', (select id from public.markets where slug = 'houston'), 0, 'submitted', 'web', 'Form Test', '+12105550144');
+values ('00000000-0000-4000-8000-0000000116c1', 'R-FRMW', (select id from public.markets where slug = 'houston'), 0, 'submitted', 'web', 'Form Test', '+12105550144');
 select set_config('test.token', (select status_token from public.requests where id = '00000000-0000-4000-8000-0000000116c1'), true);
 select set_config('test.draft', repeat('d', 32), true);
 
