@@ -12,9 +12,15 @@ events from RSOS-107" is limited to the existing conversion events (RSOS-031).
 
 ## Summary
 
-| Ticket                                  | Status    | Pull request |
-| --------------------------------------- | --------- | ------------ |
-| RSOS-113 Analytics with correct numbers | In review |              |
+| Ticket                                      | Status                                   | Pull request                                                         |
+| ------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------- |
+| RSOS-107 Automatic ad sync (prerequisite)   | BLOCKED: no specification                |                                                                      |
+| RSOS-113 Analytics with correct numbers     | Merged                                   | [#188](https://github.com/mtalha77/roadside-sos-usa-public/pull/188) |
+| RSOS-108 Website leads with online booking  | Merged                                   | [#195](https://github.com/mtalha77/roadside-sos-usa-public/pull/195) |
+| RSOS-109 Instant book                       | Merged                                   | [#196](https://github.com/mtalha77/roadside-sos-usa-public/pull/196) |
+| RSOS-110 Admin leads with online bookings   | Merged                                   | [#197](https://github.com/mtalha77/roadside-sos-usa-public/pull/197) |
+| RSOS-111 Booking speed and funnel analytics | Merged (ad matching limited by RSOS-107) | [#198](https://github.com/mtalha77/roadside-sos-usa-public/pull/198) |
+| RSOS-112 QA pass and walkthrough            | In review                                | this pull request                                                    |
 
 ## Tickets
 
@@ -166,6 +172,27 @@ events from RSOS-107" is limited to the existing conversion events (RSOS-031).
   every funnel, the mode split, the calls funnel, drop-off with last fields, demo rows excluded),
   database (`supabase/tests/033_funnel_events.test.sql`) and e2e (`booking-analytics.spec.ts`).
 
+### RSOS-112: QA pass
+
+- **Release QA on staging** (after RSOS-111 merged, staging at `9c01e0c`, read-only so it writes no
+  data): staging smoke 15 passed; the full regression suite (axe on every page, console errors,
+  phone and desktop, mobile Safari, mobile Chrome and desktop Chrome) 388 passed and 44 skipped
+  (the tests that write data, which never run against staging); the Lighthouse budgets from batch
+  4.5 passed. Run: https://github.com/mtalha77/roadside-sos-usa-public/actions/runs/44622960936
+- **Walkthrough** (`docs/WALKTHROUGH.md`): booking first (the small "Prefer to call?" link), Instant
+  book on "Finding help", booking speed on Today, the online-first launch checklist and provider
+  numbers, source tags and Assign under More on the board, and the new Analytics panels.
+- **Measured booking-flow timings on staging** (a scripted customer on a phone, 5 runs, stopping at
+  the "Send my request" button so no fake request is created): home ready 1.1 s (median), service
+  tile to the location screen 0.9 s, location to the details screen 1.7 s, landing to the "Send my
+  request" button 3.8 s. That is page and server time only; with a person typing, the 60-second
+  target is about typing, not waiting. Real data on staging: 4 real requests in 30 days, none
+  booked yet, so "submitted to provider booked" has no real number there yet.
+- **Bots out of the funnel**: known bots and headless browsers get no funnel session (the same rule
+  as the visit counter). Before this, the timing runs above left 15 `funnel_events` rows on staging
+  (5 sessions × 3 screens, 2026-11-19 around 21:50 UTC). They are not deleted: deleting data needs
+  the owner's yes. A scripted browser that presents itself as a normal phone still counts.
+
 ### Known issue: the full-demo timing test on WebKit in CI
 
 `request-status.spec.ts` ("a full demo from request to review takes under 3 minutes at 1x") began
@@ -173,3 +200,29 @@ failing on mobile Safari in CI after RSOS-109: the page stays on "On the way" ev
 for a 20-second step. It passes on WebKit locally (1.7 minutes) and on Chrome in every run, and the
 demo clock code did not change. It is marked `fixme` for WebKit on CI only, so the other browsers
 still run it; investigating the WebKit timer behaviour on the runner is a follow-up.
+
+## End-of-run summary
+
+Every ticket merged into `staging` through its own pull request with CI green; `main` was not
+touched. Before and after screenshots (375 and 1440 px, light and dark) are on each pull request.
+
+- **Done**: RSOS-113 (#188), RSOS-108 (#195), RSOS-109 (#196), RSOS-110 (#197), RSOS-111 (#198),
+  RSOS-112 (this pull request).
+- **Partial**: RSOS-111's "match the ad conversion events from RSOS-107" uses the existing
+  conversion events (RSOS-031), because RSOS-107 is not specified. RSOS-110's "flagged by the
+  customer or a provider" cannot be a condition for Assign yet: requests have no flag.
+- **BLOCKED**: RSOS-107 (automatic ad sync): no specification anywhere.
+- **Measured on staging**: landing to the "Send my request" button 3.8 s (scripted, median of 5);
+  no real bookings yet to time "submitted to provider booked".
+
+**For the owner to decide**
+
+1. RSOS-107: send the automatic ad sync specification (the analytics will then match the ad
+   platforms' conversions).
+2. Whether to delete the 15 test `funnel_events` rows on staging (from the timing check).
+3. Whether customers or providers should be able to flag a request (it would bring Assign forward
+   on the board, as RSOS-110 describes).
+4. The WebKit-on-CI full-demo timing test is marked as a known issue; worth a look before
+   production traffic.
+5. Real phone numbers stay optional on the go-live checklist; the test booking per market is now
+   required before a market can go live.
