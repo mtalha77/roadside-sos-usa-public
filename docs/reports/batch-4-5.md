@@ -6,15 +6,15 @@
 
 ## Summary
 
-| Ticket                                            | Status      | Pull request                                                         |
-| ------------------------------------------------- | ----------- | -------------------------------------------------------------------- |
-| RSOS-100 Emergency-first website home, city pages | Merged      | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184) |
-| RSOS-101 Get Help flow, faster and calmer         | Merged      | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186) |
-| RSOS-102 Roles and permissions in the admin       | Merged      | [#187](https://github.com/mtalha77/roadside-sos-usa-public/pull/187) |
-| RSOS-103 Admin rebuild (Today, navigation, board) | Merged      | [#189](https://github.com/mtalha77/roadside-sos-usa-public/pull/189) |
-| RSOS-104 Provider portal polish                   | Merged      | [#190](https://github.com/mtalha77/roadside-sos-usa-public/pull/190) |
-| RSOS-105 Skippable guided tours                   | In review   |                                                                      |
-| RSOS-106 QA pass and walkthrough                  | Not started |                                                                      |
+| Ticket                                            | Status    | Pull request                                                         |
+| ------------------------------------------------- | --------- | -------------------------------------------------------------------- |
+| RSOS-100 Emergency-first website home, city pages | Merged    | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184) |
+| RSOS-101 Get Help flow, faster and calmer         | Merged    | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186) |
+| RSOS-102 Roles and permissions in the admin       | Merged    | [#187](https://github.com/mtalha77/roadside-sos-usa-public/pull/187) |
+| RSOS-103 Admin rebuild (Today, navigation, board) | Merged    | [#189](https://github.com/mtalha77/roadside-sos-usa-public/pull/189) |
+| RSOS-104 Provider portal polish                   | Merged    | [#190](https://github.com/mtalha77/roadside-sos-usa-public/pull/190) |
+| RSOS-105 Skippable guided tours                   | Merged    | [#191](https://github.com/mtalha77/roadside-sos-usa-public/pull/191) |
+| RSOS-106 QA pass and walkthrough                  | In review |                                                                      |
 
 RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at the owner's request ([#188](https://github.com/mtalha77/roadside-sos-usa-public/pull/188), report in `docs/reports/batch-4-6.md`).
 
@@ -235,3 +235,22 @@ RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at t
   restart; a page tour from ?; provider owner and technician: start and skip; the website demo:
   plays, pauses, skips, Get help now visible). Automated tests switch first-sign-in tours off
   (the demo accounts are shared); the tour tests start them by hand.
+
+### RSOS-106: QA pass and walkthrough
+
+- **Walkthrough**: `docs/WALKTHROUGH.md` is now a 10-minute owner walkthrough in the order a job
+  happens: the website as a customer, the admin as the owner and as a dispatcher, the provider
+  portal as the owner and as a technician, with the exact demo sign-in buttons (Owner, Dispatcher,
+  Provider owner, Technician) and the Economics model and Analytics views. The ticket names
+  `docs/walkthrough.md`; the existing `docs/WALKTHROUGH.md` was updated instead (two files whose
+  names differ only in case break on case-insensitive disks).
+- **Customer wording** across the website and provider sign-up ("Book help", "customers near you").
+  The legal document names (Driver Terms of Use) stay until the attorney review.
+- **QA on staging**: the Release QA workflow (full e2e suite on mobile Safari, mobile Chrome and
+  desktop Chrome with axe and console checks, then the Lighthouse budgets) was run by hand on the
+  `staging` branch after RSOS-105 merged. Result: see the end-of-run summary below.
+- **CI reliability fixes made during the run** (each found by a failing pull request):
+  - the browser install step retries when an Ubuntu package mirror stalls (it timed out two jobs);
+  - Vercel's preview feedback toolbar (`vercel.live`, previews only) is ignored by the console
+    check (its connection resets failed three runs);
+  - the restack scripts format merged message files (unformatted JSON would fail the lint job).

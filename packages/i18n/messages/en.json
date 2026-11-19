@@ -13,7 +13,7 @@
   "provider": {
     "label": "Provider portal",
     "headline": "Get roadside jobs near you.",
-    "body": "See requests in your area, send a quote with your price and arrival time, and get paid directly by the driver.",
+    "body": "See requests in your area, send a quote with your price and arrival time, and get paid directly by the customer.",
     "cta": "Become a provider"
   },
   "admin": {
@@ -1661,7 +1661,7 @@
       "sendLink": "Email me a sign-in link",
       "linkSent": "Check your email for a sign-in link. It expires in 1 hour.",
       "phoneTitle": "Verify your phone",
-      "phoneBody": "We text a 6-digit code to the phone drivers and dispatch will reach you on.",
+      "phoneBody": "We text a 6-digit code to the phone customers and dispatch will reach you on.",
       "phone": "Mobile phone",
       "sendCode": "Text me a code",
       "codeSent": "We sent a code to {phone}.",
@@ -1829,7 +1829,7 @@
       "current": "Showing help for {city}",
       "none": "Choose your city",
       "outsideTitle": "We're not in your area yet",
-      "outsideBody": "We're opening city by city. Leave your email and we'll tell you when drivers near you can get quotes.",
+      "outsideBody": "We're opening city by city. Leave your email and we'll tell you when we open near you.",
       "outsideBodyCity": "We're not in {city} yet. Leave your email and we'll tell you when we open near you.",
       "emergency": "If you're in danger or blocking traffic, call 911 first.",
       "email": "Email",
@@ -1865,7 +1865,7 @@
       "cookies": "Cookie policy",
       "accessibility": "Accessibility",
       "privacyChoices": "Your privacy choices",
-      "tagline": "A marketplace that connects drivers with independent, verified roadside providers. Providers set their prices and are paid directly by drivers.",
+      "tagline": "A marketplace that connects customers with independent, verified roadside providers. Providers set their prices and are paid directly by customers.",
       "rights": "© {year} {brand}"
     },
     "services": {
@@ -1919,7 +1919,7 @@
       "call": "Call {phone}",
       "areasTitle": "Areas we cover",
       "highwaysTitle": "Highways and main roads",
-      "tipsTitle": "Tips for drivers in {city}",
+      "tipsTitle": "Roadside tips for {city}",
       "faqTitle": "{city} questions",
       "nearbyTitle": "Other cities we serve",
       "serviceIn": "{service} in {city}",
@@ -1990,7 +1990,7 @@
     },
     "cities": {
       "title": "Where we help",
-      "body": "We open city by city so every driver gets fast, local help."
+      "body": "We open city by city so every customer gets fast, local help."
     },
     "services": {
       "title": "Services"
@@ -2000,7 +2000,7 @@
       "items": {
         "cost": {
           "q": "How much does it cost?",
-          "a": "Each provider quotes a full price before you choose. You only pay the provider you pick, directly. Using this site is free for drivers."
+          "a": "Each provider quotes a full price before you choose. You only pay the provider you pick, directly. Using this site is free for customers."
         },
         "fast": {
           "q": "How fast will someone arrive?",
@@ -2022,7 +2022,7 @@
     },
     "providers": {
       "title": "Run a towing or roadside business?",
-      "body": "Get paid jobs from drivers near you. Set your own prices, quote when you want, and pay a flat fee only when a driver picks you.",
+      "body": "Get paid jobs from customers near you. Set your own prices, quote when you want, and pay a flat fee only when a customer picks you.",
       "cta": "Learn about joining"
     },
     "getHelp": "Get help now",
@@ -2051,8 +2051,8 @@
   "pages": {
     "how": {
       "title": "How it works",
-      "intro": "Drivers get quotes from nearby providers and choose one. Providers get paid jobs and set their own prices.",
-      "drivers": "For drivers",
+      "intro": "Customers get quotes from nearby providers and choose one. Providers get paid jobs and set their own prices.",
+      "drivers": "For customers",
       "providers": "For providers",
       "driverSteps": [
         [
@@ -2083,7 +2083,7 @@
         ]
       ],
       "payTitle": "Who pays whom",
-      "payBody": "Drivers pay providers directly for the job. Providers pay us a flat fee per picked request from a prepaid wallet. We never handle the job payment.",
+      "payBody": "Customers pay providers directly for the job. Providers pay us a flat fee per picked request from a prepaid wallet. We never handle the job payment.",
       "cta": "Get help now",
       "providerCta": "Learn about joining"
     },
@@ -2160,12 +2160,12 @@
     },
     "about": {
       "title": "About us",
-      "intro": "We connect stranded drivers with independent roadside providers nearby, quickly and with clear prices.",
+      "intro": "We connect stranded customers with independent roadside providers nearby, quickly and with clear prices.",
       "mission": "Why we exist",
       "missionBody": "Getting stuck is stressful. Calling around for a tow or a jump takes time you don't have, and prices are often a surprise. We let nearby providers compete for the job with a clear price and arrival time, so you can choose with confidence.",
       "how": "How we work",
-      "howBody": "We are a marketplace, not a towing company. Independent, insured providers do the work and set their prices. Drivers pay providers directly. Providers pay us a small flat fee when a driver picks them.",
-      "cities": "We open city by city so every driver gets fast local help.",
+      "howBody": "We are a marketplace, not a towing company. Independent, insured providers do the work and set their prices. Customers pay providers directly. Providers pay us a small flat fee when a customer picks them.",
+      "cities": "We open city by city so every customer gets fast local help.",
       "contact": "Questions? Contact us."
     },
     "contact": {
@@ -2228,8 +2228,8 @@
     }
   },
   "forProviders": {
-    "title": "Get roadside jobs from drivers near you",
-    "intro": "Join verified local providers who get paid jobs from stranded drivers. You set your prices, you choose the jobs, and you only pay when a driver picks you.",
+    "title": "Get roadside jobs from customers near you",
+    "intro": "Join verified local providers who get paid jobs from stranded customers. You set your prices, you choose the jobs, and you only pay when a customer picks you.",
     "apply": "Apply to join",
     "how": {
       "title": "How jobs arrive",
@@ -2251,8 +2251,8 @@
     "money": {
       "title": "How the money works",
       "yourPrices": "You set your own prices for every job.",
-      "direct": "Drivers pay you directly. We never touch the job payment.",
-      "fee": "We charge a flat fee only when a driver picks you, from a prepaid wallet you top up.",
+      "direct": "Customers pay you directly. We never touch the job payment.",
+      "fee": "We charge a flat fee only when a customer picks you, from a prepaid wallet you top up.",
       "noMonthly": "No monthly fee to join."
     },
     "fees": {
@@ -2770,12 +2770,12 @@
       },
       "reviewSamples": [
         "Showed up earlier than quoted and had me back on the road in minutes.",
-        "Friendly driver, clear price, no surprises at the end.",
+        "Friendly customer, clear price, no surprises at the end.",
         "Called ahead to say where he was. Felt safe the whole time.",
         "Careful with my car and explained everything before starting.",
         "Late at night and still quick. Would use again.",
         "The price matched the quote exactly. Easy to pay by card.",
-        "Truck was clean and the driver checked my tire pressure too.",
+        "Truck was clean and the customer checked my tire pressure too.",
         "A little slower than the ETA, but kept me updated."
       ]
     },
@@ -2929,7 +2929,7 @@
     "address": "Your address or cross streets in {city}",
     "continue": "Continue",
     "trust": {
-      "label": "Why drivers use us",
+      "label": "Why customers use us",
       "insured": "Insured, verified providers",
       "fast": "Quotes in about 3 minutes",
       "noMembership": "No membership"
