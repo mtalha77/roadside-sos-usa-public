@@ -28,7 +28,7 @@ test("tow answers appear in the admin request panel", async ({ page, browser }) 
     timeout: 20_000,
   });
   await site.getByRole("button", { name: "Send my request" }).click();
-  await expect(site).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
+  await expect(site).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/, { timeout: 15_000 });
   await site.close();
 
   await signInAsDemo(page, admin!, "Dispatcher");

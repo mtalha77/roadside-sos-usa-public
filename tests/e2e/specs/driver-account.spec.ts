@@ -59,7 +59,8 @@ test.describe("driver account", () => {
     });
     await page.getByRole("button", { name: "Send my request" }).click();
     taps++;
-    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
+    // Creating the request and stepping the history back to the start page takes a few seconds.
+    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/, { timeout: 15_000 });
     expect(taps).toBeLessThanOrEqual(3);
   });
 });

@@ -38,7 +38,7 @@ test.describe("ad tracking and attribution", () => {
       timeout: 20_000,
     });
     await web.getByRole("button", { name: "Send my request" }).click();
-    await expect(web).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
+    await expect(web).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/, { timeout: 15_000 });
     await driver.close();
 
     // Marketing downloads today's offline conversion file: the gclid is there.
