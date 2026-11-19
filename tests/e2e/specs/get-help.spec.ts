@@ -91,8 +91,9 @@ test.describe("get help: questions per service", () => {
       page,
     }) => {
       // Only services some market offers have a screen.
-      const res = await page.goto(url(`/get-help/${service}/problem`));
-      test.skip(res?.status() === 404, `${service} is not offered in any market here`);
+      const res = await page.request.get(url(`/get-help/${service}/problem`));
+      test.skip(res.status() === 404, `${service} is not offered in any market here`);
+      await page.goto(url(`/get-help/${service}/problem`));
       await expect(page.getByText("Step 1 of 3")).toBeVisible();
       // Nothing answered: the browser (or our own check) keeps the customer on screen 1.
       await page.getByRole("button", { name: "Continue" }).click();
