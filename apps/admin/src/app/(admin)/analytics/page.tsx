@@ -10,6 +10,8 @@ import { getAdminContext } from "@/lib/admin";
 import { type AnalyticsView, demoView, modelView, realView } from "@/lib/analytics";
 import { demoNow } from "@/lib/demo-clock";
 import { getModels } from "@/lib/economics";
+import { BookingAnalytics } from "@/components/analytics/booking-analytics";
+import { getMetricData, getServiceNames } from "@/lib/booking-metrics";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +27,7 @@ const Query = z.object({
     .catch(7),
   view: z.enum(["real", "demo", "model"]).catch("real"),
   market: z.string().max(60).optional().catch(undefined),
+  by: z.enum(["market", "source", "service", "device"]).catch("market"),
 });
 
 /**
@@ -67,6 +70,18 @@ export default async function AnalyticsPage({
             q.days,
             now,
           );
+  // Booking funnel rows (RSOS-111): real only; the Demo view adds labelled demo rows.
+  const serviceNames = await getServiceNames();
+  const metrics =
+    view === "model"
+      ? null
+      : await getMetricData({
+          markets,
+          services: Object.keys(serviceNames),
+          from: now - q.days * 86_400_000,
+          to: now,
+          includeDemo: view === "demo",
+        });
   const l = locale as Locale;
   const money = (n: number | null) => (n === null ? "–" : formatCurrency(Math.round(n * 100), l));
   const count = (n: number) => formatNumber(Math.round(n), l, { maximumFractionDigits: 0 });
@@ -121,7 +136,7 @@ export default async function AnalyticsPage({
     ["profit", money(data.profit), money(model.profit), versus(data.profit, model.profit)],
   ];
   const link = (patch: Record<string, string | number | undefined>) => {
-    const next = { days: q.days, view, market: q.market, ...patch };
+    const next = { days: q.days, view, market: q.market, by: q.by, ...patch };
     const p = new URLSearchParams(
       Object.entries(next).flatMap(([k, v]) => (v === undefined ? [] : [[k, String(v)]])),
     );
@@ -250,6 +265,20 @@ export default async function AnalyticsPage({
           ))}
         </ol>
       </section>
+
+      {metrics ? (
+        <BookingAnalytics
+          data={metrics}
+          by={q.by}
+          byLink={(by) => `${link({ by })}#bb-h`}
+          tag={tag}
+          names={{
+            market: (slug) => inView.find((m) => m.slug === slug)?.name ?? slug,
+            source: (s) => (t.has(`sources.${s}`) ? t(`sources.${s}` as never) : s),
+            service: (s) => serviceNames[s] ?? s,
+          }}
+        />
+      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
         <section className={card} aria-labelledby="s-h">

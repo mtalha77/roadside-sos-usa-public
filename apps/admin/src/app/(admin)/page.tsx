@@ -11,6 +11,8 @@ import { getAdminContext } from "@/lib/admin";
 import { formatAge } from "@/lib/board-time";
 import { demoNow } from "@/lib/demo-clock";
 import { getToday } from "@/lib/today";
+import { BookingSpeed } from "@/components/analytics/booking-analytics";
+import { getMetricData, getServiceNames } from "@/lib/booking-metrics";
 
 export const dynamic = "force-dynamic";
 
@@ -18,15 +20,46 @@ export const dynamic = "force-dynamic";
  * Today (RSOS-103, replaces the overview): what needs a person now, the ten most urgent items with
  * one action each, today's numbers per market and alerts. Calm and small: no decorative charts.
  */
-export default async function TodayPage() {
-  const [t, td, tt, locale, ctx, now] = await Promise.all([
+/** Midnight today in a time zone, as epoch milliseconds. */
+function dayStartIn(timeZone: string, now: number): number {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hourCycle: "h23",
+  }).formatToParts(new Date(now));
+  const n = (k: string) => Number(parts.find((p) => p.type === k)?.value ?? 0);
+  return now - ((n("hour") * 60 + n("minute")) * 60 + n("second")) * 1000;
+}
+
+export default async function TodayPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}) {
+  const [t, td, tt, tb, ta, locale, ctx, now, sp] = await Promise.all([
     getTranslations("admin"),
     getTranslations("admin.today"),
     getTranslations("tours.labels"),
+    getTranslations("admin.booking"),
+    getTranslations("admin.analytics"),
     getLocale(),
     getAdminContext(),
     demoNow(),
+    searchParams,
   ]);
+  // Booking speed (RSOS-111): real only; staging and previews can include labelled demo rows.
+  const includeDemo = ctx.demo && sp.demo === "1";
+  const inView = ctx.markets.filter((m) => ctx.selected.includes(m.slug));
+  const metrics = await getMetricData({
+    markets: inView,
+    services: Object.keys(await getServiceNames()),
+    from: now - 7 * 86_400_000,
+    to: now,
+    includeDemo,
+  });
+  const dayStart = dayStartIn(inView[0]?.timeZone ?? "America/Chicago", now);
   const today = await getToday(ctx, now);
   const stale = { stale: t("dispatch.stale") };
   const age = (since: number) => formatAge(now - since, stale);
@@ -82,6 +115,29 @@ export default async function TodayPage() {
           ))}
         </dl>
       </section>
+
+      <BookingSpeed
+        data={metrics}
+        now={now}
+        dayStart={dayStart}
+        tag={includeDemo ? <Badge tone="outline">{tb("demoTag")}</Badge> : undefined}
+        names={{
+          market: name,
+          source: (s) => (ta.has(`sources.${s}`) ? ta(`sources.${s}` as never) : s),
+        }}
+        toggle={
+          ctx.demo ? (
+            <p className="mb-3">
+              <Link
+                href={includeDemo ? "/" : "/?demo=1"}
+                className="inline-flex min-h-12 items-center rounded-full border px-4 text-sm underline-offset-2 hover:underline"
+              >
+                {includeDemo ? tb("excludeDemo") : tb("includeDemo")}
+              </Link>
+            </p>
+          ) : null
+        }
+      />
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <section

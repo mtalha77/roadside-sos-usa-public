@@ -136,3 +136,32 @@ events from RSOS-107" is limited to the existing conversion events (RSOS-031).
 - Tests: database (`supabase/tests/032_go_live_without_phones.test.sql`: a market with every
   required item and no phone numbers goes live; without the test booking it cannot) and e2e
   (`admin-online-first.spec.ts`).
+
+### RSOS-111: Booking speed and funnel analytics
+
+- **Events recorded server-side** (migration `20261119060000_booking_funnel.sql`, table
+  `funnel_events`): each Get Help screen a visitor session sees, the screen and the last field
+  touched when they leave without sending (a small beacon; only the field's name, never what was
+  typed), and the submit with the seconds since landing. Sessions are a random id in a
+  browser-session cookie set on the first page of the visit (no personal data). One row per
+  session, event and screen, so repeats and reloads never double count. Only analytics staff
+  (owner, ops manager, marketing, read only) can read them.
+- **North-star metrics on Today**: landing to request submitted (target under 60 s) and request
+  submitted to provider booked (target under 5 min), today and the last 7 days, median and 90th
+  percentile, each against its target in text, plus both by market and by source.
+- **Analytics and Test campaign**: the booking funnel (visits → started request → submitted →
+  first quote → booked → completed) with conversion and drop-off per step; Compare quotes vs
+  Instant book; the funnel by market, source, service and device; the calls funnel (calls →
+  answered → qualified → booked → completed; qualified is a conversation of 30 seconds or more, or
+  one that became a request); and where people drop on each Get Help screen with the most common
+  last field.
+- **Real data only**: fictional test numbers and test cleanups are left out everywhere. Demo rows
+  (seeded, always labelled) appear only in the Analytics Demo view and with "Include demo data" on
+  Today, both offered on staging and previews only.
+- **Not done (RSOS-107 blocked)**: matching the ad platforms' conversion events needs RSOS-107's
+  automatic ad sync, which has no specification. The funnel uses the same sources as the existing
+  conversion events (RSOS-031); landing times start with this release, so older requests have no
+  landing time.
+- Tests: unit (`packages/core/test/booking-metrics.test.ts`: percentiles, both timings, groups,
+  every funnel, the mode split, the calls funnel, drop-off with last fields, demo rows excluded),
+  database (`supabase/tests/033_funnel_events.test.sql`) and e2e (`booking-analytics.spec.ts`).

@@ -1,6 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
+import { BookingAnalytics } from "@/components/analytics/booking-analytics";
+import { getAdminContext } from "@/lib/admin";
+import { getMetricData, getServiceNames } from "@/lib/booking-metrics";
 import { loadCampaign } from "@/lib/campaign";
+import { demoNow } from "@/lib/demo-clock";
 
 export const dynamic = "force-dynamic";
 
@@ -14,11 +18,28 @@ const card = "rounded-2xl border bg-card p-4 sm:p-5";
 export default async function CampaignPage({
   searchParams,
 }: {
-  searchParams: Promise<{ days?: string }>;
+  searchParams: Promise<{ days?: string; by?: string }>;
 }) {
   const sp = await searchParams;
   const days = z.coerce.number().int().min(1).max(90).catch(14).parse(sp.days);
-  const [t, rows] = await Promise.all([getTranslations("admin.campaign"), loadCampaign(days)]);
+  const by = z.enum(["market", "source", "service", "device"]).catch("market").parse(sp.by);
+  const [t, ta, rows, ctx, now, serviceNames] = await Promise.all([
+    getTranslations("admin.campaign"),
+    getTranslations("admin.analytics"),
+    loadCampaign(days),
+    getAdminContext(),
+    demoNow(),
+    getServiceNames(),
+  ]);
+  // The booking funnel over the campaign window (RSOS-111): real requests only.
+  const inView = ctx.markets.filter((m) => ctx.selected.includes(m.slug));
+  const metrics = await getMetricData({
+    markets: inView,
+    services: Object.keys(serviceNames),
+    from: now - days * 86_400_000,
+    to: now,
+    includeDemo: false,
+  });
   const usd = (c: number | null) =>
     c === null
       ? "—"
@@ -110,6 +131,16 @@ export default async function CampaignPage({
         </div>
         <p className="mt-3 text-sm text-muted-foreground">{t("note")}</p>
       </section>
+      <BookingAnalytics
+        data={metrics}
+        by={by}
+        byLink={(b) => `/campaign?days=${days}&by=${b}#bb-h`}
+        names={{
+          market: (slug) => inView.find((m) => m.slug === slug)?.name ?? slug,
+          source: (s) => (ta.has(`sources.${s}`) ? ta(`sources.${s}` as never) : s),
+          service: (s) => serviceNames[s] ?? s,
+        }}
+      />
     </main>
   );
 }

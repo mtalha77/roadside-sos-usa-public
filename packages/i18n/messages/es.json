@@ -1549,6 +1549,93 @@
       "errorTitle": "Esta página no cargó",
       "errorBody": "Algo salió mal de nuestro lado. Tus datos están a salvo. Inténtalo de nuevo y, si sigue pasando, avisa al equipo en el canal de operaciones.",
       "retry": "Intentar de nuevo"
+    },
+    "booking": {
+      "sec": "{n} s",
+      "min": "{n} min",
+      "median": "mediana",
+      "p90": "percentil 90: {value}",
+      "count": "{n} solicitudes",
+      "target": "Meta: menos de {value}",
+      "overTarget": "Más lento que la meta ({value})",
+      "underTarget": "Dentro de la meta ({value})",
+      "dropped": "{value} abandonó",
+      "noData": "Todavía no hay solicitudes en este periodo.",
+      "steps": {
+        "visits": "Visitas",
+        "started": "Empezó la solicitud",
+        "submitted": "Enviada",
+        "quoted": "Primera cotización",
+        "booked": "Reservada",
+        "completed": "Completada"
+      },
+      "bookedShare": "Reservadas",
+      "dropTitle": "Dónde abandonan",
+      "dropNote": "Por pantalla de Pedir ayuda: la parte de las sesiones que se fueron sin enviar la solicitud y el último campo que tocaron.",
+      "screen": "Pantalla",
+      "reached": "Llegaron",
+      "leftShare": "Se fueron aquí",
+      "lastField": "Último campo más común",
+      "screens": {
+        "problem": "Qué pasó",
+        "location": "Ubicación",
+        "details": "Tus datos"
+      },
+      "fields": {
+        "service": "Servicio",
+        "address": "Dirección",
+        "destAddress": "Destino del remolque",
+        "destMiles": "Distancia del remolque",
+        "market": "Ciudad",
+        "note": "Nota",
+        "spot": "Lugar seguro",
+        "name": "Nombre",
+        "phone": "Teléfono",
+        "email": "Correo",
+        "make": "Marca del vehículo",
+        "model": "Modelo del vehículo",
+        "color": "Color del vehículo"
+      },
+      "speedTitle": "Rapidez de reserva",
+      "speedNote": "Solo solicitudes reales. La llegada es la primera página de la visita; reservada es cuando se reservó un proveedor.",
+      "landingToSubmit": "De la llegada a la solicitud enviada",
+      "submitToBooked": "De la solicitud enviada al proveedor reservado",
+      "today": "Hoy",
+      "last7": "Últimos 7 días",
+      "byMarket": "Por mercado",
+      "bySource": "Por origen",
+      "group": "Grupo",
+      "modeTitle": "Comparar cotizaciones vs Reserva instantánea",
+      "modes": {
+        "compare": "Comparar cotizaciones",
+        "instant": "Reserva instantánea"
+      },
+      "funnelTitle": "Embudo de reservas",
+      "funnelNote": "Solicitudes por el sitio web: visitas, sesiones de Pedir ayuda y luego el avance de cada solicitud. Conversión y abandono desde el paso anterior.",
+      "byTitle": "Embudo por",
+      "by": {
+        "market": "Mercado",
+        "source": "Origen",
+        "service": "Servicio",
+        "device": "Dispositivo"
+      },
+      "devices": {
+        "mobile": "Teléfono",
+        "desktop": "Computadora",
+        "unknown": "Desconocido"
+      },
+      "callsTitle": "Embudo de llamadas",
+      "callsNote": "Llamadas entrantes. Calificada: una conversación de 30 segundos o más, o una que se convirtió en solicitud.",
+      "callSteps": {
+        "calls": "Llamadas",
+        "answered": "Contestadas",
+        "qualified": "Calificadas",
+        "booked": "Reservadas",
+        "completed": "Completadas"
+      },
+      "includeDemo": "Incluir datos de demostración",
+      "excludeDemo": "Solo datos reales",
+      "demoTag": "Incluye demostración"
     }
   },
   "emails": {

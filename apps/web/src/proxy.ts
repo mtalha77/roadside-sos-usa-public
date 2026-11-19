@@ -1,6 +1,7 @@
 import { buildCsp, createNonce } from "@rsos/config/security";
 import { SOURCE_COOKIE, SOURCE_COOKIE_MAX_AGE, sourceForVisit } from "@rsos/core/adapters";
 import { ATTRIBUTION_COOKIE, encodeAttribution, firstTouch } from "./lib/attribution";
+import { FLOW_COOKIE, newFlowCookie, readFlow } from "./lib/funnel";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -58,11 +59,26 @@ export async function proxy(request: NextRequest) {
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-nonce", nonce);
+  // Booking funnel session (RSOS-111): when the visitor landed and a random id, for this browser
+  // session only. The page sees it on this very request too.
+  const flow =
+    isPage && !readFlow(request.cookies.get(FLOW_COOKIE)?.value) ? newFlowCookie() : null;
+  if (flow) {
+    const jar = request.headers.get("cookie");
+    requestHeaders.set("cookie", `${jar ? `${jar}; ` : ""}${FLOW_COOKIE}=${flow}`);
+  }
   requestHeaders.set("x-pathname", request.nextUrl.pathname + request.nextUrl.search);
   requestHeaders.set("Content-Security-Policy", csp);
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+  if (flow)
+    response.cookies.set(FLOW_COOKIE, flow, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      secure: request.nextUrl.protocol === "https:",
+    });
   // First touch (RSOS-030, 031): on a visitor's first page view, remember for 90 days where they
   // came from (click ids, campaign, landing page, referrer host, market) in a first-party cookie,
   // and count the visit. The site shows that source's phone number; requests carry the attribution.
