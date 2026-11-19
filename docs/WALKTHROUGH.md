@@ -44,6 +44,10 @@ three. The admin and the provider portal sit behind Vercel's login on staging.
    shows how a new teammate is added (on staging the invite link is shown instead of emailed).
 5. Glance at **Markets**, **Pricing** and **Finance** (Business group), then the **System status**
    link.
+6. **Economics model** (Business group): each market's base and strong inputs from the brief and
+   what they mean per month. Change a cost per click and press **Save**: **Analytics** →
+   **Model** shows the new numbers at once. **Analytics** opens on **Real** data; **Demo** and
+   **Model** are separate views, and every card shows the model's number next to the real one.
 
 ## 3. Admin, as a dispatcher (2 minutes)
 
