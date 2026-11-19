@@ -33,6 +33,8 @@ export type OfferView = {
   maxCents: number;
   feeCents: number;
   winningEta: number;
+  /** Instant book (RSOS-109): the customer books the first provider at or below this price. */
+  instantMaxCents: number | null;
 };
 
 type Sent = { priceCents: number; eta: number };
@@ -107,7 +109,11 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
 
   if (!offer) return <p className="text-lg text-muted-foreground">{t("none")}</p>;
   const mine = sent[offer.id];
-  const p = price ?? offer.suggestedCents;
+  const p =
+    price ??
+    (offer.instantMaxCents !== null
+      ? Math.min(offer.suggestedCents, offer.instantMaxCents)
+      : offer.suggestedCents);
   const e = eta ?? nearestChip(offer.driveMinutes);
   const inRange = p >= offer.minCents && p <= offer.maxCents;
   const send = () => {
@@ -119,8 +125,11 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
       /* private mode */
     }
   };
-  const decided = mine && now > offer.pickAt;
-  const won = decided && mine.eta <= offer.winningEta;
+  // Instant book: accepting at or below the customer's price books the job on the spot.
+  const instantWin =
+    Boolean(mine) && offer.instantMaxCents !== null && mine!.priceCents <= offer.instantMaxCents;
+  const decided = instantWin || (mine && now > offer.pickAt);
+  const won = instantWin || (decided && mine!.eta <= offer.winningEta);
 
   return (
     <div className="flex flex-col gap-4">
@@ -194,6 +203,11 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
             <dd className="text-lg font-semibold">{offer.area}</dd>
           </div>
         </dl>
+        {offer.instantMaxCents !== null ? (
+          <p className="rounded-xl border-2 border-primary bg-primary/10 px-3 py-2 font-semibold">
+            {t("instant", { price: money(offer.instantMaxCents) })}
+          </p>
+        ) : null}
         <ul className="flex flex-wrap gap-2">
           {offer.onHighway ? (
             <li className="rounded-full bg-warning-subtle px-3 py-1 text-sm font-medium text-warning-strong">

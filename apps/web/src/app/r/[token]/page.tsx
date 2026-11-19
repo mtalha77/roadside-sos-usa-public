@@ -1,5 +1,11 @@
 import { isDemoMode } from "@rsos/config/demo";
-import { type DemoRequest, demoRequestFromToken, makeDemoRequest, seedFrom } from "@rsos/core/demo";
+import {
+  type DemoRequest,
+  demoRequestFromToken,
+  makeDemoRequest,
+  seedFrom,
+  typicalPriceCents,
+} from "@rsos/core/demo";
 import { Button } from "@rsos/ui/button";
 import { GeistMono } from "geist/font/mono";
 import type { Metadata } from "next";
@@ -83,7 +89,17 @@ export default async function RequestPage({ params }: Params) {
   const market = markets.find((m) => m.slug === marketSlug) ?? null;
   // "Call us" only when phones are enabled (RSOS-100); the provider count only from real data.
   const phone = phonesEnabled() ? (market?.phone ?? null) : null;
-  const stats = marketSlug ? await getMarketStats(marketSlug) : null;
+  const [stats, prices] = marketSlug
+    ? await Promise.all([getMarketStats(marketSlug), getMarketServices(marketSlug)])
+    : [null, []];
+  // Instant book starts at the market's typical price for this service (RSOS-109).
+  const priceRow = prices.find(
+    (p) => p.service_slug === (real?.service_slug ?? simulation?.serviceSlug),
+  );
+  const typicalCents =
+    priceRow?.price_min_cents != null && priceRow.price_max_cents != null
+      ? typicalPriceCents(priceRow.price_min_cents, priceRow.price_max_cents)
+      : null;
   if (!real && !simulation) {
     return (
       <SitePage>
@@ -127,6 +143,7 @@ export default async function RequestPage({ params }: Params) {
             realStatus={real?.status ?? null}
             simulation={simulation}
             supportPhone={phone ? formatPhone(phone) : null}
+            typicalCents={typicalCents}
             reach={
               market && stats?.provider_count
                 ? { count: stats.provider_count, city: market.name }
