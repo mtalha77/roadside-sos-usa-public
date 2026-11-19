@@ -6,15 +6,15 @@
 
 ## Summary
 
-| Ticket                                            | Status    | Pull request                                                         |
-| ------------------------------------------------- | --------- | -------------------------------------------------------------------- |
-| RSOS-100 Emergency-first website home, city pages | Merged    | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184) |
-| RSOS-101 Get Help flow, faster and calmer         | Merged    | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186) |
-| RSOS-102 Roles and permissions in the admin       | Merged    | [#187](https://github.com/mtalha77/roadside-sos-usa-public/pull/187) |
-| RSOS-103 Admin rebuild (Today, navigation, board) | Merged    | [#189](https://github.com/mtalha77/roadside-sos-usa-public/pull/189) |
-| RSOS-104 Provider portal polish                   | Merged    | [#190](https://github.com/mtalha77/roadside-sos-usa-public/pull/190) |
-| RSOS-105 Skippable guided tours                   | Merged    | [#191](https://github.com/mtalha77/roadside-sos-usa-public/pull/191) |
-| RSOS-106 QA pass and walkthrough                  | In review |                                                                      |
+| Ticket                                            | Status | Pull request                                                                                                                               |
+| ------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| RSOS-100 Emergency-first website home, city pages | Merged | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184)                                                                       |
+| RSOS-101 Get Help flow, faster and calmer         | Merged | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186)                                                                       |
+| RSOS-102 Roles and permissions in the admin       | Merged | [#187](https://github.com/mtalha77/roadside-sos-usa-public/pull/187)                                                                       |
+| RSOS-103 Admin rebuild (Today, navigation, board) | Merged | [#189](https://github.com/mtalha77/roadside-sos-usa-public/pull/189)                                                                       |
+| RSOS-104 Provider portal polish                   | Merged | [#190](https://github.com/mtalha77/roadside-sos-usa-public/pull/190)                                                                       |
+| RSOS-105 Skippable guided tours                   | Merged | [#191](https://github.com/mtalha77/roadside-sos-usa-public/pull/191)                                                                       |
+| RSOS-106 QA pass and walkthrough                  | Merged | [#192](https://github.com/mtalha77/roadside-sos-usa-public/pull/192), [#193](https://github.com/mtalha77/roadside-sos-usa-public/pull/193) |
 
 RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at the owner's request ([#188](https://github.com/mtalha77/roadside-sos-usa-public/pull/188), report in `docs/reports/batch-4-6.md`).
 
@@ -267,3 +267,52 @@ RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at t
 - Fixes: Release QA now runs read-only (`E2E_READ_ONLY=1`; the tests that write skip themselves,
   the staging smoke's one "Smoke Test Driver" request is still sent), and the check ignores
   requests closed as "test cleanup".
+
+## End-of-run summary
+
+Every ticket is merged into `staging`; nothing was merged to `main` (Release 1 is still not
+released: production keys, monitoring and the owner super admin are pending).
+
+| Ticket                                                                           | Result                                            | Pull request                                                                                                                               |
+| -------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| RSOS-100 Emergency-first home and city pages                                     | Done; home JavaScript **partial**                 | [#184](https://github.com/mtalha77/roadside-sos-usa-public/pull/184)                                                                       |
+| RSOS-101 Get Help in three screens                                               | Done                                              | [#186](https://github.com/mtalha77/roadside-sos-usa-public/pull/186)                                                                       |
+| RSOS-102 Roles and permissions, Team & roles                                     | Done                                              | [#187](https://github.com/mtalha77/roadside-sos-usa-public/pull/187)                                                                       |
+| RSOS-113 Analytics with correct numbers (owner request, ran between 102 and 103) | Done                                              | [#188](https://github.com/mtalha77/roadside-sos-usa-public/pull/188)                                                                       |
+| RSOS-103 Admin rebuild                                                           | Done; admin JavaScript and data speed **partial** | [#189](https://github.com/mtalha77/roadside-sos-usa-public/pull/189)                                                                       |
+| RSOS-104 Provider portal polish                                                  | Done; portal loading skeleton **partial**         | [#190](https://github.com/mtalha77/roadside-sos-usa-public/pull/190)                                                                       |
+| RSOS-105 Skippable guided tours                                                  | Done                                              | [#191](https://github.com/mtalha77/roadside-sos-usa-public/pull/191)                                                                       |
+| RSOS-106 QA pass and walkthrough                                                 | Done                                              | [#192](https://github.com/mtalha77/roadside-sos-usa-public/pull/192), [#193](https://github.com/mtalha77/roadside-sos-usa-public/pull/193) |
+
+**QA on staging** (Release QA run by hand on `staging`, 2026-11-19): staging smoke 15 passed;
+full regression 372 passed, 42 skipped (tests that write data, read-only on staging), 0 failed, on
+mobile Safari, mobile Chrome and desktop Chrome with axe and console checks; Lighthouse budgets
+passed on the home, city, service, Get Help and landing pages.
+
+**Screenshots**: before and after (375 and 1440 px, light and dark) are on every pull request,
+stored on the `pr-screenshots` branch (`rsos-100` to `rsos-106`, `rsos-113`).
+
+**Measured performance**
+
+- Website home JavaScript (mobile, transferred): 146.9 KB before, about 139 KB after; target
+  120 KB (Next.js itself needs about 137 KB).
+- Phone fold (375 x 667): Tow tile, Get help now and the 911 line all above the fold.
+- Admin (preview, signed in): a menu click shows the page in about 50 ms (target 200 ms); the page
+  with its data is ready in 1.4 to 1.6 s; JavaScript about 208 KB per route (target 200 KB),
+  312 KB on Inbox, 248 KB on Calls.
+
+**For the owner to decide**
+
+1. Home page JavaScript: 120 KB means leaving Next.js for the home page; we stand at about 139 KB.
+2. Admin JavaScript and data speed: accept about 208 KB and 1.4 to 1.6 s with data, or fund a
+   follow-up (lighter Inbox live updates, caching the dashboard queries).
+3. Provider portal loading skeleton: removed because of a render mismatch; fix the mismatch as a
+   follow-up, or keep pages rendering in full.
+4. Failed webhooks are not recorded anywhere yet, so the Today alert for them cannot show
+   anything until error monitoring (Sentry) is connected.
+5. Legal names still say "Driver Terms of Use" until the attorney review.
+6. Economics model funnel rates not in the brief (started 60%, quoted 90%, completed 90%): set
+   real values on the Economics model page.
+7. Clean-up: the old remote branches `rsos-103-admin-rebuild`, `rsos-104-provider-polish` and
+   `rsos-105-guided-tours` (previews only, no pull requests) can be deleted.
+8. RSOS-107 (automatic ad sync), required by batch 4.6, is not written in any batch file.
