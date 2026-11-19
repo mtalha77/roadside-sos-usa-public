@@ -176,7 +176,7 @@ test.describe("service pages", () => {
     for (const c of cities.slice(0, 3)) {
       for (const s of services) {
         await page.goto(url(`${c}/${s}`));
-        notes.add((await page.locator("main h1 + p").textContent()) ?? "");
+        notes.add((await page.locator("main [data-local-note]").textContent()) ?? "");
         const start = page.locator("main [data-flow-service]");
         const market = c.split("/").pop()!;
         await expect(start).toHaveAttribute("data-flow-market", market);

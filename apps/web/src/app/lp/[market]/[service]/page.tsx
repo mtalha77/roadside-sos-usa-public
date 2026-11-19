@@ -2,7 +2,7 @@ import { brand } from "@rsos/config/brand";
 import { DniSwap } from "@/components/site/dni-swap";
 import { formatPriceRange, type Locale } from "@rsos/i18n";
 import { inputClass } from "@rsos/ui/input";
-import { BadgeCheck, Clock, Phone, WalletCards } from "lucide-react";
+import { BadgeCheck, Clock, WalletCards } from "lucide-react";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -90,9 +90,14 @@ export default async function LandingPage({ params, searchParams }: Params) {
         <span className="mr-auto text-lg font-bold">{brand.name}</span>
         <LightThemeToggle label={tc("toggleTheme")} />
         {m.phone ? (
-          <a href={`tel:${m.phone}`} data-dni={m.slug} className={`${ui.button.outline} px-3`}>
-            <Phone aria-hidden="true" className="size-5" />
-            <span className="tabular-nums">{formatPhone(m.phone)}</span>
+          <a
+            href={`tel:${m.phone}`}
+            data-dni={m.slug}
+            className="inline-flex min-h-touch items-center px-1 text-sm text-muted-foreground underline-offset-4 hover:underline"
+          >
+            <span className="tabular-nums" data-dni-text>
+              {formatPhone(m.phone)}
+            </span>
           </a>
         ) : null}
       </header>
@@ -100,17 +105,8 @@ export default async function LandingPage({ params, searchParams }: Params) {
         <h1 className="text-4xl font-semibold tracking-tight text-balance">
           {t(`headlines.${h}`, { service: name, city: m.name })}
         </h1>
-        {m.phone ? (
-          <a
-            href={`tel:${m.phone}`}
-            data-dni={m.slug}
-            className={`${ui.button.primary} min-h-14 w-full text-lg`}
-          >
-            <Phone aria-hidden="true" className="size-6" />
-            {t("callNow", { phone: formatPhone(m.phone) })}
-          </a>
-        ) : null}
         <form
+          id="start"
           method="post"
           action="/api/get-help"
           className="flex flex-col gap-4 rounded-2xl border bg-card p-4"
@@ -182,14 +178,24 @@ export default async function LandingPage({ params, searchParams }: Params) {
           withSchema={false}
         />
       </div>
-      {m.phone ? (
-        <div className="fixed inset-x-0 bottom-0 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-          <a href={`tel:${m.phone}`} data-dni={m.slug} className={`${ui.button.primary} w-full`}>
-            <Phone aria-hidden="true" className="size-5" />
-            {t("callNow", { phone: formatPhone(m.phone) })}
+      {/* Booking first (RSOS-108): the bar starts the request; calling is a small link under it. */}
+      <div className="fixed inset-x-0 bottom-0 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <a href="#start" className={`${ui.button.primary} w-full`}>
+          {t("bookNow")}
+        </a>
+        {m.phone ? (
+          <a
+            href={`tel:${m.phone}`}
+            data-dni={m.slug}
+            className="mt-1 flex min-h-10 items-center justify-center gap-1 text-sm text-muted-foreground underline underline-offset-4"
+          >
+            {t("preferCall")}{" "}
+            <span className="tabular-nums" data-dni-text>
+              {formatPhone(m.phone)}
+            </span>
           </a>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
       <DniSwap />
     </main>
   );

@@ -3,7 +3,6 @@ import { getSiteUrl } from "@rsos/config/site";
 import { formatPriceRange, type Locale } from "@rsos/i18n";
 import { Alert } from "@rsos/ui/alert";
 import { Button } from "@rsos/ui/button";
-import { Phone } from "lucide-react";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -15,6 +14,7 @@ import { serviceName } from "@/components/site/service-label";
 import { ServiceDetails } from "@/components/site/service-details";
 import { SitePage } from "@/components/site/site-page";
 import { cityLabel, formatPhone, marketPath } from "@/lib/market";
+import { phonesEnabled } from "@/lib/phones";
 import {
   getMarketByPath,
   getMarketServiceNote,
@@ -79,7 +79,37 @@ export default async function CityServicePage({ params }: Params) {
         <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
           {t("cityService.title", { service: name, city })}
         </h1>
-        {note ? <p className="max-w-3xl text-lg">{note}</p> : null}
+        {/* Booking first, above the fold (RSOS-108); calling is a small link for those who prefer it. */}
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+          {start ? (
+            <Button asChild size="lg" className="w-full sm:w-auto">
+              <Link
+                href={`/get-help?service=${start}&market=${market.slug}`}
+                data-flow-service={start}
+                data-flow-market={market.slug}
+              >
+                {svc.enabled ? t("nav.getHelp") : t("service.requestTow")}
+              </Link>
+            </Button>
+          ) : null}
+          {market.phone && phonesEnabled() ? (
+            <a
+              href={`tel:${market.phone}`}
+              data-dni={market.slug}
+              className="inline-flex min-h-touch items-center justify-center gap-1 text-sm text-muted-foreground underline underline-offset-4"
+            >
+              {t("nav.preferCall")}{" "}
+              <span className="tabular-nums" data-dni-text>
+                {formatPhone(market.phone)}
+              </span>
+            </a>
+          ) : null}
+        </div>
+        {note ? (
+          <p data-local-note className="max-w-3xl text-lg">
+            {note}
+          </p>
+        ) : null}
         {page ? <p className="max-w-3xl text-muted-foreground">{page.summary}</p> : null}
         {!svc.enabled ? (
           <Alert tone="info" title={t("service.notOffered", { city: market.name })}>
@@ -99,29 +129,6 @@ export default async function CityServicePage({ params }: Params) {
             <span className="text-sm text-muted-foreground">{t("service.priceNote")}</span>
           </p>
         ) : null}
-        <div className="flex flex-wrap gap-3">
-          {start ? (
-            <Button asChild size="lg">
-              <Link
-                href={`/get-help?service=${start}&market=${market.slug}`}
-                data-flow-service={start}
-                data-flow-market={market.slug}
-              >
-                {svc.enabled ? t("nav.getHelp") : t("service.requestTow")}
-              </Link>
-            </Button>
-          ) : null}
-          {market.phone ? (
-            <Button asChild size="lg" variant="outline">
-              <a href={`tel:${market.phone}`} data-dni={market.slug}>
-                <Phone aria-hidden="true" className="size-5" />
-                <span className="tabular-nums">
-                  {t("city.call", { phone: formatPhone(market.phone) })}
-                </span>
-              </a>
-            </Button>
-          ) : null}
-        </div>
       </div>
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4">
         {page ? <ServiceDetails page={page} serviceLabel={name} /> : null}

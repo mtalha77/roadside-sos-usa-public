@@ -20,6 +20,7 @@ import {
   getMarkets,
   getMarketServices,
   getMarketStats,
+  getBookingSpeed,
 } from "@/lib/site-data";
 
 export const dynamic = "force-dynamic";
@@ -31,13 +32,14 @@ async function load(params: Params["params"]) {
   const market = await getMarketByPath(state, city);
   if (!market) return null;
   const locale = await getLocale();
-  const [page, services, stats, markets] = await Promise.all([
+  const [page, services, stats, markets, bookMinutes] = await Promise.all([
     getMarketPage(market.slug, locale),
     getMarketServices(market.slug),
     getMarketStats(market.slug),
     getMarkets(),
+    getBookingSpeed(market.slug),
   ]);
-  return { market, page, services, stats, markets };
+  return { market, page, services, stats, markets, bookMinutes };
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -56,7 +58,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function CityPage({ params }: Params) {
   const data = await load(params);
   if (!data) notFound();
-  const { market, page, services, stats, markets } = data;
+  const { market, page, services, stats, markets, bookMinutes } = data;
   const t = await getTranslations("site");
   const vars = { city: market.name, state: market.state_code };
   const path = marketPath(market);
@@ -78,6 +80,7 @@ export default async function CityPage({ params }: Params) {
         marketSlug={market.slug}
         city={market.name}
         providerCount={stats?.provider_count ?? null}
+        bookMinutes={bookMinutes}
       />
       <div className="mx-auto flex max-w-6xl flex-col gap-14 px-4">
         <Reassurance />

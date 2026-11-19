@@ -54,6 +54,12 @@ export default async function ServicePageRoute({ params }: Params) {
       <Breadcrumbs items={[{ href: `/services/${svc.slug}`, label: name }]} />
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pt-6 pb-8 sm:pt-10">
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{name}</h1>
+        {/* Booking first, above the fold (RSOS-108). */}
+        {offered ? (
+          <Button asChild size="lg" className="w-full sm:w-auto sm:self-start">
+            <Link href={`/get-help?service=${svc.slug}`}>{t("nav.getHelp")}</Link>
+          </Button>
+        ) : null}
         <p className="max-w-3xl text-lg text-muted-foreground">
           {page?.summary ?? serviceName(t, svc, "short")}
         </p>
@@ -68,11 +74,6 @@ export default async function ServicePageRoute({ params }: Params) {
             <br />
             <span className="text-sm text-muted-foreground">{t("service.priceNote")}</span>
           </p>
-        ) : null}
-        {offered ? (
-          <Button asChild size="lg" className="self-start">
-            <Link href={`/get-help?service=${svc.slug}`}>{t("nav.getHelp")}</Link>
-          </Button>
         ) : null}
       </div>
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4">

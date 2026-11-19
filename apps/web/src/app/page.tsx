@@ -15,7 +15,13 @@ import { ProviderBand } from "@/components/site/provider-band";
 import { SitePage } from "@/components/site/site-page";
 import { cityLabel, marketPath } from "@/lib/market";
 import { orderTiles } from "@/lib/tiles";
-import { getMarkets, getMarketServices, getMarketStats, getServices } from "@/lib/site-data";
+import {
+  getBookingSpeed,
+  getMarkets,
+  getMarketServices,
+  getMarketStats,
+  getServices,
+} from "@/lib/site-data";
 import { getVisitorMarket } from "@/lib/visitor";
 
 export const dynamic = "force-dynamic";
@@ -44,9 +50,13 @@ export default async function HomePage() {
     getVisitorMarket(),
   ]);
   const market = detection.kind === "market" ? detection.market : null;
-  const [marketServices, stats] = market
-    ? await Promise.all([getMarketServices(market.slug), getMarketStats(market.slug)])
-    : [[], null];
+  const [marketServices, stats, bookMinutes] = market
+    ? await Promise.all([
+        getMarketServices(market.slug),
+        getMarketStats(market.slug),
+        getBookingSpeed(market.slug),
+      ])
+    : [[], null, null];
   const offered = services.filter((s) => s.market_count > 0);
   const tiles = orderTiles(
     market
@@ -63,6 +73,7 @@ export default async function HomePage() {
         marketSlug={market?.slug ?? null}
         city={market?.name ?? null}
         providerCount={stats?.provider_count ?? null}
+        bookMinutes={bookMinutes}
       />
 
       <div className="mx-auto flex max-w-6xl flex-col gap-16 px-4">

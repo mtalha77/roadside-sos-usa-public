@@ -1,6 +1,6 @@
 import { brand } from "@rsos/config/brand";
 import { Button } from "@rsos/ui/button";
-import { ChevronDown, Menu, Phone } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { cityLabel, formatPhone, marketPath, type SiteMarket } from "@/lib/market";
@@ -67,19 +67,19 @@ export async function SiteHeader({ markets, services, market }: Props) {
           </Link>
         </nav>
         {market && phone ? (
-          <Button asChild variant="outline" className="px-3 sm:px-4">
-            <a
-              href={`tel:${phone}`}
-              data-dni={market.slug}
-              aria-label={t("nav.callMarket", { phone: formatPhone(phone) })}
-            >
-              <Phone aria-hidden="true" className="size-5" />
-              <span className="sm:hidden">{t("nav.call")}</span>
-              <span className="hidden tabular-nums sm:inline" data-dni-text>
-                {formatPhone(phone)}
-              </span>
-            </a>
-          </Button>
+          // Calling is a backup (RSOS-108): a small text link, never a button.
+          <a
+            href={`tel:${phone}`}
+            data-dni={market.slug}
+            aria-label={t("nav.callMarket", { phone: formatPhone(phone) })}
+            className="inline-flex min-h-touch items-center gap-1 px-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            <span className="sm:hidden">{t("nav.call")}</span>
+            <span className="hidden sm:inline">{t("nav.preferCall")}</span>{" "}
+            <span className="hidden tabular-nums sm:inline" data-dni-text>
+              {formatPhone(phone)}
+            </span>
+          </a>
         ) : null}
         <LightThemeToggle label={tc("toggleTheme")} />
         <Button asChild className="hidden sm:inline-flex">

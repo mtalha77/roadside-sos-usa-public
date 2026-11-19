@@ -83,6 +83,20 @@ export const getMarketStats = unstable_cache(
   { revalidate: REVALIDATE, tags: [SITE_TAG] },
 );
 
+/** Real booking speed for the website's promise (RSOS-108): null minutes below 10 bookings. */
+export const getBookingSpeed = unstable_cache(
+  async (slug: string): Promise<number | null> =>
+    (
+      await rpc(
+        z.object({ bookings: z.number(), median_minutes: z.number().nullable() }),
+        "market_booking_speed",
+        { p_market_slug: slug },
+      )
+    )[0]?.median_minutes ?? null,
+  ["market_booking_speed"],
+  { revalidate: REVALIDATE, tags: [SITE_TAG] },
+);
+
 /** Market slug for a point (any published market). Not cached: one call per detection. */
 export async function marketSlugForPoint(lat: number, lng: number): Promise<string | null> {
   const rows = await rpc(z.object({ slug: z.string(), status: z.string() }), "market_for_point", {

@@ -1819,7 +1819,8 @@
       "home": "Home",
       "allServices": "All services",
       "allCities": "All cities",
-      "breadcrumb": "Breadcrumb"
+      "breadcrumb": "Breadcrumb",
+      "preferCall": "Prefer to call?"
     },
     "market": {
       "label": "Your area",
@@ -2034,12 +2035,13 @@
     },
     "hero": {
       "headline": "Stuck on the road? Help is on the way.",
-      "sub": "Tell us where you are. Nearby tow and roadside pros reply with a price and arrival time in about 3 minutes.",
+      "sub": "Book help in under a minute: nearby tow and roadside pros send a price and arrival time in about 3 minutes.",
       "available": "{count, plural, one {# verified provider} other {# verified providers}} near {city}",
       "changeCity": "Change city",
       "tilesTitle": "What happened?",
       "getHelp": "Get help now",
-      "safety": "In danger or on a busy highway? Call 911 first."
+      "safety": "In danger or on a busy highway? Call 911 first.",
+      "bookSpeed": "Typical time to book in {city}: {minutes} min"
     },
     "reassure": {
       "label": "Good to know",
@@ -2921,7 +2923,6 @@
       "local": "Local {city} providers, ready now.",
       "stuck": "Stuck in {city}? Help is on the way."
     },
-    "callNow": "Call now {phone}",
     "startTitle": "Start your request",
     "useLocation": "Use my location",
     "locating": "Finding you…",
@@ -2949,7 +2950,9 @@
         "q": "Do I need a membership?",
         "a": "No. No membership, sign-up or subscription."
       }
-    }
+    },
+    "preferCall": "Prefer to call?",
+    "bookNow": "Book help now"
   },
   "driverAccount": {
     "title": "Your account",

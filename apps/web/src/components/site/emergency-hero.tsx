@@ -18,6 +18,7 @@ export async function EmergencyHero({
   marketSlug,
   city,
   providerCount,
+  bookMinutes = null,
 }: {
   headline: string;
   services: Tile[];
@@ -25,6 +26,8 @@ export async function EmergencyHero({
   city: string | null;
   /** Real active, non-demo providers in the market; null or 0 hides the line. */
   providerCount: number | null;
+  /** Median minutes to book a provider in this market (real bookings only); null hides it. */
+  bookMinutes?: number | null;
 }) {
   const [t, ts] = await Promise.all([getTranslations("home.hero"), getTranslations("site")]);
   const withMarket = (path: string) =>
@@ -48,6 +51,9 @@ export async function EmergencyHero({
             <span aria-hidden="true" className="size-2 rounded-full bg-success" />
             {t("available", { count: providerCount, city })}
           </span>
+          {bookMinutes ? (
+            <span className="tabular-nums">{t("bookSpeed", { city, minutes: bookMinutes })}</span>
+          ) : null}
           <Link href="/#cities-title" className="underline underline-offset-4">
             {t("changeCity")}
           </Link>
