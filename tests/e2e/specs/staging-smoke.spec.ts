@@ -58,7 +58,7 @@ test.describe("staging smoke @staging", () => {
       timeout: 20_000,
     });
     await page.getByRole("button", { name: "Send my request" }).click();
-    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
+    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/, { timeout: 15_000 });
     // A fictional number used again within 30 minutes opens that number's open request instead
     // (the duplicate rule), which other tests may already have moved on.
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(

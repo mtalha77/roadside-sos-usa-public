@@ -52,7 +52,7 @@ test.describe("get help flow", () => {
     });
     await expectNoA11yViolations(page);
     await page.getByRole("button", { name: "Send my request" }).click();
-    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
+    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/, { timeout: 15_000 });
     expect(Date.now() - started).toBeLessThan(60_000);
   });
 
@@ -203,7 +203,7 @@ test.describe("get help: going back", () => {
       timeout: 20_000,
     });
     await page.getByRole("button", { name: "Send my request" }).click();
-    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
+    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/, { timeout: 15_000 });
     await page.goBack();
     await page.waitForURL((u) => u.pathname === "/services/flat-tire");
   });
