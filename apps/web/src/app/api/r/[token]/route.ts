@@ -2,7 +2,7 @@ import { brand } from "@rsos/config/brand";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { cancelRealRequest, getRealRequest } from "@/lib/request-status";
+import { cancelRealRequest, getRealRequest, setBookingMode } from "@/lib/request-status";
 
 type Params = { params: Promise<{ token: string }> };
 
@@ -20,6 +20,11 @@ const Action = z.discriminatedUnion("action", [
     reason: z.enum(["found_help", "too_slow", "too_expensive", "fixed", "other"]),
   }),
   z.object({
+    action: z.literal("booking_mode"),
+    mode: z.enum(["compare", "instant"]),
+    maxCents: z.number().int().min(500).max(1_000_000),
+  }),
+  z.object({
     action: z.literal("report"),
     kind: z.enum(["no_show", "overcharge", "damage", "safety"]),
     details: z.string().max(2000),
@@ -35,6 +40,10 @@ export async function POST(request: NextRequest, { params }: Params) {
   if (!req) return NextResponse.json({ error: "not found" }, { status: 404 });
   if (parsed.data.action === "cancel")
     return NextResponse.json({ ok: await cancelRealRequest(token, parsed.data.reason) });
+  if (parsed.data.action === "booking_mode")
+    return NextResponse.json({
+      ok: await setBookingMode(token, parsed.data.mode, parsed.data.maxCents),
+    });
   const supabase = createPublicSupabase();
   const { error } = await (
     supabase!.rpc as unknown as (f: string, a: object) => PromiseLike<{ error: unknown }>

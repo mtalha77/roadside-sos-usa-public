@@ -34,8 +34,9 @@ test.describe("provider incoming request", () => {
       .getByRole("button", { name: /^Send quote/ })
       .first()
       .click();
+    // An Instant book offer (RSOS-109) books a quote at or below its price at once.
     await expect(
-      page.getByText(/Quote sent: .*Waiting for the customer to choose\./),
+      page.getByText(/Quote sent: .*Waiting for the customer to choose\.|You were picked!/).first(),
     ).toBeVisible();
   });
 });

@@ -53,6 +53,7 @@ export default async function OfferPage() {
       maxCents: range?.price_max_cents ?? 20000,
       feeCents: o.feeCents,
       winningEta: fastest?.etaMinutes ?? 30,
+      instantMaxCents: r.instant?.maxCents ?? null,
     };
   });
   return (

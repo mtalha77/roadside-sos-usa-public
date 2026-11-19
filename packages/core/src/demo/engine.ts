@@ -85,6 +85,8 @@ export type DemoRequest = {
   safety: { safe: boolean; onHighway: boolean; passengers: number };
   quotes: DemoQuote[];
   outcome: "completed" | "cancelled" | "expired";
+  /** Instant book (RSOS-109): the customer's ceiling, or null when they compare quotes. */
+  instant: { maxCents: number } | null;
 };
 
 /** Scenario timing, in seconds after the request was sent (compressed so screens feel alive). */
@@ -187,6 +189,12 @@ export function makeDemoRequest(
     safety: { safe: !onHighway || r() < 0.7, onHighway, passengers: Math.floor(r() * 3) },
     quotes,
     outcome: roll < 0.08 ? "expired" : roll < 0.16 ? "cancelled" : "completed",
+    // About a third of demo customers book the fastest provider automatically, at the market's
+    // typical price (a separate generator, so every other detail stays the same as before).
+    instant:
+      rng((seed ^ 0x5bd1e995) >>> 0)() < 0.33
+        ? { maxCents: round5((range.min + range.max) / 2) }
+        : null,
   };
 }
 
@@ -260,6 +268,11 @@ export function demoState(
         { stage: "cancelled", atSec: T.cancelAt },
       ],
     };
+  }
+  // Instant book: the first quote at or below the ceiling books itself (else the usual pick).
+  if (!pick && !opts.driverControlled && req.instant) {
+    const auto = instantPick(req.quotes, req.instant.maxCents, 0, T.expireAt);
+    if (auto) pick = auto;
   }
   const pickAt = pick ? pick.atSec : opts.driverControlled ? Infinity : T.pickAt;
   if (t < pickAt)
@@ -390,4 +403,21 @@ export function seedFrom(text: string): number {
   let h = 0x811c9dc5;
   for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193) >>> 0;
   return h % 1_000_000_007;
+}
+
+/**
+ * Instant book (RSOS-109): the first quote (in arrival order) at or below the ceiling, booked the
+ * moment it arrives, or the moment the customer switched to Instant book if it was already in.
+ * Quotes after the window never book. Null when nothing qualifies.
+ */
+export function instantPick(
+  quotes: readonly DemoQuote[],
+  maxCents: number,
+  fromSec = 0,
+  windowSec: number = TIMING.expireAt,
+): DemoPick | null {
+  const first = [...quotes]
+    .filter((q) => q.priceCents <= maxCents && q.arrivesAtSec <= windowSec)
+    .sort((a, b) => a.arrivesAtSec - b.arrivesAtSec)[0];
+  return first ? { quoteId: first.id, atSec: Math.max(first.arrivesAtSec, fromSec) } : null;
 }

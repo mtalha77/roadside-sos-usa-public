@@ -2,6 +2,7 @@
 
 import { demoMaskedNumber } from "@rsos/config/demo-fixtures";
 import {
+  type BookingMode,
   DRIVER_DEMO_TIMING,
   DRIVER_STAGES,
   type DemoPick,
@@ -10,7 +11,9 @@ import {
   type DemoStage,
   demoState,
   driverStageStarts,
+  instantOutcome,
   milesBetween,
+  QUOTE_WINDOW_SEC,
 } from "@rsos/core/demo";
 import { Alert } from "@rsos/ui/alert";
 import { Badge } from "@rsos/ui/badge";
@@ -24,6 +27,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import Link from "next/link";
 import { Skeleton } from "@rsos/ui/skeleton";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { BookingChoice } from "./booking-choice";
 import { CompareView } from "./compare-view";
 import { ProviderProfilePanel } from "./provider-profile";
 import { DemoBar, StageStepper } from "./stage-stepper";
@@ -93,9 +97,13 @@ export type RequestLiveProps = {
   supportPhone: string | null;
   /** Real active, non-demo providers serving the market (null without real data). */
   reach?: { count: number; city: string } | null;
+  /** The market's typical price for this service: Instant book's starting ceiling (RSOS-109). */
+  typicalCents?: number | null;
 };
 
 const storageKey = (token: string) => `rsos_pick_${token}`;
+const modeKey = (token: string) => `rsos_mode_${token}`;
+type ModeState = { mode: BookingMode; maxCents: number; fromSec: number };
 const noop = () => () => {};
 
 /** Live view only in the browser (it depends on the current second); the server sends a skeleton. */
@@ -131,6 +139,7 @@ function RequestLiveView({
   simulation,
   supportPhone,
   reach,
+  typicalCents,
 }: RequestLiveProps) {
   const t = useTranslations("track");
   const f = useFormatter();
@@ -141,7 +150,12 @@ function RequestLiveView({
   const [pick, setPick] = useState<DemoPick | null>(null);
   const [localEnd, setLocalEnd] = useState<"cancelled" | null>(null);
   const [sort, setSort] = useState<"fastest" | "cheapest">("fastest");
-  const [autoPick, setAutoPick] = useState(false);
+  const [booking, setBooking] = useState<ModeState>({
+    mode: "compare",
+    maxCents: typicalCents ?? 10_000,
+    fromSec: 0,
+  });
+  const [fallback, setFallback] = useState<"compare" | "manual" | null>(null);
   const [confirming, setConfirming] = useState<DemoQuote | null>(null);
   const [profile, setProfile] = useState<DemoQuote | null>(null);
   const [compare, setCompare] = useState<string[]>([]);
@@ -164,6 +178,14 @@ function RequestLiveView({
       } catch {
         /* ignore */
       }
+    }
+    try {
+      const m = localStorage.getItem(modeKey(token));
+      const saved = m ? (JSON.parse(m) as ModeState) : null;
+      if (saved && (saved.mode === "compare" || saved.mode === "instant"))
+        queueMicrotask(() => setBooking(saved));
+    } catch {
+      /* ignore */
     }
     if (isDemo) return;
     const tick = setInterval(() => setNow(Date.now()), 1000);
@@ -195,6 +217,7 @@ function RequestLiveView({
       : sim
         ? sim.stage
         : (realStage ?? "searching"));
+  const active = !["completed", "cancelled", "expired"].includes(stage);
   const quotes = useMemo(() => {
     const list = [...(sim?.quotes ?? [])];
     return list.sort((a, b) =>
@@ -247,9 +270,40 @@ function RequestLiveView({
     if (isDemo) clock.jumpTo(p.atSec);
   };
 
+  // Instant book (RSOS-109): book the first quote at or below the ceiling as soon as it is in;
+  // after the quote window, fall back to comparing what arrived, then to our dispatchers.
+  const chooseMode = (mode: BookingMode, maxCents: number) => {
+    const next = { mode, maxCents, fromSec: elapsedNow() };
+    setBooking(next);
+    setFallback(null);
+    try {
+      localStorage.setItem(modeKey(token), JSON.stringify(next));
+    } catch {
+      /* private mode */
+    }
+    if (realStatus !== null)
+      void fetch(`/api/r/${token}`, {
+        method: "POST",
+        body: JSON.stringify({ action: "booking_mode", mode, maxCents }),
+      }).catch(() => null);
+  };
   useEffect(() => {
-    if (autoPick && stage === "quoting" && quotes[0] && !pick)
-      queueMicrotask(() => choose(quotes[0]!));
+    if (booking.mode !== "instant" || pick || !simulation || !active) return;
+    const out = instantOutcome(
+      simulation.quotes,
+      booking.maxCents,
+      elapsedNow(),
+      booking.fromSec,
+      QUOTE_WINDOW_SEC,
+    );
+    if (out.kind === "booked") {
+      queueMicrotask(() => {
+        savePick(out.pick);
+        setNotice(t("instant.booked", { price: money(booking.maxCents) }));
+      });
+    } else if (out.kind !== "waiting" && fallback !== out.kind) {
+      queueMicrotask(() => setFallback(out.kind === "compare" ? "compare" : "manual"));
+    }
   });
 
   // Demo controls: every move is a jump on the demo clock.
@@ -347,9 +401,38 @@ function RequestLiveView({
     setCompare((c) => (c.includes(id) ? c.filter((x) => x !== id) : [...c, id].slice(-3)));
 
   const picked = sim?.picked ?? null;
-  const active = !["completed", "cancelled", "expired"].includes(stage);
   const showStepper = stageIndex >= 0 && (active || stage === "completed");
   const card = "rounded-2xl border bg-card p-5";
+  const choice = (
+    <div className="flex flex-col gap-2">
+      <BookingChoice
+        mode={booking.mode}
+        maxCents={booking.maxCents}
+        onChange={chooseMode}
+        money={money}
+        labels={{
+          title: t("instant.title"),
+          compare: t("instant.compare"),
+          compareHint: t("instant.compareHint"),
+          instant: t("instant.instant"),
+          instantHint: t("instant.instantHint"),
+          max: t("instant.max"),
+          apply: t("instant.apply"),
+          on: t.raw("instant.on") as string,
+        }}
+      />
+      {fallback ? (
+        <Alert
+          tone="info"
+          title={
+            fallback === "compare"
+              ? t("instant.fellBack", { price: money(booking.maxCents) })
+              : t("instant.manual")
+          }
+        />
+      ) : null}
+    </div>
+  );
   const skipNext =
     isDemo && canNext ? (
       <Button type="button" variant="ghost" size="sm" className="self-start" onClick={next}>
@@ -413,6 +496,7 @@ function RequestLiveView({
             />
           )}
           <p>{t("searching.body")}</p>
+          {pick ? null : <div className="w-full text-left">{choice}</div>}
           {reach ? (
             <p className="font-medium">
               {t("searching.reach", { count: reach.count, city: reach.city })}
@@ -460,16 +544,7 @@ function RequestLiveView({
               ))}
             </div>
           </div>
-          <label className="flex min-h-touch items-center gap-3 font-medium">
-            <input
-              type="checkbox"
-              role="switch"
-              checked={autoPick}
-              onChange={(e) => setAutoPick(e.target.checked)}
-              className="size-5 accent-[var(--primary)]"
-            />
-            {t("quotes.autoPick")}
-          </label>
+          {pick ? null : choice}
           <p className="text-sm text-muted-foreground">{t("quotes.tapHint")}</p>
           <ul className="flex flex-col gap-4">
             {quotes.map((q) => (

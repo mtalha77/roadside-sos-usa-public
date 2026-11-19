@@ -56,3 +56,19 @@ export async function cancelRealRequest(token: string, reason: string): Promise<
   });
   return data === true;
 }
+
+/** Instant book (RSOS-109): the customer's choice, saved with the status link (before booking). */
+export async function setBookingMode(
+  token: string,
+  mode: "compare" | "instant",
+  maxCents: number,
+): Promise<boolean> {
+  const supabase = createPublicSupabase();
+  if (!supabase) return false;
+  const { data } = await (supabase.rpc as unknown as Rpc)("set_booking_mode", {
+    p_token: token,
+    p_mode: mode,
+    p_max_cents: mode === "instant" ? maxCents : null,
+  });
+  return data === true;
+}
