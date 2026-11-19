@@ -122,7 +122,8 @@ export default async function RequestPage({ params }: Params) {
     ? serviceName(ts, { slug: real.service_slug, name: real.service_name })
     : serviceName(ts, { slug: simulation!.serviceSlug, name: simulation!.serviceSlug });
   return (
-    <SitePage marketSlug={marketSlug}>
+    // The request is sent: no "Get help now" bar on its status page.
+    <SitePage marketSlug={marketSlug} bar={false}>
       <NextIntlClientProvider
         messages={{
           track: (messages as Record<string, unknown>).track as Record<string, unknown>,
