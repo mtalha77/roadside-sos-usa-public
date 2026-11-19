@@ -254,3 +254,16 @@ RSOS-113 (analytics with correct numbers) ran between RSOS-102 and RSOS-103 at t
   - Vercel's preview feedback toolbar (`vercel.live`, previews only) is ignored by the console
     check (its connection resets failed three runs);
   - the restack scripts format merged message files (unformatted JSON would fail the lint job).
+
+### RSOS-106b: Release QA follow-up (staging test data)
+
+- Running the Release QA workflow by hand on `staging` (2026-11-19 04:16 UTC) ran the regression
+  suite in write mode against the shared staging database: it created 8 test requests, 3 provider
+  applications and 3 contact messages (fictional 555-01xx numbers, `@example.test` emails), and the
+  next staging deploy's "no fake data" check failed.
+- Cleaned up the same day, logged in the audit log (`test_data.removed`, `request.test_cleanup`):
+  the applications and messages were removed; the requests were closed as cancelled with reason
+  "test cleanup" (request history is append-only, so they are not deleted).
+- Fixes: Release QA now runs read-only (`E2E_READ_ONLY=1`; the tests that write skip themselves,
+  the staging smoke's one "Smoke Test Driver" request is still sent), and the check ignores
+  requests closed as "test cleanup".

@@ -12,8 +12,11 @@ select is((select slug from public.market_for_point(29.4241, -98.4936)), 'san-an
 
 -- The staging smoke test (staging-smoke.yml, demo mode only) submits one request per deploy as
 -- "Smoke Test Driver" with a fictional number: expected on staging, impossible in production.
-select is_empty($$ select 1 from public.requests where driver_name ilike 'dev seed%'
-  or (driver_phone ~ '^\+1[0-9]{3}55501[0-9]{2}$' and driver_name <> 'Smoke Test Driver') $$, 'no fake requests');
+-- Test requests that reached staging by mistake are closed (cancelled, "test cleanup", logged)
+-- rather than deleted, because request history is append-only; closed ones do not count.
+select is_empty($$ select 1 from public.requests where (driver_name ilike 'dev seed%'
+  or (driver_phone ~ '^\+1[0-9]{3}55501[0-9]{2}$' and driver_name <> 'Smoke Test Driver'))
+  and coalesce(end_reason, '') <> 'test cleanup' $$, 'no fake requests');
 select is_empty($$ select 1 from public.provider_applications where company_name ilike 'dev seed%' or email ilike '%@example.test' $$, 'no fake provider applications');
 select is_empty($$ select 1 from public.contact_messages where name ilike 'dev seed%' or email ilike '%@example.test' $$, 'no fake contact messages');
 select is_empty($$ select 1 from public.waitlist where email ilike '%@example.test' or source = 'dev-seed' $$, 'no fake waitlist entries');
