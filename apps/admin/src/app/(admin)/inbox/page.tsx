@@ -56,7 +56,7 @@ export default async function InboxPage({
         </div>
       </div>
       {selected ? (
-        <RequestPanel data={selected} userId={ctx.userId} />
+        <RequestPanel data={selected} userId={ctx.userId} role={ctx.role} />
       ) : (
         <p className="hidden rounded-2xl border border-dashed p-6 text-muted-foreground lg:block">
           {t("pick")}

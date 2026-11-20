@@ -1979,6 +1979,43 @@
       "kindIp": "IP",
       "kindDevice": "Dispositivo",
       "remove": "Quitar"
+    },
+    "flags": {
+      "title": "Marcas",
+      "customerTitle": "Marcas sobre este cliente",
+      "providerTitle": "Marcas de clientes",
+      "openCount": "{count, plural, =0 {Ninguna abierta} one {# abierta} other {# abiertas}}",
+      "none": "Sin marcas.",
+      "urgent": "Urgente",
+      "side": {
+        "customer": "Del cliente",
+        "provider": "De un proveedor"
+      },
+      "reasons": {
+        "customer": {
+          "no_show": "El proveedor no llegó",
+          "price_changed": "El precio cambió",
+          "poor_service": "Mal servicio",
+          "safety": "Problema de seguridad",
+          "other": "Otro"
+        },
+        "provider": {
+          "fake": "Falsa o broma",
+          "wrong_location": "Ubicación equivocada",
+          "unreachable": "Cliente no contactable",
+          "unsafe": "Insegura",
+          "other": "Otro"
+        }
+      },
+      "status": {
+        "open": "Abierta",
+        "resolved": "Resuelta"
+      },
+      "provider": "Proveedor: {name}",
+      "resolution": "Resuelta: {note}",
+      "resolutionLabel": "¿Qué hiciste? (opcional)",
+      "resolve": "Resolver",
+      "inbox": "{count, plural, one {# marca} other {# marcas}}"
     }
   },
   "emails": {
@@ -3549,14 +3586,15 @@
     "report": {
       "open": "Reportar un problema",
       "title": "Reportar un problema",
-      "kinds": {
+      "note": "¿Algo más? (opcional)",
+      "pick": "¿Qué salió mal? Toca una opción para enviar.",
+      "reasons": {
         "no_show": "El proveedor no llegó",
-        "overcharge": "Me cobraron más de lo cotizado",
-        "damage": "Dañaron mi vehículo",
-        "safety": "Me sentí inseguro"
+        "price_changed": "El precio cambió",
+        "poor_service": "Mal servicio",
+        "safety": "Tengo un problema de seguridad",
+        "other": "Otra cosa"
       },
-      "details": "¿Qué pasó?",
-      "send": "Enviar reporte",
       "sent": "Gracias. Nuestro equipo te contactará."
     },
     "review": {
@@ -4283,6 +4321,22 @@
       "errorTitle": "Esta página no cargó",
       "errorBody": "Algo salió mal de nuestro lado. Tus trabajos y tu saldo están a salvo. Inténtalo de nuevo o llama a soporte para proveedores si sigue pasando.",
       "retry": "Intentar de nuevo"
+    },
+    "flag": {
+      "open": "Marcar esta solicitud",
+      "title": "Marcar esta solicitud",
+      "note": "Nota para nuestro equipo (opcional)",
+      "pick": "Toca un motivo para enviar.",
+      "reasons": {
+        "fake": "Falsa o broma",
+        "wrong_location": "Ubicación equivocada",
+        "unreachable": "No se puede contactar al cliente",
+        "unsafe": "Insegura",
+        "other": "Otra cosa"
+      },
+      "sent": "Marca enviada. Nuestro equipo la revisará.",
+      "failed": "No pudimos enviar la marca. Inténtalo de nuevo.",
+      "cancel": "Cancelar"
     }
   },
   "voice": {

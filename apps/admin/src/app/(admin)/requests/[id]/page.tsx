@@ -6,9 +6,11 @@ import { LiteMap } from "@rsos/ui/lite-map";
 import { ProviderLogo } from "@rsos/ui/provider-logo";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { FlagList } from "@/components/flags/flag-list";
 import { RequestActions } from "@/components/requests/request-actions";
 import { getAdminContext } from "@/lib/admin";
 import { demoNow } from "@/lib/demo-clock";
+import { getProfileFlags, getRequestFlags } from "@/lib/flags";
 import { getRequestDetail } from "@/lib/requests";
 
 export const dynamic = "force-dynamic";
@@ -17,8 +19,15 @@ const card = "rounded-2xl border bg-card p-4 sm:p-5";
 
 async function load(id: string) {
   const [ctx, now] = await Promise.all([getAdminContext(), demoNow()]);
-  return { ctx, r: await getRequestDetail(id, now, ctx.demo) };
+  const r = await getRequestDetail(id, now, ctx.demo);
+  // Flags (owner decision 3): on this request, and what providers reported about this customer.
+  const [flags, customerFlags] =
+    r && !r.demo
+      ? await Promise.all([getRequestFlags(r.id), getProfileFlags({ phone: r.phone })])
+      : [[], []];
+  return { ctx, r, flags, customerFlags };
 }
+const FLAG_RESOLVERS = ["super_admin", "ops_manager", "dispatcher", "support"];
 
 /**
  * Request detail (RSOS-073): driver inputs, map, quotes with times, the chosen provider, full
@@ -27,8 +36,9 @@ async function load(id: string) {
  */
 export default async function RequestDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [t, ts, locale, { r, ctx }] = await Promise.all([
+  const [t, tf, ts, locale, { r, ctx, flags, customerFlags }] = await Promise.all([
     getTranslations("admin.requests"),
+    getTranslations("admin.flags"),
     getTranslations("site.services"),
     getLocale(),
     load(decodeURIComponent(id)),
@@ -124,6 +134,24 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
           </section>
         </div>
         <div className="flex flex-col gap-4">
+          {!r.demo ? (
+            <>
+              <FlagList
+                flags={flags}
+                back={`/requests/${r.id}`}
+                title={tf("title")}
+                canResolve={FLAG_RESOLVERS.includes(ctx.role)}
+              />
+              <FlagList
+                hid="customer-flags-h"
+                flags={customerFlags}
+                back={`/requests/${r.id}`}
+                title={tf("customerTitle")}
+                showCode
+                canResolve={false}
+              />
+            </>
+          ) : null}
           <section className={card} aria-labelledby="tl-h">
             <h2 id="tl-h" className="mb-3 font-semibold">
               {t("timeline")}

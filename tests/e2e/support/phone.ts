@@ -1,9 +1,71 @@
 /**
- * A fictional US mobile number (555-0100 to 555-0199) in one of ten area codes: 900 numbers. The
- * request duplicate rule reopens a number's open request from the last 30 minutes, so tests that
- * file requests on the shared preview database need a wide pool (90 numbers collided often).
+ * A fictional US mobile number (555-0100 to 555-0199) in one of 60 area codes: 6,000 numbers. The
+ * request duplicate rule reopens a number's open request from the last 30 minutes, and several
+ * pull requests' test runs file requests on the shared preview database at once: 90 and then 900
+ * numbers still collided.
  */
-const AREAS = ["210", "512", "713", "702", "602", "407", "305", "214", "615", "919"];
+const AREAS = [
+  "201",
+  "202",
+  "203",
+  "205",
+  "206",
+  "207",
+  "208",
+  "209",
+  "210",
+  "212",
+  "213",
+  "214",
+  "215",
+  "216",
+  "217",
+  "218",
+  "219",
+  "224",
+  "225",
+  "228",
+  "229",
+  "231",
+  "234",
+  "239",
+  "240",
+  "248",
+  "251",
+  "252",
+  "253",
+  "254",
+  "256",
+  "260",
+  "262",
+  "267",
+  "269",
+  "270",
+  "276",
+  "281",
+  "301",
+  "302",
+  "303",
+  "304",
+  "305",
+  "307",
+  "308",
+  "309",
+  "310",
+  "312",
+  "313",
+  "314",
+  "315",
+  "316",
+  "317",
+  "318",
+  "319",
+  "320",
+  "321",
+  "323",
+  "325",
+  "330",
+];
 export function fakeMobile(): string {
   const area = AREAS[Math.floor(Math.random() * AREAS.length)];
   return `(${area}) 555-01${String(Math.floor(Math.random() * 90) + 10)}`;

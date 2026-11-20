@@ -1966,6 +1966,82 @@ export type Database = {
           },
         ]
       }
+      request_flags: {
+        Row: {
+          created_at: string
+          id: string
+          is_test: boolean
+          market_id: string
+          note: string | null
+          priority: string
+          provider_id: string | null
+          raised_by: string | null
+          reason: string
+          request_id: string
+          resolution: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          side: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_test?: boolean
+          market_id: string
+          note?: string | null
+          priority: string
+          provider_id?: string | null
+          raised_by?: string | null
+          reason: string
+          request_id: string
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          side: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_test?: boolean
+          market_id?: string
+          note?: string | null
+          priority?: string
+          provider_id?: string | null
+          raised_by?: string | null
+          reason?: string
+          request_id?: string
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          side?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_flags_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_flags_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_flags_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       requests: {
         Row: {
           is_test: boolean

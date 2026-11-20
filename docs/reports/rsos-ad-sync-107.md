@@ -4,9 +4,12 @@ Specification: `docs/batches/rsos-ad-sync-107.md` (the owner sent it on 2026-11-
 batch 4.6 prerequisite). Owner's instruction with it: all ad platforms stay off until keys exist;
 everything tested with fakes.
 
-| Ticket                     | Status    | Pull request |
-| -------------------------- | --------- | ------------ |
-| RSOS-107 Automatic ad sync | In review |              |
+| Work                                      | Status    | Pull request |
+| ----------------------------------------- | --------- | ------------ |
+| RSOS-107 Automatic ad sync                | Merged    | #204         |
+| Owner decision 2: test traffic marker     | Merged    | #205         |
+| Owner decision 3: request flags           | In review | #206         |
+| Owner decision 4: Mobile Safari CI timing | Merged    | #202         |
 
 ## RSOS-107: Automatic ad sync
 
@@ -88,3 +91,74 @@ the dashboard and its CSV, cron jobs refuse calls without the secret).
 - Tests: unit (`apps/web/test/test-traffic.test.ts`), database
   (`supabase/tests/037_test_traffic.test.sql`: tagging, no conversions, no visit count, the list
   and who changes it) and e2e (`test-traffic.spec.ts`).
+
+## Owner decision 3: flagging, both sides
+
+- **Customer**: "Report a problem" is always on the tracking page, during the job and after
+  completion. Sending takes one tap on a reason, with an optional note: provider didn't arrive,
+  price changed, poor service, safety concern, or other. On real requests it calls
+  `flag_request_as_customer` with the tracking link's token. This replaces the earlier report
+  form, which sent a contact message.
+- **Provider**: "Flag this request" on the incoming-request screen, the job detail and the active
+  job. It works the same way: one tap on a reason, optional note. Reasons: fake or prank, wrong
+  location, customer unreachable, unsafe, other. On a real request (one the company was offered
+  in dispatch or assigned) it calls `flag_request_as_provider`. The provider portal still runs on
+  the demo stream, so demo requests only show the confirmation.
+- **Database** (migration `20261120050000_request_flags.sql`): table `request_flags` with side,
+  reason, note, priority, status and resolution, plus the provider involved. Safety and unsafe are
+  **urgent** and mark the request urgent. Other rules:
+  - at most three flags per side per request;
+  - every flag and resolution goes on the request timeline, and resolutions also go in the audit
+    log;
+  - flags from test traffic are tagged `is_test`.
+  - RLS: staff read flags in their markets; a provider reads only the flags its company raised;
+    visitors read nothing.
+- **Admin**:
+  - The Inbox lists flagged requests even after completion. Urgent flags sort to the top, with a
+    flag count badge, and the list reloads live.
+  - The request panel and the request page show the flags with a resolve form (dispatchers,
+    operations, support).
+  - The request page also shows "Flags about this customer": provider flags on any request from
+    the same phone number. There is no customer profile page yet, so this is the customer's
+    profile view for now.
+  - The provider page shows "Flags from customers".
+- **RSOS-117** (fraud signals and reliability scores) has no specification yet.
+  `request_flag_counts(provider, phone)` returns the per-reason counts it will read (test traffic
+  excluded).
+- Tests: database (`supabase/tests/038_request_flags.test.sql`: reasons per side, urgent safety,
+  who may flag, who reads, resolve) and e2e (`request-flags.spec.ts`: the customer's one-tap
+  report, a provider flag, and a real request's safety report shown urgent and flagged in the
+  Inbox, then resolved by a dispatcher).
+
+## Owner decision 4: Mobile Safari CI timing
+
+Investigated within the time box (#202). The full-demo test stalled on WebKit on CI at "On the
+way". The CI trace showed the page had stopped painting and its main thread was starved. On those
+stages the tracking map drew a second, endlessly looping SMIL truck next to the live one, and
+WebKit without a GPU fell behind repainting it. The clock and the booking logic were correct.
+
+- **Fix:** the map shows only the live truck. That also removes a visible defect, since customers
+  saw two trucks.
+- **Result:** the test's CI-only `fixme` was removed, and the test runs and passes on WebKit in CI.
+  No quarantine was needed.
+
+## CI reliability fixes made on the way
+
+These were found while getting this run's PRs green. Each one failed every PR, not only the one it
+surfaced on.
+
+- **`SUPABASE_ACCESS_TOKEN` expired:** it was a 7-day token. The owner renewed it with 90 days on
+  2026-11-20, and a reminder is set for 2027-02-11.
+- **Market page:** it listed every tracking number (311 on rsos-dev from test runs), which went past
+  WebKit's screenshot limit. It now shows 12 and links to Settings.
+- **Credits page on phones:** hidden table labels and the duplicate-review buttons overflowed at
+  375 px.
+- **Fictional numbers:** tests that file requests drew from only 90 numbers, so the 30-minute
+  duplicate rule reopened another run's request. A shared `fakeMobile()` now draws from
+  6,000 (900 still collided with several PRs testing at once).
+- **Incoming-request test:** it now waits out the demo stream's quiet spells (up to about 50 s with
+  no open request).
+- **Database tests:** they now insert complete requests (service, market service, pickup), as the
+  `requests_complete_unless_intake` check requires.
+- **e2e job time limit:** raised from 30 to 50 minutes. The runner's package mirror served the
+  browsers' system libraries at about 123 kB/s twice in one day.

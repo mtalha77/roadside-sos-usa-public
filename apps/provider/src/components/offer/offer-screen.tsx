@@ -7,6 +7,7 @@ import { CurrencyInput } from "@rsos/ui/currency-input";
 import { LiteMap } from "@rsos/ui/lite-map";
 import { PartyPopper } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
+import { FlagRequest } from "@/components/flags/flag-request";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 const noop = () => () => {};
@@ -351,6 +352,7 @@ export function OfferScreen({ offers, now: serverNow }: { offers: OfferView[]; n
                 </Button>
               </form>
             </div>
+            <FlagRequest key={`flag-${offer.id}`} requestId={offer.id} className="self-start" />
           </>
         )}
       </section>

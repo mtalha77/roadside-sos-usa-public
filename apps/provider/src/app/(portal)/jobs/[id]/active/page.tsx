@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { FlagRequest } from "@/components/flags/flag-request";
 import { JobFlow } from "@/components/jobs/job-flow";
 import { PageHead, pageMain } from "@/components/shell/page-head";
 import { getPortalContext, getPortalData } from "@/lib/portal";
@@ -28,6 +29,7 @@ export default async function ActiveJobPage({ params }: { params: Promise<{ id: 
         address={job.address}
         team={data.team.map((m) => m.name)}
       />
+      <FlagRequest requestId={job.id} className="mt-4 self-start" />
     </main>
   );
 }
