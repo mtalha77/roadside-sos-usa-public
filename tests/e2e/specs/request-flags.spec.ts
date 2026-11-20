@@ -80,9 +80,14 @@ test.describe("request flags", () => {
     await site.getByLabel("Destination address or shop name").fill("400 Oak St");
     await site.getByRole("button", { name: "Continue" }).click();
     await site.getByLabel("Your name").fill(name);
+    // A fictional 555-01xx number in one of several area codes (the duplicate rule would reopen
+    // another run's request for a number used within 30 minutes).
+    const areas = ["210", "512", "713", "702", "602", "407", "305", "214", "615", "919"];
     await site
       .getByLabel("Mobile number")
-      .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
+      .fill(
+        `(${areas[Math.floor(Math.random() * areas.length)]}) 555-01${String(Math.floor(Math.random() * 90) + 10)}`,
+      );
     await site.getByLabel("Make").fill("Ford");
     await expect(site.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,
