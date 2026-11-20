@@ -1,6 +1,7 @@
 import { answerScreenOne } from "../support/get-help";
 import { signInAsDemo } from "../support/demo";
 import { appUrls, expect, readOnly, test } from "../support/fixtures";
+import { fakeMobile } from "../support/phone";
 
 // RSOS-031 acceptance on previews: a visit with a (fake) gclid produces a request that carries it
 // into the Google Ads offline conversion file; no Google Tag Manager before consent.
@@ -30,14 +31,9 @@ test.describe("ad tracking and attribution", () => {
     await web.getByLabel("City").selectOption({ index: 1 });
     await web.getByRole("button", { name: "Continue" }).click();
     await web.getByLabel("Your name").fill("Ad Test Customer");
-    // A fictional 555-01xx number in one of several area codes: with only 90 numbers, another run
-    // within 30 minutes often had the same one, and the duplicate rule then opened that run's
-    // request (without this gclid) instead of creating a new one.
-    const areas = ["210", "512", "713", "702", "602", "407", "305", "214", "615", "919"];
-    const area = areas[Math.floor(Math.random() * areas.length)];
-    await web
-      .getByLabel("Mobile number")
-      .fill(`(${area}) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
+    // A wide pool of fictional numbers (see fakeMobile): another run's open request for the same
+    // number would be reopened by the duplicate rule, without this gclid.
+    await web.getByLabel("Mobile number").fill(fakeMobile());
     await web.getByLabel("Make").fill("Toyota");
     await expect(web.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,

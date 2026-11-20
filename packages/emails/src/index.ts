@@ -8,3 +8,4 @@ export * from "./templates/dispatch-alert";
 export * from "./templates/driver-update";
 export * from "./templates/operations";
 export * from "./templates/credit-expiry";
+export * from "./templates/ads-notice";

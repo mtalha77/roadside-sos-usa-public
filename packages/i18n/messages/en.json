@@ -1863,6 +1863,99 @@
       "requiredNo": "Optional",
       "order": "Order (lower first)",
       "save": "Save"
+    },
+    "ads": {
+      "back": "Back to Marketing",
+      "title": "Ad connections",
+      "lead": "Spend import, conversion upload and auto-pause for each ad platform. A platform works only when its keys are set in the server environment and its switch is on here; keys are never shown.",
+      "saved": "Saved.",
+      "forbidden": "You can't change this. The owner and marketing do.",
+      "invalid": "Check the form: something is missing or out of range.",
+      "test": {
+        "button": "Test connection",
+        "ok": "Connection works.",
+        "failed": "Connection failed: see the error on the card.",
+        "missing": "Not connected: its keys are not set on the server."
+      },
+      "platformsTitle": "Platforms",
+      "platforms": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads"
+      },
+      "status": {
+        "not_connected": "Not connected",
+        "off": "Off",
+        "connected": "Connected",
+        "error": "Error"
+      },
+      "account": "Account",
+      "lastSync": "Last sync",
+      "lastError": "Last error",
+      "never": "Never",
+      "needKeys": "Add its keys in Vercel (see docs/runbooks/ads-connections.md), then switch it on here.",
+      "turnOn": "Switch on",
+      "turnOff": "Switch off",
+      "codesTitle": "Market codes for campaign names",
+      "codesNote": "Campaigns named \"CODE | Service | Type\" (for example the market code, then Tow, then Search) are mapped to the market and service automatically.",
+      "save": "Save",
+      "campaignsTitle": "Campaigns",
+      "campaignsNote": "Imported campaigns and their market. {unmapped, plural, =0 {All are mapped.} one {# campaign has no market: map it by hand.} other {# campaigns have no market: map them by hand.}}",
+      "noCampaigns": "No campaigns imported yet.",
+      "market": "Market",
+      "service": "Service",
+      "anyService": "Any service",
+      "unmapped": "Not mapped",
+      "byHand": "mapped by hand",
+      "pausedByAuto": "paused by auto-pause",
+      "pauseTitle": "Auto-pause",
+      "pauseNote": "Every 5 minutes: when fewer providers than the minimum are available for a service during ad hours, after the grace period, that market's campaigns for the service pause; they resume when providers are back. Each change is logged and emailed to the owner. Off by default.",
+      "on": "On",
+      "off": "Off",
+      "pauseOn": "Auto-pause on",
+      "minProviders": "Minimum providers",
+      "grace": "Grace period (minutes)",
+      "startHour": "Ad hours from",
+      "endHour": "Ad hours until",
+      "saveRule": "Save rule",
+      "pauseLog": "Recent pauses and resumes",
+      "paused": "paused",
+      "resumed": "resumed",
+      "dashTitle": "Ads by market and channel",
+      "dashNote": "Spend from the platforms (the manual form only fills days with no import). Fees earned are our fees on assigned jobs; return on ad spend is fees earned divided by spend.",
+      "connections": "Ad connections",
+      "csv": "Download CSV",
+      "cols": {
+        "market": "Market",
+        "channel": "Channel",
+        "trend": "Spend trend",
+        "spend": "Spend",
+        "clicks": "Clicks",
+        "calls": "Calls",
+        "qualified": "Qualified calls",
+        "requests": "Requests",
+        "assigned": "Assigned",
+        "completed": "Completed",
+        "perRequest": "Cost per request",
+        "perCompleted": "Cost per completed job",
+        "fees": "Fees earned",
+        "roas": "Return on ad spend"
+      },
+      "noData": "No ad data in this range.",
+      "channels": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads",
+        "other": "Other"
+      },
+      "health": {
+        "title": "Ad sync health",
+        "note": "Last successful run per job and failures in a row; the owner is emailed after 3 failures.",
+        "job": "Job",
+        "lastOk": "Last success",
+        "failures": "Failures in a row",
+        "none": "No sync has run yet."
+      }
     }
   },
   "emails": {
@@ -1960,6 +2053,20 @@
       "intro": "Hello {company},",
       "body": "{amount} of bonus credit in your wallet expires on {date}. It pays your job fees automatically, so going online and winning jobs before then uses it.",
       "note": "Bonus credit is not cash and cannot be withdrawn."
+    },
+    "ads": {
+      "failingTitle": "Ad sync failing: {job}",
+      "failingBody": "3 failed runs in a row. Last error: {error}",
+      "pausedTitle": "Ads paused: {service} in {market}",
+      "resumedTitle": "Ads resumed: {service} in {market}",
+      "pausedBody": "No provider available for {service} for {minutes} minutes during ad hours: {count} campaign(s) paused.",
+      "resumedBody": "Providers are available again for {service}: {count} campaign(s) resumed.",
+      "dailyTitle": "Ads yesterday ({day})",
+      "dailyRow": "{market}: spend {spend}, requests {requests}, completed jobs {completed}, fees {fees}",
+      "unusualSpend": "{market}: spend with zero requests",
+      "unusualCost": "{market}: cost per completed job above {max}",
+      "unusualSync": "Sync failing: {job}",
+      "nothingUnusual": "Nothing unusual."
     }
   },
   "auth": {

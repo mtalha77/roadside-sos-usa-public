@@ -7,11 +7,12 @@ import {
   expectNoHorizontalScroll,
   test,
 } from "../support/fixtures";
+import { fakeMobile } from "../support/phone";
 
 // RSOS-021, three screens since RSOS-101: what happened, where, who and which vehicle.
 const web = appUrls.web;
 const url = (p: string) => new URL(p, web).toString();
-const fakePhone = () => `(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`;
+const fakePhone = fakeMobile;
 
 test.describe("get help flow", () => {
   test.skip(!web, "No website URL");

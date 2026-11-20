@@ -1,5 +1,6 @@
 import { answerScreenOne } from "../support/get-help";
 import { appUrls, expect, test } from "../support/fixtures";
+import { fakeMobile } from "../support/phone";
 
 // RSOS-099 staging smoke (runs after every staging deploy, and in Release QA): all three health
 // checks are green on the expected commit, and the Get Help flow reaches the quotes screen in demo
@@ -50,9 +51,7 @@ test.describe("staging smoke @staging", () => {
     ).toBeVisible();
     // The name the staging "no fake data" check expects; a fictional 555-01xx number.
     await page.getByLabel("Your name").fill("Smoke Test Driver");
-    await page
-      .getByLabel("Mobile number")
-      .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
+    await page.getByLabel("Mobile number").fill(fakeMobile());
     await page.getByLabel("Make").fill("Toyota");
     await expect(page.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,

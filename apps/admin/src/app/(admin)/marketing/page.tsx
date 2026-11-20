@@ -1,6 +1,7 @@
 import { inputClass } from "@rsos/ui/input";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
+import { AdsDashboard } from "@/components/marketing/ads-dashboard";
 import { SpendForm } from "@/components/marketing/spend-form";
 import { getAdminContext } from "@/lib/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -75,6 +76,13 @@ export default async function MarketingPage({
           perCompleted: per(total.spend, total.completed),
         })}
       </p>
+      {/* RSOS-107: imported spend, conversions and return on ad spend per market and channel. */}
+      <AdsDashboard
+        from={from}
+        to={to}
+        marketIds={ctx.markets.filter((m) => ctx.selected.includes(m.slug)).map((m) => m.id)}
+        marketName={(id) => ctx.markets.find((m) => m.id === id)?.name ?? id}
+      />
       <section className={card} aria-labelledby="mk-h">
         <h2 id="mk-h" className="mb-3 font-semibold">
           {t("bySource")}
