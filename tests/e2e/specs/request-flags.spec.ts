@@ -42,9 +42,15 @@ test.describe("request flags", () => {
 
   test("a provider flags an incoming request", async ({ page }) => {
     test.skip(!appUrls.provider, "No provider URL");
-    test.setTimeout(90_000);
+    test.setTimeout(150_000);
     await signInAsDemo(page, appUrls.provider!, "Provider owner");
-    await page.goto(new URL("/offer", appUrls.provider).toString());
+    // The demo stream has short quiet spells (up to about 50 s): reload until a request is in.
+    await expect(async () => {
+      await page.goto(new URL("/offer", appUrls.provider).toString());
+      await expect(page.getByRole("button", { name: "Flag this request" }).first()).toBeVisible({
+        timeout: 5_000,
+      });
+    }).toPass({ timeout: 70_000, intervals: [5_000] });
     await page.getByRole("button", { name: "Flag this request" }).first().click();
     const box = page.getByRole("region", { name: "Flag this request" });
     for (const reason of [
