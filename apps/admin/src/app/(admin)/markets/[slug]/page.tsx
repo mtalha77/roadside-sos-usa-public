@@ -3,10 +3,14 @@ import { Badge } from "@rsos/ui/badge";
 import { BoundaryPreview, type BoundaryFeature } from "@rsos/ui/boundary-preview";
 import { CircleCheck, Circle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarketStatusForm } from "@/components/markets/market-status-form";
 import { getAdminContext } from "@/lib/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
+
+/** The market page shows a short list; Settings > Phone numbers has them all. */
+const PHONES_SHOWN = 12;
 
 export const dynamic = "force-dynamic";
 const card = "rounded-2xl border bg-card p-4 sm:p-5";
@@ -26,7 +30,9 @@ async function load(slug: string) {
       supabase
         .from("market_phone_numbers")
         .select("phone_number, purpose, is_active")
-        .eq("market_id", market.id),
+        .eq("market_id", market.id)
+        .order("is_active", { ascending: false })
+        .order("purpose"),
       (supabase.rpc as unknown as (f: string) => PromiseLike<{ data: unknown }>)(
         "admin_market_shapes",
       ),
@@ -148,7 +154,7 @@ export default async function MarketDetailPage({ params }: { params: Promise<{ s
               <p className="text-sm text-muted-foreground">{t("noPhones")}</p>
             ) : (
               <ul className="text-sm">
-                {phones.map((p) => (
+                {phones.slice(0, PHONES_SHOWN).map((p) => (
                   <li key={p.phone_number} className="flex justify-between gap-2 py-1">
                     <span>{p.purpose}</span>
                     <span className="tabular-nums">{p.phone_number}</span>
@@ -156,6 +162,15 @@ export default async function MarketDetailPage({ params }: { params: Promise<{ s
                 ))}
               </ul>
             )}
+            {/* The full list (and editing) is in Settings: tests add numbers on every run. */}
+            {phones.length > PHONES_SHOWN ? (
+              <Link
+                href="/settings?tab=phones"
+                className="mt-2 inline-flex min-h-touch items-center text-sm underline underline-offset-2"
+              >
+                {t("allPhones", { count: phones.length })}
+              </Link>
+            ) : null}
           </section>
           <section className={card} aria-labelledby="c-h">
             <h2 id="c-h" className="mb-3 font-semibold">

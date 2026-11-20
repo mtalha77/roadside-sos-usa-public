@@ -661,7 +661,7 @@ export default async function CreditsPage({
                   {data.name(f.provider_id)} · {date.format(Date.parse(f.created_at))}
                 </span>
                 {canEdit ? (
-                  <span className="flex gap-2">
+                  <span className="flex max-w-full flex-wrap gap-2">
                     <form action={reviewFlagAction}>
                       <input type="hidden" name="flag" value={f.id} />
                       <input type="hidden" name="grant" value="yes" />

@@ -15,11 +15,21 @@ test.describe("provider incoming request", () => {
   test.skip(!base, "No provider URL");
 
   test("one tap sends the pre-filled quote", async ({ page }, info) => {
-    test.setTimeout(90_000);
+    test.setTimeout(150_000);
     await signInAsDemo(page, base!, "Provider owner");
-    await page.goto(new URL("/offer", base).toString());
-    await expect(page.getByRole("heading", { name: "Incoming requests", level: 1 })).toBeVisible();
-    await expect(page.getByText("Exact address hidden until you're picked.").first()).toBeVisible();
+    // The demo stream has short quiet spells (up to about 50 s with no open request): reload until
+    // one is in.
+    await expect(async () => {
+      await page.goto(new URL("/offer", base).toString());
+      await expect(
+        page.getByRole("heading", { name: "Incoming requests", level: 1 }),
+      ).toBeVisible();
+      await expect(page.getByText("Exact address hidden until you're picked.").first()).toBeVisible(
+        {
+          timeout: 5_000,
+        },
+      );
+    }).toPass({ timeout: 70_000, intervals: [5_000] });
     await expectNoA11yViolations(page);
     await expectNoHorizontalScroll(page);
     await page.screenshot({ path: info.outputPath("provider-offer.png"), fullPage: true });
