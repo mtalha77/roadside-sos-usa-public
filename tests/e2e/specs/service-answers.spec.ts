@@ -1,6 +1,7 @@
 import { signInAsDemo } from "../support/demo";
 import { appUrls, expect, readOnly, test } from "../support/fixtures";
 import { answerScreenOne, tap } from "../support/get-help";
+import { fakeMobile } from "../support/phone";
 
 // RSOS-116: a tow request's answers reach the admin request panel as short tags and in full.
 const web = appUrls.web;
@@ -22,9 +23,7 @@ test("tow answers appear in the admin request panel", async ({ page, browser }) 
   await site.getByLabel("Destination address or shop name").fill("400 Oak St");
   await site.getByRole("button", { name: "Continue" }).click();
   await site.getByLabel("Your name").fill(name);
-  await site
-    .getByLabel("Mobile number")
-    .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
+  await site.getByLabel("Mobile number").fill(fakeMobile());
   await site.getByLabel("Make").fill("Ford");
   await expect(site.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
     timeout: 20_000,
