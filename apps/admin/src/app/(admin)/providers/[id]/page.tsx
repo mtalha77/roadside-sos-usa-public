@@ -1,3 +1,6 @@
+import { Alert } from "@rsos/ui/alert";
+import { Button } from "@rsos/ui/button";
+import { inputClass } from "@rsos/ui/input";
 import { demoPortal } from "@rsos/core/demo";
 import { formatCurrency, type Locale } from "@rsos/i18n";
 import { Badge } from "@rsos/ui/badge";
@@ -5,10 +8,12 @@ import { LiteMap } from "@rsos/ui/lite-map";
 import { ProviderLogo } from "@rsos/ui/provider-logo";
 import { StatCard } from "@rsos/ui/stat-card";
 import { getLocale, getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProviderActions } from "@/components/providers/provider-actions";
 import { getAdminContext } from "@/lib/admin";
 import { demoNow } from "@/lib/demo-clock";
+import { setProviderStatusAction } from "@/lib/provider-status-actions";
 import { demoDocuments, demoProviderFromId } from "@/lib/providers";
 import { getServerSupabase } from "@/lib/supabase/server";
 
@@ -20,26 +25,50 @@ async function load(id: string) {
   const demo = ctx.demo ? demoProviderFromId(id) : null;
   if (demo) {
     const portal = demoPortal(now, { marketSlug: demo.marketSlug, providerSlug: demo.slug });
-    return { now, kind: "demo" as const, demo, portal, real: null };
+    return { now, kind: "demo" as const, demo, portal, real: null, ledger: [], flagged: false };
   }
   if (!/^[0-9a-f-]{36}$/.test(id)) return null;
   const supabase = await getServerSupabase();
-  const { data } = await supabase
-    .from("providers")
-    .select("id, name, status, status_reason")
-    .eq("id", id)
-    .maybeSingle();
-  return data ? { now, kind: "real" as const, demo: null, portal: null, real: data } : null;
+  const [{ data }, { data: ledger }, { data: flags }] = await Promise.all([
+    supabase.from("providers").select("id, name, status, status_reason").eq("id", id).maybeSingle(),
+    // RSOS-115: the provider's wallet timeline (money staff only, by RLS).
+    supabase
+      .from("wallet_ledger")
+      .select("id, created_at, kind, balance, amount_cents, note")
+      .eq("provider_id", id)
+      .order("created_at", { ascending: false })
+      .limit(30),
+    supabase.from("provider_review_flags").select("id").eq("provider_id", id).eq("status", "open"),
+  ]);
+  return data
+    ? {
+        now,
+        kind: "real" as const,
+        demo: null,
+        portal: null,
+        real: data,
+        ledger: ledger ?? [],
+        flagged: (flags ?? []).length > 0,
+      }
+    : null;
 }
 
 /**
  * Provider detail (RSOS-075): company, team, trucks, area, documents, performance, wallet,
  * reviews, notes and activity, with actions (approve, pause, suspend, credit, message, view as).
  */
-export default async function ProviderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProviderDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | undefined>>;
+}) {
   const { id } = await params;
-  const [t, locale, data] = await Promise.all([
+  const sp = await searchParams;
+  const [t, tw, locale, data] = await Promise.all([
     getTranslations("admin.providers"),
+    getTranslations("admin.credits.timeline"),
     getLocale(),
     load(decodeURIComponent(id)),
   ]);
@@ -80,6 +109,71 @@ export default async function ProviderDetailPage({ params }: { params: Promise<{
           <p className="text-muted-foreground">{data.real.status_reason}</p>
         ) : null}
         <p className="text-sm text-muted-foreground">{t("realPending")}</p>
+        {sp.done ? (
+          <Alert
+            tone="success"
+            title={tw(`status.done.${sp.done === "active" ? "active" : "paused"}`)}
+          />
+        ) : null}
+        {sp.error ? <Alert tone="critical" title={tw("status.error")} /> : null}
+        {data.real && data.real.status !== "active" ? (
+          <form action={setProviderStatusAction}>
+            <input type="hidden" name="provider" value={data.real.id} />
+            <input type="hidden" name="status" value="active" />
+            <Button type="submit">{tw("status.approve")}</Button>
+            <p className="mt-1 text-sm text-muted-foreground">{tw("status.approveHint")}</p>
+          </form>
+        ) : data.real ? (
+          <form action={setProviderStatusAction} className="flex flex-wrap items-end gap-2">
+            <input type="hidden" name="provider" value={data.real.id} />
+            <input type="hidden" name="status" value="paused" />
+            <label className="flex flex-col gap-1.5 text-sm font-medium">
+              {tw("status.reason")}
+              <input name="reason" required minLength={3} maxLength={300} className={inputClass} />
+            </label>
+            <Button type="submit" variant="outline">
+              {tw("status.pause")}
+            </Button>
+          </form>
+        ) : null}
+        <section className={card} aria-labelledby="wallet-h">
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+            <h2 id="wallet-h" className="font-semibold">
+              {tw("ledger")}
+            </h2>
+            <Link
+              href="/credits#grant"
+              className="inline-flex min-h-12 items-center text-sm underline"
+            >
+              {tw("grantLink")}
+            </Link>
+          </div>
+          {data.flagged ? (
+            <Alert tone="warning" title={tw("flagged")}>
+              <Link href="/credits#flags" className="underline">
+                {tw("review")}
+              </Link>
+            </Alert>
+          ) : null}
+          {data.ledger.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{tw("noLines")}</p>
+          ) : (
+            <ul className="divide-y text-sm">
+              {data.ledger.map((l) => (
+                <li key={l.id} className="flex flex-wrap justify-between gap-2 py-2">
+                  <span>
+                    {tw(`kinds.${l.kind}` as never)}
+                    {l.note ? ` · ${l.note}` : ""}
+                  </span>
+                  <span className="tabular-nums text-muted-foreground">
+                    {l.amount_cents > 0 ? "+" : ""}
+                    {money(l.amount_cents)} · {date.format(Date.parse(l.created_at))}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
         {actions}
       </main>
     );

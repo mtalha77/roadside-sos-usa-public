@@ -96,6 +96,107 @@ export async function getWalletBalance(providerId: string | null): Promise<numbe
   return data?.balance_cents ?? null;
 }
 
+const Summary = z.object({
+  paid_cents: z.number(),
+  bonus_cents: z.number(),
+  next_expiry: z.string().nullable(),
+  next_expiry_cents: z.number().nullable(),
+});
+export type WalletLine = {
+  id: string;
+  at: number;
+  kind: string;
+  balance: "paid" | "bonus";
+  amountCents: number;
+  requestId: string | null;
+};
+
+/**
+ * Both balances (RSOS-115): paid balance and bonus credit (spent first, expires), the ledger and
+ * the latest welcome notice. Owners and managers only (RLS and the summary function check it).
+ * In demo mode a company with no grants shows a labelled demo grant so the screen can be seen.
+ */
+export async function getWallet(providerId: string | null, demo: boolean, now: number) {
+  const empty = {
+    paidCents: 0,
+    bonusCents: 0,
+    nextExpiry: null as { at: number; cents: number } | null,
+  };
+  if (!providerId) return { ...empty, lines: [] as WalletLine[], welcome: null, demoCredit: false };
+  const supabase = await getServerSupabase();
+  const [summary, ledger, notice] = await Promise.all([
+    (supabase.rpc as unknown as (f: string, a: object) => PromiseLike<{ data: unknown }>)(
+      "wallet_summary",
+      {
+        p_provider_id: providerId,
+      },
+    ),
+    supabase
+      .from("wallet_ledger")
+      .select("id, created_at, kind, balance, amount_cents, request_id")
+      .eq("provider_id", providerId)
+      .order("created_at", { ascending: false })
+      .limit(100),
+    supabase
+      .from("provider_notices")
+      .select("kind, data, created_at")
+      .eq("provider_id", providerId)
+      .eq("kind", "bonus_welcome")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+  const row = z
+    .array(Summary)
+    .catch([])
+    .parse(summary.data ?? [])[0];
+  const lines: WalletLine[] = (ledger.data ?? []).map((l) => ({
+    id: String(l.id),
+    at: Date.parse(l.created_at),
+    kind: l.kind,
+    balance: l.balance === "bonus" ? "bonus" : "paid",
+    amountCents: l.amount_cents,
+    requestId: l.request_id,
+  }));
+  const welcome = z
+    .object({ amount_cents: z.number(), expires_at: z.string() })
+    .safeParse(notice.data?.data);
+  if (demo && !lines.some((l) => l.balance === "bonus")) {
+    const at = now - 3 * 86_400_000;
+    return {
+      paidCents: row?.paid_cents ?? 0,
+      bonusCents: 5000,
+      nextExpiry: { at: at + 60 * 86_400_000, cents: 5000 },
+      lines: [
+        {
+          id: "demo-bonus",
+          at,
+          kind: "bonus_grant",
+          balance: "bonus" as const,
+          amountCents: 5000,
+          requestId: null,
+        },
+        ...lines,
+      ],
+      welcome: null,
+      demoCredit: true,
+    };
+  }
+  return {
+    paidCents: row?.paid_cents ?? 0,
+    bonusCents: row?.bonus_cents ?? 0,
+    nextExpiry:
+      row?.next_expiry && row.next_expiry_cents
+        ? { at: Date.parse(row.next_expiry), cents: row.next_expiry_cents }
+        : null,
+    lines,
+    welcome: welcome.success
+      ? { cents: welcome.data.amount_cents, expiresAt: Date.parse(welcome.data.expires_at) }
+      : null,
+    demoCredit: false,
+  };
+}
+
 /** The company's own prices per service (its price table), in cents; empty when it has none. */
 export async function getPriceTable(providerId: string | null): Promise<Record<string, number>> {
   if (!providerId) return {};

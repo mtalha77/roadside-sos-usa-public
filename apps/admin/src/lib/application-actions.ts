@@ -29,6 +29,11 @@ export async function approveApplicationAction(id: string): Promise<"ok" | "forb
     .select("contact_name, company_name, email")
     .maybeSingle();
   if (error || !data) return "error";
+  // RSOS-115: the approved application becomes a real provider (onboarding until approved).
+  await (supabase.rpc as unknown as (f: string, x: object) => PromiseLike<unknown>)(
+    "create_provider_from_application",
+    { p_application_id: parsed.data },
+  );
   await chooseEmailSender()
     .send({
       to: data.email,

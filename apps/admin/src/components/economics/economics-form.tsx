@@ -28,12 +28,18 @@ export function EconomicsForm({
     {},
   );
   const p = (v: number | undefined) => (v === undefined ? "" : String(Math.round(v * 10000) / 100));
-  const field = (name: string, label: string, value: string, unit: string) => (
+  const field = (name: string, label: string, value: string, unit: string, required = true) => (
     <label className="flex flex-col gap-1 text-sm font-medium">
       <span>
         {label} <span className="font-normal text-muted-foreground">({unit})</span>
       </span>
-      <input name={name} defaultValue={value} inputMode="decimal" required className={input} />
+      <input
+        name={name}
+        defaultValue={value}
+        inputMode="decimal"
+        required={required}
+        className={input}
+      />
     </label>
   );
   return (
@@ -54,6 +60,21 @@ export function EconomicsForm({
           labels.usdMonth!,
         )}
         {field("fixedCosts", labels.fixed!, String(inputs?.fixedCosts ?? ""), labels.usdMonth!)}
+        {/* RSOS-115: optional (empty means no signup bonus in the model). */}
+        {field(
+          "signupBonus",
+          labels.signupBonus!,
+          String(inputs?.signupBonus ?? ""),
+          labels.usd!,
+          false,
+        )}
+        {field(
+          "newProviders",
+          labels.newProviders!,
+          String(inputs?.newProvidersPerMonth ?? ""),
+          labels.perMonth!,
+          false,
+        )}
       </div>
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-sm font-semibold">{labels.mixAndFees}</legend>

@@ -7,3 +7,4 @@ export * from "./templates/ops-alert";
 export * from "./templates/dispatch-alert";
 export * from "./templates/driver-update";
 export * from "./templates/operations";
+export * from "./templates/credit-expiry";

@@ -18,11 +18,19 @@ select is((select phone from public.list_site_markets() where slug = 'houston'),
 select is((select phone from public.list_site_markets() where slug = 'las-vegas'), null::text, 'no number until the owner adds one');
 select is((select count(*)::int from public.list_public_services() where market_count = 3), 5, 'five services are offered in all three test markets');
 select is((select market_count from public.list_public_services() where slug = 'winch-out'), 0, 'a service disabled everywhere shows as not available yet');
-select is((select provider_count from public.market_public_stats('houston')), 0, 'live proof counts only real providers');
+reset role;
+-- rsos-dev keeps real test providers from e2e runs (RSOS-115 approves some): compare with them.
+select set_config('test.real_providers', (select count(*)::text from public.providers p
+  where p.status = 'active' and not p.is_demo
+    and (select id from public.markets where slug = 'houston') = any (p.market_ids)), true);
+set local role anon;
+select is((select provider_count from public.market_public_stats('houston')), current_setting('test.real_providers')::int,
+  'live proof counts only real providers');
 reset role;
 insert into public.providers (name, status, market_ids, is_demo) select 'Stats Test (demo)', 'active', array_agg(id), true from public.markets where slug = 'houston';
 set local role anon;
-select is((select provider_count from public.market_public_stats('houston')), 0, 'demo companies never count as real providers');
+select is((select provider_count from public.market_public_stats('houston')), current_setting('test.real_providers')::int,
+  'demo companies never count as real providers');
 select is((select avg_eta_minutes from public.market_public_stats('houston')), null::int, 'no average ETA without real completed jobs');
 select is_empty($$ select * from public.market_public_stats('phoenix') $$, 'no stats for unpublished markets');
 

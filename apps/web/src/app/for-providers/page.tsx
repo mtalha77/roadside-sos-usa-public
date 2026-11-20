@@ -159,6 +159,12 @@ export default async function ForProvidersPage() {
             <p className="text-sm text-muted-foreground">{t("plans.note")}</p>
           </section>
         ) : null}
+        <section aria-labelledby="fp-credit" className="flex flex-col gap-2">
+          <h2 id="fp-credit" className="text-2xl font-semibold">
+            {t("credit.title")}
+          </h2>
+          <p className="max-w-3xl text-muted-foreground">{t("credit.body")}</p>
+        </section>
         <section aria-labelledby="fp-req">
           <h2 id="fp-req" className="mb-4 text-3xl font-semibold">
             {t("requirements.title")}
