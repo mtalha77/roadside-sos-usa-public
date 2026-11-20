@@ -15,8 +15,11 @@ set constraints all immediate;
 
 -- A request from test traffic (the website sends x-rsos-test: 1).
 select set_config('request.headers', '{"x-rsos-test":"1"}', true);
-insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone)
-values ('00000000-0000-4000-8000-0000000118c1', 'R-TSTA', (select id from public.markets where slug = 'houston'), 0, 'submitted', 'web', 'Test', '+12105550145');
+insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone, service_id, market_service_id, pickup_point, pickup_address)
+select '00000000-0000-4000-8000-0000000118c1', 'R-TSTA', ms.market_id, 0, 'submitted', 'web', 'Test', '+12105550145', ms.service_id, ms.id,
+  extensions.st_setsrid(extensions.st_makepoint(-95.37, 29.76), 4326)::extensions.geography, 'Test address'
+from public.market_services ms join public.markets m on m.id = ms.market_id join public.services s on s.id = ms.service_id
+where m.slug = 'houston' and s.slug = 'flat-tire';
 select ok((select is_test from public.requests where id = '00000000-0000-4000-8000-0000000118c1'), 'a test request is tagged');
 select is((select count(*)::int from public.conversion_events where request_id = '00000000-0000-4000-8000-0000000118c1'), 0,
   'test traffic creates no conversion events (nothing reaches an ad platform)');
@@ -29,8 +32,11 @@ select ok((select is_test from public.funnel_events where session_id = 'test-ses
 
 -- A normal request is not.
 select set_config('request.headers', '{}', true);
-insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone)
-values ('00000000-0000-4000-8000-0000000118c2', 'R-TSTB', (select id from public.markets where slug = 'houston'), 0, 'submitted', 'web', 'Real', '+12105550146');
+insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone, service_id, market_service_id, pickup_point, pickup_address)
+select '00000000-0000-4000-8000-0000000118c2', 'R-TSTB', ms.market_id, 0, 'submitted', 'web', 'Real', '+12105550146', ms.service_id, ms.id,
+  extensions.st_setsrid(extensions.st_makepoint(-95.37, 29.76), 4326)::extensions.geography, 'Test address'
+from public.market_services ms join public.markets m on m.id = ms.market_id join public.services s on s.id = ms.service_id
+where m.slug = 'houston' and s.slug = 'flat-tire';
 select ok(not (select is_test from public.requests where id = '00000000-0000-4000-8000-0000000118c2'), 'other requests are not tagged');
 
 -- The test list.
