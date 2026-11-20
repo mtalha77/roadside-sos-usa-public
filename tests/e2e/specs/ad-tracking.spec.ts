@@ -30,9 +30,14 @@ test.describe("ad tracking and attribution", () => {
     await web.getByLabel("City").selectOption({ index: 1 });
     await web.getByRole("button", { name: "Continue" }).click();
     await web.getByLabel("Your name").fill("Ad Test Customer");
+    // A fictional 555-01xx number in one of several area codes: with only 90 numbers, another run
+    // within 30 minutes often had the same one, and the duplicate rule then opened that run's
+    // request (without this gclid) instead of creating a new one.
+    const areas = ["210", "512", "713", "702", "602", "407", "305", "214", "615", "919"];
+    const area = areas[Math.floor(Math.random() * areas.length)];
     await web
       .getByLabel("Mobile number")
-      .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
+      .fill(`(${area}) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
     await web.getByLabel("Make").fill("Toyota");
     await web.getByRole("radio", { name: "Off the road, in a safe place" }).check();
     await expect(web.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
