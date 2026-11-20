@@ -695,7 +695,7 @@ export default async function CreditsPage({
             tabIndex={0}
             role="region"
             aria-label={t("recent.title")}
-            className="overflow-x-auto"
+            className="relative overflow-x-auto"
           >
             <table className="w-full min-w-[44rem] text-sm">
               <caption className="sr-only">{t("recent.title")}</caption>
@@ -778,7 +778,7 @@ export default async function CreditsPage({
             tabIndex={0}
             role="region"
             aria-label={t("report.title")}
-            className="overflow-x-auto"
+            className="relative overflow-x-auto"
           >
             <table className="w-full min-w-[52rem] text-sm">
               <caption className="sr-only">{t("report.title")}</caption>
