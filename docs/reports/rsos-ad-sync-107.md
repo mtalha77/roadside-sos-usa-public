@@ -154,7 +154,8 @@ surfaced on.
 - **Credits page on phones:** hidden table labels and the duplicate-review buttons overflowed at
   375 px.
 - **Fictional numbers:** tests that file requests drew from only 90 numbers, so the 30-minute
-  duplicate rule reopened another run's request. A shared `fakeMobile()` now draws from 900.
+  duplicate rule reopened another run's request. A shared `fakeMobile()` now draws from
+  6,000 (900 still collided with several PRs testing at once).
 - **Incoming-request test:** it now waits out the demo stream's quiet spells (up to about 50 s with
   no open request).
 - **Database tests:** they now insert complete requests (service, market service, pickup), as the
