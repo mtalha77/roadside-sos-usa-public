@@ -4,9 +4,12 @@ Specification: `docs/batches/rsos-ad-sync-107.md` (the owner sent it on 2026-11-
 batch 4.6 prerequisite). Owner's instruction with it: all ad platforms stay off until keys exist;
 everything tested with fakes.
 
-| Ticket                     | Status    | Pull request |
-| -------------------------- | --------- | ------------ |
-| RSOS-107 Automatic ad sync | In review |              |
+| Work                                      | Status    | Pull request |
+| ----------------------------------------- | --------- | ------------ |
+| RSOS-107 Automatic ad sync                | Merged    | #204         |
+| Owner decision 2: test traffic marker     | Merged    | #205         |
+| Owner decision 3: request flags           | In review | #206         |
+| Owner decision 4: Mobile Safari CI timing | Merged    | #202         |
 
 ## RSOS-107: Automatic ad sync
 
@@ -126,3 +129,35 @@ the dashboard and its CSV, cron jobs refuse calls without the secret).
   who may flag, who reads, resolve) and e2e (`request-flags.spec.ts`: the customer's one-tap
   report, a provider flag, and a real request's safety report shown urgent and flagged in the
   Inbox, then resolved by a dispatcher).
+
+## Owner decision 4: Mobile Safari CI timing
+
+Investigated within the time box (#202). The full-demo test stalled on WebKit on CI at "On the
+way". The CI trace showed the page had stopped painting and its main thread was starved. On those
+stages the tracking map drew a second, endlessly looping SMIL truck next to the live one, and
+WebKit without a GPU fell behind repainting it. The clock and the booking logic were correct.
+
+- **Fix:** the map shows only the live truck. That also removes a visible defect, since customers
+  saw two trucks.
+- **Result:** the test's CI-only `fixme` was removed, and the test runs and passes on WebKit in CI.
+  No quarantine was needed.
+
+## CI reliability fixes made on the way
+
+These were found while getting this run's PRs green. Each one failed every PR, not only the one it
+surfaced on.
+
+- **`SUPABASE_ACCESS_TOKEN` expired:** it was a 7-day token. The owner renewed it with 90 days on
+  2026-11-20, and a reminder is set for 2027-02-11.
+- **Market page:** it listed every tracking number (311 on rsos-dev from test runs), which went past
+  WebKit's screenshot limit. It now shows 12 and links to Settings.
+- **Credits page on phones:** hidden table labels and the duplicate-review buttons overflowed at
+  375 px.
+- **Fictional numbers:** tests that file requests drew from only 90 numbers, so the 30-minute
+  duplicate rule reopened another run's request. A shared `fakeMobile()` now draws from 900.
+- **Incoming-request test:** it now waits out the demo stream's quiet spells (up to about 50 s with
+  no open request).
+- **Database tests:** they now insert complete requests (service, market service, pickup), as the
+  `requests_complete_unless_intake` check requires.
+- **e2e job time limit:** raised from 30 to 50 minutes. The runner's package mirror served the
+  browsers' system libraries at about 123 kB/s twice in one day.

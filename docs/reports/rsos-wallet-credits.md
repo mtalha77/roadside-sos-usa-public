@@ -10,11 +10,11 @@ run without it.
 
 ## Summary
 
-| Ticket                                           | Status    | Pull request |
-| ------------------------------------------------ | --------- | ------------ |
-| RSOS-114 (not specified)                         | BLOCKED   |              |
-| RSOS-115 Wallet bonus credits                    | In review |              |
-| RSOS-116 Complete service forms, back navigation | Pending   |              |
+| Ticket                                           | Status  | Pull request |
+| ------------------------------------------------ | ------- | ------------ |
+| RSOS-114 (not specified)                         | BLOCKED |              |
+| RSOS-115 Wallet bonus credits                    | Merged  | #201         |
+| RSOS-116 Complete service forms, back navigation | Merged  | #203         |
 
 ## Tickets
 
