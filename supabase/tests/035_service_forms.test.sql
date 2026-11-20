@@ -12,8 +12,11 @@ create function pg_temp.as_staff(r text) returns void language sql as $$
 $$;
 insert into auth.users (id, email, aud, role) values ('00000000-0000-4000-8000-0000000116a1', 'forms@example.test', 'authenticated', 'authenticated');
 
-insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone)
-values ('00000000-0000-4000-8000-0000000116c1', 'R-FRMW', (select id from public.markets where slug = 'houston'), 0, 'submitted', 'web', 'Form Test', '+12105550144');
+insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone, service_id, market_service_id, pickup_point, pickup_address)
+select '00000000-0000-4000-8000-0000000116c1', 'R-FRMW', ms.market_id, 0, 'submitted', 'web', 'Form Test', '+12105550144', ms.service_id, ms.id,
+  extensions.st_setsrid(extensions.st_makepoint(-95.37, 29.76), 4326)::extensions.geography, 'Test address'
+from public.market_services ms join public.markets m on m.id = ms.market_id join public.services s on s.id = ms.service_id
+where m.slug = 'houston' and s.slug = 'flat-tire';
 select set_config('test.token', (select status_token from public.requests where id = '00000000-0000-4000-8000-0000000116c1'), true);
 select set_config('test.draft', repeat('d', 32), true);
 

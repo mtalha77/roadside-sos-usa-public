@@ -12,9 +12,11 @@ test("tow answers appear in the admin request panel", async ({ page, browser }) 
   const name = `E2E Tow ${Date.now()}`;
   const site = await browser.newPage();
   await site.goto(new URL("/get-help/tow/problem", web).toString());
+  // The required answers first (the helper answers "Does it roll" with Yes), then this test's own.
+  await answerScreenOne(site, "tow", false);
   await tap(site, /All-wheel or 4-wheel drive/, "Yes");
   await tap(site, /Does it roll and steer/, "No");
-  await answerScreenOne(site, "tow");
+  await site.getByRole("button", { name: "Continue" }).click();
   await site.getByLabel("Street address or cross streets").fill("1200 Main St");
   await site.getByLabel("City").selectOption({ index: 1 });
   await site.getByLabel("Destination address or shop name").fill("400 Oak St");
