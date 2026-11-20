@@ -175,7 +175,10 @@ jobs:
     name: e2e
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # The tests take about 15 minutes, but the Ubuntu mirror for the browsers' system libraries
+    # can crawl (123 kB/s, 19 minutes on 2026-11-20; apt runs under sudo, so the retry's timeout
+    # cannot stop it): leave room so a slow mirror delays the run instead of cancelling it.
+    timeout-minutes: 50
     permissions:
       contents: read
       deployments: read
