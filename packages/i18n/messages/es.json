@@ -388,6 +388,7 @@
       "radiusValue": "10, 20 y luego 35 millas",
       "phones": "Números por origen",
       "noPhones": "Aún no hay números (requiere Twilio).",
+      "allPhones": "Ver los {count} números en Configuración",
       "checklist": "Lista para lanzar",
       "checks": {
         "numbers": "Números de seguimiento asignados (sitio web y Google Ads)",

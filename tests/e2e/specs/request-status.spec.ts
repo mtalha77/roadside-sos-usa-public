@@ -165,13 +165,10 @@ test.describe("request status page (driver demo)", () => {
     await expect(heading(page)).toHaveText(/Provider confirmed|On the way/);
   });
 
-  test("a full demo from request to review takes under 3 minutes at 1x", async ({
-    page,
-    browserName,
-  }) => {
-    // Known issue (batch 4.6 report): on the CI runner WebKit sometimes stops advancing the demo
-    // clock at "On the way"; it passes on WebKit locally and on Chrome everywhere.
-    test.fixme(browserName === "webkit" && !!process.env.CI, "WebKit demo clock stalls on CI");
+  test("a full demo from request to review takes under 3 minutes at 1x", async ({ page }) => {
+    // Owner decision 4 (2026-11-19): this used to stall at "On the way" on WebKit on CI. The map
+    // drew a second, endlessly animated truck next to the live one; without a GPU the repaints
+    // starved the page. The map now shows only the live truck.
     test.setTimeout(200_000);
     const started = Date.now();
     await open(page, 5);
