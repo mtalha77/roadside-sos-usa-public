@@ -1,17 +1,9 @@
-import { timingSafeEqual } from "node:crypto";
 import { chooseMetaConversions } from "@rsos/core/adapters";
 import { createAdminSupabase } from "@rsos/db/admin";
 import type { NextRequest } from "next/server";
+import { cronAuthorized } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
-
-const authorized = (request: NextRequest) => {
-  const secret = process.env.CRON_SECRET;
-  if (!secret) return false;
-  const a = Buffer.from(`Bearer ${secret}`);
-  const b = Buffer.from(request.headers.get("authorization") ?? "");
-  return a.length === b.length && timingSafeEqual(a, b);
-};
 
 /**
  * Sends conversion events not yet delivered to Meta's Conversions API (RSOS-031). Runs on Vercel
@@ -19,7 +11,7 @@ const authorized = (request: NextRequest) => {
  * and token. Event ids deduplicate with the browser pixel.
  */
 export async function GET(request: NextRequest) {
-  if (!authorized(request)) return new Response("Unauthorized", { status: 401 });
+  if (!cronAuthorized(request)) return new Response("Unauthorized", { status: 401 });
   const meta = chooseMetaConversions();
   if (meta.mode === "fake") return Response.json({ ok: true, meta: "off" });
   const admin = createAdminSupabase();

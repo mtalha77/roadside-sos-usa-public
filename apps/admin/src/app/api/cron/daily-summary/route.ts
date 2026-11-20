@@ -1,4 +1,3 @@
-import { timingSafeEqual } from "node:crypto";
 import { brand } from "@rsos/config/brand";
 import { createAdminSupabase } from "@rsos/db/admin";
 import {
@@ -8,17 +7,9 @@ import {
   dailySummarySubject,
 } from "@rsos/emails";
 import type { NextRequest } from "next/server";
+import { cronAuthorized } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
-
-const authorized = (request: NextRequest) => {
-  const secret = process.env.CRON_SECRET;
-  const given = request.headers.get("authorization") ?? "";
-  if (!secret) return false;
-  const a = Buffer.from(`Bearer ${secret}`);
-  const b = Buffer.from(given);
-  return a.length === b.length && timingSafeEqual(a, b);
-};
 
 /**
  * Daily dispatch summary for the owner (RSOS-035), run by Vercel Cron each morning with
@@ -26,7 +17,7 @@ const authorized = (request: NextRequest) => {
  * provider, and the manual_test fees that would have been earned.
  */
 export async function GET(request: NextRequest) {
-  if (!authorized(request)) return new Response("Unauthorized", { status: 401 });
+  if (!cronAuthorized(request)) return new Response("Unauthorized", { status: 401 });
   const admin = createAdminSupabase();
   const end = new Date();
   end.setUTCHours(0, 0, 0, 0);

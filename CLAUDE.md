@@ -45,6 +45,7 @@ Validate with Zod (`packages/core` schemas) wherever data enters or leaves trust
 - Every table enables RLS **in the same migration that creates it**, with explicit policies. No table ships without them.
 - Default deny. Policies are scoped by role (driver, provider, admin) and by market.
 - Every new table gets RLS tests (pgTAP in `supabase/tests/` or integration tests) proving allowed and denied access for each role.
+- Guard staff-only database functions with `if not public.staff_role_in('super_admin', ...) then raise ...`. Never write `if public.jwt_staff_role() not in (...)`: the role is NULL for providers and customers, so that test is NULL and lets them through. Every pgTAP test of a staff-only function includes a signed-in user who is not staff.
 
 ### 4a. Schema changes only through migrations (cloud only)
 
