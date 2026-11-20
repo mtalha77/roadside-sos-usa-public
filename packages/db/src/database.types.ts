@@ -223,6 +223,63 @@ export type Database = {
           },
         ]
       }
+      bonus_grants: {
+        Row: {
+          amount_cents: number
+          campaign_id: string | null
+          created_at: string
+          created_by: string | null
+          expired_at: string | null
+          expires_at: string
+          id: string
+          market_id: string | null
+          note: string | null
+          plan_allowed: boolean
+          provider_id: string
+          reason: string | null
+          refund_of: string | null
+          remaining_cents: number
+          reversed_at: string | null
+          source: string
+        }
+        Insert: {
+          amount_cents: number
+          campaign_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          expired_at?: string | null
+          expires_at: string
+          id?: string
+          market_id?: string | null
+          note?: string | null
+          plan_allowed?: boolean
+          provider_id: string
+          reason?: string | null
+          refund_of?: string | null
+          remaining_cents: number
+          reversed_at?: string | null
+          source: string
+        }
+        Update: {
+          amount_cents?: number
+          campaign_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          expired_at?: string | null
+          expires_at?: string
+          id?: string
+          market_id?: string | null
+          note?: string | null
+          plan_allowed?: boolean
+          provider_id?: string
+          reason?: string | null
+          refund_of?: string | null
+          remaining_cents?: number
+          reversed_at?: string | null
+          source?: string
+        }
+        Relationships: []
+      }
       calls: {
         Row: {
           answered_at: string | null
@@ -534,6 +591,117 @@ export type Database = {
             referencedColumns: ["document", "version"]
           },
         ]
+      }
+      credit_campaigns: {
+        Row: {
+          amount_cents: number
+          audience: Json
+          budget_cents: number
+          created_at: string
+          created_by: string | null
+          expiry_days: number
+          granted_cents: number
+          id: string
+          market_id: string | null
+          message: string | null
+          name: string
+          plan_allowed: boolean
+          recipients: number
+        }
+        Insert: {
+          amount_cents: number
+          audience?: Json
+          budget_cents: number
+          created_at?: string
+          created_by?: string | null
+          expiry_days?: number
+          granted_cents?: number
+          id?: string
+          market_id?: string | null
+          message?: string | null
+          name: string
+          plan_allowed?: boolean
+          recipients?: number
+        }
+        Update: {
+          amount_cents?: number
+          audience?: Json
+          budget_cents?: number
+          created_at?: string
+          created_by?: string | null
+          expiry_days?: number
+          granted_cents?: number
+          id?: string
+          market_id?: string | null
+          message?: string | null
+          name?: string
+          plan_allowed?: boolean
+          recipients?: number
+        }
+        Relationships: []
+      }
+      credit_limits: {
+        Row: {
+          per_campaign_cents: number | null
+          per_grant_cents: number | null
+          role: Database["public"]["Enums"]["staff_role"]
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          per_campaign_cents?: number | null
+          per_grant_cents?: number | null
+          role: Database["public"]["Enums"]["staff_role"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          per_campaign_cents?: number | null
+          per_grant_cents?: number | null
+          role?: Database["public"]["Enums"]["staff_role"]
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      credit_rules: {
+        Row: {
+          amount_cents: number
+          budget_cents: number
+          enabled: boolean
+          expiry_days: number
+          kind: string
+          market_id: string
+          threshold: number
+          updated_at: string
+          updated_by: string | null
+          used_cents: number
+        }
+        Insert: {
+          amount_cents?: number
+          budget_cents?: number
+          enabled?: boolean
+          expiry_days?: number
+          kind: string
+          market_id: string
+          threshold?: number
+          updated_at?: string
+          updated_by?: string | null
+          used_cents?: number
+        }
+        Update: {
+          amount_cents?: number
+          budget_cents?: number
+          enabled?: boolean
+          expiry_days?: number
+          kind?: string
+          market_id?: string
+          threshold?: number
+          updated_at?: string
+          updated_by?: string | null
+          used_cents?: number
+        }
+        Relationships: []
       }
       demo_accounts: {
         Row: {
@@ -1280,6 +1448,66 @@ export type Database = {
           },
         ]
       }
+      provider_notices: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          kind: string
+          provider_id: string
+          read_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          kind: string
+          provider_id: string
+          read_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          kind?: string
+          provider_id?: string
+          read_at?: string | null
+        }
+        Relationships: []
+      }
+      provider_review_flags: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          kind: string
+          provider_id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          kind: string
+          provider_id: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          kind?: string
+          provider_id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       provider_service_prices: {
         Row: {
           active: boolean
@@ -1357,6 +1585,7 @@ export type Database = {
       }
       providers: {
         Row: {
+          application_id: string | null
           base_point: unknown
           created_at: string
           dispatch_phone: string | null
@@ -1370,6 +1599,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          application_id?: string | null
           base_point?: unknown
           created_at?: string
           dispatch_phone?: string | null
@@ -1383,6 +1613,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          application_id?: string | null
           base_point?: unknown
           created_at?: string
           dispatch_phone?: string | null
@@ -1863,6 +2094,39 @@ export type Database = {
         }
         Relationships: []
       }
+      signup_bonus_rules: {
+        Row: {
+          amount_cents: number
+          enabled: boolean
+          ends_on: string | null
+          expiry_days: number
+          market_id: string
+          starts_on: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          amount_cents?: number
+          enabled?: boolean
+          ends_on?: string | null
+          expiry_days?: number
+          market_id: string
+          starts_on?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          enabled?: boolean
+          ends_on?: string | null
+          expiry_days?: number
+          market_id?: string
+          starts_on?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       site_visits: {
         Row: {
           day: string
@@ -2202,6 +2466,48 @@ export type Database = {
           source?: string | null
           state_code?: string | null
           zip?: string | null
+        }
+        Relationships: []
+      }
+      wallet_ledger: {
+        Row: {
+          actor_id: string | null
+          amount_cents: number
+          balance: string
+          created_at: string
+          grant_id: string | null
+          id: number
+          kind: string
+          market_id: string | null
+          note: string | null
+          provider_id: string
+          request_id: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          amount_cents: number
+          balance: string
+          created_at?: string
+          grant_id?: string | null
+          id?: number
+          kind: string
+          market_id?: string | null
+          note?: string | null
+          provider_id: string
+          request_id?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          amount_cents?: number
+          balance?: string
+          created_at?: string
+          grant_id?: string | null
+          id?: number
+          kind?: string
+          market_id?: string | null
+          note?: string | null
+          provider_id?: string
+          request_id?: string | null
         }
         Relationships: []
       }

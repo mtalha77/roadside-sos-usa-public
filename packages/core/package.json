@@ -10,7 +10,8 @@
     "./adapters": "./src/adapters/index.ts",
     "./economics": "./src/economics.ts",
     "./analytics-sources": "./src/analytics-sources.ts",
-    "./booking-metrics": "./src/booking-metrics.ts"
+    "./booking-metrics": "./src/booking-metrics.ts",
+    "./wallet": "./src/wallet.ts"
   },
   "scripts": {
     "lint": "eslint .",

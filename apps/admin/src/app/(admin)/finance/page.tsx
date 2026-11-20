@@ -6,6 +6,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { getAdminContext } from "@/lib/admin";
 import { demoNow } from "@/lib/demo-clock";
+import { getOutstandingCredit } from "@/lib/credits";
 import { demoLedger, demoRevenue } from "@/lib/finance";
 
 export const dynamic = "force-dynamic";
@@ -15,9 +16,13 @@ const KINDS = ["all", "fee", "top_up", "credit", "plan"] as const;
 const card = "rounded-2xl border bg-card p-4 sm:p-5";
 
 async function load() {
-  const [ctx, now] = await Promise.all([getAdminContext(), demoNow()]);
+  const [ctx, now, credit] = await Promise.all([
+    getAdminContext(),
+    demoNow(),
+    getOutstandingCredit(),
+  ]);
   const ledger = ctx.demo ? demoLedger(now, ctx.selected) : [];
-  return { ctx, now, ledger, revenue: demoRevenue(now, ctx.selected, ledger) };
+  return { ctx, now, ledger, credit, revenue: demoRevenue(now, ctx.selected, ledger) };
 }
 
 /**
@@ -32,9 +37,10 @@ export default async function FinancePage({
   const sp = await searchParams;
   const tab = TABS.find((x) => x === sp.tab) ?? "ledger";
   const kind = KINDS.find((x) => x === sp.kind) ?? "all";
-  const [t, ts, locale, { ctx, ledger, revenue }] = await Promise.all([
+  const [t, ts, tc, locale, { ctx, ledger, revenue, credit }] = await Promise.all([
     getTranslations("admin.finance"),
     getTranslations("site.services"),
+    getTranslations("admin.credits.finance"),
     getLocale(),
     load(),
   ]);
@@ -81,6 +87,55 @@ export default async function FinancePage({
         <StatCard label={t("kinds.credit")} value={money(sum("credit"))} />
         <StatCard label={t("kinds.plan")} value={money(sum("plan"))} />
       </div>
+      {/* RSOS-115: bonus credit granted and not yet used or expired is a liability. Real rows. */}
+      <section className={card} aria-labelledby="credit-h">
+        <h2 id="credit-h" className="mb-1 font-semibold">
+          {tc("title")}
+        </h2>
+        <p className="mb-3 text-sm text-muted-foreground">{tc("note")}</p>
+        {credit.length === 0 ? (
+          <p className="text-sm text-muted-foreground">{tc("none")}</p>
+        ) : (
+          <div tabIndex={0} role="region" aria-label={tc("title")} className="overflow-x-auto">
+            <table className="w-full min-w-[32rem] text-sm">
+              <caption className="sr-only">{tc("title")}</caption>
+              <thead className="border-b text-left text-muted-foreground">
+                <tr>
+                  {(["market", "outstanding", "providers", "used", "expired"] as const).map((k) => (
+                    <th key={k} scope="col" className="py-2 pr-3 font-medium">
+                      {tc(`cols.${k}`)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {credit.map((c) => (
+                  <tr key={c.market_id ?? "none"}>
+                    <th scope="row" className="py-2 pr-3 text-left font-normal">
+                      {ctx.markets.find((m) => m.id === c.market_id)?.name ?? "–"}
+                    </th>
+                    <td className="py-2 pr-3 font-semibold tabular-nums">
+                      {money(c.outstanding_cents ?? 0)}
+                    </td>
+                    <td className="py-2 pr-3 tabular-nums">{c.providers}</td>
+                    <td className="py-2 pr-3 tabular-nums">{money(c.used_cents)}</td>
+                    <td className="py-2 pr-3 tabular-nums">{money(c.expired_cents)}</td>
+                  </tr>
+                ))}
+                <tr className="font-semibold">
+                  <th scope="row" className="py-2 pr-3 text-left">
+                    {tc("total")}
+                  </th>
+                  <td className="py-2 pr-3 tabular-nums">
+                    {money(credit.reduce((n, c) => n + (c.outstanding_cents ?? 0), 0))}
+                  </td>
+                  <td colSpan={3} />
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
       <nav aria-label={t("views")} className="flex gap-1 overflow-x-auto border-b">
         {TABS.map((x) => (
           <Link
