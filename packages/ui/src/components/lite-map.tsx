@@ -42,7 +42,11 @@ export function LiteMap({
   radius?: { center: { lat: number; lng: number }; miles: number };
   className?: string;
   label: string;
-  /** Drive a truck along the route (only with a route; never with reduced motion). */
+  /**
+   * Drive a truck along the route (only with a route; never with reduced motion). Skipped when a
+   * live truck is among the points: one truck on the map, and no endless animation repainting the
+   * map while the page already updates the truck's position (it starved WebKit without a GPU).
+   */
   animate?: boolean;
   /**
    * Group request pins closer than this many map units (the map is 400 wide) into one numbered
@@ -152,7 +156,7 @@ export function LiteMap({
           strokeDasharray="2 8"
         />
       ) : null}
-      {route && animate ? (
+      {route && animate && !points.some((p) => p.kind === "truck") ? (
         <g className="motion-reduce:hidden" aria-hidden="true">
           <Truck />
           <animateMotion
