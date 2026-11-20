@@ -34,6 +34,20 @@ async function onList(ip: string | null, device: string | null): Promise<boolean
   return yes;
 }
 
+// Whether the list has any IP rules, cached per server instance for 5 minutes: most of the time it
+// has none, and then no visitor's IP needs a database round trip before the page renders.
+let ipRules: { at: number; yes: boolean } | null = null;
+async function hasIpRules(): Promise<boolean> {
+  if (ipRules && Date.now() - ipRules.at < 300_000) return ipRules.yes;
+  const supabase = createPublicSupabase();
+  if (!supabase) return false;
+  const { data } = await (supabase.rpc as unknown as (f: string) => PromiseLike<{ data: unknown }>)(
+    "test_traffic_has_ip_rules",
+  );
+  ipRules = { at: Date.now(), yes: data === true };
+  return ipRules.yes;
+}
+
 export type TestDecision = {
   test: boolean;
   /** Cookies to set on the response. */
@@ -60,7 +74,12 @@ export async function testTraffic(req: {
   if (req.cookie(TEST_COOKIE)) return { test: true, set };
   const device = Token.safeParse(req.cookie(TEST_DEVICE_COOKIE));
   if (device.success && (await onList(null, device.data))) return { test: true, set };
-  if (req.ip && /^[0-9a-fA-F:.]+$/.test(req.ip) && (await onList(req.ip, null)))
+  if (
+    req.ip &&
+    /^[0-9a-fA-F:.]+$/.test(req.ip) &&
+    (await hasIpRules()) &&
+    (await onList(req.ip, null))
+  )
     return { test: true, set };
   return { test: false, set };
 }

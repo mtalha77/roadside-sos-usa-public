@@ -1,19 +1,11 @@
-import { timingSafeEqual } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { sendDailyEmail } from "@/lib/ads-email";
 import { importSpend, runAutoPause, uploadConversions } from "@/lib/ads-sync";
+import { cronAuthorized } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
-
-const authorized = (request: NextRequest) => {
-  const secret = process.env.CRON_SECRET;
-  if (!secret) return false;
-  const a = Buffer.from(`Bearer ${secret}`);
-  const b = Buffer.from(request.headers.get("authorization") ?? "");
-  return a.length === b.length && timingSafeEqual(a, b);
-};
 
 const Job = z.enum(["spend", "spend-full", "conversions", "autopause", "daily-email"]);
 
@@ -25,7 +17,7 @@ const Job = z.enum(["spend", "spend-full", "conversions", "autopause", "daily-em
  * Platforms without keys or switched off are skipped: nothing errors.
  */
 export async function GET(request: NextRequest, { params }: { params: Promise<{ job: string }> }) {
-  if (!authorized(request)) return new Response("Unauthorized", { status: 401 });
+  if (!cronAuthorized(request)) return new Response("Unauthorized", { status: 401 });
   const job = Job.safeParse((await params).job);
   if (!job.success) return new Response("Not found", { status: 404 });
   switch (job.data) {

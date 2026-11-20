@@ -1,20 +1,11 @@
-import { timingSafeEqual } from "node:crypto";
 import { createAdminSupabase } from "@rsos/db/admin";
 import { chooseEmailSender, CreditExpiryEmail, creditExpirySubject } from "@rsos/emails";
 import { formatCurrency } from "@rsos/i18n";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
+import { cronAuthorized } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
-
-const authorized = (request: NextRequest) => {
-  const secret = process.env.CRON_SECRET;
-  const given = request.headers.get("authorization") ?? "";
-  if (!secret) return false;
-  const a = Buffer.from(`Bearer ${secret}`);
-  const b = Buffer.from(given);
-  return a.length === b.length && timingSafeEqual(a, b);
-};
 
 const Notice = z.object({
   id: z.uuid(),
@@ -28,7 +19,7 @@ const Notice = z.object({
  * provider owner once per reminder (Resend, or the fake sender that records it).
  */
 export async function GET(request: NextRequest) {
-  if (!authorized(request)) return new Response("Unauthorized", { status: 401 });
+  if (!cronAuthorized(request)) return new Response("Unauthorized", { status: 401 });
   const admin = createAdminSupabase();
   const rpc = admin.rpc.bind(admin) as unknown as (f: string) => PromiseLike<{ data: unknown }>;
   const expired = z
