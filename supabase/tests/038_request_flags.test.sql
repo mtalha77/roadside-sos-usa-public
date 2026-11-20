@@ -22,9 +22,12 @@ insert into auth.users (id, email, aud, role) values
 insert into public.providers (id, name, status) values
   ('00000000-0000-4000-8000-0000000119b1', 'Flag Test Towing', 'active'),
   ('00000000-0000-4000-8000-0000000119b2', 'Other Test Towing', 'active');
-insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone, assigned_provider_id, status_token)
-values ('00000000-0000-4000-8000-0000000119c1', 'R-FLGA', (select id from public.markets where slug = 'houston'), 0, 'completed', 'web',
-        'Flag Test', '+17135550147', '00000000-0000-4000-8000-0000000119b1', 'flag-test-token-000000000000000001');
+insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone, assigned_provider_id, status_token, service_id, market_service_id, pickup_point, pickup_address)
+select '00000000-0000-4000-8000-0000000119c1', 'R-FLGA', ms.market_id, 0, 'completed', 'web',
+        'Flag Test', '+17135550147', '00000000-0000-4000-8000-0000000119b1', 'flag-test-token-000000000000000001', ms.service_id, ms.id,
+  extensions.st_setsrid(extensions.st_makepoint(-95.37, 29.76), 4326)::extensions.geography, 'Test address'
+from public.market_services ms join public.markets m on m.id = ms.market_id join public.services s on s.id = ms.service_id
+where m.slug = 'houston' and s.slug = 'flat-tire';
 set constraints all immediate;
 
 -- Customer side, from the tracking link (anonymous).
