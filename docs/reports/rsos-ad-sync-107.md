@@ -88,3 +88,41 @@ the dashboard and its CSV, cron jobs refuse calls without the secret).
 - Tests: unit (`apps/web/test/test-traffic.test.ts`), database
   (`supabase/tests/037_test_traffic.test.sql`: tagging, no conversions, no visit count, the list
   and who changes it) and e2e (`test-traffic.spec.ts`).
+
+## Owner decision 3: flagging, both sides
+
+- **Customer**: "Report a problem" is always on the tracking page, during the job and after
+  completion. Sending takes one tap on a reason, with an optional note: provider didn't arrive,
+  price changed, poor service, safety concern, or other. On real requests it calls
+  `flag_request_as_customer` with the tracking link's token. This replaces the earlier report
+  form, which sent a contact message.
+- **Provider**: "Flag this request" on the incoming-request screen, the job detail and the active
+  job. It works the same way: one tap on a reason, optional note. Reasons: fake or prank, wrong
+  location, customer unreachable, unsafe, other. On a real request (one the company was offered
+  in dispatch or assigned) it calls `flag_request_as_provider`. The provider portal still runs on
+  the demo stream, so demo requests only show the confirmation.
+- **Database** (migration `20261120050000_request_flags.sql`): table `request_flags` with side,
+  reason, note, priority, status and resolution, plus the provider involved. Safety and unsafe are
+  **urgent** and mark the request urgent. Other rules:
+  - at most three flags per side per request;
+  - every flag and resolution goes on the request timeline, and resolutions also go in the audit
+    log;
+  - flags from test traffic are tagged `is_test`.
+  - RLS: staff read flags in their markets; a provider reads only the flags its company raised;
+    visitors read nothing.
+- **Admin**:
+  - The Inbox lists flagged requests even after completion. Urgent flags sort to the top, with a
+    flag count badge, and the list reloads live.
+  - The request panel and the request page show the flags with a resolve form (dispatchers,
+    operations, support).
+  - The request page also shows "Flags about this customer": provider flags on any request from
+    the same phone number. There is no customer profile page yet, so this is the customer's
+    profile view for now.
+  - The provider page shows "Flags from customers".
+- **RSOS-117** (fraud signals and reliability scores) has no specification yet.
+  `request_flag_counts(provider, phone)` returns the per-reason counts it will read (test traffic
+  excluded).
+- Tests: database (`supabase/tests/038_request_flags.test.sql`: reasons per side, urgent safety,
+  who may flag, who reads, resolve) and e2e (`request-flags.spec.ts`: the customer's one-tap
+  report and a provider flag). An e2e for a real request through the Inbox is added once RSOS-116's
+  new request flow is merged, since the test has to file a real request through it.
