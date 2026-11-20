@@ -1,6 +1,6 @@
 import { Alert } from "@rsos/ui/alert";
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
+import { BackLink } from "./flow";
 import type { ReactNode } from "react";
 
 /** One question per screen: progress bar, back link, the question and any error. */
@@ -24,7 +24,7 @@ export async function StepShell({
     <div className="mx-auto flex w-full max-w-xl flex-col gap-5 px-4 pt-4 pb-10">
       <div className="flex items-center gap-3">
         {back ? (
-          <Link
+          <BackLink
             href={back}
             className="inline-flex min-h-touch items-center font-medium underline-offset-4 hover:underline"
           >
@@ -41,7 +41,7 @@ export async function StepShell({
               <path d="M15 18l-6-6 6-6" />
             </svg>
             {t("back")}
-          </Link>
+          </BackLink>
         ) : null}
         <p className="ml-auto text-sm text-muted-foreground tabular-nums">
           {t("progress", { n, total })}

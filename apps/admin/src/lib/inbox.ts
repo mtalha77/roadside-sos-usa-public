@@ -129,7 +129,7 @@ export async function getInboxRequest(id: string) {
   const { data: r } = await supabase
     .from("requests")
     .select(
-      "id, short_code, status, urgent, market_id, service_id, driver_name, driver_phone, driver_email, pickup_address, pickup_note, notes, vehicle_year, vehicle_make, vehicle_model, vehicle_color, vehicle_type, safe_spot, on_highway, has_passengers, channel, source, created_at, claimed_at, assigned_dispatcher_id, assigned_provider_id, quoted_price_cents, quoted_eta_minutes, end_reason, status_token, platform_fee_cents, services(slug, name), markets(name, slug, time_zone)",
+      "id, short_code, status, urgent, market_id, service_id, driver_name, driver_phone, driver_email, pickup_address, pickup_note, notes, vehicle_year, vehicle_make, vehicle_model, vehicle_color, vehicle_type, safe_spot, on_highway, has_passengers, channel, source, created_at, claimed_at, assigned_dispatcher_id, assigned_provider_id, quoted_price_cents, quoted_eta_minutes, end_reason, status_token, platform_fee_cents, service_answers, answers_version, photo_paths, scheduled_for, services(slug, name), markets(name, slug, time_zone)",
     )
     .eq("id", id)
     .maybeSingle();

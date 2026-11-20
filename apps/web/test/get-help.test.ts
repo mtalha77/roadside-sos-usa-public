@@ -9,19 +9,28 @@ import {
 } from "../src/lib/get-help";
 
 describe("get help flow (RSOS-021, three screens since RSOS-101)", () => {
-  const base = { market: "houston", lat: 29.76, lng: -95.37 };
+  const base = { market: "market-a", lat: 29.76, lng: -95.37 };
+  const answers = { safety: "safe" };
   it("resumes at the first unfinished screen", () => {
     expect(currentStep({})).toBe("problem");
-    expect(currentStep({ service: "flat-tire" })).toBe("location");
-    expect(currentStep({ ...base, service: "flat-tire" })).toBe("details");
+    // RSOS-116: screen 1 asks the service's questions before the location.
+    expect(currentStep({ service: "flat-tire" })).toBe("problem");
+    expect(currentStep({ service: "flat-tire", answers })).toBe("location");
+    expect(currentStep({ ...base, service: "flat-tire", answers })).toBe("details");
+    // An ad landing page asks the address first: screen 1 comes next.
+    expect(currentStep({ ...base, service: "flat-tire" })).toBe("problem");
     // A tow also needs where to take the vehicle, asked on the location screen.
-    expect(currentStep({ ...base, service: "tow" })).toBe("location");
-    expect(currentStep({ ...base, service: "tow", destAddress: "1 Main St" })).toBe("details");
+    expect(currentStep({ ...base, service: "tow", answers })).toBe("location");
+    expect(currentStep({ ...base, service: "tow", answers, destAddress: "1 Main St" })).toBe(
+      "details",
+    );
   });
   it("has at most three screens, and screens cannot be skipped", () => {
     expect(STEPS).toHaveLength(3);
     expect(allowedStep({}, "details")).toBe("problem");
-    expect(allowedStep({ ...base, service: "tow", destAddress: "x" }, "location")).toBe("location");
+    expect(allowedStep({ ...base, service: "tow", answers, destAddress: "x" }, "location")).toBe(
+      "location",
+    );
     expect(previousStep({ service: "flat-tire" }, "details")).toBe("location");
     expect(previousStep({}, "problem")).toBeNull();
   });

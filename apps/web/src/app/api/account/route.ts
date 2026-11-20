@@ -110,6 +110,8 @@ export async function POST(request: NextRequest) {
         p_patch: {
           service,
           followUp: service === "flat-tire" ? "yes" : "",
+          // RSOS-116: a repeat request skips screen 1; safety is asked on the last screen.
+          answers: { when: "now" },
           vehicleType: vehicle.type,
           make: vehicle.make,
           model: vehicle.model,
@@ -122,7 +124,7 @@ export async function POST(request: NextRequest) {
           quick: true,
         },
       });
-      const res = go("/get-help?step=location");
+      const res = go(`/get-help/${encodeURIComponent(service)}/location`);
       res.cookies.set(DRAFT_COOKIE, String(data), {
         path: "/",
         httpOnly: true,

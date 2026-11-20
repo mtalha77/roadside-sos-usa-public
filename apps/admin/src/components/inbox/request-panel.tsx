@@ -4,6 +4,7 @@ import { LiteMap } from "@rsos/ui/lite-map";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { CallButton } from "@/components/softphone/call-button";
+import { RequestAnswers } from "@/components/requests/request-answers";
 import { CLAIM_MINUTES, type InboxRequest, STEPS } from "@/lib/inbox";
 import {
   AttemptForm,
@@ -27,7 +28,11 @@ function claimIsFresh(claimedAt: string | null): boolean {
 }
 
 export async function RequestPanel({ data, userId }: { data: InboxRequest; userId: string }) {
-  const [t, locale] = [await getTranslations("admin.inbox"), "en-US"];
+  const [t, ta, locale] = [
+    await getTranslations("admin.inbox"),
+    await getTranslations("admin.answers"),
+    "en-US",
+  ];
   const r = data.request;
   const time = new Intl.DateTimeFormat(locale, {
     timeStyle: "short",
@@ -79,6 +84,17 @@ export async function RequestPanel({ data, userId }: { data: InboxRequest; userI
           <dd>{r.pickup_address ?? t("noLocation")}</dd>
           <dt className="text-muted-foreground">{t("vehicle")}</dt>
           <dd>{vehicle || "—"}</dd>
+          {/* RSOS-116: the customer's answers for this service, as short tags and in full. */}
+          <dt className="text-muted-foreground">{ta("title")}</dt>
+          <dd>
+            <RequestAnswers
+              service={(r.services as { slug?: string } | null)?.slug ?? ""}
+              stored={r.service_answers}
+              photos={r.photo_paths ?? []}
+              scheduledFor={r.scheduled_for}
+              timeZone={(r.markets as { time_zone?: string } | null)?.time_zone}
+            />
+          </dd>
           <dt className="text-muted-foreground">{t("notes")}</dt>
           <dd>{r.notes ?? r.pickup_note ?? "—"}</dd>
           <dt className="text-muted-foreground">{t("source")}</dt>

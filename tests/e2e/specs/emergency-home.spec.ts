@@ -41,11 +41,14 @@ test.describe("emergency-first home", () => {
 
     const started = Date.now();
     await page.getByRole("link", { name: "Tow" }).first().click();
-    await expect(page.getByRole("heading", { name: "Where are you?" })).toBeVisible();
-    test
-      .info()
-      .annotations.push({ type: "tow-to-location-ms", description: String(Date.now() - started) });
-    expect(new URL(page.url()).searchParams.get("service")).toBe("tow");
+    // RSOS-116: a tile opens that service's screen 1 (its quick questions).
+    await expect(page).toHaveURL(/\/get-help\/tow\/problem/);
+    await expect(page.getByRole("heading", { name: "What happened?", level: 1 })).toBeVisible();
+    test.info().annotations.push({
+      type: "tow-to-first-step-ms",
+      description: String(Date.now() - started),
+    });
+    expect(new URL(page.url()).pathname).toBe("/get-help/tow/problem");
   });
 
   test("the theme toggle switches and remembers dark mode", async ({ page }) => {

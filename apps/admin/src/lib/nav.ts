@@ -40,6 +40,7 @@ export const SECTIONS = [
   },
   { href: "/finance", key: "finance", section: "finance", group: "business", shortcut: "g f" },
   { href: "/credits", key: "credits", section: "credits", group: "business", shortcut: "g w" },
+  { href: "/services", key: "services", section: "services", group: "business", shortcut: "g q" },
   {
     href: "/marketing",
     key: "marketing",

@@ -66,7 +66,7 @@ export async function EmergencyHero({
           return (
             <li key={s.slug}>
               <Link
-                href={withMarket(`/get-help?service=${s.slug}`)}
+                href={withMarket(`/get-help/${s.slug}/problem`)}
                 className="flex h-full min-h-24 flex-col justify-between gap-2 rounded-2xl border-2 border-border bg-surface p-3 text-lg sm:p-4 leading-tight font-semibold shadow-sm transition-[border-color,box-shadow,transform] duration-150 ease-standard hover:border-input hover:shadow-md active:scale-[0.98] motion-reduce:transition-none"
               >
                 <span

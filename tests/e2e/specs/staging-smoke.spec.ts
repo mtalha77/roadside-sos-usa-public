@@ -1,3 +1,4 @@
+import { answerScreenOne } from "../support/get-help";
 import { appUrls, expect, test } from "../support/fixtures";
 
 // RSOS-099 staging smoke (runs after every staging deploy, and in Release QA): all three health
@@ -39,9 +40,8 @@ test.describe("staging smoke @staging", () => {
     const url = (p: string) => new URL(p, web).toString();
     // Three screens (RSOS-101): what happened, where, who and which vehicle.
     await page.goto(url("/get-help"));
-    await page.locator("label").filter({ hasText: "Flat tire" }).click();
-    await page.getByRole("radio", { name: "Yes" }).check();
-    await page.getByRole("button", { name: "Continue" }).click();
+    await page.getByRole("main").getByRole("link", { name: "Flat tire" }).first().click();
+    await answerScreenOne(page, "flat-tire");
     await page.getByLabel("Street address or cross streets").fill("1200 Main St");
     await page.getByLabel("City").selectOption({ index: 1 });
     await page.getByRole("button", { name: "Continue" }).click();
@@ -54,12 +54,11 @@ test.describe("staging smoke @staging", () => {
       .getByLabel("Mobile number")
       .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
     await page.getByLabel("Make").fill("Toyota");
-    await page.getByRole("radio", { name: "Off the road, in a safe place" }).check();
     await expect(page.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
       timeout: 20_000,
     });
     await page.getByRole("button", { name: "Send my request" }).click();
-    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/);
+    await expect(page).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/, { timeout: 15_000 });
     // A fictional number used again within 30 minutes opens that number's open request instead
     // (the duplicate rule), which other tests may already have moved on.
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(

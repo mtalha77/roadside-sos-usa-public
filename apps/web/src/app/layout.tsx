@@ -1,4 +1,5 @@
 import { buildMetadata } from "@rsos/config/metadata";
+import { LastPage } from "@/components/get-help/flow";
 import { themeColor } from "@rsos/config/theme-colors";
 import { getSiteEnv } from "@rsos/config/site";
 import { GeistSans } from "geist/font/sans";
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body>
         {isDemoMode() ? <DemoBadge label={demoLabel} strip /> : null}
+        <LastPage />
         {children}
         <ConsentBanner />
         {analytics ? <VercelAnalytics /> : null}
