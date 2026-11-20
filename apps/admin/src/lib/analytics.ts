@@ -126,6 +126,7 @@ export async function realView(
   models: MarketModel[],
   days: number,
   now: number,
+  includeTest = false,
 ): Promise<AnalyticsView> {
   const supabase = await getServerSupabase();
   const since = new Date(now - days * DAY);
@@ -145,6 +146,7 @@ export async function realView(
           )
           .in("market_id", marketIds)
           .neq("status", "draft")
+          .in("is_test", includeTest ? [true, false] : [false])
           .gte("created_at", since.toISOString())
           .limit(10_000)
       : Promise.resolve(none),

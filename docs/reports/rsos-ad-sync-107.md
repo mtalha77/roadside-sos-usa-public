@@ -64,3 +64,27 @@ backoff, auto-pause and resume with the grace period and ad hours, dashboard num
 days, sync health, and each real adapter's requests against a stubbed network), database
 (`supabase/tests/036_ad_sync.test.sql`) and e2e (`ad-sync.spec.ts`: Not connected without keys,
 the dashboard and its CSV, cron jobs refuse calls without the secret).
+
+## Owner decision 2: test traffic
+
+- The 15 test rows in staging's `funnel_events` (ids 6 to 20: 11 from the batch 4.6 timing check,
+  4 from the staging smoke test) were exported to `docs/reports/test-funnel-rows.csv` and deleted
+  on 2026-11-19, with an `audit_log` entry (`analytics.test_rows_deleted`). Other test rows on
+  staging from Release QA and later smoke runs were not deleted (outside the owner's approval);
+  they predate the marker.
+- **The marker** (migration `20261120040000_test_traffic.sql`): a website request is test traffic
+  when the session started with `?rsos_test=1` (session cookie), the browser opened a test device
+  link (long-lived device cookie, checked against the list), its IP is on the list (single address
+  or range), or staff are signed in to the admin in that browser (the admin sets a `rsos_test=staff`
+  cookie on the shared parent domain; previews and local hosts have none). The website then sends
+  `x-rsos-test: 1` on its database calls, and the database tags `requests.is_test` and
+  `funnel_events.is_test`, creates no conversion events for test requests (so nothing reaches an ad
+  platform, the marketing report or the ads dashboard) and does not count test visits.
+- **Excluded everywhere**: Analytics, booking speed on Today, the funnel panels, Test campaign and
+  the website's booking-speed promise. **Include test traffic** (Analytics, Real view) is offered on
+  staging and previews only.
+- **The list**: Settings > System > Test traffic (owner, operations manager, marketing): add an IP
+  or range, create a device link (open it once on the phone), remove; every change in the audit log.
+- Tests: unit (`apps/web/test/test-traffic.test.ts`), database
+  (`supabase/tests/037_test_traffic.test.sql`: tagging, no conversions, no visit count, the list
+  and who changes it) and e2e (`test-traffic.spec.ts`).

@@ -28,6 +28,7 @@ const Query = z.object({
   view: z.enum(["real", "demo", "model"]).catch("real"),
   market: z.string().max(60).optional().catch(undefined),
   by: z.enum(["market", "source", "service", "device"]).catch("market"),
+  test: z.enum(["1"]).optional().catch(undefined),
 });
 
 /**
@@ -52,6 +53,8 @@ export default async function AnalyticsPage({
   const q = Query.parse(sp);
   // Production never has Demo.
   const view = q.view === "demo" && !ctx.demo ? "real" : q.view;
+  // Owner decision 2: test traffic stays out unless included on purpose, on staging only.
+  const includeTest = ctx.demo && q.test === "1";
   const inView = ctx.markets.filter((m) => ctx.selected.includes(m.slug));
   const markets = q.market ? inView.filter((m) => m.slug === q.market) : inView;
   const scenario: Scenario =
@@ -69,6 +72,7 @@ export default async function AnalyticsPage({
             models,
             q.days,
             now,
+            includeTest,
           );
   // Booking funnel rows (RSOS-111): real only; the Demo view adds labelled demo rows.
   const serviceNames = await getServiceNames();
@@ -81,6 +85,7 @@ export default async function AnalyticsPage({
           from: now - q.days * 86_400_000,
           to: now,
           includeDemo: view === "demo",
+          includeTest,
         });
   const l = locale as Locale;
   const money = (n: number | null) => (n === null ? "–" : formatCurrency(Math.round(n * 100), l));
@@ -136,7 +141,14 @@ export default async function AnalyticsPage({
     ["profit", money(data.profit), money(model.profit), versus(data.profit, model.profit)],
   ];
   const link = (patch: Record<string, string | number | undefined>) => {
-    const next = { days: q.days, view, market: q.market, by: q.by, ...patch };
+    const next = {
+      days: q.days,
+      view,
+      market: q.market,
+      by: q.by,
+      test: includeTest ? "1" : undefined,
+      ...patch,
+    };
     const p = new URLSearchParams(
       Object.entries(next).flatMap(([k, v]) => (v === undefined ? [] : [[k, String(v)]])),
     );
@@ -194,6 +206,17 @@ export default async function AnalyticsPage({
             ))}
           </nav>
         </div>
+        {ctx.demo && view === "real" ? (
+          <p>
+            <Link
+              href={link({ test: includeTest ? undefined : "1" })}
+              aria-current={includeTest ? "page" : undefined}
+              className={chip}
+            >
+              {includeTest ? t("testOn") : t("testOff")}
+            </Link>
+          </p>
+        ) : null}
         <p className="text-sm text-muted-foreground">
           {t(`viewNote.${view}`, { scenario: t(`scenarios.${scenario}`) })}
           {view === "real" && data.requests < ENOUGH_REAL ? ` ${t("notEnough")}` : ""}

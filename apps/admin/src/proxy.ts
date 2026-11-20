@@ -42,6 +42,7 @@ export async function proxy(request: NextRequest) {
 
   let response = NextResponse.next({ request: { headers: requestHeaders } });
   const path = request.nextUrl.pathname;
+  let staffSignedIn = false;
 
   if (!PUBLIC.some((re) => re.test(path))) {
     const state = await getSessionState(
@@ -59,6 +60,7 @@ export async function proxy(request: NextRequest) {
     const decision = withSessionState(adminAccess(state.claims), state, {
       requireSecondStep: false,
     });
+    staffSignedIn = decision === "ok";
     // Role guard (RSOS-102): a page or API outside the role's sections is refused here, not only
     // hidden from the menu. RLS still checks every row in the database.
     if (decision === "ok" && !canOpenPath(state.claims?.staff_role, path)) {
@@ -77,6 +79,25 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // Owner decision 2: a browser where staff are signed in is test traffic on the website too. The
+  // marker is a cookie on the parent domain (staging-admin.x and staging.x share x); preview and
+  // local hosts have no shared parent, so nothing is set there.
+  const host = request.nextUrl.hostname;
+  const parent = host.split(".").slice(1).join(".");
+  if (
+    staffSignedIn &&
+    parent.includes(".") &&
+    !/(^|\.)(vercel\.app|localhost)$/.test(host) &&
+    request.cookies.get("rsos_test")?.value !== "staff"
+  )
+    response.cookies.set("rsos_test", "staff", {
+      domain: `.${parent}`,
+      path: "/",
+      maxAge: 30 * 86_400,
+      httpOnly: true,
+      sameSite: "lax",
+      secure: true,
+    });
   response.headers.set("Content-Security-Policy", csp);
   return response;
 }

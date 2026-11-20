@@ -5,6 +5,7 @@ import { FlagsPanel } from "@/components/settings/flags-panel";
 import { OnDuty } from "@/components/settings/on-duty";
 import { PhoneNumbers } from "@/components/settings/phone-numbers";
 import { SystemStatus } from "@/components/settings/system-status";
+import { TestTraffic } from "@/components/settings/test-traffic";
 import { TextsPanel } from "@/components/settings/texts-panel";
 import { getAdminContext } from "@/lib/admin";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -209,6 +210,7 @@ export default async function SettingsPage({
       {tab === "phones" ? <PhoneNumbers /> : null}
       {tab === "duty" ? <OnDuty /> : null}
       {tab === "system" ? <SystemStatus /> : null}
+      {tab === "system" ? <TestTraffic sp={sp} /> : null}
     </main>
   );
 }

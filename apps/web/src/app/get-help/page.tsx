@@ -19,6 +19,7 @@ import { deviceOf, FLOW_COOKIE, readFlow, recordFunnel } from "@/lib/funnel";
 import { FlowForm, FlowTracker } from "@/components/get-help/flow";
 import { QuestionFields } from "@/components/get-help/questions";
 import { getQuestionOverrides } from "@/lib/questions";
+import { isTestHeader } from "@/lib/test-traffic";
 import { MapView } from "@/components/site/map-view";
 import { OutsideArea } from "@/components/site/outside-area";
 import { serviceName } from "@/components/site/service-label";
@@ -133,7 +134,9 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
   const jar = await cookies();
   const flow = readFlow(jar.get(FLOW_COOKIE)?.value);
   if (flow) {
-    const device = deviceOf((await headers()).get("user-agent"));
+    const h = await headers();
+    const device = deviceOf(h.get("user-agent"));
+    const test = isTestHeader(h);
     after(() =>
       recordFunnel({
         session: flow.session,
@@ -142,6 +145,7 @@ export default async function GetHelpPage({ searchParams }: { searchParams: Prom
         market: market?.slug ?? null,
         source: jar.get(SOURCE_COOKIE)?.value ?? null,
         device,
+        test,
       }),
     );
   }

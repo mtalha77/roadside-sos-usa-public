@@ -24,6 +24,7 @@ import {
 } from "@/lib/get-help";
 import { maps, rateLimitStore } from "@/lib/adapters";
 import { ATTRIBUTION_COOKIE, decodeAttribution } from "@/lib/attribution";
+import { isTestHeader } from "@/lib/test-traffic";
 import { deviceOf, FLOW_COOKIE, readFlow, recordFunnel } from "@/lib/funnel";
 import { getQuestionOverrides } from "@/lib/questions";
 import { getMarkets, getMarketServices, getServices, marketSlugForPoint } from "@/lib/site-data";
@@ -32,8 +33,8 @@ type Rpc = (
   fn: string,
   args: object,
 ) => PromiseLike<{ data: unknown; error: { message?: string } | null }>;
-const db = () => {
-  const s = createPublicSupabase();
+const db = (test = false) => {
+  const s = createPublicSupabase({ test });
   if (!s) throw new Error("Supabase is not configured");
   return s.rpc.bind(s) as unknown as Rpc;
 };
@@ -52,7 +53,8 @@ const Email = z.email().max(254);
 export async function POST(request: NextRequest) {
   const form = await request.formData();
   const step = String(form.get("step") ?? "");
-  const rpc = db();
+  const test = isTestHeader(request.headers);
+  const rpc = db(test);
   const cookieToken = request.cookies.get(DRAFT_COOKIE)?.value ?? null;
   const { data: rawDraft } = cookieToken
     ? await rpc("get_request_draft", { p_token: cookieToken })
@@ -431,6 +433,7 @@ export async function POST(request: NextRequest) {
             source: request.cookies.get(SOURCE_COOKIE)?.value ?? null,
             device: deviceOf(request.headers.get("user-agent")),
             landingSec: (Date.now() - flow.landedAt) / 1000,
+            test,
             requestToken: row.status_token ?? null,
           }),
         );
