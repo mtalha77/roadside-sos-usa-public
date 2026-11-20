@@ -19,7 +19,7 @@ export function FlagRequest({ requestId, className }: { requestId: string; class
   const [note, setNote] = useState("");
   const [state, setState] = useState<"idle" | "sent" | "failed">("idle");
   const [pending, start] = useTransition();
-  if (state === "sent") return <Alert tone="success" title={t("sent")} className={className} />;
+  if (state === "sent") return <Alert tone="success" title={t("sent")} className="w-full" />;
   if (!open)
     return (
       <Button
@@ -35,7 +35,7 @@ export function FlagRequest({ requestId, className }: { requestId: string; class
   return (
     <section
       aria-labelledby={`${id}-h`}
-      className={`flex flex-col gap-2 rounded-xl border p-3 ${className ?? ""}`}
+      className="flex w-full flex-col gap-2 rounded-xl border p-3"
     >
       <h3 id={`${id}-h`} className="font-semibold">
         {t("title")}
