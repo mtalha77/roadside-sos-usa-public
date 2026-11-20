@@ -42,7 +42,8 @@
       "calls": "Calls",
       "today": "Today",
       "economics": "Economics model",
-      "status": "System status"
+      "status": "System status",
+      "credits": "Wallet credits"
     },
     "shell": {
       "nav": "Admin",
@@ -1400,7 +1401,7 @@
       "shared": "Fixed costs shared across markets",
       "sharedOn": "Fixed costs: one amount spread across the markets shown.",
       "sharedOff": "Fixed costs: charged to each market.",
-      "formula": "Clicks = budget ÷ cost per click; requests = clicks × click-to-request; accepted = requests × acceptance; contribution = fee revenue + subscriptions − ad spend − payment fees; profit = contribution − fixed costs.",
+      "formula": "Clicks = budget ÷ cost per click; requests = clicks × click-to-request; accepted = requests × acceptance; contribution = fee revenue + subscriptions − ad spend − payment fees − promotion credits (signup bonus × new providers); net fee revenue = fee revenue − promotion credits; profit = contribution − fixed costs.",
       "results": "Monthly results",
       "market": "Market",
       "scenario": "Scenario",
@@ -1417,7 +1418,9 @@
         "contribution": "Contribution",
         "profit": "Profit after fixed costs",
         "adCostPerAccepted": "Ad cost per accepted",
-        "breakEvenAccepted": "Break-even accepted"
+        "breakEvenAccepted": "Break-even accepted",
+        "promotionCredits": "Promotion credits used",
+        "netFeeRevenue": "Net fee revenue"
       },
       "emptyTitle": "No model yet",
       "empty": "No market in view has an economics model.",
@@ -1449,7 +1452,10 @@
           "mix": "The service mix must add up to 100%.",
           "save": "Could not save. Try again.",
           "forbidden": "Only owners and operations managers can change the model."
-        }
+        },
+        "signupBonus": "Signup bonus per provider",
+        "newProviders": "New providers",
+        "perMonth": "per month"
       },
       "sharedStateOn": ": on",
       "sharedStateOff": ": off"
@@ -1637,6 +1643,193 @@
       "includeDemo": "Include demo data",
       "excludeDemo": "Real data only",
       "demoTag": "Includes demo"
+    },
+    "credits": {
+      "title": "Wallet credits",
+      "lead": "Free wallet balance for providers (bonus credit). It pays our job fees before the paid balance, expires on its date and is never cash.",
+      "viewOnly": "You can view wallet credits. Owners and operations managers make changes.",
+      "on": "On",
+      "off": "Off",
+      "amountUsd": "Amount (USD)",
+      "expiryDays": "Expires after (days)",
+      "starts": "Starts",
+      "ends": "Ends",
+      "provider": "Provider",
+      "choose": "Choose a provider",
+      "market": "Market",
+      "reason": "Reason",
+      "noteLabel": "Note (required for Other)",
+      "reasons": {
+        "goodwill": "Goodwill",
+        "dispute": "Dispute",
+        "promotion": "Promotion",
+        "test": "Test",
+        "other": "Other"
+      },
+      "sources": {
+        "signup": "Signup bonus",
+        "manual": "Manual grant",
+        "campaign": "Campaign",
+        "milestone": "Milestone",
+        "referral": "Referral",
+        "reactivation": "Reactivation",
+        "refund": "Refunded fee"
+      },
+      "signup": {
+        "title": "Signup bonus",
+        "note": "Granted automatically when a provider is approved (verified and active), never at sign-up. Once per business: a duplicate EIN, business phone, insurance policy, bank account or device is flagged for review.",
+        "enabled": "Signup bonus on",
+        "save": "Save {market}"
+      },
+      "grant": {
+        "title": "Manual grant",
+        "noteOwner": "Give one provider bonus credit. It shows on their timeline and in the audit log.",
+        "noteLimit": "Give one provider bonus credit, up to {limit} per grant; above that the owner grants it.",
+        "submit": "Grant credit"
+      },
+      "campaign": {
+        "title": "Bulk campaign",
+        "noteOwner": "Credit for a group of providers, with a total budget cap. Preview who receives it and the total before confirming.",
+        "noteLimit": "Credit for a group of providers, with a total budget cap up to {limit}. Preview who receives it and the total before confirming.",
+        "name": "Campaign name",
+        "audience": "Who receives it",
+        "audiences": {
+          "market": "All providers in the market",
+          "service": "Providers offering a service",
+          "inactive": "Inactive for 30 days or more",
+          "list": "A pasted list"
+        },
+        "service": "Service (for \"offering a service\")",
+        "anyService": "Any service",
+        "list": "Pasted list (provider names or ids, one per line)",
+        "budget": "Total budget cap (USD)",
+        "message": "Message shown to providers",
+        "plan": "Credit can also pay the monthly plan",
+        "preview": "Preview recipients",
+        "previewTitle": "Preview",
+        "summary": "{count, plural, one {# provider receives} other {# providers receive}} {amount} each: {total} of the {budget} budget.",
+        "leftOut": "{count, plural, one {# provider is} other {# providers are}} left out by the budget cap.",
+        "nobody": "Nobody matches this audience.",
+        "confirm": "Confirm and grant {total}"
+      },
+      "rules": {
+        "title": "Rule-based bonuses",
+        "note": "Optional and off by default. Each rule has an amount, expiry, budget cap and switch per market.",
+        "enabled": "Rule on",
+        "threshold": "Completed jobs",
+        "budget": "Budget cap (USD) · used {used}",
+        "save": "Save rule",
+        "kinds": {
+          "milestone": "Milestone",
+          "referral": "Referral",
+          "reactivation": "Reactivation"
+        },
+        "hints": {
+          "milestone": "Credit after the provider's Nth completed job.",
+          "referral": "Credit for the referring provider when the new provider completes 3 jobs (needs referral tracking: saved now, paid once referrals are recorded).",
+          "reactivation": "Credit when a provider comes back online after 30 days inactive (needs online tracking for real providers: saved now, paid once it exists)."
+        }
+      },
+      "limits": {
+        "title": "Approval limits",
+        "note": "Operations managers grant up to these amounts; above them the owner must. Owners have no limit; finance can view. Only the owner changes them. Empty means no limit.",
+        "perGrant": "Operations manager, per grant (USD)",
+        "perCampaign": "Operations manager, per campaign (USD)",
+        "save": "Save limits"
+      },
+      "flags": {
+        "title": "Duplicate businesses to review",
+        "note": "These approved providers share an identifier with another business, so their signup bonus is waiting for a decision.",
+        "grant": "Not a duplicate: grant the bonus",
+        "keep": "Duplicate: no bonus"
+      },
+      "recent": {
+        "title": "Recent grants",
+        "empty": "No grants yet.",
+        "reversed": "Reversed",
+        "why": "Reason",
+        "reverse": "Remove unused credit",
+        "cols": {
+          "date": "Date",
+          "provider": "Provider",
+          "market": "Market",
+          "source": "Source",
+          "amount": "Amount",
+          "left": "Left",
+          "expires": "Expires",
+          "action": "Action"
+        }
+      },
+      "report": {
+        "title": "Campaign report",
+        "empty": "No campaigns yet.",
+        "cols": {
+          "name": "Campaign",
+          "market": "Market",
+          "granted": "Granted",
+          "used": "Used",
+          "expired": "Expired",
+          "recipients": "Providers",
+          "toppedUp": "Topped up later",
+          "jobs": "Jobs on credit",
+          "revenue": "Fees, next 60 days"
+        }
+      },
+      "done": {
+        "signup": "Signup bonus saved.",
+        "grant": "Credit granted.",
+        "campaign": "Campaign granted.",
+        "rule": "Rule saved.",
+        "limit": "Limits saved.",
+        "reverse": "Unused credit removed.",
+        "flag": "Review saved."
+      },
+      "errors": {
+        "limit": "Above your approval limit: the owner must approve this.",
+        "forbidden": "You can't make this change.",
+        "invalid": "Check the form: something is missing or out of range."
+      },
+      "finance": {
+        "title": "Outstanding bonus credit",
+        "note": "Bonus credit granted and not yet used, expired or removed: a liability, per market. Credit used for fees is a promotion cost.",
+        "none": "No bonus credit granted yet.",
+        "total": "Total",
+        "cols": {
+          "market": "Market",
+          "outstanding": "Outstanding",
+          "providers": "Providers holding it",
+          "used": "Used for fees",
+          "expired": "Expired"
+        }
+      },
+      "timeline": {
+        "ledger": "Wallet timeline",
+        "grantLink": "Grant credit",
+        "noLines": "No wallet activity yet.",
+        "kinds": {
+          "topup": "Top-up",
+          "fee": "Job fee (paid balance)",
+          "fee_refund": "Fee refund",
+          "bonus_grant": "Bonus credit added",
+          "bonus_use": "Job fee (bonus credit)",
+          "bonus_expiry": "Bonus credit expired",
+          "bonus_reversal": "Bonus credit removed",
+          "bonus_refund": "Fee refunded as bonus credit"
+        },
+        "status": {
+          "approve": "Approve provider",
+          "approveHint": "Verification is complete: the provider can quote and gets the market's signup bonus (once per business).",
+          "pause": "Pause provider",
+          "reason": "Reason",
+          "done": {
+            "active": "Provider approved.",
+            "paused": "Provider paused."
+          },
+          "error": "Could not change the status."
+        },
+        "flagged": "Signup bonus waiting: this business shares an identifier with another one.",
+        "review": "Review it in Wallet credits"
+      }
     }
   },
   "emails": {
@@ -1727,6 +1920,13 @@
       "none": "No requests yesterday.",
       "line": "{requests} requests, {calls} calls ({missed} missed), {assigned} assigned, {completed} completed, {noProvider} without a provider. Fees that would have been earned: {fees}.",
       "footer": "Test campaign: fees are recorded as manual_test and nobody is charged."
+    },
+    "creditExpiry": {
+      "subjectWeek": "Your {brand} bonus credit expires in 7 days",
+      "subjectDay": "Your {brand} bonus credit expires tomorrow",
+      "intro": "Hello {company},",
+      "body": "{amount} of bonus credit in your wallet expires on {date}. It pays your job fees automatically, so going online and winning jobs before then uses it.",
+      "note": "Bonus credit is not cash and cannot be withdrawn."
     }
   },
   "auth": {
@@ -2262,7 +2462,11 @@
             "What does it cost providers?",
             "A flat fee per request where the driver picks you, paid from a prepaid wallet. Optional plans add discounts and featured placement."
           ],
-          ["Do I set my own prices?", "Yes. You quote each job at your price."]
+          ["Do I set my own prices?", "Yes. You quote each job at your price."],
+          [
+            "What is bonus credit?",
+            "Free balance we add for new providers and promotions. It pays job fees, is used before your paid balance, and expires on the date shown. It is not cash and cannot be withdrawn."
+          ]
         ]
       }
     },
@@ -2413,7 +2617,11 @@
       },
       "checkField": "Check this field."
     },
-    "smsConfirmation": "{brand}: we got your application for {company}. We'll be in touch within 2 business days. Reply STOP to opt out."
+    "smsConfirmation": "{brand}: we got your application for {company}. We'll be in touch within 2 business days. Reply STOP to opt out.",
+    "credit": {
+      "title": "What is bonus credit?",
+      "body": "Free balance we add for new providers and promotions. It pays job fees, is used before your paid balance, and expires on the date shown. It is not cash and cannot be withdrawn."
+    }
   },
   "legal": {
     "draftBanner": "Draft for attorney review. Not yet in effect.",
@@ -2495,6 +2703,10 @@
           [
             "Suspension and removal",
             "We may pause or remove a provider for lapsed insurance or licenses, repeated no-shows, complaints, fraud or breaking these terms. We tell you the reason and the next step."
+          ],
+          [
+            "Bonus credit",
+            "We may add free bonus credit to your wallet for signing up or for promotions. Bonus credit pays job fees (and plans only when a promotion says so), is used before your paid balance, expires on the date shown and has no cash value: it cannot be withdrawn, refunded, sold or transferred. We may remove unused bonus credit given by mistake or obtained through fraud or duplicate accounts. Used bonus credit counts as fees paid. A refunded fee that was paid with bonus credit returns as bonus credit. (Draft clause for attorney review.)"
           ],
           [
             "Changes and contact",
@@ -3443,7 +3655,30 @@
       "current": "Your plan",
       "soon": "Coming soon",
       "ownersOnly": "Only owners and managers can see the wallet.",
-      "more": "Show earlier transactions"
+      "more": "Show earlier transactions",
+      "credit": {
+        "available": "Total available",
+        "paid": "Paid balance",
+        "paidHint": "Your top-ups. Never expires.",
+        "bonus": "Bonus credit",
+        "bonusHint": "Free credit from us. Pays job fees first.",
+        "expires": "{amount} expires on {date}",
+        "order": "Bonus credit pays job fees first (the soonest to expire first), then your paid balance. It is not cash and cannot be withdrawn.",
+        "demo": "Demo",
+        "welcome": "Welcome. We added {amount} bonus credit to your wallet. It pays your fees on your first jobs and expires on {date}.",
+        "ledger": "Wallet activity",
+        "noLines": "No wallet activity yet.",
+        "kinds": {
+          "topup": "Top-up",
+          "fee": "Job fee (paid balance)",
+          "fee_refund": "Fee refund",
+          "bonus_grant": "Bonus credit added",
+          "bonus_use": "Job fee (bonus credit)",
+          "bonus_expiry": "Bonus credit expired",
+          "bonus_reversal": "Bonus credit removed",
+          "bonus_refund": "Fee refunded as bonus credit"
+        }
+      }
     },
     "services": {
       "title": "Services and prices",

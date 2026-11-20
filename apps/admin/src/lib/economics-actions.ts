@@ -49,6 +49,8 @@ export async function saveEconomicsAction(
     startToSubmit: pct(form.get("startToSubmit")),
     quoteRate: pct(form.get("quoteRate")),
     completionRate: pct(form.get("completionRate")),
+    signupBonus: form.get("signupBonus") ? num(form.get("signupBonus")) : undefined,
+    newProvidersPerMonth: form.get("newProviders") ? num(form.get("newProviders")) : undefined,
   });
   if (!parsed.success) return { error: "invalid" };
   const mixTotal = Object.values(parsed.data.serviceMix).reduce((a, b) => a + b, 0);

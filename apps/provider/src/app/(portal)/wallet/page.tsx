@@ -1,6 +1,7 @@
 import { demoPlans, topUpPresets } from "@rsos/config/demo-fixtures";
 import { formatCurrency, type Locale } from "@rsos/i18n";
 import { Alert } from "@rsos/ui/alert";
+import { Badge } from "@rsos/ui/badge";
 import { Button } from "@rsos/ui/button";
 import { EmptyState } from "@rsos/ui/empty-state";
 import { Check, Download } from "lucide-react";
@@ -8,17 +9,18 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { WalletActions } from "@/components/wallet/wallet-actions";
 import { card, PageHead, pageMain } from "@/components/shell/page-head";
-import { getPortalContext, getPortalData, getWalletBalance } from "@/lib/portal";
+import { getPortalContext, getPortalData, getWallet } from "@/lib/portal";
 
 export const dynamic = "force-dynamic";
 
 async function load() {
   const ctx = await getPortalContext();
-  const [{ data }, balance] = await Promise.all([
-    getPortalData(ctx, Date.now()),
-    getWalletBalance(ctx.providerId),
+  const now = Date.now();
+  const [{ data }, wallet] = await Promise.all([
+    getPortalData(ctx, now),
+    getWallet(ctx.providerId, ctx.demo, now),
   ]);
-  return { ctx, data, balance };
+  return { ctx, data, wallet };
 }
 
 /**
@@ -34,7 +36,7 @@ export default async function WalletPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const days = Math.min(60, Math.max(14, Number((await searchParams).days) || 14));
-  const [t, locale, { ctx, data, balance }] = await Promise.all([
+  const [t, locale, { ctx, data, wallet }] = await Promise.all([
     getTranslations("portal.wallet"),
     getLocale(),
     load(),
@@ -47,6 +49,10 @@ export default async function WalletPage({
       </main>
     );
   const money = (c: number) => formatCurrency(c, locale as Locale);
+  const shortDate = new Intl.DateTimeFormat(locale === "es" ? "es-US" : "en-US", {
+    month: "short",
+    day: "numeric",
+  });
   const day = new Intl.DateTimeFormat(locale === "es" ? "es-US" : "en-US", { dateStyle: "full" });
   const groups = new Map<string, typeof data.txns>();
   const newest = data.txns[0]?.at ?? 0;
@@ -69,13 +75,46 @@ export default async function WalletPage({
           </Button>
         }
       />
+      {wallet.welcome ? (
+        <Alert
+          tone="success"
+          title={t("credit.welcome", {
+            amount: money(wallet.welcome.cents),
+            date: shortDate.format(wallet.welcome.expiresAt),
+          })}
+        />
+      ) : null}
       <section className={card} aria-labelledby="bal-h">
         <h2 id="bal-h" className="text-sm font-medium text-muted-foreground">
-          {t("balance")}
+          {t("credit.available")}
         </h2>
         <p className="text-5xl font-semibold tabular-nums">
-          {balance === null ? t("noWallet") : money(balance)}
+          {money(wallet.paidCents + wallet.bonusCents)}
         </p>
+        {/* RSOS-115: the two balances, always shown separately. */}
+        <dl className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border p-3">
+            <dt className="text-sm text-muted-foreground">{t("credit.paid")}</dt>
+            <dd className="text-2xl font-semibold tabular-nums">{money(wallet.paidCents)}</dd>
+            <dd className="text-xs text-muted-foreground">{t("credit.paidHint")}</dd>
+          </div>
+          <div className="rounded-xl border p-3">
+            <dt className="flex items-center gap-2 text-sm text-muted-foreground">
+              {t("credit.bonus")}
+              {wallet.demoCredit ? <Badge tone="outline">{t("credit.demo")}</Badge> : null}
+            </dt>
+            <dd className="text-2xl font-semibold tabular-nums">{money(wallet.bonusCents)}</dd>
+            <dd className="text-xs text-muted-foreground">
+              {wallet.nextExpiry
+                ? t("credit.expires", {
+                    amount: money(wallet.nextExpiry.cents),
+                    date: shortDate.format(wallet.nextExpiry.at),
+                  })
+                : t("credit.bonusHint")}
+            </dd>
+          </div>
+        </dl>
+        <p className="mt-2 text-xs text-muted-foreground">{t("credit.order")}</p>
         <WalletActions
           presets={[...topUpPresets]}
           labels={{
@@ -93,6 +132,32 @@ export default async function WalletPage({
             presetLabels: topUpPresets.map((c) => money(c)),
           }}
         />
+      </section>
+      <section className={card} aria-labelledby="ledger-h">
+        <h2 id="ledger-h" className="mb-2 font-semibold">
+          {t("credit.ledger")}
+        </h2>
+        {wallet.lines.length === 0 ? (
+          <p className="text-muted-foreground">{t("credit.noLines")}</p>
+        ) : (
+          <ul className="divide-y">
+            {wallet.lines.map((x) => (
+              <li key={x.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                <div>
+                  <p className="font-medium">{t(`credit.kinds.${x.kind}` as never)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {shortDate.format(x.at)} ·{" "}
+                    {t(x.balance === "bonus" ? "credit.bonus" : "credit.paid")}
+                  </p>
+                </div>
+                <p className="font-semibold tabular-nums">
+                  {x.amountCents > 0 ? "+" : ""}
+                  {money(x.amountCents)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
       <section className={card} aria-labelledby="pm-h">
         <h2 id="pm-h" className="mb-2 font-semibold">
