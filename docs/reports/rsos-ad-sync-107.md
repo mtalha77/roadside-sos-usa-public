@@ -123,6 +123,5 @@ the dashboard and its CSV, cron jobs refuse calls without the secret).
   `request_flag_counts(provider, phone)` returns the per-reason counts it will read (test traffic
   excluded).
 - Tests: database (`supabase/tests/038_request_flags.test.sql`: reasons per side, urgent safety,
-  who may flag, who reads, resolve) and e2e (`request-flags.spec.ts`: the customer's one-tap
-  report and a provider flag). An e2e for a real request through the Inbox is added once RSOS-116's
-  new request flow is merged, since the test has to file a real request through it.
+  who may flag, who reads, resolve) and e2e (`request-flags.spec.ts`: the customer's one-tap report, a provider flag, and a real
+  request's safety report shown urgent and flagged in the Inbox, then resolved by a dispatcher).

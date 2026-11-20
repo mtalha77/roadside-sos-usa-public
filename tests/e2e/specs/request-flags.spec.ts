@@ -5,8 +5,10 @@ import {
   expect,
   expectNoA11yViolations,
   expectNoHorizontalScroll,
+  readOnly,
   test,
 } from "../support/fixtures";
+import { answerScreenOne, tap } from "../support/get-help";
 
 // Owner decision 3 (2026-11-19): flagging from both sides, one tap plus a reason. The database
 // side (priorities, who may flag and read, the admin Inbox) is covered by
@@ -56,5 +58,61 @@ test.describe("request flags", () => {
     await expectNoA11yViolations(page);
     await box.getByRole("button", { name: "Wrong location" }).click();
     await expect(page.getByText("Flag sent. Our team will review it.")).toBeVisible();
+  });
+
+  test("a customer's safety report is urgent in the admin Inbox and gets resolved", async ({
+    page,
+    browser,
+  }) => {
+    test.skip(
+      !appUrls.web || !appUrls.admin || readOnly,
+      "Needs the website and admin; writes to the database",
+    );
+    test.setTimeout(180_000);
+    const name = `E2E Flag ${Date.now()}`;
+    const site = await browser.newPage();
+    await site.goto(new URL("/get-help/tow/problem", appUrls.web).toString());
+    await tap(site, /All-wheel or 4-wheel drive/, "No");
+    await tap(site, /Does it roll and steer/, "Yes");
+    await answerScreenOne(site, "tow");
+    await site.getByLabel("Street address or cross streets").fill("1200 Main St");
+    await site.getByLabel("City").selectOption({ index: 1 });
+    await site.getByLabel("Destination address or shop name").fill("400 Oak St");
+    await site.getByRole("button", { name: "Continue" }).click();
+    await site.getByLabel("Your name").fill(name);
+    await site
+      .getByLabel("Mobile number")
+      .fill(`(210) 555-01${String(Math.floor(Math.random() * 90) + 10)}`);
+    await site.getByLabel("Make").fill("Ford");
+    await expect(site.locator('input[name="cf-turnstile-response"]')).toHaveValue(/.+/, {
+      timeout: 20_000,
+    });
+    await site.getByRole("button", { name: "Send my request" }).click();
+    await expect(site).toHaveURL(/\/r\/[A-Za-z0-9_-]{20,}$/, { timeout: 15_000 });
+
+    // The customer reports a safety concern: one tap.
+    await site.getByRole("button", { name: "Report a problem" }).click();
+    await site
+      .getByRole("dialog", { name: "Report a problem" })
+      .getByRole("button", { name: "I have a safety concern" })
+      .click();
+    await expect(site.getByText("Thanks. Our team will contact you.")).toBeVisible();
+    await site.close();
+
+    // It is urgent and flagged in the Inbox; a dispatcher resolves it.
+    await signInAsDemo(page, appUrls.admin!, "Dispatcher");
+    await page.goto(new URL("/inbox", appUrls.admin).toString());
+    const item = page.getByRole("link", { name: new RegExp(name) }).first();
+    await expect(item).toBeVisible({ timeout: 30_000 });
+    await expect(item.getByText("Urgent")).toBeVisible();
+    await expect(item.getByText("1 flag")).toBeVisible();
+    await item.click();
+    const flags = page.getByTestId("flag-list");
+    await expect(flags.getByText("Safety concern")).toBeVisible();
+    await expect(flags.getByText("From the customer")).toBeVisible();
+    await expectNoA11yViolations(page);
+    await flags.getByLabel("What did you do? (optional)").fill("Called the customer");
+    await flags.getByRole("button", { name: "Resolve" }).click();
+    await expect(flags.getByText("Resolved: Called the customer")).toBeVisible();
   });
 });
