@@ -6,6 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { card, PageHead, pageMain } from "@/components/shell/page-head";
 import { DisputeButton } from "@/components/jobs/dispute-button";
+import { FlagRequest } from "@/components/flags/flag-request";
 import { getPortalContext, getPortalData } from "@/lib/portal";
 
 export const dynamic = "force-dynamic";
@@ -93,6 +94,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
           {ctx.canSeeMoney && job.feeCents ? (
             <DisputeButton label={t("dispute")} sent={t("disputeSent")} />
           ) : null}
+          <FlagRequest requestId={job.id} className="mt-4 self-start" />
         </section>
       </div>
     </main>

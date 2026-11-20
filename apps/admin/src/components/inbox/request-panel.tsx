@@ -3,6 +3,7 @@ import { inputClass } from "@rsos/ui/input";
 import { LiteMap } from "@rsos/ui/lite-map";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { FlagList } from "@/components/flags/flag-list";
 import { CallButton } from "@/components/softphone/call-button";
 import { RequestAnswers } from "@/components/requests/request-answers";
 import { CLAIM_MINUTES, type InboxRequest, STEPS } from "@/lib/inbox";
@@ -16,6 +17,7 @@ import {
 } from "./panel-forms";
 
 const card = "rounded-2xl border bg-card p-4";
+const FLAG_RESOLVERS = ["super_admin", "ops_manager", "dispatcher", "support"];
 
 /**
  * One request in the inbox (RSOS-034b): who and where, the full timeline, claim, the next manual
@@ -27,7 +29,16 @@ function claimIsFresh(claimedAt: string | null): boolean {
   return claimedAt !== null && Date.now() - Date.parse(claimedAt) < CLAIM_MINUTES * 60_000;
 }
 
-export async function RequestPanel({ data, userId }: { data: InboxRequest; userId: string }) {
+export async function RequestPanel({
+  data,
+  userId,
+  role,
+}: {
+  data: InboxRequest;
+  userId: string;
+  role: string;
+}) {
+  const tf = await getTranslations("admin.flags");
   const [t, ta, locale] = [
     await getTranslations("admin.inbox"),
     await getTranslations("admin.answers"),
@@ -65,6 +76,16 @@ export async function RequestPanel({ data, userId }: { data: InboxRequest; userI
           {t("fullDetail")}
         </Link>
       </header>
+
+      {/* Flags (owner decision 3) first: a safety report is the most urgent thing on the request. */}
+      {data.flags.length ? (
+        <FlagList
+          flags={data.flags}
+          back={`/inbox?id=${r.id}`}
+          title={tf("title")}
+          canResolve={FLAG_RESOLVERS.includes(role)}
+        />
+      ) : null}
 
       <section className={card} aria-labelledby="who-h">
         <h3 id="who-h" className="mb-2 font-semibold">

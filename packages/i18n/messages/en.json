@@ -1979,6 +1979,43 @@
       "kindIp": "IP",
       "kindDevice": "Device",
       "remove": "Remove"
+    },
+    "flags": {
+      "title": "Flags",
+      "customerTitle": "Flags about this customer",
+      "providerTitle": "Flags from customers",
+      "openCount": "{count, plural, =0 {None open} one {# open} other {# open}}",
+      "none": "No flags.",
+      "urgent": "Urgent",
+      "side": {
+        "customer": "From the customer",
+        "provider": "From a provider"
+      },
+      "reasons": {
+        "customer": {
+          "no_show": "Provider didn't arrive",
+          "price_changed": "Price changed",
+          "poor_service": "Poor service",
+          "safety": "Safety concern",
+          "other": "Other"
+        },
+        "provider": {
+          "fake": "Fake or prank",
+          "wrong_location": "Wrong location",
+          "unreachable": "Customer unreachable",
+          "unsafe": "Unsafe",
+          "other": "Other"
+        }
+      },
+      "status": {
+        "open": "Open",
+        "resolved": "Resolved"
+      },
+      "provider": "Provider: {name}",
+      "resolution": "Resolved: {note}",
+      "resolutionLabel": "What did you do? (optional)",
+      "resolve": "Resolve",
+      "inbox": "{count, plural, one {# flag} other {# flags}}"
     }
   },
   "emails": {
@@ -3549,14 +3586,15 @@
     "report": {
       "open": "Report a problem",
       "title": "Report a problem",
-      "kinds": {
-        "no_show": "The provider didn't show up",
-        "overcharge": "I was charged more than the quote",
-        "damage": "My vehicle was damaged",
-        "safety": "I felt unsafe"
+      "note": "Anything to add? (optional)",
+      "pick": "What went wrong? Tap one to send.",
+      "reasons": {
+        "no_show": "The provider didn't arrive",
+        "price_changed": "The price changed",
+        "poor_service": "Poor service",
+        "safety": "I have a safety concern",
+        "other": "Something else"
       },
-      "details": "What happened?",
-      "send": "Send report",
       "sent": "Thanks. Our team will contact you."
     },
     "review": {
@@ -4283,6 +4321,22 @@
       "errorTitle": "This page didn't load",
       "errorBody": "Something went wrong on our side. Your jobs and wallet are safe. Try again, or call provider support if it keeps happening.",
       "retry": "Try again"
+    },
+    "flag": {
+      "open": "Flag this request",
+      "title": "Flag this request",
+      "note": "Note for our team (optional)",
+      "pick": "Tap a reason to send.",
+      "reasons": {
+        "fake": "Fake or prank",
+        "wrong_location": "Wrong location",
+        "unreachable": "Customer unreachable",
+        "unsafe": "Unsafe",
+        "other": "Something else"
+      },
+      "sent": "Flag sent. Our team will review it.",
+      "failed": "We could not send the flag. Try again.",
+      "cancel": "Cancel"
     }
   },
   "voice": {

@@ -1,4 +1,5 @@
 import "server-only";
+import { getOpenFlags, getRequestFlags } from "@/lib/flags";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 /** Requests still being handled (manual dispatch, RSOS-034b). */
@@ -44,6 +45,9 @@ export type InboxItem = {
   unread: boolean;
   lastCall: string | null;
   lastText: string | null;
+  /** Open flags on the request (owner decision 3); an urgent one (safety) sorts it to the top. */
+  flags: number;
+  flagUrgent: boolean;
 };
 
 /**
@@ -59,23 +63,33 @@ export async function getInbox(marketIds: string[]): Promise<{
 }> {
   const supabase = await getServerSupabase();
   if (marketIds.length === 0) return { items: [], unread: 0, unassigned: 0, at: Date.now() };
-  const [{ data: rows }, { data: staff }] = await Promise.all([
+  const FIELDS =
+    "id, short_code, status, urgent, market_id, driver_name, driver_phone, channel, source, created_at, claimed_at, assigned_dispatcher_id, contacted_at, services(name), calls(outcome, created_at), sms_messages(direction, created_at)";
+  const [{ data: openRows }, { data: staff }, flags] = await Promise.all([
     supabase
       .from("requests")
-      .select(
-        "id, short_code, status, urgent, market_id, driver_name, driver_phone, channel, source, created_at, claimed_at, assigned_dispatcher_id, contacted_at, services(name), calls(outcome, created_at), sms_messages(direction, created_at)",
-      )
+      .select(FIELDS)
       .in("market_id", marketIds)
       .in("status", [...OPEN_STATUSES])
       // The newest 200 open requests (then sorted for display: urgent first, longest wait).
       .order("created_at", { ascending: false })
       .limit(200),
     supabase.from("staff_members").select("user_id, display_name"),
+    getOpenFlags(marketIds),
   ]);
+  // Requests with an open flag stay in the inbox even when they are finished (a customer can
+  // report a problem after completion).
+  const listed = new Set((openRows ?? []).map((r) => r.id));
+  const missing = [...new Set(flags.map((f) => f.request_id))].filter((id) => !listed.has(id));
+  const { data: flaggedRows } = missing.length
+    ? await supabase.from("requests").select(FIELDS).in("id", missing.slice(0, 100))
+    : { data: [] };
+  const rows = [...(openRows ?? []), ...(flaggedRows ?? [])];
   const now = Date.now();
   const name = (id: string | null) =>
     id ? ((staff ?? []).find((s) => s.user_id === id)?.display_name ?? null) : null;
-  const items: InboxItem[] = (rows ?? []).map((r) => {
+  const items: InboxItem[] = rows.map((r) => {
+    const mine = flags.filter((f) => f.request_id === r.id);
     const claimedAt = r.claimed_at ? Date.parse(r.claimed_at) : 0;
     const fresh = Boolean(r.assigned_dispatcher_id) && now - claimedAt < CLAIM_MINUTES * 60_000;
     const calls = (r.calls ?? []).sort((a, b) => b.created_at.localeCompare(a.created_at));
@@ -98,12 +112,17 @@ export async function getInbox(marketIds: string[]): Promise<{
       unread: !r.claimed_at && !r.contacted_at,
       lastCall: calls[0]?.outcome ?? null,
       lastText: texts[0]?.direction ?? null,
+      flags: mine.length,
+      flagUrgent: mine.some((f) => f.priority === "urgent"),
     };
   });
-  // Urgent first, then online requests (the main flow, RSOS-110), then the longest wait.
+  // Urgent flags first (safety), then urgent requests, then flagged ones, then online requests
+  // (the main flow, RSOS-110), then the longest wait.
   items.sort(
     (a, b) =>
+      Number(b.flagUrgent) - Number(a.flagUrgent) ||
       Number(b.urgent) - Number(a.urgent) ||
+      Number(b.flags > 0) - Number(a.flags > 0) ||
       Number(a.channel === "phone") - Number(b.channel === "phone") ||
       a.createdAt - b.createdAt,
   );
@@ -196,7 +215,9 @@ export async function getInboxRequest(id: string) {
     })),
   ].sort((a, b) => a.at - b.at);
   const pt = Array.isArray(point.data) ? point.data[0] : null;
+  const flags = await getRequestFlags(id);
   return {
+    flags,
     request: r,
     point: pt ? { lat: pt.lat, lng: pt.lng } : null,
     timeline,

@@ -10,8 +10,10 @@ import { StatCard } from "@rsos/ui/stat-card";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FlagList } from "@/components/flags/flag-list";
 import { ProviderActions } from "@/components/providers/provider-actions";
 import { getAdminContext } from "@/lib/admin";
+import { getProfileFlags } from "@/lib/flags";
 import { demoNow } from "@/lib/demo-clock";
 import { setProviderStatusAction } from "@/lib/provider-status-actions";
 import { demoDocuments, demoProviderFromId } from "@/lib/providers";
@@ -29,7 +31,7 @@ async function load(id: string) {
   }
   if (!/^[0-9a-f-]{36}$/.test(id)) return null;
   const supabase = await getServerSupabase();
-  const [{ data }, { data: ledger }, { data: flags }] = await Promise.all([
+  const [{ data }, { data: ledger }, { data: flags }, customerFlags] = await Promise.all([
     supabase.from("providers").select("id, name, status, status_reason").eq("id", id).maybeSingle(),
     // RSOS-115: the provider's wallet timeline (money staff only, by RLS).
     supabase
@@ -39,6 +41,8 @@ async function load(id: string) {
       .order("created_at", { ascending: false })
       .limit(30),
     supabase.from("provider_review_flags").select("id").eq("provider_id", id).eq("status", "open"),
+    // Flags (owner decision 3): what customers reported about this provider.
+    getProfileFlags({ providerId: id }),
   ]);
   return data
     ? {
@@ -49,6 +53,7 @@ async function load(id: string) {
         real: data,
         ledger: ledger ?? [],
         flagged: (flags ?? []).length > 0,
+        flags: customerFlags,
       }
     : null;
 }
@@ -66,9 +71,10 @@ export default async function ProviderDetailPage({
 }) {
   const { id } = await params;
   const sp = await searchParams;
-  const [t, tw, locale, data] = await Promise.all([
+  const [t, tw, tf, locale, data] = await Promise.all([
     getTranslations("admin.providers"),
     getTranslations("admin.credits.timeline"),
+    getTranslations("admin.flags"),
     getLocale(),
     load(decodeURIComponent(id)),
   ]);
@@ -175,6 +181,13 @@ export default async function ProviderDetailPage({
           )}
         </section>
         {actions}
+        <FlagList
+          flags={data.flags}
+          back={`/providers/${data.real.id}`}
+          title={tf("providerTitle")}
+          showCode
+          canResolve={false}
+        />
       </main>
     );
   const p = data.portal!;

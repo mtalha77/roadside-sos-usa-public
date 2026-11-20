@@ -359,11 +359,11 @@ function RequestLiveView({
     setSheet(null);
     setNotice(t("cancel.done"));
   };
-  const report = async (kind: string, details: string) => {
+  const report = async (reason: string, note: string) => {
     if (realStatus !== null)
       await fetch(`/api/r/${token}`, {
         method: "POST",
-        body: JSON.stringify({ action: "report", kind, details }),
+        body: JSON.stringify({ action: "report", reason, note: note.trim() || undefined }),
       }).catch(() => null);
     setSheet(null);
     setNotice(t("report.sent"));
@@ -792,11 +792,10 @@ function RequestLiveView({
             {t("cancel.open")}
           </Button>
         ) : null}
-        {stage !== "searching" ? (
-          <Button type="button" variant="ghost" onClick={() => setSheet("report")}>
-            {t("report.open")}
-          </Button>
-        ) : null}
+        {/* Owner decision 3: always there, during the job and after completion. */}
+        <Button type="button" variant="ghost" onClick={() => setSheet("report")}>
+          {t("report.open")}
+        </Button>
       </div>
 
       <Sheet open={confirming !== null} onOpenChange={(o) => (o ? null : setConfirming(null))}>
@@ -891,38 +890,43 @@ function RequestLiveView({
           </SheetContent>
         ) : sheet === "report" ? (
           <SheetContent title={t("report.title")}>
+            {/* One tap plus a reason: each reason sends the report (the note is optional). */}
             <form
               className="flex flex-col gap-3"
               onSubmit={(e) => {
                 e.preventDefault();
+                const submitter = (e.nativeEvent as SubmitEvent)
+                  .submitter as HTMLButtonElement | null;
                 const fd = new FormData(e.currentTarget);
-                void report(String(fd.get("kind") ?? "no_show"), String(fd.get("details") ?? ""));
+                void report(submitter?.value ?? "other", String(fd.get("note") ?? ""));
               }}
             >
-              <fieldset className="flex flex-col gap-2">
-                <legend className="sr-only">{t("report.title")}</legend>
-                {(["no_show", "overcharge", "damage", "safety"] as const).map((k, i) => (
-                  <label key={k} className="flex min-h-touch items-center gap-3">
-                    <input
-                      type="radio"
-                      name="kind"
-                      value={k}
-                      defaultChecked={i === 0}
-                      className="size-5 accent-[var(--primary)]"
-                    />
-                    {t(`report.kinds.${k}`)}
-                  </label>
-                ))}
-              </fieldset>
               <label className="flex flex-col gap-2 font-medium">
-                {t("report.details")}
+                {t("report.note")}
                 <textarea
-                  name="details"
-                  rows={3}
+                  name="note"
+                  rows={2}
+                  maxLength={500}
                   className="rounded-lg border border-input bg-surface p-3"
                 />
               </label>
-              <Button type="submit">{t("report.send")}</Button>
+              <fieldset className="flex flex-col gap-2">
+                <legend className="mb-1 font-medium">{t("report.pick")}</legend>
+                {(["no_show", "price_changed", "poor_service", "safety", "other"] as const).map(
+                  (k) => (
+                    <Button
+                      key={k}
+                      type="submit"
+                      name="reason"
+                      value={k}
+                      variant={k === "safety" ? "destructive" : "outline"}
+                      className="justify-start"
+                    >
+                      {t(`report.reasons.${k}`)}
+                    </Button>
+                  ),
+                )}
+              </fieldset>
             </form>
           </SheetContent>
         ) : null}

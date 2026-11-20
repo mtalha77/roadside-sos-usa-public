@@ -1,8 +1,8 @@
-import { brand } from "@rsos/config/brand";
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { cancelRealRequest, getRealRequest, setBookingMode } from "@/lib/request-status";
+import { isTestHeader } from "@/lib/test-traffic";
 
 type Params = { params: Promise<{ token: string }> };
 
@@ -26,12 +26,13 @@ const Action = z.discriminatedUnion("action", [
   }),
   z.object({
     action: z.literal("report"),
-    kind: z.enum(["no_show", "overcharge", "damage", "safety"]),
-    details: z.string().max(2000),
+    // Owner decision 3: one tap plus a reason, an optional note.
+    reason: z.enum(["no_show", "price_changed", "poor_service", "safety", "other"]),
+    note: z.string().trim().max(500).optional(),
   }),
 ]);
 
-/** Driver actions on a real request: cancel with a reason, or report a problem to the team. */
+/** Customer actions on a real request: cancel with a reason, or report a problem (a flag). */
 export async function POST(request: NextRequest, { params }: Params) {
   const token = (await params).token;
   const parsed = Action.safeParse(await request.json().catch(() => null));
@@ -44,21 +45,15 @@ export async function POST(request: NextRequest, { params }: Params) {
     return NextResponse.json({
       ok: await setBookingMode(token, parsed.data.mode, parsed.data.maxCents),
     });
-  const supabase = createPublicSupabase();
+  // The flag goes to the admin Inbox (safety is urgent) and onto the request and both profiles.
+  const supabase = createPublicSupabase({ test: isTestHeader(request.headers) });
+  if (!supabase) return NextResponse.json({ ok: false }, { status: 503 });
   const { error } = await (
-    supabase!.rpc as unknown as (f: string, a: object) => PromiseLike<{ error: unknown }>
-  )("submit_contact_message", {
-    p: {
-      name: `Driver on ${req.short_code}`,
-      email: brand.emails.support,
-      topic: "job",
-      market_slug: req.market_slug,
-      message:
-        `Problem report on request ${req.short_code}: ${parsed.data.kind}. ${parsed.data.details}`.slice(
-          0,
-          5000,
-        ),
-    },
+    supabase.rpc as unknown as (f: string, a: object) => PromiseLike<{ error: unknown }>
+  )("flag_request_as_customer", {
+    p_token: token,
+    p_reason: parsed.data.reason,
+    p_note: parsed.data.note ?? null,
   });
-  return NextResponse.json({ ok: !error });
+  return NextResponse.json({ ok: !error }, { status: error ? 400 : 200 });
 }

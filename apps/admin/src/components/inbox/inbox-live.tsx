@@ -57,6 +57,7 @@ export function InboxLive({
   selectedId: string | null;
 }) {
   const t = useTranslations("admin.inbox");
+  const tf = useTranslations("admin.flags");
   const [data, setData] = useState(initial);
   const savedAlerts = useSyncExternalStore(noSubscription, readAlertsPref, () => false);
   const [chosenAlerts, setAlerts] = useState<boolean | null>(null);
@@ -84,7 +85,7 @@ export function InboxLive({
       }, 300);
     };
     const channel = supabase.channel("inbox");
-    for (const table of ["requests", "calls", "sms_messages", "request_events"])
+    for (const table of ["requests", "calls", "sms_messages", "request_events", "request_flags"])
       channel.on("postgres_changes", { event: "*", schema: "public", table }, reload);
     channel.subscribe();
     // Safety net when Realtime drops (network changes): reload every minute.
@@ -156,6 +157,11 @@ export function InboxLive({
                     <span className="flex flex-wrap items-center gap-2">
                       <span className="font-mono font-semibold">{i.code}</span>
                       {i.urgent ? <Badge tone="critical">{t("urgent")}</Badge> : null}
+                      {i.flags ? (
+                        <Badge tone={i.flagUrgent ? "critical" : "warning"}>
+                          {tf("inbox", { count: i.flags })}
+                        </Badge>
+                      ) : null}
                       {i.unread ? <Badge tone="warning">{t("new")}</Badge> : null}
                       <Badge tone="neutral">{t(`status.${i.status}`)}</Badge>
                       {/* Where it came from (RSOS-110): online requests are the main flow. */}
