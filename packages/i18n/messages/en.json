@@ -1706,7 +1706,7 @@
         "plan": "Credit can also pay the monthly plan",
         "preview": "Preview recipients",
         "previewTitle": "Preview",
-        "summary": "{count, plural, one {# provider} other {# providers}} receive {amount} each: {total} of the {budget} budget.",
+        "summary": "{count, plural, one {# provider receives} other {# providers receive}} {amount} each: {total} of the {budget} budget.",
         "leftOut": "{count, plural, one {# provider is} other {# providers are}} left out by the budget cap.",
         "nobody": "Nobody matches this audience.",
         "confirm": "Confirm and grant {total}"

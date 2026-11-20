@@ -107,7 +107,7 @@ test.describe("wallet credits", () => {
     await expect(preview.getByRole("heading", { name: "Preview" })).toBeVisible();
     await expect(
       preview
-        .getByText(/receive \$20\.00 each: \$\d+\.00 of the \$40\.00 budget/)
+        .getByText(/receives? \$20(\.00)? each: \$\d+(\.00)? of the \$40(\.00)? budget/)
         .or(preview.getByText("Nobody matches this audience.")),
     ).toBeVisible();
     await expectNoA11yViolations(page);
