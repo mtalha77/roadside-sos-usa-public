@@ -388,6 +388,7 @@
       "radiusValue": "10, 20, then 35 miles",
       "phones": "Phone numbers by source",
       "noPhones": "No numbers yet (needs Twilio).",
+      "allPhones": "See all {count} numbers in Settings",
       "checklist": "Launch checklist",
       "checks": {
         "numbers": "Tracking numbers assigned (website and Google Ads)",
