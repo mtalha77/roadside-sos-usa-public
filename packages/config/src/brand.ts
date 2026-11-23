@@ -1,6 +1,7 @@
 /**
  * Brand configuration: the ONLY place the brand name and default domain are written down.
- * Both are working values and will change. Change the name here; change the domain with the
+ * The name is final (Road Rescue SOS, owner 2026-11-23); the domain moves to roadrescuesos.com
+ * when it is live. Change the name here; change the domain with the
  * NEXT_PUBLIC_APP_DOMAIN environment variable (no code edit). Never hardcode either elsewhere:
  * `node scripts/check-brand.ts` fails CI if you do.
  * Phone numbers and cities are NOT brand config: they belong to a market in the database.
@@ -13,11 +14,11 @@ const domain = (process.env.NEXT_PUBLIC_APP_DOMAIN || DEFAULT_DOMAIN).trim().toL
 
 export const brand = {
   /** Full product name shown in titles, headings and footers. */
-  name: "Roadside SOS USA",
+  name: "Road Rescue SOS",
   /** Short name for tight spaces (mobile header, app icon, PWA name). */
-  shortName: "Roadside SOS",
+  shortName: "Road Rescue SOS",
   /** Legal entity for terms, privacy and invoices. Placeholder until the company is formed. */
-  legalName: "Roadside SOS USA LLC (placeholder)",
+  legalName: "Road Rescue SOS LLC (placeholder)",
   tagline: "Roadside help, fast",
   description:
     "Stranded? Share your location and problem, get quotes with price and arrival time from verified roadside providers nearby, and pick one.",

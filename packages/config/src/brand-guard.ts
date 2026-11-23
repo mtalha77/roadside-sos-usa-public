@@ -2,7 +2,9 @@
  * Finds hardcoded brand names or domains outside the places allowed to contain them.
  * Used by `node scripts/check-brand.ts` in CI.
  */
-export const BRAND_PATTERN = /roadside[\s_-]*sos|fixallcontractors/i;
+// The old working name and test domain stay blocked so leftovers are caught too.
+export const BRAND_PATTERN =
+  /road[\s_-]*rescue[\s_-]*sos|roadrescuesos|roadside[\s_-]*sos|fixallcontractors/i;
 
 /** Paths allowed to contain the brand name or domain. */
 export function isAllowedPath(path: string): boolean {

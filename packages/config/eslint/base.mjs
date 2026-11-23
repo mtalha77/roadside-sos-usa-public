@@ -7,7 +7,7 @@ import tseslint from "typescript-eslint";
  * Blocks hardcoded brand names and domains outside packages/config/src/brand.ts.
  * Import `brand` from "@rsos/config/brand" instead.
  */
-const BRAND_PATTERN = "/fixallcontractors|roadside\\s*sos/i";
+const BRAND_PATTERN = "/fixallcontractors|roadrescuesos|road\\s*rescue\\s*sos|roadside\\s*sos/i";
 export const brandSelectors = [
   {
     selector: `Literal[value=${BRAND_PATTERN}]`,
