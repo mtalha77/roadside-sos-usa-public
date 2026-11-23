@@ -12,6 +12,19 @@ describe("brand guard", () => {
     ]);
   });
 
+  it("catches the new name and domain too, and the old working name", () => {
+    const violations = findBrandViolations([
+      { path: "apps/web/src/a.tsx", content: 'const t = "Road Rescue SOS";' },
+      { path: "apps/web/src/b.tsx", content: "fetch('https://admin.roadrescuesos.com')" },
+      { path: "apps/web/src/c.tsx", content: 'const t = "Roadside SOS USA";' },
+    ]);
+    expect(violations.map((v) => v.path)).toEqual([
+      "apps/web/src/a.tsx",
+      "apps/web/src/b.tsx",
+      "apps/web/src/c.tsx",
+    ]);
+  });
+
   it("catches a hardcoded domain in any file type", () => {
     const violations = findBrandViolations([
       { path: "scripts/deploy.sh", content: "curl https://fixallcontractors.com" },
