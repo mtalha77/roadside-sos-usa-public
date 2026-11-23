@@ -1,0 +1,50 @@
+name: Uptime
+
+# Release QA check 7 (soft launch, 2026-11-23): every 15 minutes, ask the three production apps
+# for /api/health. Two failures in a row for a host open one critical issue assigned to the owner
+# (GitHub emails the assignee); the next healthy run closes it. Hosts follow vars.APP_DOMAIN.
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: uptime
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: uptime
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DOMAIN: ${{ vars.APP_DOMAIN }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Check /api/health on the three apps
+        run: |
+          down=""
+          for host in "$DOMAIN" "pro.$DOMAIN" "admin.$DOMAIN"; do
+            ok=0
+            for attempt in 1 2; do
+              if curl -fsS --max-time 20 "https://$host/api/health" | jq -e '.ok == true' >/dev/null 2>&1; then ok=1; break; fi
+              sleep 30
+            done
+            if [ "$ok" = 1 ]; then echo "up: $host"; else echo "::error::down: $host"; down="$down $host"; fi
+          done
+          title="Production is down"
+          open=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label critical --search "\"$title\" in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$down" ]; then
+            if [ -z "$open" ]; then
+              gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --label critical --assignee "${{ github.repository_owner }}" \
+                --body "Health checks failed twice in a row for:$down. Run: $RUN_URL. Roll back in Vercel (Deployments, last good production deployment, Instant Rollback); see docs/QA.md, Gate 4."
+            fi
+            exit 1
+          elif [ -n "$open" ]; then
+            gh issue close "$open" --repo "$GITHUB_REPOSITORY" --comment "All three apps are healthy again: $RUN_URL"
+          fi
