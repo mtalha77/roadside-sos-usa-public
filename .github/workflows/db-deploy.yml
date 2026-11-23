@@ -25,6 +25,7 @@ jobs:
       SUPABASE_DB_PASSWORD: ${{ github.ref_name == 'main' && secrets.SUPABASE_DB_PASSWORD_PROD || secrets.SUPABASE_DB_PASSWORD_STAGING }}
       SUPABASE_PROJECT_ID: ${{ github.ref_name == 'main' && vars.SUPABASE_PROJECT_ID_PROD || vars.SUPABASE_PROJECT_ID_STAGING }}
       APP_DOMAIN: ${{ vars.APP_DOMAIN }}
+      APP_DOMAIN_ALIASES: ${{ vars.APP_DOMAIN_ALIASES }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install Supabase CLI

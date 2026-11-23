@@ -100,6 +100,7 @@ jobs:
       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD_DEV }}
       SUPABASE_PROJECT_ID: ${{ vars.SUPABASE_PROJECT_ID_DEV }}
       APP_DOMAIN: ${{ vars.APP_DOMAIN }}
+      APP_DOMAIN_ALIASES: ${{ vars.APP_DOMAIN_ALIASES }}
       VERCEL_TEAM_SLUG: ${{ vars.VERCEL_TEAM_SLUG }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

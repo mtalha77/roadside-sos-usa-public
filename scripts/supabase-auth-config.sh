@@ -2,7 +2,9 @@
 # Sets Supabase Auth for one environment: site URL and redirect URLs, the custom access token hook
 # (roles in the JWT, RSOS-018), authenticator-app MFA and password rules.
 # Usage: scripts/supabase-auth-config.sh <dev|staging|prod> <project-ref>
-# Needs: SUPABASE_ACCESS_TOKEN, APP_DOMAIN (e.g. the test domain), VERCEL_TEAM_SLUG (dev only).
+# Needs: SUPABASE_ACCESS_TOKEN, APP_DOMAIN (the main domain), VERCEL_TEAM_SLUG (dev only).
+# Optional: APP_DOMAIN_ALIASES, space-separated older domains still served during a domain move;
+# their hosts stay on the redirect allow list so sign-in keeps working there.
 # Hostnames come from environment variables so the domain can change without a code edit.
 set -euo pipefail
 
@@ -30,6 +32,14 @@ case "$env_name" in
     exit 1
     ;;
 esac
+
+# During a domain move the old hosts stay allowed (the site URL is always the main domain).
+for alias in ${APP_DOMAIN_ALIASES:-}; do
+  case "$env_name" in
+    staging) allow="${allow},https://staging.${alias}/**,https://staging-pro.${alias}/**,https://staging-admin.${alias}/**" ;;
+    prod) allow="${allow},https://${alias}/**,https://www.${alias}/**,https://pro.${alias}/**,https://admin.${alias}/**" ;;
+  esac
+done
 
 # Email codes (batch 4 scope change: no SMS). Sign-in emails carry a 6-digit code, not only a
 # link, so drivers, providers and admins type it on the page they are on. No brand in the text:
