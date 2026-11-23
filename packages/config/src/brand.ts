@@ -1,14 +1,14 @@
 /**
  * Brand configuration: the ONLY place the brand name and default domain are written down.
- * The name is final (Road Rescue SOS, owner 2026-11-23); the domain moves to roadrescuesos.com
- * when it is live. Change the name here; change the domain with the
+ * Name: Road Rescue SOS (owner, 2026-11-23). Main domain: roadrescuesos.com (the old test domain
+ * fixallcontractors.com is still served during the move). Change the name here; change the domain with the
  * NEXT_PUBLIC_APP_DOMAIN environment variable (no code edit). Never hardcode either elsewhere:
  * `node scripts/check-brand.ts` fails CI if you do.
  * Phone numbers and cities are NOT brand config: they belong to a market in the database.
  */
 import { iconColors } from "./theme-colors";
 
-const DEFAULT_DOMAIN = "fixallcontractors.com";
+const DEFAULT_DOMAIN = "roadrescuesos.com";
 
 const domain = (process.env.NEXT_PUBLIC_APP_DOMAIN || DEFAULT_DOMAIN).trim().toLowerCase();
 
