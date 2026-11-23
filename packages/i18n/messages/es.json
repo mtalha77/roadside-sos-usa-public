@@ -397,7 +397,8 @@
         "on_duty": "El horario telefónico cubre 24/7",
         "landing_pages": "Páginas de ciudad y de anuncios publicadas",
         "tracking": "Seguimiento de conversiones verificado (una conversión en los últimos 30 días)",
-        "booking_test": "Flujo de reserva probado de principio a fin (una reserva de prueba asignada y luego cancelada como \"test\")"
+        "booking_test": "Flujo de reserva probado de principio a fin (una reserva de prueba asignada y luego cancelada como \"test\")",
+        "sentry": "Sentry activo en las tres apps (obligatorio antes de cualquier anuncio pagado)"
       },
       "done": "(hecho)",
       "todo": "(pendiente)",
@@ -759,8 +760,9 @@
           "maps": "Google Maps (apagado)",
           "email": "Email (Resend)",
           "turnstile": "Protección contra bots (Turnstile)",
-          "rateLimit": "Límites de uso (Upstash)",
-          "analytics": "Seguimiento de anuncios (GTM)"
+          "rateLimit": "Límites de uso (Postgres, o Upstash si está configurado)",
+          "analytics": "Seguimiento de anuncios (GTM)",
+          "sentry": "Registro de errores (Sentry)"
         },
         "state": {
           "real": "Real",
@@ -1957,7 +1959,14 @@
         "lastOk": "Último éxito",
         "failures": "Fallas seguidas",
         "none": "Todavía no se ha ejecutado ninguna sincronización."
-      }
+      },
+      "sentryTitle": "Sentry: obligatorio antes de cualquier anuncio pagado",
+      "sentryLive": "Sentry está activo en las tres apps. Se pueden encender las plataformas.",
+      "sentryNotLive": "Sentry aún no está activo ({detail}). Ninguna plataforma se puede encender hasta que el registro de errores funcione en el sitio web, el portal de proveedores y admin.",
+      "sentryBlocked": "Primero necesita Sentry activo",
+      "sentry": "No se encendió: Sentry debe estar activo en las tres apps antes de cualquier anuncio pagado.",
+      "sentryOn": "Activo",
+      "sentryOff": "No activo"
     },
     "testTraffic": {
       "title": "Tráfico de prueba",
@@ -2144,7 +2153,8 @@
       "code": "Ese código no funcionó. Revísalo e inténtalo de nuevo.",
       "notConfigured": "El inicio de sesión aún no está disponible en este entorno.",
       "generic": "Algo salió mal. Inténtalo de nuevo.",
-      "expired": "Tu sesión terminó. Vuelve a iniciar sesión."
+      "expired": "Tu sesión terminó. Vuelve a iniciar sesión.",
+      "limit": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo."
     },
     "admin": {
       "title": "Acceso de administración",

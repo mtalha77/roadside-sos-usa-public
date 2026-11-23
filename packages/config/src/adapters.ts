@@ -1,3 +1,4 @@
+import { rateLimitBackend } from "./rate-limits";
 import { getSiteEnv } from "./site";
 
 /**
@@ -23,9 +24,17 @@ export const ADAPTER_KEYS = {
   turnstile: ["NEXT_PUBLIC_TURNSTILE_SITE_KEY", "TURNSTILE_SECRET_KEY"],
   rateLimit: ["UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_TOKEN"],
   analytics: ["NEXT_PUBLIC_GTM_ID"],
+  sentry: ["NEXT_PUBLIC_SENTRY_DSN"],
 } as const satisfies Record<string, readonly string[]>;
 
 export type AdapterName = keyof typeof ADAPTER_KEYS;
+
+/**
+ * Sentry's SDK is not in the apps yet (accepted exception for the soft launch, release 1). A DSN
+ * alone reports nothing, so error tracking only counts as real once the Sentry ticket adds the SDK
+ * to all three apps and sets this to true. Paid ads are blocked until then.
+ */
+export const SENTRY_SDK_INSTALLED = false;
 
 /** Adapters that also need an on switch besides their keys (owner scope change, batch 4). */
 export const ADAPTER_FLAGS: Partial<Record<AdapterName, string>> = {
@@ -45,7 +54,12 @@ export type AdapterState = "real" | "fake" | "deferred" | "missing";
 type EnvSource = Record<string, string | undefined>;
 
 export function adapterState(name: AdapterName, env: EnvSource = process.env): AdapterState {
-  const present = ADAPTER_KEYS[name].every((k) => (env[k] ?? "").trim().length > 0);
+  // Rate limiting is real on Upstash or on the shared Postgres counter (owner decision, release 1);
+  // only the per-instance memory store counts as fake or missing.
+  if (name === "rateLimit" && rateLimitBackend(env) !== "memory") return "real";
+  const present =
+    ADAPTER_KEYS[name].every((k) => (env[k] ?? "").trim().length > 0) &&
+    (name !== "sentry" || SENTRY_SDK_INSTALLED);
   const flag = ADAPTER_FLAGS[name];
   if (present && (!flag || env[flag] === "true")) return "real";
   if (DEFERRED_BY_OWNER.includes(name)) return "deferred";

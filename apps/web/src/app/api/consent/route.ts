@@ -1,4 +1,5 @@
 import { createPublicSupabase } from "@rsos/db/public";
+import { callerIpFrom, enforceRateLimit } from "@rsos/db/rate-limit";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import {
@@ -59,8 +60,11 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
     });
   }
+  // The cookie is always set; the consent record is skipped for a caller over the limit.
   const supabase = createPublicSupabase();
-  if (supabase) {
+  const allowed = (await enforceRateLimit("consent", { ip: callerIpFrom(request.headers) }))
+    .allowed;
+  if (supabase && allowed) {
     await supabase.rpc(
       "record_cookie_consent" as never,
       {

@@ -22,6 +22,49 @@ and both sign-in pages; Vercel runtime logs watched for 15 minutes (19:57 to 20:
 requests across the three apps, all 2xx or 3xx): info entries only, no warnings, errors or
 fatals.
 
+## Accepted exceptions
+
+Owner decisions on 2026-11-23, after the v0.1.0 deploy. Anything not listed here is not waived.
+
+| Item            | Decision                          | Date       | Reason                                                                            | Condition                                                                                                                                                                                                                     | Owner                                |
+| --------------- | --------------------------------- | ---------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| Rate limiting   | **Not waived**: fixed in v0.1.1   | 2026-11-23 | Public forms, sign-in codes and request creation must not be floodable at launch. | None: shipped as the Postgres limiter (below). Upstash stays optional: setting `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` switches the store with no code change.                                                | Engineering                          |
+| Twilio / phones | Accepted                          | 2026-11-23 | Booking is web-only for the soft launch.                                          | Phones stay off in production until the RingCentral connection (`docs/batches/rsos-ringcentral.md`), which the owner will ask for.                                                                                            | Owner (asks), Engineering            |
+| Sentry          | Accepted for the soft launch only | 2026-11-23 | No paid traffic yet; uptime checks cover outages.                                 | Sentry live in all three apps **before any paid ads start**. Enforced: "Sentry live" is a required go-live item for every market, and no ad platform can be switched on without it (database check, shown on Ad connections). | Engineering (SDK), Owner (DSN)       |
+| Super admin     | Accepted                          | 2026-11-23 | The account can only be created after the first production deploy.                | Created in `rsos-prod` within 1 hour of the release, with the steps in the post-release checklist below.                                                                                                                      | Owner (step 1), Engineering (step 2) |
+
+### Rate limiting as shipped (v0.1.1)
+
+Limits live in `packages/config/src/rate-limits.ts` (per IP, per email or phone, per market) and
+are counted in Postgres (`rate_limit_hit`), shared by every server instance; old windows are swept
+nightly. Covered: Get Help (creates a request), contact form, provider application, waitlist,
+email sign-in codes, provider email links and phone codes, cookie choices and the funnel beacon.
+`/api/health` reports `adapters.rateLimit: "real"` and `rateLimitBackend: "postgres"`, proven by
+a counted probe on every health check.
+
+## Post-release checklist
+
+Within 1 hour of the release:
+
+1. **Super admin, step 1 (owner).** Supabase dashboard → project `rsos-prod` → Authentication →
+   Users → Add user → Create new user. Enter your email and a strong password, tick **Auto Confirm
+   User**, then Create user.
+2. **Super admin, step 2 (engineering, or the owner in the SQL editor of `rsos-prod`).** Make that
+   user the owner (replace the email):
+
+   ```sql
+   insert into public.staff_members (user_id, role, display_name)
+   select id, 'super_admin', 'Owner' from auth.users where email = 'you@example.com'
+   on conflict (user_id) do update set role = 'super_admin', is_active = true;
+   ```
+
+3. **Sign in.** Go to `admin.` + the main domain → Sign in with that email and password. Set up
+   the authenticator app when asked (staff need two-factor sign-in), then sign out and in again.
+4. **Check.** Settings → System status shows all three apps healthy, `Rate limits` Real, and
+   `Error tracking (Sentry)` Missing (the accepted exception). Marketing → Ad connections shows
+   "Sentry: Not live", with every platform's Switch on disabled.
+5. **Dummy providers.** Six `[Dummy]` providers stay until the owner says to remove them.
+
 ## What is live
 
 - **Customers:** the website, the Get Help request flow with per-service questions, the tracking
@@ -39,7 +82,7 @@ fatals.
 | `providerMarketplace` | Provider offers, jobs, insights, team activity and home counts (still on the demo scenario) | The quote engine (batch 5) is built. |
 
 Off until keys exist (not flags): Twilio calls and texts, Google Maps, ad platform sync, Meta and
-Google conversion uploads, Sentry, rate limiting.
+Google conversion uploads, Sentry (paid ads blocked until it is live).
 
 ## Rollback
 
@@ -55,7 +98,7 @@ database changes are additive, so the old apps keep working against the new sche
 ## Owner actions
 
 1. Create the first super admin (`docs/runbooks/super-admin.md`).
-2. Sentry DSN for the three apps; Upstash keys for rate limiting.
+2. Sentry: the SDK ticket, then a DSN for the three apps, before any paid ads (Upstash is optional).
 3. Turnstile site and secret keys on the provider and admin projects (production).
 4. Twilio production keys when phones should go live (`docs/runbooks/twilio.md`).
 5. Supabase: turn on leaked-password protection; confirm backups (PITR) on `rsos-prod`.

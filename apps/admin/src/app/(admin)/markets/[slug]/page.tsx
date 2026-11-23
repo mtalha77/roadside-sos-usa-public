@@ -7,6 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarketStatusForm } from "@/components/markets/market-status-form";
 import { getAdminContext } from "@/lib/admin";
+import { refreshSentryCheck } from "@/lib/app-health";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 /** The market page shows a short list; Settings > Phone numbers has them all. */
@@ -19,7 +20,8 @@ async function load(slug: string) {
   const ctx = await getAdminContext();
   const market = ctx.markets.find((m) => m.slug === slug);
   if (!market) return null;
-  const supabase = await getServerSupabase();
+  // Records whether Sentry is live in all three apps: a required go-live item (release 1).
+  const [supabase] = await Promise.all([getServerSupabase(), refreshSentryCheck()]);
   const [{ data: row }, { data: phones }, { data: shapes }, { count: services }, { data: checks }] =
     await Promise.all([
       supabase

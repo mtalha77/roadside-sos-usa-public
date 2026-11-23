@@ -6,6 +6,7 @@ import { inputClass } from "@rsos/ui/input";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { getAdminContext } from "@/lib/admin";
+import { refreshSentryCheck } from "@/lib/app-health";
 import {
   mapCampaignAction,
   setAdCodeAction,
@@ -37,10 +38,12 @@ export default async function ConnectionsPage({
 }: {
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
-  const [t, ctx, sp] = await Promise.all([
+  const [t, ctx, sp, sentry] = await Promise.all([
     getTranslations("admin.ads"),
     getAdminContext(),
     searchParams,
+    // Owner decision (release 1): no paid ads until Sentry is live in all three apps.
+    refreshSentryCheck(),
   ]);
   const supabase = await getServerSupabase();
   const [
@@ -85,8 +88,26 @@ export default async function ConnectionsPage({
       </header>
       {sp.done ? <Alert tone="success" title={t("saved")} /> : null}
       {sp.error ? (
-        <Alert tone="critical" title={t(sp.error === "forbidden" ? "forbidden" : "invalid")} />
+        <Alert
+          tone="critical"
+          title={t(
+            sp.error === "forbidden" ? "forbidden" : sp.error === "sentry" ? "sentry" : "invalid",
+          )}
+        />
       ) : null}
+      <section id="sentry" aria-labelledby="sentry-h" className={card}>
+        <div className="mb-1 flex items-center justify-between gap-2">
+          <h2 id="sentry-h" className="font-semibold">
+            {t("sentryTitle")}
+          </h2>
+          <Badge tone={sentry.ok ? "success" : "critical"}>
+            {t(sentry.ok ? "sentryOn" : "sentryOff")}
+          </Badge>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {sentry.ok ? t("sentryLive") : t("sentryNotLive", { detail: sentry.detail ?? "" })}
+        </p>
+      </section>
       {sp.test ? (
         <Alert
           tone={sp.test === "ok" ? "success" : "critical"}
@@ -136,10 +157,20 @@ export default async function ConnectionsPage({
                     <form action={setConnectionAction}>
                       <input type="hidden" name="platform" value={p} />
                       <input type="hidden" name="enabled" value={c?.enabled ? "off" : "on"} />
-                      <Button type="submit" variant="outline">
+                      <Button
+                        type="submit"
+                        variant="outline"
+                        disabled={!c?.enabled && !sentry.ok}
+                        aria-describedby={!c?.enabled && !sentry.ok ? `${p}-sentry` : undefined}
+                      >
                         {c?.enabled ? t("turnOff") : t("turnOn")}
                       </Button>
                     </form>
+                    {!c?.enabled && !sentry.ok ? (
+                      <p id={`${p}-sentry`} className="w-full text-sm text-muted-foreground">
+                        {t("sentryBlocked")}
+                      </p>
+                    ) : null}
                   </div>
                 ) : null}
               </li>

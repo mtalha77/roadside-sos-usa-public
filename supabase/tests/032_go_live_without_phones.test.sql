@@ -27,6 +27,9 @@ insert into public.market_pages (market_id, locale, headline, intro)
 values ('00000000-0000-4000-8000-0000000110b1', 'en', 'Roadside help in Go Live Test',
         repeat('Fast roadside help from verified local providers, booked online in about a minute. ', 2));
 insert into public.conversion_events (event_id, name, market_id) values ('golive-test:1', 'request_submitted', '00000000-0000-4000-8000-0000000110b1');
+-- Release 1: Sentry live in all three apps is required too (recorded by the admin app).
+insert into public.platform_checks (key, ok, checked_at) values ('sentry', true, now())
+  on conflict (key) do update set ok = true, checked_at = now();
 
 select pg_temp.as_ops();
 select ok((select not ok from public.market_launch_checklist('00000000-0000-4000-8000-0000000110b1') where item = 'numbers')
