@@ -25,12 +25,12 @@
     "@commitlint/config-conventional": "21.2.4",
     "@eslint/js": "10.0.1",
     "@rsos/config": "workspace:*",
-    "eslint": "10.14.0",
+    "eslint": "10.15.0",
     "husky": "9.1.7",
-    "lint-staged": "17.6.0",
-    "prettier": "3.9.10",
-    "supabase": "3.1.0",
-    "turbo": "2.11.10",
+    "lint-staged": "17.6.1",
+    "prettier": "3.10.1",
+    "supabase": "3.2.0",
+    "turbo": "2.11.13",
     "typescript": "6.0.3"
   },
   "lint-staged": {
