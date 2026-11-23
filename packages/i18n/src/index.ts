@@ -17,3 +17,17 @@ export function isLocale(value: string): value is Locale {
 export function getMessages(locale: Locale): Messages {
   return catalog[locale];
 }
+
+export * from "./format";
+
+/** Picks the locale from the cookie value, else the default. */
+export function resolveLocale(cookieValue: string | undefined | null): Locale {
+  return cookieValue && isLocale(cookieValue) ? cookieValue : defaultLocale;
+}
+
+/** Fills {placeholders} in a message (for non-React contexts such as emails and SMS). */
+export function fill(template: string, values: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (match, key: string) =>
+    key in values ? String(values[key]) : match,
+  );
+}

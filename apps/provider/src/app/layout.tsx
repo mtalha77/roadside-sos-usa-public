@@ -1,36 +1,55 @@
-import { brand } from "@rsos/config/brand";
+import { buildMetadata } from "@rsos/config/metadata";
+import { themeColor } from "@rsos/config/theme-colors";
 import { ThemeProvider } from "@rsos/ui/theme-provider";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
+import { headers } from "next/headers";
 import type { ReactNode } from "react";
+import { isDemoMode } from "@rsos/config/demo";
+import { DemoBadge } from "@rsos/ui/demo-badge";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("provider");
-  return {
-    title: { default: `${t("label")} | ${brand.name}`, template: `%s | ${brand.name}` },
-    description: t("body"),
-    applicationName: brand.name,
-  };
+  return buildMetadata({ app: "provider", title: t("label"), description: t("body") });
 }
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fcfcfa" },
-    { media: "(prefers-color-scheme: dark)", color: "#16181f" },
+    { media: "(prefers-color-scheme: light)", color: themeColor.light },
+    { media: "(prefers-color-scheme: dark)", color: themeColor.dark },
   ],
 };
 
+// Protected deployments (previews, and staging behind Vercel's login) answer the manifest request
+// (which WebKit sends without the access cookie) with an endless redirect, so only production and
+// local development link it. Installing the app is checked on production.
+const linkManifest = process.env.VERCEL_ENV !== "preview";
+
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  const demoLabel = (await getTranslations("demo"))("badge");
   const locale = await getLocale();
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      suppressHydrationWarning
+    >
+      {linkManifest ? (
+        <head>
+          <link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials" />
+        </head>
+      ) : null}
       <body>
+        {isDemoMode() ? <DemoBadge label={demoLabel} /> : null}
         <NextIntlClientProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider nonce={nonce}>{children}</ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

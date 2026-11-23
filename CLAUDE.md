@@ -4,7 +4,7 @@ Guidance for Claude Code and every human working in this repository. Read it bef
 
 ## Product
 
-**Roadside SOS USA** (working name; test domain `fixallcontractors.com`; both will change, see "Brand" below) is a US roadside assistance marketplace.
+**Road Rescue SOS** (renamed from the working name "Roadside SOS USA" on 2026-11-23; main domain `roadrescuesos.com`; the old test domain `fixallcontractors.com` stays served and allowed for sign-in during the move, see `docs/runbooks/domain-move.md`) is a US roadside assistance marketplace.
 
 - A stranded driver shares their location and problem.
 - Within **3 minutes** they get quotes with **price and ETA** from nearby **verified providers**, and pick one.
@@ -45,6 +45,22 @@ Validate with Zod (`packages/core` schemas) wherever data enters or leaves trust
 - Every table enables RLS **in the same migration that creates it**, with explicit policies. No table ships without them.
 - Default deny. Policies are scoped by role (driver, provider, admin) and by market.
 - Every new table gets RLS tests (pgTAP in `supabase/tests/` or integration tests) proving allowed and denied access for each role.
+- Guard staff-only database functions with `if not public.staff_role_in('super_admin', ...) then raise ...`. Never write `if public.jwt_staff_role() not in (...)`: the role is NULL for providers and customers, so that test is NULL and lets them through. Every pgTAP test of a staff-only function includes a signed-in user who is not staff.
+
+### 4a. Schema changes only through migrations (cloud only)
+
+- **Every schema change is a SQL file in `supabase/migrations/`**, created with `pnpm exec supabase migration new <name>` and merged through a pull request. **Never edit tables, policies, functions, buckets or extensions in the Supabase dashboard** of any project; the next migration run would drift from it.
+- There is no local database (no Docker). Three Supabase cloud projects in us-east-1 stay identical through migrations:
+
+  | Project        | Receives migrations from                  | Used by                      |
+  | -------------- | ----------------------------------------- | ---------------------------- |
+  | `rsos-dev`     | every pull request (`db` job in `ci.yml`) | Vercel previews, local `dev` |
+  | `rsos-staging` | merge to `staging` (`db-deploy.yml`)      | staging hosts                |
+  | `rsos-prod`    | merge to `main` (`db-deploy.yml`)         | production hosts             |
+
+- Project IDs are GitHub Actions variables `SUPABASE_PROJECT_ID_{DEV,STAGING,PROD}`; database passwords are secrets `SUPABASE_DB_PASSWORD_{DEV,STAGING,PROD}`; `SUPABASE_ACCESS_TOKEN` is the CI token. Auth settings (site and redirect URLs from the `APP_DOMAIN` variable, the role hook, MFA, password rules) are applied by `scripts/supabase-auth-config.sh`.
+- Tests for the database live in `supabase/tests/*.test.sql` (pgTAP) and run against the target project after each migration run.
+- After a migration that changes the `public` schema, run `pnpm --filter @rsos/db gen:types` (generates from `rsos-dev`) and commit `packages/db/src/database.types.ts`.
 
 ### 5. Never expose the Supabase service role key to the browser
 
@@ -59,6 +75,16 @@ Validate with Zod (`packages/core` schemas) wherever data enters or leaves trust
 - **Dark mode** everywhere: use theme tokens (`bg-background`, `text-foreground`, `bg-primary`, ...), never raw colours. Check both themes.
 - **WCAG 2.2 AA:** 4.5:1 text contrast, visible focus, full keyboard use, labelled controls, semantic landmarks and headings, `prefers-reduced-motion` respected.
 - **48px touch targets:** everything tappable uses at least `min-h-touch` (and `min-w-touch` for icon buttons). The shared `Button` already does.
+
+### 7. Accessibility checklist (every page and component)
+
+- **Labels:** every input has a visible `<label>` (use `Field`); icon-only buttons use `IconButton` (label required); images have `alt` (decorative: `alt=""`).
+- **Focus order:** follows the visual order; no positive `tabIndex`; dialogs and sheets trap focus and return it to the trigger; a "skip to main content" link on every page.
+- **Contrast:** only design tokens (CI checks every pair at WCAG 2.2 AA in both themes); never convey meaning by colour alone (status pills always show text).
+- **Live regions:** announce changes that matter (quotes arriving, status changes, countdowns) with `aria-live="polite"`; errors use `role="alert"`; do not announce every tick.
+- **Targets:** at least 48x48px (`min-h-touch`, `min-w-touch`) with space between them.
+- **Text:** no hardcoded user-facing strings: put them in `packages/i18n/messages/{en,es}.json` and use `useTranslations`/`getTranslations` (ESLint `react/jsx-no-literals` and literal `aria-label`/`placeholder`/`alt`/`title` checks enforce it). Format money, numbers, dates and times with `@rsos/i18n` helpers in the **market's time zone**.
+- **Verify:** keyboard-only pass, screen reader spot check (VoiceOver on iPhone), 200% zoom, reduced motion, light and dark. CI runs axe on every story and every preview page.
 
 ## Stack
 
@@ -84,8 +110,9 @@ packages/
   emails/      React Email templates
   i18n/        next-intl message catalogs (en.json, es.json; keys must match)
 supabase/
-  config.toml  Local stack config
-  migrations/  SQL migrations (RLS in the same migration as the table)
+  config.toml  CLI config (no local stack is run)
+  migrations/  SQL migrations (RLS in the same migration as the table); CI applies them
+  tests/       pgTAP database tests, run against the cloud project after migrations
   seed.sql     Local test data
   functions/   Edge Functions
 docs/          Product docs and backlog
@@ -97,21 +124,21 @@ Workspace packages are imported as `@rsos/<name>` and ship TypeScript source (no
 
 Run from the repository root.
 
-| Command                            | What it does                                                              |
-| ---------------------------------- | ------------------------------------------------------------------------- |
-| `pnpm install`                     | Install everything                                                        |
-| `pnpm dev`                         | Run all three apps (3000, 3001, 3002)                                     |
-| `pnpm --filter @rsos/web dev`      | Run one app                                                               |
-| `pnpm build`                       | Production build of every app                                             |
-| `pnpm lint`                        | ESLint everywhere                                                         |
-| `pnpm typecheck`                   | TypeScript everywhere                                                     |
-| `pnpm test`                        | Unit tests (Vitest) everywhere                                            |
-| `pnpm test:e2e`                    | Playwright (first run: `pnpm --filter @rsos/web exec playwright install`) |
-| `pnpm storybook`                   | Storybook for `packages/ui` on port 6006                                  |
-| `pnpm email:dev`                   | React Email preview on port 3003                                          |
-| `pnpm format`                      | Prettier                                                                  |
-| `pnpm exec supabase start`         | Local Supabase (needs Docker Desktop)                                     |
-| `pnpm --filter @rsos/db gen:types` | Regenerate database types after a migration                               |
+| Command                                   | What it does                                                              |
+| ----------------------------------------- | ------------------------------------------------------------------------- |
+| `pnpm install`                            | Install everything                                                        |
+| `pnpm dev`                                | Run all three apps (3000, 3001, 3002)                                     |
+| `pnpm --filter @rsos/web dev`             | Run one app                                                               |
+| `pnpm build`                              | Production build of every app                                             |
+| `pnpm lint`                               | ESLint everywhere                                                         |
+| `pnpm typecheck`                          | TypeScript everywhere                                                     |
+| `pnpm test`                               | Unit tests (Vitest) everywhere                                            |
+| `pnpm test:e2e`                           | Playwright (first run: `pnpm --filter @rsos/web exec playwright install`) |
+| `pnpm storybook`                          | Storybook for `packages/ui` on port 6006                                  |
+| `pnpm email:dev`                          | React Email preview on port 3003                                          |
+| `pnpm format`                             | Prettier                                                                  |
+| `pnpm exec supabase migration new <name>` | New migration file (CI applies it to rsos-dev; no local database)         |
+| `pnpm --filter @rsos/db gen:types`        | Regenerate database types from rsos-dev after a migration                 |
 
 ## Git workflow
 
@@ -127,7 +154,7 @@ Run from the repository root.
 - **`staging`** is the integration branch: open every ticket PR from `rsos-<id>-<slug>` into `staging`.
 - **`main`** is production: release by opening a PR from `staging` into `main`.
 - Both branches are protected: no direct pushes (owner included), no force pushes, no deletion, a pull request is required (0 approvals, so a solo developer can merge their own PR), conversations must be resolved, and the branch must be up to date.
-- **Required checks** (job names in `.github/workflows/ci.yml`): `lint`, `typecheck`, `test`, `build`, `db`. Renaming a job means updating branch protection too.
+- **Required checks** (job names in `.github/workflows/ci.yml`): `lint`, `typecheck`, `test`, `build`, `db`, `storybook`, `e2e`, `lighthouse`, `scan`; `main` also requires `release-qa`. Renaming a job means updating branch protection too. What each gate checks and how to read failures: `docs/QA.md`.
   - `build` builds only the apps a PR affects (`turbo --affected`); pushes build everything.
   - `db` skips cleanly until `supabase/migrations/` has SQL files; then it resets a fresh local database, lints the schema and runs `supabase/tests/` (pgTAP/RLS tests).
 - Dependabot opens grouped weekly update PRs into `staging` (npm and GitHub Actions).

@@ -13,13 +13,4638 @@
   "provider": {
     "label": "Provider portal",
     "headline": "Get roadside jobs near you.",
-    "body": "See requests in your area, send a quote with your price and arrival time, and get paid directly by the driver.",
+    "body": "See requests in your area, send a quote with your price and arrival time, and get paid directly by the customer.",
     "cta": "Become a provider"
   },
   "admin": {
     "label": "Admin dashboard",
     "headline": "Run every market from one place.",
     "body": "Launch markets, verify providers, and manage pricing, fees and plans.",
-    "cta": "Sign in"
+    "cta": "Sign in",
+    "sections": {
+      "dispatch": "Dispatch",
+      "requests": "Requests",
+      "providers": "Providers",
+      "recruitment": "Recruitment",
+      "markets": "Markets",
+      "pricing": "Pricing",
+      "finance": "Finance",
+      "reviews": "Reviews",
+      "analytics": "Analytics",
+      "content": "Content",
+      "settings": "Settings",
+      "walkthrough": "Walkthrough",
+      "intake": "Phone intake",
+      "inbox": "Inbox",
+      "marketing": "Marketing",
+      "campaign": "Test campaign",
+      "team": "Team & roles",
+      "calls": "Calls",
+      "today": "Today",
+      "economics": "Economics model",
+      "status": "System status",
+      "credits": "Wallet credits",
+      "services": "Services"
+    },
+    "shell": {
+      "nav": "Admin",
+      "navMobile": "Sections",
+      "skip": "Skip to content",
+      "account": "Account and security",
+      "collapse": "Collapse sidebar",
+      "search": "Search or jump to…",
+      "palette": "Command palette",
+      "paletteHint": "Type a page, a request code, a phone or a provider",
+      "empty": "Nothing found",
+      "pages": "Pages",
+      "find": "Find",
+      "findRequest": "Find request",
+      "findProvider": "Find provider",
+      "actions": "Actions",
+      "toggleTheme": "Switch light or dark",
+      "shortcuts": "Keyboard shortcuts",
+      "close": "Close",
+      "allMarkets": "All markets",
+      "marketsCount": "markets",
+      "marketLabel": "Markets in view",
+      "groups": {
+        "operate": "Operate",
+        "network": "Network",
+        "business": "Business",
+        "system": "System"
+      },
+      "menu": "Menu"
+    },
+    "demoControls": {
+      "title": "Demo controls",
+      "hint": "Control the simulated requests on admin screens. Real data is never changed.",
+      "close": "Close",
+      "paused": "Scenario paused",
+      "running": "Scenario running in real time",
+      "pause": "Pause",
+      "resume": "Resume",
+      "skip": "Skip ahead 5 minutes",
+      "reset": "Reset to now",
+      "scenario": "Demo economics",
+      "scenarioBase": "Base scenario",
+      "scenarioStrong": "Strong scenario",
+      "load": "Load test: 200 demo requests on the dispatch board",
+      "loadOn": "Load test on"
+    },
+    "overview": {
+      "status": {}
+    },
+    "dispatch": {
+      "title": "Dispatch board",
+      "map": "Live map of requests and trucks",
+      "supply": "Supply by area",
+      "gap": "No one online",
+      "online": "online",
+      "lanes": {
+        "new": "New",
+        "quoting": "Quoting",
+        "picked": "Picked",
+        "en_route": "On the way",
+        "on_site": "On site",
+        "closing": "Needs closing"
+      },
+      "demo": "Demo",
+      "real": "Real",
+      "quotes": "{count} quotes",
+      "waiting": "No quote",
+      "call": "Call customer",
+      "push": "Push to more providers",
+      "assign": "Assign manually",
+      "note": "Add a note",
+      "cancel": "Cancel request",
+      "open": "Open full request",
+      "empty": "Supply appears here once providers are online.",
+      "count": "{count} open requests",
+      "live": "Live, updates every 2 seconds",
+      "pushed": "Sent to more providers (simulated).",
+      "noted": "Note saved.",
+      "assigned": "Assignment started (simulated).",
+      "softphone": "Softphone opens here once phone service is connected.",
+      "error": "Connection lost. Retrying…",
+      "more": "+{count} more",
+      "laneEmpty": "Nothing here.",
+      "quotesLabel": "Quotes",
+      "stale": "Stale",
+      "market": "Market",
+      "source": "Show requests",
+      "sources": {
+        "real": "Real",
+        "demo": "Demo",
+        "both": "Both"
+      },
+      "keys": "Keys: J/K move, Enter opens, A assigns, C calls",
+      "close": "Close",
+      "customer": "Customer",
+      "phone": "Phone",
+      "where": "Where",
+      "provider": "Provider",
+      "kind": "Type",
+      "pageTour": "Tour of this page",
+      "moreActions": "More",
+      "sourceWebsite": "Website",
+      "sourceCall": "Call",
+      "instant": "Instant ≤ ${price}"
+    },
+    "requests": {
+      "title": "Requests",
+      "search": "Code, phone or name",
+      "go": "Search",
+      "none": "No requests match.",
+      "code": "Code",
+      "service": "Service",
+      "market": "Market",
+      "status": "Status",
+      "driver": "Customer",
+      "created": "Created",
+      "demo": "Demo",
+      "statuses": {
+        "submitted": "New",
+        "searching": "Finding providers",
+        "quoting": "Quoting",
+        "quoted": "Quoted",
+        "accepted": "Picked",
+        "picked": "Picked",
+        "en_route": "En route",
+        "on_site": "On site",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "expired": "Expired"
+      },
+      "detailTitle": "Request {code}",
+      "inputs": "What the customer told us",
+      "location": "Location",
+      "vehicle": "Vehicle",
+      "safety": "Safety",
+      "safe": "Safe, off the road",
+      "flags": {
+        "unsafe": "Not in a safe place",
+        "highway": "On a highway",
+        "passengers": "Passengers"
+      },
+      "fee": "Our fee",
+      "map": "Location on the map",
+      "quotes": "Quotes",
+      "noQuotes": "No quotes yet.",
+      "chosen": "Chosen",
+      "eta": "{minutes} min",
+      "comms": "Calls, recordings and texts",
+      "commsPending": "Appear here once phone service is connected.",
+      "timeline": "Timeline",
+      "noEvents": "No events yet.",
+      "attribution": "Attribution",
+      "actions": "Notes and actions",
+      "note": "Note",
+      "addNote": "Add note",
+      "call": "Call the customer (softphone placeholder)",
+      "credit": "Credit the provider's fee",
+      "dispute": "Open a dispute",
+      "logged": "Action log",
+      "review": "Review",
+      "noReview": "No review yet.",
+      "callDriver": "Call customer"
+    },
+    "intake": {
+      "title": "Phone intake",
+      "softphone": "Softphone",
+      "available": "Available for calls",
+      "away": "Away",
+      "incoming": "Incoming call from",
+      "answer": "Answer",
+      "decline": "Decline",
+      "hold": "Hold",
+      "resume": "Resume",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "transfer": "Transfer",
+      "hangUp": "Hang up",
+      "onCall": "On a call",
+      "idle": "No call",
+      "simulate": "Simulate an incoming call (demo)",
+      "startCall": "Calls arrive here once phone service is connected",
+      "screenPop": "Caller",
+      "history": "Past requests",
+      "noHistory": "No past requests.",
+      "form": "New phone request",
+      "name": "Customer's name",
+      "phone": "Callback number",
+      "market": "Market",
+      "service": "Service",
+      "location": "Location",
+      "locationHint": "Address, cross streets or mile marker",
+      "sendLink": "Text a location link",
+      "linkSent": "Location link sent (simulated until phone service is connected).",
+      "vehicle": "Vehicle",
+      "safety": "Safety",
+      "safe": "Safe, off the road",
+      "highway": "On a highway shoulder",
+      "unsafe": "Not safe",
+      "create": "Create request",
+      "created": "Request {code} created.",
+      "required": "Fill in the required fields.",
+      "timer": "Time from answering: {time}."
+    },
+    "providers": {
+      "title": "Providers",
+      "views": "Views",
+      "tabs": {
+        "table": "Table",
+        "map": "Map",
+        "review": "Review queue"
+      },
+      "search": "Company name",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "filter": "Filter",
+      "none": "No providers match.",
+      "queueEmpty": "No documents waiting for review.",
+      "name": "Company",
+      "market": "Market",
+      "trucks": "Trucks",
+      "rating": "Rating",
+      "real": "Real",
+      "demo": "Demo",
+      "statuses": {
+        "applied": "Applied",
+        "onboarding": "Onboarding",
+        "active": "Active",
+        "paused": "Paused",
+        "suspended": "Suspended",
+        "closed": "Closed"
+      },
+      "docs": {
+        "insurance": "Insurance certificate",
+        "license": "Towing license",
+        "w9": "W-9"
+      },
+      "states": {
+        "ok": "Approved",
+        "pending": "Waiting for review",
+        "expiring": "Expires soon"
+      },
+      "approve": "Approve",
+      "changes": "Request changes",
+      "approved": "Approved.",
+      "requested": "Changes requested:",
+      "expires": "Expires",
+      "preview": "Document preview",
+      "reason": "What needs to change?",
+      "jobsWon": "Jobs won (60 days)",
+      "feesPaid": "Fees paid (60 days)",
+      "team": "Team and trucks",
+      "roles": {
+        "owner": "Owner",
+        "manager": "Manager",
+        "operator": "Operator"
+      },
+      "area": "Service area",
+      "documents": "Documents",
+      "recent": "Recent jobs and reviews",
+      "realPending": "Detailed performance, wallet and documents for real companies arrive with the backend batch.",
+      "act": {
+        "actions": "Actions",
+        "approve": "Approve",
+        "pause": "Pause",
+        "suspend": "Suspend",
+        "credit": "Credit",
+        "message": "Message",
+        "viewAs": "View as provider",
+        "done": "recorded (simulated)",
+        "note": "Note",
+        "addNote": "Add note"
+      },
+      "online": "Online now",
+      "onlineYes": "Online",
+      "onlineNo": "Offline",
+      "responseRate": "Response rate",
+      "medianQuote": "Median quote time",
+      "bookingRate": "Booking rate",
+      "seconds": "{s} s"
+    },
+    "recruitment": {
+      "title": "Recruitment",
+      "coverage": "Coverage",
+      "coverageOf": "{live} of {target} live providers",
+      "stages": {
+        "lead": "Lead",
+        "contacted": "Contacted",
+        "interested": "Interested",
+        "onboarding": "Onboarding",
+        "live": "Live",
+        "lost": "Lost"
+      },
+      "board": "Board",
+      "table": "Table",
+      "view": "View",
+      "company": "Company",
+      "contact": "Contact",
+      "market": "Market",
+      "stage": "Stage",
+      "trucks": "Trucks",
+      "source": "Source",
+      "task": "Task",
+      "followUp": "Follow up",
+      "remind": "Remind me tomorrow",
+      "reminded": "Reminder set for",
+      "import": "Import leads (CSV)",
+      "importHint": "Columns: company, contact, phone, market, trucks",
+      "imported": "Leads imported: {count}.",
+      "importError": "The file needs a \"company\" column.",
+      "demo": "Demo",
+      "real": "Real",
+      "moveTo": "Move",
+      "empty": "No leads yet.",
+      "more": "+{count} more in the table view",
+      "approve": "Approve",
+      "approvedNotice": "Approved and emailed:",
+      "approveFailed": "Could not approve. Only super admins and ops managers can."
+    },
+    "markets": {
+      "title": "Markets",
+      "status": {
+        "draft": "Draft",
+        "test": "Testing",
+        "active": "Live",
+        "paused": "Paused"
+      },
+      "boundary": "Boundary",
+      "boundaryOf": "Boundary of {name}",
+      "noBoundary": "No boundary yet.",
+      "drawHint": "Drawing a new boundary on the map comes with the Google Maps key; boundaries are set in the database for now.",
+      "heatmap": "Coverage by hour",
+      "heatmapDemo": "Demo data: share of the hour with a provider online, by area.",
+      "settings": "Settings",
+      "timeZone": "Time zone",
+      "hours": "Coverage hours",
+      "always": "24 hours, 7 days",
+      "custom": "Custom hours",
+      "quoteWindow": "Quote window",
+      "quoteWindowValue": "3 minutes",
+      "radius": "Search radius steps",
+      "radiusValue": "10, 20, then 35 miles",
+      "phones": "Phone numbers by source",
+      "noPhones": "No numbers yet (needs Twilio).",
+      "allPhones": "See all {count} numbers in Settings",
+      "checklist": "Launch checklist",
+      "checks": {
+        "numbers": "Tracking numbers assigned (website and Google Ads)",
+        "providers": "Enough active providers per service",
+        "prices": "Prices and fees set for every service",
+        "on_duty": "Phone schedule covers 24/7",
+        "landing_pages": "City and landing pages live",
+        "tracking": "Conversion tracking verified (a conversion in the last 30 days)",
+        "booking_test": "Booking flow tested end to end (a test booking assigned, then cancelled as \"test\")"
+      },
+      "done": "(done)",
+      "todo": "(to do)",
+      "missing": "Missing: {detail}",
+      "statusLabel": "Market status",
+      "overrideReason": "Checklist not complete: reason to go live anyway (logged)",
+      "notReady": "Finish the checklist first. Only a super admin can override.",
+      "saveStatus": "Save status",
+      "statusSaved": "Status saved.",
+      "statusErrors": {
+        "forbidden": "Only super admins and ops managers can change status.",
+        "invalid": "Choose a status.",
+        "checklist": "The launch checklist is not complete.",
+        "generic": "Something went wrong. Try again."
+      },
+      "optional": "(optional)",
+      "bookingTestHow": "Send a request in this market from the website, assign a provider in the Inbox, then cancel it with the reason \"test\"."
+    },
+    "pricing": {
+      "title": "Pricing and fees",
+      "none": "No prices set for these markets.",
+      "current": "Current prices in {market}",
+      "cols": {
+        "service": "Service",
+        "range": "Customer price range",
+        "fee": "Our fee",
+        "proFee": "Pro fee",
+        "featured": "Featured slot",
+        "since": "Since"
+      },
+      "rangeValue": "{min} to {max}",
+      "historyRow": "{min} to {max} · fee {fee} · from {date}",
+      "off": "Off",
+      "perMonth": "{price}/mo",
+      "scheduledCount": "{count, plural, one {# scheduled change} other {# scheduled changes}}",
+      "history": "{count, plural, one {# earlier price} other {# earlier prices}}",
+      "plansNote": "Pro discount and featured slot price are placeholders until plan pricing is decided.",
+      "change": {
+        "schedule": "Schedule a change",
+        "service": "Service",
+        "min": "Lowest price",
+        "max": "Highest price",
+        "fee": "Our fee",
+        "effective": "Effective from",
+        "submit": "Submit for approval",
+        "pending": "Waiting for approval",
+        "approve": "Approve",
+        "approved": "Approved (applies on the date)",
+        "needsApproval": "Needs a super admin",
+        "invalid": "Fill every amount and a date; the lowest price must not be above the highest.",
+        "to": "to"
+      }
+    },
+    "finance": {
+      "title": "Finance",
+      "export": "Export ledger (CSV)",
+      "demo": "Demo data: finance shows a simulated ledger until billing is connected.",
+      "views": "Views",
+      "filter": "Type",
+      "all": "All",
+      "tabs": {
+        "ledger": "Ledger",
+        "revenue": "Revenue",
+        "disputes": "Disputes",
+        "stripe": "Stripe reconciliation"
+      },
+      "kinds": {
+        "fee": "Job fees",
+        "top_up": "Top-ups",
+        "credit": "Credits",
+        "plan": "Subscriptions"
+      },
+      "cols": {
+        "date": "Date",
+        "provider": "Provider",
+        "market": "Market",
+        "type": "Type",
+        "job": "Job",
+        "amount": "Amount"
+      },
+      "byMarket": "Fee revenue by market (30 days)",
+      "byService": "Fee revenue by service (30 days)",
+      "bySource": "Fee revenue by source (30 days)",
+      "sources": {
+        "web": "Website",
+        "phone": "Phone",
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "organic": "Organic"
+      },
+      "noDisputes": "No open disputes.",
+      "stripe": "Stripe reconciliation appears here once Stripe is connected (payouts, charges and ledger matched daily)."
+    },
+    "reviews": {
+      "title": "Reviews and quality",
+      "demo": "Demo data: there is no reviews table yet.",
+      "none": "No reviews yet.",
+      "queue": "Moderation queue (lowest first)",
+      "approve": "Approve",
+      "hide": "Hide",
+      "followUp": "Follow up with the customer",
+      "approved": "Published.",
+      "hidden": "Hidden from the profile.",
+      "followed": "Follow-up task created.",
+      "stars": "{n} of 5",
+      "low": "Low rating",
+      "quality": "Provider quality scores",
+      "thresholds": "Flagged below a {rating} rating or above {cancel}% cancellations.",
+      "score": "Score {score}",
+      "flag": "Needs attention"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "range": "Date range",
+      "days": "{count, plural, one {Today} other {Last # days}}",
+      "viewLabel": "Data shown",
+      "views": {
+        "real": "Real",
+        "demo": "Demo",
+        "model": "Model"
+      },
+      "marketLabel": "Markets",
+      "allMarkets": "All markets",
+      "viewNote": {
+        "real": "Real data only: requests, visits, ad spend and fees recorded in the database.",
+        "demo": "Demo data generated from the Economics model ({scenario} scenario). Never mixed with real numbers.",
+        "model": "Model estimate: what the Economics model ({scenario} scenario) expects for this range."
+      },
+      "scenarios": {
+        "base": "base",
+        "strong": "strong"
+      },
+      "notEnough": "Not enough real data yet.",
+      "demoTag": "Demo data",
+      "modelTag": "Model estimate",
+      "cardsTitle": "Key numbers",
+      "cards": {
+        "requests": "Requests",
+        "accepted": "Accepted",
+        "adCostPerAccepted": "Ad cost per accepted request",
+        "feeRevenue": "Fee revenue",
+        "contribution": "Contribution",
+        "profit": "Profit after fixed costs"
+      },
+      "vsModel": "Model: {value}",
+      "funnel": "Funnel",
+      "funnelNote": "Each step as a share of the step before it; hover for the share of visits.",
+      "funnelRealNote": "Website requests made in this range (phone requests are in the channel table). Later steps count only these requests.",
+      "dataWarning": "Data check: {steps} came out higher than the step before it, so it is shown capped. The underlying data needs a look.",
+      "ofVisits": "{value} of visits",
+      "steps": {
+        "visits": "Visits",
+        "started": "Started",
+        "submitted": "Submitted",
+        "quoted": "Quoted",
+        "picked": "Picked",
+        "completed": "Completed"
+      },
+      "bySource": "Requests by source",
+      "byChannel": "Requests by channel",
+      "total": "Total",
+      "sources": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads",
+        "organic": "Organic search",
+        "direct": "Direct",
+        "referral": "Referral"
+      },
+      "channels": {
+        "website": "Website",
+        "phone": "Phone"
+      },
+      "economics": "Economics",
+      "money": {
+        "adSpend": "Ad spend",
+        "feeRevenue": "Fee revenue",
+        "paymentFees": "Payment fees and disputed-lead credits",
+        "subscriptions": "Subscriptions and featured, net",
+        "contribution": "Contribution",
+        "fixedCosts": "Fixed costs",
+        "profit": "Profit after fixed costs"
+      },
+      "moneyRealNote": "Ad spend as entered in Marketing; fees of requests picked in this range; payment fees at the model's rate. Subscriptions and fixed costs come from the model for this range until they are recorded.",
+      "moneyModelNote": "From the Economics model for this range.",
+      "editModel": "Edit the model",
+      "testOff": "Include test traffic",
+      "testOn": "Including test traffic: show real traffic only"
+    },
+    "content": {
+      "title": "Content",
+      "subtitle": "City page intros are live on the website as soon as you publish.",
+      "intro": "{name} city page intro",
+      "count": "{n} of 1200 characters",
+      "publish": "Publish",
+      "readOnly": "Only super admins and operations managers can publish.",
+      "saved": "Published. The city page shows the new intro.",
+      "invalid": "Write 40 to 1200 characters.",
+      "forbidden": "You don't have permission to publish content.",
+      "error": "Couldn't publish. Try again.",
+      "preview": "Preview",
+      "previewTitle": "Roadside help in {name}",
+      "other": "FAQs, service copy and banners",
+      "otherHint": "These live in the message files (English and Spanish) and change with a release; moving them here comes with the content tables."
+    },
+    "settings": {
+      "title": "Settings",
+      "sections": "Settings sections",
+      "tabs": {
+        "users": "Users and roles",
+        "audit": "Audit log",
+        "templates": "Texts and templates",
+        "rules": "Business rules",
+        "flags": "Feature flags",
+        "integrations": "Integrations",
+        "system": "System status",
+        "phones": "Phone numbers",
+        "duty": "On duty"
+      },
+      "onlyYou": "Only super admins see everyone; you see yourself.",
+      "inactive": "Inactive",
+      "viewAs": "View-as sessions open a provider's portal read-only; they arrive with the backend batch.",
+      "manageStaff": "Manage staff and second steps",
+      "superOnly": "Only super admins can read the audit log.",
+      "noAudit": "No audit entries yet.",
+      "channels": {
+        "sms": "Text message",
+        "email": "Email",
+        "push": "Push"
+      },
+      "tpl": {
+        "template": "Template",
+        "channel": "Channel",
+        "english": "English",
+        "spanish": "Spanish",
+        "preview": "Preview with sample values",
+        "save": "Save template",
+        "saved": "Saved on this page. Sending uses these once messaging is connected.",
+        "variables": "Variables: '{code}', '{provider}', '{eta}', '{price}'"
+      },
+      "rules": {
+        "quoteWindow": {
+          "label": "Quote window",
+          "value": "3 minutes"
+        },
+        "radiusSteps": {
+          "label": "Search radius steps",
+          "value": "10, 20, then 35 miles"
+        },
+        "maxQuotes": {
+          "label": "Most quotes shown to a customer",
+          "value": "5"
+        },
+        "autoExpire": {
+          "label": "Request expires without quotes after",
+          "value": "15 minutes"
+        },
+        "cancelFee": {
+          "label": "Fee when the customer cancels after pick",
+          "value": "None (decision pending)"
+        }
+      },
+      "rulesHint": "Rules are the same for every market today; per-market editing arrives with the rules table.",
+      "flags": {
+        "spanish_site": {
+          "label": "Spanish website",
+          "hint": "Show the language switch on the website."
+        },
+        "phone_intake": {
+          "label": "Phone intake",
+          "hint": "Dispatchers can create requests from calls."
+        },
+        "auto_pick": {
+          "label": "Get help fastest",
+          "hint": "Customers can let us pick the fastest quote."
+        },
+        "featured_slots": {
+          "label": "Featured slots",
+          "hint": "Featured providers on city pages."
+        },
+        "driver_accounts": {
+          "label": "Customer accounts",
+          "hint": "Customers can sign in to see history."
+        }
+      },
+      "flagSaved": "{flag} updated on this page.",
+      "integrations": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads",
+        "twilio": "Twilio",
+        "stripe": "Stripe",
+        "google_maps": "Google Maps",
+        "resend": "Resend"
+      },
+      "notConnected": "Not connected",
+      "lastSync": "Last sync: {when}",
+      "never": "never",
+      "connect": "Connect (needs an account)",
+      "templates": {
+        "request_received": {
+          "name": "Request received",
+          "en": "We got your request '{code}'. Providers are sending quotes now.",
+          "es": "Recibimos tu solicitud '{code}'. Los proveedores están enviando cotizaciones."
+        },
+        "provider_picked": {
+          "name": "Provider confirmed",
+          "en": "'{provider}' is on the way. Arrival in about '{eta}'.",
+          "es": "'{provider}' va en camino. Llega en unos '{eta}'."
+        },
+        "provider_arriving": {
+          "name": "Provider arriving",
+          "en": "'{provider}' is almost there. Stay in a safe place.",
+          "es": "'{provider}' está por llegar. Quédate en un lugar seguro."
+        },
+        "job_completed": {
+          "name": "Job completed",
+          "en": "Done! You paid '{price}'. How did '{provider}' do?",
+          "es": "¡Listo! Pagaste '{price}'. ¿Cómo lo hizo '{provider}'?"
+        }
+      },
+      "system": {
+        "intro": "Live health of the three apps in this environment. Only states are shown, never keys or values.",
+        "apps": {
+          "web": "Website",
+          "provider": "Provider app",
+          "admin": "Admin"
+        },
+        "healthy": "Healthy",
+        "unhealthy": "Needs attention",
+        "unreachable": "Not reachable",
+        "unreachableBody": "This app's health check could not be reached from here (for example a protected preview).",
+        "environment": "Environment",
+        "commit": "Commit",
+        "database": "Database",
+        "serviceKey": "Server key",
+        "demoMode": "Demo mode",
+        "on": "On",
+        "off": "Off",
+        "none": "—",
+        "db": {
+          "ok": "Reachable",
+          "error": "Error",
+          "not-configured": "Not configured"
+        },
+        "key": {
+          "match": "Matches project",
+          "mismatch": "Wrong project",
+          "unverifiable": "Set (not verifiable)",
+          "missing": "Missing",
+          "not-used": "Not used"
+        },
+        "adapters": "Third-party services",
+        "adapter": "Service",
+        "adapterNames": {
+          "twilio": "Twilio calls (voice)",
+          "texting": "Twilio texts (off)",
+          "softphone": "Browser softphone",
+          "maps": "Google Maps (off)",
+          "email": "Email (Resend)",
+          "turnstile": "Bot protection (Turnstile)",
+          "rateLimit": "Rate limits (Upstash)",
+          "analytics": "Ad tracking (GTM)"
+        },
+        "state": {
+          "real": "Real",
+          "fake": "Fake",
+          "deferred": "Deferred",
+          "missing": "Missing"
+        },
+        "legend": "Real: live keys are set (and switched on). Fake: keys are missing outside production, so a safe stand-in is used and nothing is sent. Deferred: turned off by the owner for now (no SMS, no Google Maps, email provider after the final domain); the stand-in is used everywhere. Missing: keys are missing in production and the feature is off.",
+        "usage": "Paid API usage today",
+        "usageIntro": "Google Maps and Twilio calls counted by our servers. The owner gets one email a day when a service passes its threshold.",
+        "groups": {
+          "maps": "Google Maps",
+          "twilio": "Twilio"
+        },
+        "usedOf": "{used} of {limit}",
+        "threshold": "Daily alert threshold",
+        "save": "Save"
+      },
+      "phones": {
+        "intro": "Each tracking number belongs to one market and one source, so every call is attributed. Numbers are bought in Twilio; add them here to start tracking.",
+        "title": "Tracking numbers",
+        "empty": "No numbers yet. Buy numbers in Twilio, then add them here.",
+        "number": "Number",
+        "market": "Market",
+        "source": "Source",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Label (optional)",
+        "active": "Active",
+        "inactive": "Off",
+        "inTwilio": "In Twilio",
+        "activate": "Turn on",
+        "deactivate": "Turn off",
+        "add": "Add a number",
+        "addButton": "Add number",
+        "added": "Added {phone}.",
+        "sync": "Sync from Twilio",
+        "synced": "{count, plural, one {# number} other {# numbers}} found in Twilio.",
+        "sources": {
+          "website": "Website",
+          "google_ads": "Google Ads",
+          "gmb": "Google Business Profile",
+          "meta": "Meta (Facebook, Instagram)",
+          "bing": "Microsoft Ads (Bing)",
+          "organic": "Organic",
+          "provider_line": "Provider line",
+          "staging_test": "Staging test"
+        },
+        "setupTitle": "Twilio setup for each number",
+        "setupBody": "In Twilio, set the number's Voice webhook to /api/twilio/voice on the admin domain (POST) and its call status callback to /api/twilio/voice/status. Staging numbers use the staging admin domain. See docs/runbooks/twilio.md.",
+        "errors": {
+          "forbidden": "Only super admins and ops managers can change numbers.",
+          "invalid": "Enter a valid US number, market and source.",
+          "exists": "That number is already tracked.",
+          "generic": "Something went wrong. Try again.",
+          "noTwilio": "Twilio is not connected yet."
+        }
+      },
+      "duty": {
+        "you": "You",
+        "presence": "Presence",
+        "presences": {
+          "available": "Available",
+          "busy": "Busy",
+          "away": "Away"
+        },
+        "onDutyNow": "I am on duty now",
+        "save": "Save",
+        "mobile": "Your mobile number",
+        "mobileHint": "Rung when no dispatcher answers in the browser, and texted about missed calls and voicemails.",
+        "nowTitle": "On duty right now",
+        "nobody": "Nobody is on duty. Calls go to voicemail.",
+        "weekTitle": "Weekly schedule",
+        "uncovered": "Not covered",
+        "shift": "{name}, {start} to {end}",
+        "remove": "Remove {name}'s shift",
+        "removeShort": "Remove",
+        "who": "Dispatcher",
+        "day": "Day",
+        "start": "Start",
+        "end": "End",
+        "zone": "Time zone",
+        "addShift": "Add shift",
+        "days": {
+          "0": "Sunday",
+          "1": "Monday",
+          "2": "Tuesday",
+          "3": "Wednesday",
+          "4": "Thursday",
+          "5": "Friday",
+          "6": "Saturday"
+        }
+      },
+      "texts": {
+        "a2pTitle": "Carrier registration (A2P 10DLC)",
+        "a2pBody": "US carriers require our brand and texting campaign to be registered before we text customers at scale. Until it is approved, texts to anyone but test numbers (OWNER_TEST_PHONE and staff mobiles) are held, unless you turn on the override. See docs/runbooks/a2p-10dlc.md.",
+        "a2p": {
+          "pending": "Registration pending",
+          "approved": "Approved",
+          "rejected": "Rejected"
+        },
+        "overrideOn": "Override on",
+        "a2pStatus": "Status",
+        "override": "Send to everyone anyway (override)",
+        "saveA2p": "Save",
+        "reportTitle": "Delivery, last 14 days",
+        "reportEmpty": "No texts yet.",
+        "cols": {
+          "day": "Day",
+          "market": "Market",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "failed": "Failed",
+          "undelivered": "Not delivered",
+          "held": "Held",
+          "blocked": "Blocked",
+          "received": "Received",
+          "errors": "Top errors"
+        },
+        "errorCode": "{code} ({meaning})",
+        "twilioErrors": {
+          "21211": "invalid phone number",
+          "21610": "the number replied STOP",
+          "21614": "not a mobile number",
+          "30003": "phone off or unreachable",
+          "30004": "blocked by the recipient",
+          "30005": "unknown or inactive number",
+          "30006": "landline or unreachable carrier",
+          "30007": "filtered by the carrier",
+          "30008": "unknown carrier error",
+          "30034": "blocked: A2P 10DLC registration missing"
+        },
+        "templatesTitle": "Text templates",
+        "templatesBody": "Placeholders in braces are filled in when the text is sent: '{first_name}', '{provider}', '{price}', '{eta}', '{link}', '{brand}', '{support}'. Keep texts to one or two segments.",
+        "english": "English",
+        "spanish": "Spanish",
+        "counter": "{chars} characters, {segments} segment(s)",
+        "urgent": "Urgent: may send during quiet hours",
+        "quiet": "Not sent 9pm to 8am (market time)",
+        "save": "Save template",
+        "saved": "Template saved.",
+        "errors": {
+          "forbidden": "You can't edit templates.",
+          "invalid": "Each language needs 2 to 640 characters.",
+          "generic": "Something went wrong. Try again."
+        },
+        "textingOff": "Texting is off for now (owner decision): nothing is sent or received. Templates, opt-outs and quiet hours are ready for when it is switched on with TEXTING_ENABLED and the Twilio Messaging keys."
+      }
+    },
+    "walkthrough": {
+      "title": "Staging walkthrough",
+      "subtitle": "Every screen of the three apps, in the order a real job happens. Links open in new tabs.",
+      "run": "Run full demo",
+      "runHint": "Opens one fresh demo job in the website, the provider portal and here, side by side. It plays out over about 18 minutes; use Demo controls to skip ahead.",
+      "openWeb": "Open the customer's view",
+      "openProvider": "Open the provider's view",
+      "openAdmin": "Open the admin view",
+      "started": "Started. If your browser blocked the extra tabs, use the three links.",
+      "groups": {
+        "driver": "1. Customer",
+        "provider": "2. Provider",
+        "admin": "3. Admin"
+      },
+      "steps": {
+        "home": {
+          "title": "Website home",
+          "hint": "Where a stranded customer lands."
+        },
+        "city": {
+          "title": "City page",
+          "hint": "Local providers, prices and live proof for one market."
+        },
+        "getHelp": {
+          "title": "Get Help request",
+          "hint": "One question per screen; ends on the request's status page."
+        },
+        "tracking": {
+          "title": "Quotes, pick and tracking",
+          "hint": "The same demo job the provider and admin see: quotes arrive, the customer picks, the truck moves, then the review."
+        },
+        "account": {
+          "title": "Customer account",
+          "hint": "History, saved vehicles and quick requests (demo sign-in by phone code)."
+        },
+        "signIn": {
+          "title": "Provider sign-in",
+          "hint": "Choose \"Sign in as demo\" then \"Provider owner\"."
+        },
+        "onboarding": {
+          "title": "Onboarding",
+          "hint": "Nine short steps, resumable."
+        },
+        "goOnline": {
+          "title": "Go online",
+          "hint": "Home with the big toggle, today's numbers and the wallet."
+        },
+        "offer": {
+          "title": "Incoming offer",
+          "hint": "Send the pre-filled quote in one tap."
+        },
+        "jobs": {
+          "title": "Active job",
+          "hint": "Open the job, then the job flow: drive, arrive, work, complete."
+        },
+        "wallet": {
+          "title": "Wallet",
+          "hint": "Balance (real), top-up sheet, ledger and plans."
+        },
+        "prices": {
+          "title": "Services and prices",
+          "hint": "Prices within the market range, area and hours."
+        },
+        "profile": {
+          "title": "Public profile",
+          "hint": "Live preview and strength meter."
+        },
+        "insights": {
+          "title": "Insights",
+          "hint": "Win rate and return on fees."
+        },
+        "adminSignIn": {
+          "title": "Admin sign-in",
+          "hint": "Choose \"Sign in as demo\" then \"Super admin\"."
+        },
+        "dispatch": {
+          "title": "Dispatch board",
+          "hint": "Lanes, SLA timers, map and supply; real requests appear within 2 seconds."
+        },
+        "request": {
+          "title": "Request detail",
+          "hint": "The same demo job, with quotes and timeline."
+        },
+        "intake": {
+          "title": "Phone intake",
+          "hint": "Simulate a call and create a request."
+        },
+        "providers": {
+          "title": "Providers",
+          "hint": "Table, map, review queue and detail."
+        },
+        "recruitment": {
+          "title": "Recruitment",
+          "hint": "Pipeline from real applications plus demo leads."
+        },
+        "markets": {
+          "title": "Markets",
+          "hint": "Real markets, boundaries and launch checklist."
+        },
+        "pricing": {
+          "title": "Pricing",
+          "hint": "Real ranges and fees; schedule a change."
+        },
+        "finance": {
+          "title": "Finance",
+          "hint": "Ledger, revenue and export."
+        },
+        "analytics": {
+          "title": "Analytics",
+          "hint": "Funnel, sources and economics."
+        },
+        "settings": {
+          "title": "Settings",
+          "hint": "Users, audit log, templates, flags and integrations."
+        }
+      },
+      "stepsTitle": "Jump to a step",
+      "stepsHint": "Moves the admin screens to that point of the demo job. The website and the provider portal keep real time.",
+      "skip": "Skip to the next step",
+      "stage": {
+        "quotes": "Quotes arrive",
+        "picked": "Customer picks",
+        "onTheWay": "On the way",
+        "onSite": "On site",
+        "done": "Done and review"
+      }
+    },
+    "softphone": {
+      "title": "Phone",
+      "minimise": "Hide",
+      "pill": "Phone · {presence}",
+      "ringing": "Incoming call",
+      "incomingFrom": "Incoming call from {caller}",
+      "unknownCaller": "Unknown caller",
+      "presenceLabel": "Your status",
+      "presence": {
+        "available": "Available",
+        "busy": "Busy",
+        "away": "Away"
+      },
+      "demoMode": "Demo phone: Twilio is not connected, so calls are not placed or received here.",
+      "unsupported": "This browser can't make calls. Use the latest Chrome, Safari or Edge on a computer.",
+      "setupError": "The phone could not connect. Reload the page; if it keeps failing, check Settings > System status.",
+      "notConnected": "The phone is not connected, so this call can't be placed from the browser.",
+      "busyAlready": "Finish the current call first.",
+      "micWhy": "To answer and make calls in this browser, allow the microphone. It's used only during calls.",
+      "micAllow": "Allow microphone",
+      "micDenied": "The microphone is blocked. Allow it in the browser's site settings, then reload.",
+      "market": "Market",
+      "source": "Source",
+      "request": "Request",
+      "answer": "Answer",
+      "decline": "Decline",
+      "calling": "Calling {who}…",
+      "onCall": "On a call with {who}",
+      "onHold": "{who} is on hold",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "hold": "Hold",
+      "resume": "Resume",
+      "transfer": "Transfer",
+      "transferTo": "Transfer to {name}",
+      "noTargets": "No other dispatcher is available.",
+      "transferred": "Call transferred.",
+      "transferFailed": "The call could not be transferred.",
+      "holdFailed": "Hold didn't work. Try again.",
+      "hangUp": "Hang up"
+    },
+    "inbox": {
+      "title": "Inbox",
+      "alerts": "Sound and notifications",
+      "unread": "{count} new",
+      "unassigned": "{count} unassigned",
+      "empty": "Nothing waiting. New requests, calls and texts appear here as they arrive.",
+      "marketCount": "{market} ({count})",
+      "urgent": "Urgent",
+      "new": "New",
+      "waiting": "waiting {time}",
+      "owner": "Handled by {name}",
+      "unclaimed": "Not claimed",
+      "claimLapsed": "Claim lapsed after 10 minutes",
+      "newItem": "New in the inbox",
+      "pick": "Pick an item to see the request, call the customer and dispatch a provider.",
+      "status": {
+        "phone_intake": "Phone intake",
+        "submitted": "New",
+        "quoting": "Finding providers",
+        "quoted": "Quoted",
+        "contacted": "Contacted",
+        "location_confirmed": "Location confirmed",
+        "assigned": "Provider assigned",
+        "en_route": "On the way",
+        "on_site": "Arrived",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "no_provider": "No provider found",
+        "expired": "Expired",
+        "draft": "Draft",
+        "accepted": "Accepted"
+      },
+      "call": {
+        "ringing": "Calling now",
+        "answered": "Call answered",
+        "missed": "Missed call",
+        "voicemail": "Voicemail",
+        "busy": "Busy",
+        "failed": "Call failed",
+        "completed": "Call ended"
+      },
+      "stepTo": {
+        "contacted": "Mark contacted",
+        "location_confirmed": "Location confirmed",
+        "en_route": "On the way",
+        "on_site": "Arrived",
+        "completed": "Completed",
+        "cancelled": "Cancel",
+        "no_provider": "No provider found"
+      },
+      "textStatus": {
+        "queued": "Queued",
+        "held": "Held",
+        "blocked": "Blocked (opted out)",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "undelivered": "Not delivered",
+        "failed": "Failed",
+        "received": "Received"
+      },
+      "yours": "You are handling this.",
+      "claim": "Claim",
+      "takeOver": "Take over",
+      "claimTaken": "Another dispatcher is handling it.",
+      "reason": "Reason (required)",
+      "fullDetail": "Full detail",
+      "driver": "Customer",
+      "service": "Service",
+      "location": "Location",
+      "noLocation": "Not shared yet",
+      "vehicle": "Vehicle",
+      "notes": "Notes",
+      "source": "Source",
+      "map": "Map of the customer's location",
+      "handling": "Handling",
+      "endReason": "Reason: {reason}",
+      "intakeTitle": "Intake details",
+      "providersTitle": "Nearby providers",
+      "assignedTo": "Assigned to {name}: {price}, about {eta} min.",
+      "noProviders": "No active provider with a price for this service in this market yet.",
+      "miles": "{miles} mi",
+      "priceFrom": "Price {price}",
+      "responds": "Last answered in {sec} s",
+      "accepts": "Accepts {pct}%",
+      "callProvider": "Call",
+      "outcome": {
+        "no_answer": "No answer",
+        "declined": "Declined",
+        "quoted": "Quoted",
+        "assigned": "Assigned"
+      },
+      "timeline": "Timeline",
+      "note": "Note",
+      "addNote": "Add note",
+      "tl": {
+        "status": "Status: {status}",
+        "claimed": "Claimed",
+        "note": "Note",
+        "call_received": "Call received",
+        "call_missed": "Missed call",
+        "voicemail": "Voicemail",
+        "call_answered": "Answered in the browser",
+        "call_outbound": "Outbound call",
+        "call_transferred": "Call transferred",
+        "location_shared": "Customer shared location",
+        "call_inbound": "Incoming call: {outcome}",
+        "text_inbound": "Text from the customer",
+        "text_outbound": "Text to the customer",
+        "driver_told": "Customer told",
+        "driver_emailed": "Customer emailed"
+      },
+      "intake": {
+        "name": "Name",
+        "service": "Service",
+        "choose": "Choose a service",
+        "address": "Address or cross streets",
+        "vehicle": "Vehicle",
+        "notes": "Notes",
+        "save": "Save intake"
+      },
+      "dispatch": {
+        "price": "Price ($)",
+        "eta": "ETA (min)",
+        "quoted": "Quoted",
+        "noAnswer": "No answer",
+        "declined": "Declined",
+        "assign": "Assign"
+      },
+      "result": {
+        "ok": "Saved.",
+        "errors": {
+          "forbidden": "Only dispatchers can do this.",
+          "invalid": "Check the fields and try again.",
+          "reason": "Add a reason.",
+          "location": "Save the service and location first.",
+          "step": "That step isn't possible from here.",
+          "service": "That service isn't offered in this market.",
+          "address": "Type a street address with a number, cross streets, or a highway and exit.",
+          "quote": "Add the price and ETA for a quote.",
+          "generic": "Something went wrong. Try again."
+        }
+      },
+      "tell": {
+        "title": "Tell the customer",
+        "email": "Email: {email}",
+        "noEmail": "No email on this request: read the words below on the call.",
+        "emailed": "Emailed to the customer and logged on the timeline.",
+        "readAloud": "Read this to the customer, then log it:",
+        "logRead": "I read it to the customer",
+        "sendLink": "Location link",
+        "assignedScript": "{provider} is on the way. Quoted price {price}, about {eta} minutes.",
+        "linkScript": "Open this link and tap Share my location: {link}",
+        "logged": "Logged on the timeline.",
+        "codeScript": "Go to {site} and type the code {code}, then tap Share my location."
+      },
+      "logCall": "Log a call",
+      "sourceWebsite": "Website",
+      "sourceCall": "Call"
+    },
+    "textingLimited": "Texting limited: carrier registration pending. Texts to customers are held until it's approved.",
+    "marketing": {
+      "title": "Marketing",
+      "from": "From",
+      "to": "To",
+      "apply": "Show",
+      "summary": "Spend {spend} · cost per request {perRequest} · cost per completed job {perCompleted}",
+      "bySource": "By market and source",
+      "empty": "No visits, calls or requests in this range yet.",
+      "cols": {
+        "market": "Market",
+        "source": "Source",
+        "visits": "Visits",
+        "calls": "Calls",
+        "qualified": "Qualified calls",
+        "forms": "Forms",
+        "requests": "Requests",
+        "assigned": "Assigned",
+        "completed": "Completed",
+        "spend": "Spend",
+        "perRequest": "Cost per request",
+        "perCompleted": "Cost per completed job"
+      },
+      "spendTitle": "Ad spend",
+      "day": "Day",
+      "channel": "Channel",
+      "amount": "Amount ($)",
+      "channels": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "bing": "Microsoft Ads",
+        "gmb": "Google Business Profile",
+        "other": "Other"
+      },
+      "saveSpend": "Save spend",
+      "saved": "Spend saved.",
+      "offlineTitle": "Google Ads offline conversions",
+      "offlineBody": "Download one day of conversions with a Google click id (forms, qualified calls, assigned and completed jobs) and upload it in Google Ads > Goals > Conversions > Uploads. Needed until the Ads API developer token is approved.",
+      "download": "Download CSV",
+      "errors": {
+        "forbidden": "Only super admins and marketing can enter spend.",
+        "invalid": "Check the day, market, channel and amount.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
+    "campaign": {
+      "title": "Test campaign",
+      "intro": "The last {days} days per market: the numbers that decide the launch city.",
+      "days": "Days",
+      "apply": "Show",
+      "export": "Export CSV",
+      "byMarket": "By market",
+      "minutes": "{m} min",
+      "cols": {
+        "market": "Market",
+        "requests": "Requests",
+        "calls": "Calls",
+        "answerRate": "Answer rate",
+        "toContact": "Time to first contact",
+        "toAssigned": "Time to provider assigned",
+        "fillRate": "Fill rate",
+        "completionRate": "Completion rate",
+        "avgPrice": "Average quoted price",
+        "fees": "Fees (would have earned)",
+        "spend": "Ad spend",
+        "perRequest": "Cost per request",
+        "perCompleted": "Cost per completed job"
+      },
+      "note": "Times are medians. Fill rate = requests with a provider assigned / requests. Fees are recorded as manual_test and nobody is charged. Spend comes from Marketing > Ad spend."
+    },
+    "roles": {
+      "super_admin": {
+        "name": "Owner",
+        "who": "The business owner.",
+        "can": "Everything: team and roles, finance, payouts, settings and deleting data. At least one owner must always exist."
+      },
+      "ops_manager": {
+        "name": "Operations manager",
+        "who": "Runs day-to-day operations.",
+        "can": "Everything except changing owners, billing settings and deleting data."
+      },
+      "dispatcher": {
+        "name": "Dispatcher",
+        "who": "Handles live requests and calls.",
+        "can": "Inbox, dispatch, requests and calls; read-only providers (contact, services, prices, status). Assigns providers and updates request status. No finance, pricing, content or settings."
+      },
+      "support": {
+        "name": "Provider success",
+        "who": "Recruits and manages providers.",
+        "can": "Recruitment, providers (edit) and reviews; read-only markets."
+      },
+      "finance": {
+        "name": "Finance",
+        "who": "Money.",
+        "can": "Finance, wallet ledger, fees, refunds and exports; read-only requests."
+      },
+      "marketing": {
+        "name": "Marketing",
+        "who": "Ads and content.",
+        "can": "Marketing, test campaign, analytics, content and city pages. Customer phone numbers are masked."
+      },
+      "read_only": {
+        "name": "Viewer",
+        "who": "Investors and auditors.",
+        "can": "Read-only dashboards and reports. Customer data is masked."
+      },
+      "allMarkets": "All markets"
+    },
+    "providerRoles": {
+      "owner": {
+        "name": "Provider owner",
+        "who": "Owner of the towing or roadside business.",
+        "can": "Profile, services and prices, wallet and billing, team, all jobs and insights."
+      },
+      "manager": {
+        "name": "Dispatcher (provider side)",
+        "who": "Office staff at the provider.",
+        "can": "Receives offers, sends quotes and assigns jobs to technicians. No wallet or billing changes."
+      },
+      "operator": {
+        "name": "Technician",
+        "who": "The technician going to the customer.",
+        "can": "Only jobs assigned to them: navigation, status steps (on the way, arrived, done) and photos. Sees the customer's number only for their own active job."
+      }
+    },
+    "team": {
+      "title": "Team and roles",
+      "intro": "Who works here, what each role can see and do, and in which markets.",
+      "staffRoles": "Staff roles",
+      "people": "{count, plural, one {# person} other {# people}}",
+      "opens": "Opens: {sections}",
+      "members": "Team members",
+      "inactive": "Inactive",
+      "edit": "Change role or markets",
+      "role": "Role",
+      "markets": "Markets",
+      "marketsHint": "Leave all unchecked for every market.",
+      "save": "Save",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "inviteTitle": "Invite someone",
+      "email": "Email",
+      "name": "Name",
+      "invite": "Send invite",
+      "demoLink": "Test environment: no email is sent. Invite link:",
+      "providerRoles": "Provider roles",
+      "providerRolesIntro": "People at provider companies, set in the provider portal by the provider owner.",
+      "errors": {
+        "invalid": "Check the fields and try again.",
+        "forbidden": "Your role can't make this change.",
+        "lastOwner": "There must always be at least one active owner.",
+        "self": "You can't deactivate yourself.",
+        "generic": "Something went wrong. Try again."
+      },
+      "done": {
+        "invited": "Invite sent. They appear below with their role.",
+        "saved": "Saved.",
+        "deactivated": "Deactivated. They can't sign in any more.",
+        "reactivated": "Reactivated."
+      }
+    },
+    "economics": {
+      "title": "Economics model",
+      "lead": "Per-market inputs for the base and strong scenarios, and what they mean each month. Analytics compares real numbers against this.",
+      "shared": "Fixed costs shared across markets",
+      "sharedOn": "Fixed costs: one amount spread across the markets shown.",
+      "sharedOff": "Fixed costs: charged to each market.",
+      "formula": "Clicks = budget ÷ cost per click; requests = clicks × click-to-request; accepted = requests × acceptance; contribution = fee revenue + subscriptions − ad spend − payment fees − promotion credits (signup bonus × new providers); net fee revenue = fee revenue − promotion credits; profit = contribution − fixed costs.",
+      "results": "Monthly results",
+      "market": "Market",
+      "scenario": "Scenario",
+      "allMarkets": "All markets",
+      "scenarios": {
+        "base": "Base",
+        "strong": "Strong"
+      },
+      "cols": {
+        "clicks": "Clicks",
+        "requests": "Requests",
+        "accepted": "Accepted",
+        "feeRevenue": "Fee revenue",
+        "contribution": "Contribution",
+        "profit": "Profit after fixed costs",
+        "adCostPerAccepted": "Ad cost per accepted",
+        "breakEvenAccepted": "Break-even accepted",
+        "promotionCredits": "Promotion credits used",
+        "netFeeRevenue": "Net fee revenue"
+      },
+      "emptyTitle": "No model yet",
+      "empty": "No market in view has an economics model.",
+      "updated": "Saved {at}",
+      "history": "Change history",
+      "seeded": "Seeded from the brief",
+      "form": {
+        "budget": "Monthly ad budget",
+        "cpc": "Cost per click",
+        "clickToRequest": "Clicks that become a request",
+        "acceptance": "Requests accepted and billable",
+        "paymentFees": "Payment fees and disputed-lead credits",
+        "subscriptions": "Subscriptions and featured, net",
+        "fixed": "Fixed costs",
+        "usd": "USD",
+        "usdMonth": "USD per month",
+        "mixAndFees": "Service mix and our fee per service",
+        "mix": "Share %",
+        "fee": "Fee USD",
+        "assumptions": "Funnel assumptions (not in the brief)",
+        "assumptionsHint": "Used only to draw the Model and Demo funnels; they do not change the money.",
+        "startToSubmit": "Started requests that are sent",
+        "quoteRate": "Sent requests that get a quote",
+        "completionRate": "Accepted jobs that are completed",
+        "save": "Save",
+        "saved": "Saved. Analytics uses the new numbers now.",
+        "error": {
+          "invalid": "Check the numbers: every field needs a number in range.",
+          "mix": "The service mix must add up to 100%.",
+          "save": "Could not save. Try again.",
+          "forbidden": "Only owners and operations managers can change the model."
+        },
+        "signupBonus": "Signup bonus per provider",
+        "newProviders": "New providers",
+        "perMonth": "per month"
+      },
+      "sharedStateOn": ": on",
+      "sharedStateOff": ": off"
+    },
+    "today": {
+      "lead": "What needs a person now, and how today is going in your markets.",
+      "strip": {
+        "title": "Right now",
+        "needAction": "Needs action now",
+        "oldest": "Oldest waiting {age}",
+        "none": "Nobody is waiting",
+        "missedCalls": "Unanswered calls",
+        "last24h": "Last 24 hours, not called back",
+        "noQuote": "No quote after 3 minutes",
+        "noQuoteHint": "Amber at 3 minutes, red at 10",
+        "online": "Providers online",
+        "verified": "Verified providers"
+      },
+      "urgent": {
+        "title": "Most urgent",
+        "emptyTitle": "All clear",
+        "empty": "Nothing is waiting for a person right now."
+      },
+      "reasons": {
+        "noQuote": "No quote yet",
+        "unclaimed": "Nobody has claimed it",
+        "missedCall": "Missed call",
+        "closing": "No progress for 2 hours"
+      },
+      "do": {
+        "claim": "Claim",
+        "callBack": "Call back",
+        "assign": "Assign",
+        "close": "Close"
+      },
+      "alerts": {
+        "title": "Alerts",
+        "stale": "{count, plural, one {# request has} other {# requests have}} had no progress for 2 hours.",
+        "noProviders": "{market}: no providers available.",
+        "none": "No alerts.",
+        "webhooks": "Failed webhooks show here once error monitoring is connected."
+      },
+      "numbers": {
+        "title": "Today by market",
+        "market": "Market",
+        "requests": "Requests",
+        "fill": "Filled",
+        "assign": "Median to assign",
+        "completed": "Completed",
+        "fees": "Fees earned",
+        "note": "Since midnight in each market's time zone. Real requests only."
+      },
+      "sourceWebsite": "Website",
+      "sourceCall": "Call"
+    },
+    "calls": {
+      "title": "Calls",
+      "lead": "Every call in your markets over the last 7 days.",
+      "log": "Log a call",
+      "filter": "Filter by outcome",
+      "all": "All",
+      "emptyTitle": "No calls yet",
+      "emptyBody": "Calls to your market numbers appear here as they happen.",
+      "directions": {
+        "inbound": "Incoming",
+        "outbound": "Outgoing"
+      },
+      "outcomes": {
+        "ringing": "Ringing",
+        "answered": "Answered",
+        "missed": "Missed",
+        "voicemail": "Voicemail",
+        "busy": "Busy",
+        "failed": "Failed",
+        "completed": "Completed"
+      },
+      "table": {
+        "caption": "Calls",
+        "time": "Time",
+        "direction": "Direction",
+        "outcome": "Outcome",
+        "from": "From",
+        "to": "To",
+        "duration": "Length",
+        "market": "Market",
+        "request": "Request",
+        "search": "Search calls",
+        "columns": "Columns",
+        "empty": "No calls match.",
+        "previous": "Previous page",
+        "next": "Next page",
+        "page": "Page {page} of {pages}",
+        "sortBy": "Sort by {column}"
+      }
+    },
+    "states": {
+      "loading": "Loading…",
+      "errorTitle": "This page didn't load",
+      "errorBody": "Something went wrong on our side. Your data is safe. Try again, and if it keeps happening, tell the team in the ops channel.",
+      "retry": "Try again"
+    },
+    "booking": {
+      "sec": "{n} s",
+      "min": "{n} min",
+      "median": "median",
+      "p90": "90th percentile {value}",
+      "count": "{n} requests",
+      "target": "Target: under {value}",
+      "overTarget": "Slower than the target ({value})",
+      "underTarget": "Within the target ({value})",
+      "dropped": "{value} dropped",
+      "noData": "No requests in this range yet.",
+      "steps": {
+        "visits": "Visits",
+        "started": "Started request",
+        "submitted": "Submitted",
+        "quoted": "First quote",
+        "booked": "Booked",
+        "completed": "Completed"
+      },
+      "bookedShare": "Booked",
+      "dropTitle": "Where people drop",
+      "dropNote": "Per Get Help screen: the share of sessions that left there without sending the request, and the field they touched last.",
+      "screen": "Screen",
+      "reached": "Reached",
+      "leftShare": "Left here",
+      "lastField": "Most common last field",
+      "screens": {
+        "problem": "What happened",
+        "location": "Location",
+        "details": "Your details"
+      },
+      "fields": {
+        "service": "Service",
+        "address": "Address",
+        "destAddress": "Tow destination",
+        "destMiles": "Tow distance",
+        "market": "City",
+        "note": "Note",
+        "spot": "Safe spot",
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email",
+        "make": "Vehicle make",
+        "model": "Vehicle model",
+        "color": "Vehicle colour"
+      },
+      "speedTitle": "Booking speed",
+      "speedNote": "Real requests only. Landing is the first page of the visit; booked is when a provider was booked.",
+      "landingToSubmit": "Landing to request submitted",
+      "submitToBooked": "Request submitted to provider booked",
+      "today": "Today",
+      "last7": "Last 7 days",
+      "byMarket": "By market",
+      "bySource": "By source",
+      "group": "Group",
+      "modeTitle": "Compare quotes vs Instant book",
+      "modes": {
+        "compare": "Compare quotes",
+        "instant": "Instant book"
+      },
+      "funnelTitle": "Booking funnel",
+      "funnelNote": "Website requests: visits, Get Help sessions, then each request's progress. Conversion and drop-off from the step before.",
+      "byTitle": "Funnel by",
+      "by": {
+        "market": "Market",
+        "source": "Source",
+        "service": "Service",
+        "device": "Device"
+      },
+      "devices": {
+        "mobile": "Phone",
+        "desktop": "Desktop",
+        "unknown": "Unknown"
+      },
+      "callsTitle": "Calls funnel",
+      "callsNote": "Inbound calls. Qualified: a conversation of 30 seconds or more, or one that became a request.",
+      "callSteps": {
+        "calls": "Calls",
+        "answered": "Answered",
+        "qualified": "Qualified",
+        "booked": "Booked",
+        "completed": "Completed"
+      },
+      "includeDemo": "Include demo data",
+      "excludeDemo": "Real data only",
+      "demoTag": "Includes demo"
+    },
+    "credits": {
+      "title": "Wallet credits",
+      "lead": "Free wallet balance for providers (bonus credit). It pays our job fees before the paid balance, expires on its date and is never cash.",
+      "viewOnly": "You can view wallet credits. Owners and operations managers make changes.",
+      "on": "On",
+      "off": "Off",
+      "amountUsd": "Amount (USD)",
+      "expiryDays": "Expires after (days)",
+      "starts": "Starts",
+      "ends": "Ends",
+      "provider": "Provider",
+      "choose": "Choose a provider",
+      "market": "Market",
+      "reason": "Reason",
+      "noteLabel": "Note (required for Other)",
+      "reasons": {
+        "goodwill": "Goodwill",
+        "dispute": "Dispute",
+        "promotion": "Promotion",
+        "test": "Test",
+        "other": "Other"
+      },
+      "sources": {
+        "signup": "Signup bonus",
+        "manual": "Manual grant",
+        "campaign": "Campaign",
+        "milestone": "Milestone",
+        "referral": "Referral",
+        "reactivation": "Reactivation",
+        "refund": "Refunded fee"
+      },
+      "signup": {
+        "title": "Signup bonus",
+        "note": "Granted automatically when a provider is approved (verified and active), never at sign-up. Once per business: a duplicate EIN, business phone, insurance policy, bank account or device is flagged for review.",
+        "enabled": "Signup bonus on",
+        "save": "Save {market}"
+      },
+      "grant": {
+        "title": "Manual grant",
+        "noteOwner": "Give one provider bonus credit. It shows on their timeline and in the audit log.",
+        "noteLimit": "Give one provider bonus credit, up to {limit} per grant; above that the owner grants it.",
+        "submit": "Grant credit"
+      },
+      "campaign": {
+        "title": "Bulk campaign",
+        "noteOwner": "Credit for a group of providers, with a total budget cap. Preview who receives it and the total before confirming.",
+        "noteLimit": "Credit for a group of providers, with a total budget cap up to {limit}. Preview who receives it and the total before confirming.",
+        "name": "Campaign name",
+        "audience": "Who receives it",
+        "audiences": {
+          "market": "All providers in the market",
+          "service": "Providers offering a service",
+          "inactive": "Inactive for 30 days or more",
+          "list": "A pasted list"
+        },
+        "service": "Service (for \"offering a service\")",
+        "anyService": "Any service",
+        "list": "Pasted list (provider names or ids, one per line)",
+        "budget": "Total budget cap (USD)",
+        "message": "Message shown to providers",
+        "plan": "Credit can also pay the monthly plan",
+        "preview": "Preview recipients",
+        "previewTitle": "Preview",
+        "summary": "{count, plural, one {# provider receives} other {# providers receive}} {amount} each: {total} of the {budget} budget.",
+        "leftOut": "{count, plural, one {# provider is} other {# providers are}} left out by the budget cap.",
+        "nobody": "Nobody matches this audience.",
+        "confirm": "Confirm and grant {total}"
+      },
+      "rules": {
+        "title": "Rule-based bonuses",
+        "note": "Optional and off by default. Each rule has an amount, expiry, budget cap and switch per market.",
+        "enabled": "Rule on",
+        "threshold": "Completed jobs",
+        "budget": "Budget cap (USD) · used {used}",
+        "save": "Save rule",
+        "kinds": {
+          "milestone": "Milestone",
+          "referral": "Referral",
+          "reactivation": "Reactivation"
+        },
+        "hints": {
+          "milestone": "Credit after the provider's Nth completed job.",
+          "referral": "Credit for the referring provider when the new provider completes 3 jobs (needs referral tracking: saved now, paid once referrals are recorded).",
+          "reactivation": "Credit when a provider comes back online after 30 days inactive (needs online tracking for real providers: saved now, paid once it exists)."
+        }
+      },
+      "limits": {
+        "title": "Approval limits",
+        "note": "Operations managers grant up to these amounts; above them the owner must. Owners have no limit; finance can view. Only the owner changes them. Empty means no limit.",
+        "perGrant": "Operations manager, per grant (USD)",
+        "perCampaign": "Operations manager, per campaign (USD)",
+        "save": "Save limits"
+      },
+      "flags": {
+        "title": "Duplicate businesses to review",
+        "note": "These approved providers share an identifier with another business, so their signup bonus is waiting for a decision.",
+        "grant": "Not a duplicate: grant the bonus",
+        "keep": "Duplicate: no bonus"
+      },
+      "recent": {
+        "title": "Recent grants",
+        "empty": "No grants yet.",
+        "reversed": "Reversed",
+        "why": "Reason",
+        "reverse": "Remove unused credit",
+        "cols": {
+          "date": "Date",
+          "provider": "Provider",
+          "market": "Market",
+          "source": "Source",
+          "amount": "Amount",
+          "left": "Left",
+          "expires": "Expires",
+          "action": "Action"
+        }
+      },
+      "report": {
+        "title": "Campaign report",
+        "empty": "No campaigns yet.",
+        "cols": {
+          "name": "Campaign",
+          "market": "Market",
+          "granted": "Granted",
+          "used": "Used",
+          "expired": "Expired",
+          "recipients": "Providers",
+          "toppedUp": "Topped up later",
+          "jobs": "Jobs on credit",
+          "revenue": "Fees, next 60 days"
+        }
+      },
+      "done": {
+        "signup": "Signup bonus saved.",
+        "grant": "Credit granted.",
+        "campaign": "Campaign granted.",
+        "rule": "Rule saved.",
+        "limit": "Limits saved.",
+        "reverse": "Unused credit removed.",
+        "flag": "Review saved."
+      },
+      "errors": {
+        "limit": "Above your approval limit: the owner must approve this.",
+        "forbidden": "You can't make this change.",
+        "invalid": "Check the form: something is missing or out of range."
+      },
+      "finance": {
+        "title": "Outstanding bonus credit",
+        "note": "Bonus credit granted and not yet used, expired or removed: a liability, per market. Credit used for fees is a promotion cost.",
+        "none": "No bonus credit granted yet.",
+        "total": "Total",
+        "cols": {
+          "market": "Market",
+          "outstanding": "Outstanding",
+          "providers": "Providers holding it",
+          "used": "Used for fees",
+          "expired": "Expired"
+        }
+      },
+      "timeline": {
+        "ledger": "Wallet timeline",
+        "grantLink": "Grant credit",
+        "noLines": "No wallet activity yet.",
+        "kinds": {
+          "topup": "Top-up",
+          "fee": "Job fee (paid balance)",
+          "fee_refund": "Fee refund",
+          "bonus_grant": "Bonus credit added",
+          "bonus_use": "Job fee (bonus credit)",
+          "bonus_expiry": "Bonus credit expired",
+          "bonus_reversal": "Bonus credit removed",
+          "bonus_refund": "Fee refunded as bonus credit"
+        },
+        "status": {
+          "approve": "Approve provider",
+          "approveHint": "Verification is complete: the provider can quote and gets the market's signup bonus (once per business).",
+          "pause": "Pause provider",
+          "reason": "Reason",
+          "done": {
+            "active": "Provider approved.",
+            "paused": "Provider paused."
+          },
+          "error": "Could not change the status."
+        },
+        "flagged": "Signup bonus waiting: this business shares an identifier with another one.",
+        "review": "Review it in Wallet credits"
+      }
+    },
+    "answers": {
+      "title": "Answers",
+      "none": "No answers (asked before RSOS-116, or by phone).",
+      "tags": "Key details",
+      "scheduled": "Scheduled for {at}",
+      "photos": "Photos",
+      "photo": "Photo {n}"
+    },
+    "servicesForm": {
+      "title": "Services and questions",
+      "lead": "The Get Help questions per service. Hide a question, make it required or optional, or change its order for one market or every market. Labels and chip options are the same in every market (edit the translations to change them).",
+      "saved": "Question saved.",
+      "error": "Could not save: check the values.",
+      "market": "Market",
+      "allMarkets": "Every market",
+      "service": "Service",
+      "viewOnly": "You can view these questions. Owners and operations managers change them.",
+      "ownerOnly": "Only the owner changes questions for every market; choose a market to change it there.",
+      "shown": "Shown",
+      "hidden": "Hidden",
+      "requiredDefault": "Required by design",
+      "optionalDefault": "Optional by design",
+      "common": "Every request",
+      "safetyAlways": "Always asked and required: it decides the \"Call 911 now\" banner.",
+      "hide": "Hide",
+      "required": "Required",
+      "asDesigned": "As designed",
+      "requiredYes": "Required",
+      "requiredNo": "Optional",
+      "order": "Order (lower first)",
+      "save": "Save"
+    },
+    "ads": {
+      "back": "Back to Marketing",
+      "title": "Ad connections",
+      "lead": "Spend import, conversion upload and auto-pause for each ad platform. A platform works only when its keys are set in the server environment and its switch is on here; keys are never shown.",
+      "saved": "Saved.",
+      "forbidden": "You can't change this. The owner and marketing do.",
+      "invalid": "Check the form: something is missing or out of range.",
+      "test": {
+        "button": "Test connection",
+        "ok": "Connection works.",
+        "failed": "Connection failed: see the error on the card.",
+        "missing": "Not connected: its keys are not set on the server."
+      },
+      "platformsTitle": "Platforms",
+      "platforms": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads"
+      },
+      "status": {
+        "not_connected": "Not connected",
+        "off": "Off",
+        "connected": "Connected",
+        "error": "Error"
+      },
+      "account": "Account",
+      "lastSync": "Last sync",
+      "lastError": "Last error",
+      "never": "Never",
+      "needKeys": "Add its keys in Vercel (see docs/runbooks/ads-connections.md), then switch it on here.",
+      "turnOn": "Switch on",
+      "turnOff": "Switch off",
+      "codesTitle": "Market codes for campaign names",
+      "codesNote": "Campaigns named \"CODE | Service | Type\" (for example the market code, then Tow, then Search) are mapped to the market and service automatically.",
+      "save": "Save",
+      "campaignsTitle": "Campaigns",
+      "campaignsNote": "Imported campaigns and their market. {unmapped, plural, =0 {All are mapped.} one {# campaign has no market: map it by hand.} other {# campaigns have no market: map them by hand.}}",
+      "noCampaigns": "No campaigns imported yet.",
+      "market": "Market",
+      "service": "Service",
+      "anyService": "Any service",
+      "unmapped": "Not mapped",
+      "byHand": "mapped by hand",
+      "pausedByAuto": "paused by auto-pause",
+      "pauseTitle": "Auto-pause",
+      "pauseNote": "Every 5 minutes: when fewer providers than the minimum are available for a service during ad hours, after the grace period, that market's campaigns for the service pause; they resume when providers are back. Each change is logged and emailed to the owner. Off by default.",
+      "on": "On",
+      "off": "Off",
+      "pauseOn": "Auto-pause on",
+      "minProviders": "Minimum providers",
+      "grace": "Grace period (minutes)",
+      "startHour": "Ad hours from",
+      "endHour": "Ad hours until",
+      "saveRule": "Save rule",
+      "pauseLog": "Recent pauses and resumes",
+      "paused": "paused",
+      "resumed": "resumed",
+      "dashTitle": "Ads by market and channel",
+      "dashNote": "Spend from the platforms (the manual form only fills days with no import). Fees earned are our fees on assigned jobs; return on ad spend is fees earned divided by spend.",
+      "connections": "Ad connections",
+      "csv": "Download CSV",
+      "cols": {
+        "market": "Market",
+        "channel": "Channel",
+        "trend": "Spend trend",
+        "spend": "Spend",
+        "clicks": "Clicks",
+        "calls": "Calls",
+        "qualified": "Qualified calls",
+        "requests": "Requests",
+        "assigned": "Assigned",
+        "completed": "Completed",
+        "perRequest": "Cost per request",
+        "perCompleted": "Cost per completed job",
+        "fees": "Fees earned",
+        "roas": "Return on ad spend"
+      },
+      "noData": "No ad data in this range.",
+      "channels": {
+        "google_ads": "Google Ads",
+        "meta": "Meta",
+        "microsoft_ads": "Microsoft Ads",
+        "other": "Other"
+      },
+      "health": {
+        "title": "Ad sync health",
+        "note": "Last successful run per job and failures in a row; the owner is emailed after 3 failures.",
+        "job": "Job",
+        "lastOk": "Last success",
+        "failures": "Failures in a row",
+        "none": "No sync has run yet."
+      }
+    },
+    "testTraffic": {
+      "title": "Test traffic",
+      "note": "Visits from these IPs and devices are test traffic: tagged, and left out of analytics and ad conversions in every environment. So are visits started with ?rsos_test=1 and any browser where staff are signed in to the admin.",
+      "added": "Added to the test list.",
+      "removed": "Removed from the test list.",
+      "invalid": "Check the values: an IP address or range, and a label.",
+      "forbidden": "You can't change the test list.",
+      "deviceAdded": "Device link created: open it once on that phone or computer.",
+      "addIp": "Add an IP address or range",
+      "ip": "IP address or range (CIDR)",
+      "label": "Label",
+      "add": "Add",
+      "addDevice": "Add a test device",
+      "deviceHow": "Creates a link: opening it once on a phone or computer marks that browser as test traffic.",
+      "createLink": "Create device link",
+      "list": "On the list",
+      "empty": "Nothing on the list yet.",
+      "kindIp": "IP",
+      "kindDevice": "Device",
+      "remove": "Remove"
+    },
+    "flags": {
+      "title": "Flags",
+      "customerTitle": "Flags about this customer",
+      "providerTitle": "Flags from customers",
+      "openCount": "{count, plural, =0 {None open} one {# open} other {# open}}",
+      "none": "No flags.",
+      "urgent": "Urgent",
+      "side": {
+        "customer": "From the customer",
+        "provider": "From a provider"
+      },
+      "reasons": {
+        "customer": {
+          "no_show": "Provider didn't arrive",
+          "price_changed": "Price changed",
+          "poor_service": "Poor service",
+          "safety": "Safety concern",
+          "other": "Other"
+        },
+        "provider": {
+          "fake": "Fake or prank",
+          "wrong_location": "Wrong location",
+          "unreachable": "Customer unreachable",
+          "unsafe": "Unsafe",
+          "other": "Other"
+        }
+      },
+      "status": {
+        "open": "Open",
+        "resolved": "Resolved"
+      },
+      "provider": "Provider: {name}",
+      "resolution": "Resolved: {note}",
+      "resolutionLabel": "What did you do? (optional)",
+      "resolve": "Resolve",
+      "inbox": "{count, plural, one {# flag} other {# flags}}"
+    }
+  },
+  "emails": {
+    "welcome": {
+      "preview": "Welcome to {brand}",
+      "heading": "Welcome to {brand}, {name}",
+      "tagline": "Roadside help, fast.",
+      "questions": "Questions? Email"
+    },
+    "securityNotice": {
+      "subject": {
+        "new_sign_in": "New sign-in to your {brand} account",
+        "password_changed": "Your {brand} password was changed",
+        "email_changed": "Your {brand} email was changed",
+        "phone_changed": "Your {brand} phone number was changed",
+        "second_step_changed": "Your {brand} sign-in security was changed",
+        "recovery_codes": "New recovery codes for {brand}",
+        "session_revoked": "A device was signed out of {brand}",
+        "closure_requested": "We received your request to close your {brand} account"
+      },
+      "intro": "Hi {name},",
+      "body": "This is a security notice for your account: {event}.",
+      "when": "When: {time}",
+      "device": "Device: {device}",
+      "notYou": "If this wasn't you, reset your password now and contact {support}.",
+      "codeSubject": "Your {brand} sign-in code",
+      "codeBody": "Your sign-in code is {code}. It expires in 10 minutes. Never share it with anyone, including our staff."
+    },
+    "teamNotice": {
+      "subject": {
+        "contact": "New contact message ({brand})",
+        "provider_application": "New provider application ({brand})"
+      }
+    },
+    "formConfirmation": {
+      "subject": {
+        "contact": "We got your message",
+        "provider_application": "We got your application"
+      },
+      "greeting": "Hi {name},",
+      "body": {
+        "contact": "Thanks for writing to us. A member of our team will reply by email, usually within one business day. If you need roadside help now, use the website or call the number for your area.",
+        "provider_application": "Thanks for applying to join. We review every application and will contact you within two business days about the next steps: proof of insurance and, where required, your license."
+      },
+      "signoff": "The {brand} team"
+    },
+    "opsAlert": {
+      "usageSubject": "{brand}: {group} usage passed today's limit",
+      "usageBody": "{group} usage reached {units} today ({day}), above the alert threshold of {threshold}. Check Admin > Settings > System status, and the API key restrictions if this was not expected.",
+      "usageHint": "You get one alert per service per day. Change the threshold in Admin > Settings > System status.",
+      "groups": {
+        "maps": "Google Maps",
+        "twilio": "Twilio"
+      }
+    },
+    "dispatchAlert": {
+      "subject": {
+        "missed": "{brand}: missed call from {caller} ({market})",
+        "voicemail": "{brand}: voicemail from {caller} ({market})"
+      },
+      "body": {
+        "missed": "Nobody answered a call from {caller}. Call them back from the admin inbox; the request is marked urgent.",
+        "voicemail": "{caller} left a voicemail. Listen and call back from the admin inbox; the request is marked urgent."
+      },
+      "transcript": "Transcript: {text}",
+      "open": "Open the inbox: {url}"
+    },
+    "driverUpdate": {
+      "subject": {
+        "assigned": "{brand}: help is on the way",
+        "locationLink": "{brand}: share your exact location"
+      },
+      "body": {
+        "assigned": "Hi {first_name}, {provider} is on the way. Quoted price {price}, about {eta} minutes.",
+        "locationLink": "Hi {first_name}, please open the link below and share your exact location so we can send help. If the link doesn't open, go to our website's /l page and type the code {code}."
+      },
+      "open": "Open: {url}",
+      "footer": "You get this email because you asked for roadside help. Reply to this email if anything is wrong."
+    },
+    "applicationApproved": {
+      "subject": "You're approved to join {brand}",
+      "body": "Hi {name}, {company} is approved to receive jobs from {brand}.",
+      "next": "Sign in to the provider app to finish your profile, set your prices and service area: {url}",
+      "help": "Questions? Email {support}."
+    },
+    "dailySummary": {
+      "subject": "{brand} dispatch summary for {day}",
+      "none": "No requests yesterday.",
+      "line": "{requests} requests, {calls} calls ({missed} missed), {assigned} assigned, {completed} completed, {noProvider} without a provider. Fees that would have been earned: {fees}.",
+      "footer": "Test campaign: fees are recorded as manual_test and nobody is charged."
+    },
+    "creditExpiry": {
+      "subjectWeek": "Your {brand} bonus credit expires in 7 days",
+      "subjectDay": "Your {brand} bonus credit expires tomorrow",
+      "intro": "Hello {company},",
+      "body": "{amount} of bonus credit in your wallet expires on {date}. It pays your job fees automatically, so going online and winning jobs before then uses it.",
+      "note": "Bonus credit is not cash and cannot be withdrawn."
+    },
+    "ads": {
+      "failingTitle": "Ad sync failing: {job}",
+      "failingBody": "3 failed runs in a row. Last error: {error}",
+      "pausedTitle": "Ads paused: {service} in {market}",
+      "resumedTitle": "Ads resumed: {service} in {market}",
+      "pausedBody": "No provider available for {service} for {minutes} minutes during ad hours: {count} campaign(s) paused.",
+      "resumedBody": "Providers are available again for {service}: {count} campaign(s) resumed.",
+      "dailyTitle": "Ads yesterday ({day})",
+      "dailyRow": "{market}: spend {spend}, requests {requests}, completed jobs {completed}, fees {fees}",
+      "unusualSpend": "{market}: spend with zero requests",
+      "unusualCost": "{market}: cost per completed job above {max}",
+      "unusualSync": "Sync failing: {job}",
+      "nothingUnusual": "Nothing unusual."
+    }
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "continue": "Continue",
+    "code": "6-digit code",
+    "verify": "Verify",
+    "sending": "Sending…",
+    "errors": {
+      "invalid": "Check your email and password and try again.",
+      "required": "Fill in every field.",
+      "code": "That code didn't work. Check it and try again.",
+      "notConfigured": "Sign-in isn't available in this environment yet.",
+      "generic": "Something went wrong. Try again.",
+      "expired": "Your session ended. Sign in again."
+    },
+    "admin": {
+      "title": "Admin sign-in",
+      "subtitle": "Staff only. You'll confirm with your authenticator app next.",
+      "verifyTitle": "Confirm it's you",
+      "verifyBody": "Enter the 6-digit code from your authenticator app.",
+      "enrollTitle": "Set up your authenticator app",
+      "enrollBody": "Admin accounts need a second step. Scan this code with an authenticator app (1Password, Google Authenticator, Authy), then enter the 6-digit code it shows.",
+      "secretLabel": "Can't scan? Enter this key:",
+      "noAccessTitle": "No admin access",
+      "noAccessBody": "Your account isn't set up as staff. Ask a super admin to add you.",
+      "dashboardTitle": "Admin dashboard",
+      "signedInAs": "Signed in as {email} ({role})"
+    },
+    "provider": {
+      "title": "Provider sign-in",
+      "subtitle": "Sign in with your password or get a sign-in link by email.",
+      "passwordTab": "Password",
+      "linkTab": "Email link",
+      "sendLink": "Email me a sign-in link",
+      "linkSent": "Check your email for a sign-in link. It expires in 1 hour.",
+      "phoneTitle": "Verify your phone",
+      "phoneBody": "We text a 6-digit code to the phone customers and dispatch will reach you on.",
+      "phone": "Mobile phone",
+      "sendCode": "Text me a code",
+      "codeSent": "We sent a code to {phone}.",
+      "mockNotice": "Test mode: no text is sent. Use code {code}.",
+      "smsUnavailable": "Text messages aren't set up yet, so phones can't be verified here.",
+      "noAccessTitle": "No provider access",
+      "noAccessBody": "This account isn't linked to a provider company yet.",
+      "dashboardTitle": "Provider portal",
+      "signedInAs": "Signed in as {email}"
+    },
+    "emailCode": {
+      "tab": "Email code",
+      "email": "Email",
+      "emailHint": "The email on your account. We send you a 6-digit code.",
+      "send": "Email me a code",
+      "sent": "If an account uses that email, we sent it a code. It expires in 10 minutes.",
+      "demoCode": "Test environment: no email is sent. Use code {code}.",
+      "code": "6-digit code",
+      "verify": "Sign in",
+      "errors": {
+        "email": "Enter a valid email address.",
+        "limit": "Too many codes. Wait a few minutes and try again.",
+        "code": "That code didn't work. Check it and try again.",
+        "generic": "Something went wrong. Please try again."
+      }
+    }
+  },
+  "account": {
+    "title": "Account and security",
+    "profile": "Profile",
+    "name": "Full name",
+    "save": "Save",
+    "saved": "Saved.",
+    "email": "Email",
+    "emailChange": "Change email",
+    "emailChangeNote": "We'll send a confirmation link to both your current and your new address. The change happens when both are confirmed.",
+    "emailChangeSent": "Check both inboxes to confirm the change.",
+    "password": "Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password (12+ characters)",
+    "changePassword": "Change password",
+    "passwordChanged": "Password changed.",
+    "phone": "Phone",
+    "phoneVerified": "Verified: {phone}",
+    "phoneMissing": "No verified phone",
+    "changePhone": "Change phone",
+    "secondStep": "Second step at sign-in",
+    "secondStepEmail": "Code by email",
+    "secondStepEmailHint": "A 6-digit code is emailed each time you sign in on a new device.",
+    "secondStepSms": "Code by text message",
+    "secondStepSmsHint": "Available once text messages are set up.",
+    "secondStepTotp": "Authenticator app",
+    "secondStepTotpHint": "Codes from 1Password, Google Authenticator or Authy.",
+    "secondStepRequired": "Admins always use an authenticator app.",
+    "recovery": "Recovery codes",
+    "recoveryHint": "Use one of these if you lose access to your second step. Each works once. Generating new codes cancels the old ones.",
+    "recoveryGenerate": "Generate new recovery codes",
+    "recoveryShown": "Save these now. They won't be shown again.",
+    "devices": "Signed-in devices",
+    "thisDevice": "This device",
+    "lastActive": "Last active {time}",
+    "signOutDevice": "Sign out",
+    "unknownDevice": "Unknown device",
+    "trusted": "Trusted devices",
+    "trustedHint": "These skip the second step for 30 days.",
+    "forget": "Forget",
+    "noTrusted": "No trusted devices.",
+    "history": "Sign-in and security history",
+    "noHistory": "No activity yet.",
+    "closure": "Close account",
+    "closureHint": "We'll confirm by email and close the account after any open jobs and balances are settled.",
+    "closureReason": "Reason (optional)",
+    "closureRequest": "Request account closure",
+    "closureRequested": "We received your request and will email you.",
+    "secondStepTitle": "Confirm it's you",
+    "secondStepEmailBody": "We emailed a 6-digit code to {email}. It expires in 10 minutes.",
+    "trustDevice": "Trust this device for 30 days",
+    "useRecovery": "Use a recovery code instead",
+    "recoveryCode": "Recovery code",
+    "resend": "Send a new code",
+    "codeSentNotice": "Code sent.",
+    "mockCode": "Test mode: email not sent. Your code is {code}.",
+    "locked": "Too many wrong codes. Try again in 15 minutes.",
+    "expiredCode": "That code expired. Send a new one.",
+    "forgot": "Forgot your password?",
+    "forgotTitle": "Reset your password",
+    "forgotBody": "Enter your email. If an account exists, we'll send a link to set a new password.",
+    "sendReset": "Send reset link",
+    "resetSent": "If an account exists for that email, a reset link is on its way.",
+    "resetTitle": "Set a new password",
+    "resetDone": "Password updated. Sign in with your new password.",
+    "lostSecondStepAdmin": "Lost your authenticator? Ask a super admin to reset your second step.",
+    "statusTitle": "Your account is {status}",
+    "statusReason": "Reason: {reason}",
+    "statusNext": "Contact {support} to resolve this.",
+    "status": {
+      "paused": "paused",
+      "suspended": "suspended",
+      "closed": "closed",
+      "applied": "under review",
+      "onboarding": "being set up",
+      "active": "active"
+    },
+    "events": {
+      "auth.sign_in": "Signed in",
+      "auth.second_step_passed": "Passed the second step",
+      "auth.second_step_locked": "Locked after wrong codes",
+      "auth.device_trusted": "Trusted a device",
+      "auth.device_forgotten": "Forgot a trusted device",
+      "auth.recovery_codes_generated": "Generated recovery codes",
+      "auth.recovery_code_used": "Used a recovery code",
+      "auth.second_step_method_changed": "Changed the second step",
+      "auth.session_revoked": "Signed out a device",
+      "auth.password_changed": "Changed password",
+      "auth.email_change_requested": "Requested an email change",
+      "auth.name_changed": "Changed name",
+      "account.closure_requested": "Requested account closure",
+      "auth.staff_second_step_reset": "Reset a staff member's second step"
+    },
+    "staff": "Staff",
+    "resetSecondStep": "Reset second step",
+    "resetDoneFor": "Second step reset for {email}. They'll set up a new authenticator at next sign-in.",
+    "onlySuperAdmin": "Only super admins can do this.",
+    "code": "6-digit code",
+    "verify": "Verify",
+    "codeWrong": "That code isn't right. Check it and try again.",
+    "currentWrong": "Your current password isn't right.",
+    "checkFields": "Check the highlighted fields.",
+    "genericError": "Something went wrong. Try again.",
+    "emailPending": "Waiting for confirmation of {email}.",
+    "totpReady": "Authenticator app set up.",
+    "totpQr": "QR code to scan with your authenticator app",
+    "totpKey": "Or enter this key: {key}",
+    "totpSetUp": "Set up an authenticator app",
+    "totpReplace": "Replace authenticator app",
+    "trustedUntil": "Trusted until {time}",
+    "emailRequired": "Enter a valid email address.",
+    "passwordRule": "Use at least 12 characters.",
+    "toSignIn": "Go to sign in",
+    "account": "Account",
+    "signedOutNotice": "You were signed out from another device. Sign in again.",
+    "moreDevices": "{count, plural, one {# more signed-in device} other {# more signed-in devices}} not shown."
+  },
+  "site": {
+    "nav": {
+      "services": "Services",
+      "cities": "Cities",
+      "forProviders": "For providers",
+      "getHelp": "Get help now",
+      "call": "Call",
+      "callMarket": "Call {phone}",
+      "menu": "Menu",
+      "closeMenu": "Close menu",
+      "mainNav": "Main",
+      "home": "Home",
+      "allServices": "All services",
+      "allCities": "All cities",
+      "breadcrumb": "Breadcrumb",
+      "preferCall": "Prefer to call?"
+    },
+    "market": {
+      "label": "Your area",
+      "change": "Change area",
+      "choose": "Choose your area",
+      "save": "Use this area",
+      "current": "Showing help for {city}",
+      "none": "Choose your city",
+      "outsideTitle": "We're not in your area yet",
+      "outsideBody": "We're opening city by city. Leave your email and we'll tell you when we open near you.",
+      "outsideBodyCity": "We're not in {city} yet. Leave your email and we'll tell you when we open near you.",
+      "emergency": "If you're in danger or blocking traffic, call 911 first.",
+      "email": "Email",
+      "zip": "ZIP code (optional)",
+      "join": "Notify me",
+      "joined": "Thanks. We'll email you when we open near you.",
+      "errors": {
+        "email": "Enter a valid email address.",
+        "zip": "Enter a 5-digit ZIP code or leave it empty.",
+        "limit": "Too many tries. Please try again later.",
+        "generic": "Something went wrong. Please try again."
+      },
+      "servedCities": "Cities we serve"
+    },
+    "footer": {
+      "cities": "Cities",
+      "services": "Services",
+      "company": "Company",
+      "legal": "Legal",
+      "providers": "For providers",
+      "providerSignIn": "Provider sign-in",
+      "apply": "Apply to join",
+      "howItWorks": "How it works",
+      "faq": "FAQ",
+      "about": "About",
+      "contact": "Contact",
+      "safety": "Safety tips",
+      "driverTerms": "Driver terms",
+      "providerTerms": "Provider terms",
+      "privacy": "Privacy policy",
+      "smsTerms": "SMS terms",
+      "callRecording": "Call recording notice",
+      "cookies": "Cookie policy",
+      "accessibility": "Accessibility",
+      "privacyChoices": "Your privacy choices",
+      "tagline": "A marketplace that connects customers with independent, verified roadside providers. Providers set their prices and are paid directly by customers.",
+      "rights": "© {year} {brand}"
+    },
+    "services": {
+      "flat-tire": {
+        "name": "Flat tire",
+        "short": "Spare on, or a plug to get you rolling"
+      },
+      "wont-start": {
+        "name": "Won't start",
+        "short": "Jump start for a dead battery"
+      },
+      "locked-out": {
+        "name": "Locked out",
+        "short": "Get back into your vehicle"
+      },
+      "out-of-gas": {
+        "name": "Out of gas",
+        "short": "Fuel to reach the next station"
+      },
+      "tow": {
+        "name": "Tow",
+        "short": "Tow to a shop, home or a place you pick"
+      },
+      "winch-out": {
+        "name": "Winch out",
+        "short": "Pulled out of mud, sand or a ditch",
+        "tile": "Stuck or winch-out"
+      }
+    },
+    "placeholder": {
+      "getHelpTitle": "Get help",
+      "getHelpBody": "The request flow opens here soon. For help right now, call the number for your area.",
+      "getHelpService": "Service: {service}",
+      "getHelpMarket": "Area: {city}",
+      "trackTitle": "Your request",
+      "trackBody": "Request tracking opens here soon.",
+      "providerTitle": "Provider profile",
+      "providerBody": "Provider profiles open here soon.",
+      "applyTitle": "Apply to join",
+      "applyBody": "The application form opens here soon."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "body": "That page doesn't exist or moved.",
+      "home": "Go to the home page"
+    },
+    "city": {
+      "title": "Roadside assistance in {city}, {state}",
+      "description": "Get price and arrival-time quotes from verified roadside providers in {city}, {state}. Flat tires, jump starts, lockouts, fuel delivery and towing.",
+      "servicesTitle": "What do you need in {city}?",
+      "call": "Call {phone}",
+      "areasTitle": "Areas we cover",
+      "highwaysTitle": "Highways and main roads",
+      "tipsTitle": "Roadside tips for {city}",
+      "faqTitle": "{city} questions",
+      "nearbyTitle": "Other cities we serve",
+      "serviceIn": "{service} in {city}",
+      "heroHeadline": "Stuck on the road in {city}? Help is on the way."
+    },
+    "cityService": {
+      "title": "{service} in {city}"
+    },
+    "service": {
+      "typicalPrice": "Typical price",
+      "typicalPriceRange": "{range} in our cities",
+      "localPrice": "Typical price in {city}",
+      "typicalTime": "Typical time on site",
+      "minutes": "{min} to {max} minutes once the provider arrives",
+      "covers": "What it covers",
+      "notCovered": "Not included",
+      "expect": "What to expect",
+      "safety": "Safety tips",
+      "faq": "Questions about {service}",
+      "inCities": "{service} by city",
+      "notOffered": "Not available in {city} yet",
+      "notOfferedBody": "We're adding this service city by city. If you need help now, request a tow and describe the problem.",
+      "requestTow": "Request a tow instead",
+      "otherServices": "Other services in {city}",
+      "allCityServices": "Roadside assistance in {city}",
+      "description": "{service}: what it covers, what to expect, typical prices and how to get quotes from verified local providers.",
+      "cityDescription": "{service} in {city}, {state}: typical local prices and quotes with arrival times from verified providers nearby.",
+      "priceNote": "Providers set their own prices and quote the full price before you choose."
+    }
+  },
+  "home": {
+    "title": "Roadside help with real quotes in minutes",
+    "metaDescription": "Stuck on the road? Share where you are and what happened. Verified local providers send quotes with price and arrival time, and you pick one. No membership.",
+    "how": {
+      "title": "How it works",
+      "step1": "Tell us what happened",
+      "step1Body": "Pick the problem and share your location. It takes under a minute.",
+      "step2": "Compare quotes",
+      "step2Body": "Nearby providers reply with a full price and how soon they can arrive.",
+      "step3": "Track your help",
+      "step3Body": "Choose one and follow their arrival. You pay the provider directly.",
+      "exampleLabel": "Example of a quote",
+      "exampleEta": "{minutes} min",
+      "exampleEtaSr": "Arrives in about {minutes} minutes",
+      "exampleNote": "Example with a demo provider. Real quotes come from verified providers in your area.",
+      "trackingLabel": "Example of tracking",
+      "labels": {
+        "insured": "Insured",
+        "licensed": "Licensed",
+        "noRatings": "New provider",
+        "allIn": "all-in"
+      }
+    },
+    "tracking": {
+      "submitted": "Request sent",
+      "quoted": "Quotes received",
+      "accepted": "You picked a provider",
+      "en_route": "On the way",
+      "on_site": "Arrived"
+    },
+    "prices": {
+      "title": "Typical prices in {city}",
+      "note": "Ranges providers in {city} usually quote. Your quote is the final price before you choose.",
+      "plus_fuel": "plus fuel",
+      "plus_per_mile": "plus per-mile charge",
+      "from": "{min} to {max}",
+      "choose": "Choose your area to see local prices."
+    },
+    "cities": {
+      "title": "Where we help",
+      "body": "We open city by city so every customer gets fast, local help."
+    },
+    "services": {
+      "title": "Services"
+    },
+    "faq": {
+      "title": "Common questions",
+      "items": {
+        "cost": {
+          "q": "How much does it cost?",
+          "a": "Each provider quotes a full price before you choose. You only pay the provider you pick, directly. Using this site is free for customers."
+        },
+        "fast": {
+          "q": "How fast will someone arrive?",
+          "a": "Every quote shows the provider's arrival time, so you can pick the fastest, the cheapest or the best rated."
+        },
+        "membership": {
+          "q": "Do I need a membership?",
+          "a": "No. There's no membership, subscription or account. You request help only when you need it."
+        },
+        "who": {
+          "q": "Who are the providers?",
+          "a": "Independent local towing and roadside companies. We check their insurance and, where required, their license before they can quote."
+        },
+        "safe": {
+          "q": "What should I do while I wait?",
+          "a": "Move off the road if you safely can, turn on your hazard lights and stay in your vehicle with your seatbelt on if you're on a highway. In an emergency, call 911."
+        }
+      }
+    },
+    "providers": {
+      "title": "Run a towing or roadside business?",
+      "body": "Get paid jobs from customers near you. Set your own prices, quote when you want, and pay a flat fee only when a customer picks you.",
+      "cta": "Learn about joining"
+    },
+    "getHelp": "Get help now",
+    "trackingPill": {
+      "submitted": "Sent",
+      "quoted": "Quoted",
+      "accepted": "Picked",
+      "en_route": "On the way"
+    },
+    "hero": {
+      "headline": "Stuck on the road? Help is on the way.",
+      "sub": "Book help in under a minute: nearby tow and roadside pros send a price and arrival time in about 3 minutes.",
+      "available": "{count, plural, one {# verified provider} other {# verified providers}} near {city}",
+      "changeCity": "Change city",
+      "tilesTitle": "What happened?",
+      "getHelp": "Get help now",
+      "safety": "In danger or on a busy highway? Call 911 first.",
+      "bookSpeed": "Typical time to book in {city}: {minutes} min"
+    },
+    "reassure": {
+      "label": "Good to know",
+      "noSignup": "No sign-up",
+      "noMembership": "No membership",
+      "payDirect": "You pay the provider directly"
+    }
+  },
+  "pages": {
+    "how": {
+      "title": "How it works",
+      "intro": "Customers get quotes from nearby providers and choose one. Providers get paid jobs and set their own prices.",
+      "drivers": "For customers",
+      "providers": "For providers",
+      "driverSteps": [
+        [
+          "Tell us what happened",
+          "Choose the problem (flat tire, dead battery, lockout, fuel or tow) and share your location. No account needed."
+        ],
+        [
+          "Get quotes in minutes",
+          "Verified providers near you send a full price and their arrival time, usually within about 3 minutes."
+        ],
+        [
+          "Choose and track",
+          "Pick the quote you want and follow the provider on the way. You pay the provider directly when the job is done."
+        ]
+      ],
+      "providerSteps": [
+        [
+          "Receive requests nearby",
+          "When a driver near you needs a service you offer, you get the request with the location and details."
+        ],
+        [
+          "Send your quote",
+          "Set your own price and arrival time. Quote the jobs you want, skip the ones you don't."
+        ],
+        [
+          "Get picked, do the job",
+          "If the driver picks you, you get their details and do the job. The driver pays you directly; we charge a flat fee from your prepaid wallet."
+        ]
+      ],
+      "payTitle": "Who pays whom",
+      "payBody": "Customers pay providers directly for the job. Providers pay us a flat fee per picked request from a prepaid wallet. We never handle the job payment.",
+      "cta": "Get help now",
+      "providerCta": "Learn about joining"
+    },
+    "faqPage": {
+      "title": "Frequently asked questions",
+      "intro": "Answers about getting help, prices, safety and joining as a provider.",
+      "search": "Search questions",
+      "noResults": "No questions match \"{query}\".",
+      "groups": {
+        "drivers": "Getting help",
+        "prices": "Prices and payment",
+        "safety": "Safety",
+        "providers": "For providers"
+      },
+      "items": {
+        "drivers": [
+          [
+            "What can I get help with?",
+            "Flat tires, dead batteries, lockouts, running out of fuel and towing. Some cities add more services over time."
+          ],
+          [
+            "Do I need an account or membership?",
+            "No. You request help when you need it, with no sign-up and no membership."
+          ],
+          [
+            "How fast will help arrive?",
+            "Each quote shows the provider's arrival time, so you can choose the fastest."
+          ],
+          [
+            "Which cities do you serve?",
+            "We open city by city. The cities menu at the top lists every city we serve today."
+          ]
+        ],
+        "prices": [
+          [
+            "How much will it cost?",
+            "Providers quote a full price before you choose. City pages show typical local price ranges."
+          ],
+          [
+            "How do I pay?",
+            "You pay the provider directly when the job is done, by the payment methods they accept. We never charge you for the job."
+          ],
+          [
+            "Are there hidden fees?",
+            "The quote is the price for the service. Some services add a clear extra, like the fuel itself or towing distance, and the quote says so."
+          ]
+        ],
+        "safety": [
+          [
+            "What should I do while I wait?",
+            "Move off the road if you safely can, turn on your hazard lights, and on a highway stay in your vehicle with your seatbelt on. If you are in danger, call 911."
+          ],
+          [
+            "How do you check providers?",
+            "We check insurance and, where required, licenses (for example TDLR towing licenses in Texas) before a provider can quote."
+          ],
+          [
+            "Can I see who is coming?",
+            "Yes. You see the provider's company name and can follow their arrival once you choose them."
+          ]
+        ],
+        "providers": [
+          [
+            "How do I join?",
+            "Apply on the For providers page. We check your insurance and license, then you can start quoting."
+          ],
+          [
+            "What does it cost providers?",
+            "A flat fee per request where the driver picks you, paid from a prepaid wallet. Optional plans add discounts and featured placement."
+          ],
+          ["Do I set my own prices?", "Yes. You quote each job at your price."],
+          [
+            "What is bonus credit?",
+            "Free balance we add for new providers and promotions. It pays job fees, is used before your paid balance, and expires on the date shown. It is not cash and cannot be withdrawn."
+          ]
+        ]
+      }
+    },
+    "about": {
+      "title": "About us",
+      "intro": "We connect stranded customers with independent roadside providers nearby, quickly and with clear prices.",
+      "mission": "Why we exist",
+      "missionBody": "Getting stuck is stressful. Calling around for a tow or a jump takes time you don't have, and prices are often a surprise. We let nearby providers compete for the job with a clear price and arrival time, so you can choose with confidence.",
+      "how": "How we work",
+      "howBody": "We are a marketplace, not a towing company. Independent, insured providers do the work and set their prices. Customers pay providers directly. Providers pay us a small flat fee when a customer picks them.",
+      "cities": "We open city by city so every customer gets fast local help.",
+      "contact": "Questions? Contact us."
+    },
+    "contact": {
+      "title": "Contact us",
+      "intro": "Questions, feedback or a problem with a job? Send us a message and we'll reply by email.",
+      "urgent": "Need roadside help now? Don't wait for a reply.",
+      "getHelp": "Get help now",
+      "name": "Your name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "topic": "Topic",
+      "topics": {
+        "general": "General question",
+        "job": "A job or a provider",
+        "provider": "Joining as a provider",
+        "privacy": "Privacy request",
+        "other": "Something else"
+      },
+      "message": "Message",
+      "market": "Your city (optional)",
+      "send": "Send message",
+      "sent": "Thanks. We got your message and will reply by email.",
+      "verify": "Security check",
+      "errors": {
+        "required": "Fill in your name, a valid email and your message.",
+        "turnstile": "The security check didn't pass. Please try again.",
+        "limit": "Too many messages. Please try again later.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "safetyPage": {
+      "title": "Safety tips",
+      "intro": "What to do when your vehicle breaks down. If anyone is hurt or in danger, call 911 first.",
+      "sections": [
+        [
+          "Get to a safe place",
+          "If the vehicle still moves, take the next exit or pull as far onto the shoulder as you can, away from curves and hills. Turn on your hazard lights."
+        ],
+        [
+          "On a highway",
+          "Stay in your vehicle with your seatbelt on unless it is safer to get out. If you get out, use the side away from traffic and stand behind a barrier if there is one."
+        ],
+        [
+          "At night",
+          "Keep hazard lights and interior lights on so other drivers and your provider can see you. Share your location with someone you trust."
+        ],
+        [
+          "In heat",
+          "Keep water with you, stay in the shade or in the car with air conditioning if it is safe, and watch for signs of heat illness."
+        ],
+        [
+          "In floods",
+          "Never drive into a flooded road. Turn around. If water is rising around your vehicle, get out to higher ground and call 911."
+        ],
+        [
+          "When help arrives",
+          "Check the provider's name matches the one you chose. Agree on the price before work starts. Pay the provider directly."
+        ]
+      ]
+    }
+  },
+  "forProviders": {
+    "title": "Get roadside jobs from customers near you",
+    "intro": "Join verified local providers who get paid jobs from stranded customers. You set your prices, you choose the jobs, and you only pay when a customer picks you.",
+    "apply": "Apply to join",
+    "how": {
+      "title": "How jobs arrive",
+      "steps": [
+        [
+          "A driver near you asks for help",
+          "You get the request with the problem, the vehicle and the location."
+        ],
+        [
+          "You send a quote",
+          "Your price and how soon you can arrive. Quote what you want, when you want."
+        ],
+        [
+          "The driver picks a quote",
+          "If they pick you, you get their details and head out. They pay you directly."
+        ]
+      ]
+    },
+    "money": {
+      "title": "How the money works",
+      "yourPrices": "You set your own prices for every job.",
+      "direct": "Customers pay you directly. We never touch the job payment.",
+      "fee": "We charge a flat fee only when a customer picks you, from a prepaid wallet you top up.",
+      "noMonthly": "No monthly fee to join."
+    },
+    "fees": {
+      "title": "Fee per picked request",
+      "intro": "The flat fee depends on the city and the service. Current fees:",
+      "service": "Service",
+      "fee": "Fee",
+      "none": "Fees are not set for this city yet."
+    },
+    "plans": {
+      "title": "Optional plans",
+      "pro": "Pro",
+      "proBody": "{discount} off every fee, plus tools for busy shops.",
+      "featured": "Featured",
+      "featuredBody": "Placement at the top of quotes and city pages, per city.",
+      "price": "{range} a month",
+      "priceIn": "{range} a month in {city}",
+      "note": "Plans are optional. Exact prices per city are confirmed before launch."
+    },
+    "requirements": {
+      "title": "Requirements",
+      "insurance": "Commercial auto and liability insurance, with proof.",
+      "license": "In Texas, a TDLR tow operator license for towing (we check it).",
+      "vehicle": "A vehicle and equipment for the services you offer.",
+      "phone": "A mobile phone to receive requests and send quotes."
+    },
+    "form": {
+      "title": "Apply to join",
+      "intro": "Tell us about your business. We review every application and reply within two business days.",
+      "company": "Company name",
+      "contact": "Your name",
+      "phone": "Mobile phone",
+      "email": "Email",
+      "markets": "Cities you serve",
+      "services": "Services you offer",
+      "trucks": "Number of trucks",
+      "insurance": "Insurance carrier",
+      "license": "License number (TDLR in Texas)",
+      "referral": "How did you hear about us? (optional)",
+      "smsConsent": "Text me about my application. Message frequency varies. Message and data rates may apply. Reply STOP to opt out, HELP for help.",
+      "smsTerms": "SMS terms",
+      "submit": "Send application",
+      "sent": "Thanks. We got your application and sent you a confirmation.",
+      "verify": "Security check",
+      "errors": {
+        "required": "Check the highlighted fields: company, name, a US mobile number, email, at least one city and one service.",
+        "turnstile": "The security check didn't pass. Please try again.",
+        "limit": "Too many applications from this connection. Please try again later.",
+        "generic": "Something went wrong. Please try again."
+      },
+      "checkField": "Check this field."
+    },
+    "smsConfirmation": "{brand}: we got your application for {company}. We'll be in touch within 2 business days. Reply STOP to opt out.",
+    "credit": {
+      "title": "What is bonus credit?",
+      "body": "Free balance we add for new providers and promotions. It pays job fees, is used before your paid balance, and expires on the date shown. It is not cash and cannot be withdrawn."
+    }
+  },
+  "legal": {
+    "draftBanner": "Draft for attorney review. Not yet in effect.",
+    "version": "Version {version}",
+    "updated": "Last updated: {date}",
+    "toc": "On this page",
+    "contactLine": "Questions about this document: {email}",
+    "docs": {
+      "driver-terms": {
+        "title": "Driver Terms of Use",
+        "intro": "These terms apply when you use our website or phone line to request roadside help.",
+        "sections": [
+          [
+            "We are a marketplace, not a roadside provider",
+            "We connect you with independent roadside providers. We do not tow, repair, unlock or deliver fuel ourselves, and providers are not our employees or agents. The provider you choose is responsible for the work."
+          ],
+          [
+            "Quotes and prices",
+            "Providers set their own prices. A quote is the provider's offer for the service described. Some services list extras, such as fuel or towing distance. Confirm the price with the provider before work starts."
+          ],
+          [
+            "Payment",
+            "You pay the provider directly, using the payment methods they accept. We do not charge you for the job and do not handle the job payment."
+          ],
+          [
+            "Your information",
+            "You agree to give accurate details about your location, vehicle and problem, and to let us share them with providers so they can quote and help you. See the Privacy Policy."
+          ],
+          [
+            "Safety and emergencies",
+            "Our service is not an emergency service. If anyone is hurt or in danger, call 911 first."
+          ],
+          [
+            "Ratings and conduct",
+            "Treat providers with respect. Ratings and reviews must be honest and about your own experience."
+          ],
+          [
+            "Limits of our responsibility",
+            "To the extent the law allows, we are not responsible for the provider's work, delays, damage or pricing. Disputes about a job are between you and the provider, though we will try to help."
+          ],
+          [
+            "Changes and contact",
+            "We may update these terms. The version and date are shown above. Contact us with any questions."
+          ]
+        ]
+      },
+      "provider-terms": {
+        "title": "Provider Terms",
+        "intro": "These terms apply to roadside providers who join the marketplace.",
+        "sections": [
+          [
+            "Joining and verification",
+            "You must hold the insurance and licenses required for the services you offer (for example a TDLR tow operator license in Texas), keep them current and send proof when asked."
+          ],
+          [
+            "Quotes and jobs",
+            "You choose which requests to quote. A quote must include the full price for the service and an honest arrival time. If a driver picks you, you agree to do the job as quoted."
+          ],
+          [
+            "Fees",
+            "When a driver picks your quote, a flat fee for that city and service is charged to your prepaid wallet. Current fees are shown on the For Providers page and in your portal."
+          ],
+          [
+            "Wallet and credits",
+            "You top up your wallet in advance. Fees are taken from the balance. Credits we issue (for example for a cancelled job that was not your fault) are added to the wallet. Unused balances are handled as described in your portal."
+          ],
+          [
+            "Plans",
+            "Optional Pro and Featured plans are billed monthly at the price shown for your city and can be cancelled before the next billing date."
+          ],
+          [
+            "Payment from drivers",
+            "Drivers pay you directly. You are responsible for your own payment processing, receipts and taxes."
+          ],
+          [
+            "Conduct",
+            "Be honest, safe and courteous. No overcharging against your quote, no harassment, no unsafe work."
+          ],
+          [
+            "Suspension and removal",
+            "We may pause or remove a provider for lapsed insurance or licenses, repeated no-shows, complaints, fraud or breaking these terms. We tell you the reason and the next step."
+          ],
+          [
+            "Bonus credit",
+            "We may add free bonus credit to your wallet for signing up or for promotions. Bonus credit pays job fees (and plans only when a promotion says so), is used before your paid balance, expires on the date shown and has no cash value: it cannot be withdrawn, refunded, sold or transferred. We may remove unused bonus credit given by mistake or obtained through fraud or duplicate accounts. Used bonus credit counts as fees paid. A refunded fee that was paid with bonus credit returns as bonus credit. (Draft clause for attorney review.)"
+          ],
+          [
+            "Changes and contact",
+            "We may update these terms and fees with notice. The version and date are shown above."
+          ]
+        ]
+      },
+      "privacy": {
+        "title": "Privacy Policy",
+        "intro": "How we collect, use and share personal information, and the choices you have.",
+        "sections": [
+          [
+            "What we collect",
+            "Contact details (name, phone, email), your location and vehicle details when you request help, messages you send us, device and usage data, and for providers, business, insurance and license details."
+          ],
+          [
+            "How we use it",
+            "To connect you with providers, send updates about your request, prevent fraud, keep the service safe, improve it and meet legal duties."
+          ],
+          [
+            "Who we share it with",
+            "With the providers who quote or do your job, with service companies that help us run the service (hosting, messaging, email), and when the law requires it. We do not sell personal information for money."
+          ],
+          [
+            "Text messages",
+            "When you ask for help or call us, we use your mobile number to text you about that request: a link to share your location, the provider assigned to you with the price and arrival time, and a tracking link. Providers get job alerts. We do not send marketing texts and we do not share or sell your number for anyone else's marketing. Reply STOP to stop texts at any time and START to resume; reply HELP for help. Message and data rates may apply. We keep a record of the texts we send and your opt-out choice."
+          ],
+          [
+            "Cookies and similar technologies",
+            "We use necessary cookies to run the site. Analytics and advertising cookies are used only with your consent. See the Cookie Policy and \"Your privacy choices\"."
+          ],
+          [
+            "California residents",
+            "You can ask to know, delete or correct your personal information, and to opt out of the sale or sharing of personal information and of targeted advertising. We honor Global Privacy Control signals. We will not discriminate against you for using these rights."
+          ],
+          [
+            "Texas, Nevada and Florida residents",
+            "Depending on your state, you can ask to access, correct or delete your personal data, get a copy of it, and opt out of targeted advertising, sale or profiling. Nevada residents can opt out of the sale of covered information."
+          ],
+          [
+            "How to make a request",
+            "Use the contact page and choose \"Privacy request\", or email us. We will verify your request and reply within the time the law requires. You can appeal a decision by replying to our answer."
+          ],
+          [
+            "Retention and security",
+            "We keep information only as long as needed for these purposes and legal duties, and protect it with technical and organizational safeguards."
+          ],
+          [
+            "Children",
+            "The service is not for children under 16, and we do not knowingly collect their information."
+          ],
+          ["Changes and contact", "We will post changes here with a new version and date."]
+        ]
+      },
+      "sms-terms": {
+        "title": "SMS Terms",
+        "intro": "Terms for text messages about your requests and applications.",
+        "sections": [
+          [
+            "What you will receive",
+            "Messages about your roadside request (quotes, the provider's arrival, status) or your provider application. Message frequency varies with your activity."
+          ],
+          [
+            "How you opt in",
+            "By giving your mobile number and checking the opt-in box (or by texting us), you agree to receive these messages. Consent is not a condition of any purchase."
+          ],
+          [
+            "Opt out and help",
+            "Reply STOP to stop messages at any time. Reply HELP for help, or contact us."
+          ],
+          ["Costs", "Message and data rates may apply, depending on your mobile plan."],
+          ["Carriers", "Carriers are not liable for delayed or undelivered messages."],
+          [
+            "Privacy",
+            "We use your number as described in the Privacy Policy and do not share it for third-party marketing."
+          ]
+        ]
+      },
+      "call-recording": {
+        "title": "Call Recording Notice",
+        "intro": "Calls to and from our phone numbers may be recorded.",
+        "sections": [
+          [
+            "Why we record",
+            "To help you quickly, check quality, train our team, resolve disputes and prevent fraud."
+          ],
+          [
+            "Notice and consent",
+            "When you call us, a message tells you the call may be recorded before the conversation starts. Some states require everyone on the call to agree; continuing the call means you agree. If you do not want to be recorded, tell us and we will help another way, for example by text or the website."
+          ],
+          [
+            "Keeping recordings",
+            "Recordings are kept only as long as needed for these purposes and then deleted, unless the law requires us to keep them longer."
+          ]
+        ]
+      },
+      "cookies": {
+        "title": "Cookie Policy",
+        "intro": "How we use cookies and similar technologies, and how to control them.",
+        "sections": [
+          [
+            "Necessary",
+            "Needed for the site to work: your chosen area, language, security checks and your privacy choices. These are always on."
+          ],
+          [
+            "Analytics",
+            "Help us understand how the site is used so we can improve it. Only with your consent."
+          ],
+          [
+            "Advertising",
+            "Measure our ads and show relevant ads on other sites. Only with your consent, and never when your browser sends a Global Privacy Control signal."
+          ],
+          [
+            "Your choices",
+            "Use \"Your privacy choices\" in the footer to change your settings at any time. We use Google Consent Mode, so Google tags stay off until you agree."
+          ]
+        ]
+      },
+      "accessibility": {
+        "title": "Accessibility Statement",
+        "intro": "We want everyone to be able to get roadside help on our website.",
+        "sections": [
+          [
+            "Our goal",
+            "We aim to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA."
+          ],
+          [
+            "What we do",
+            "We test with keyboard only and screen readers, use clear contrast in light and dark mode, large touch targets and plain language, and check every page automatically before release."
+          ],
+          [
+            "Known limits",
+            "Maps may not be fully accessible; you can always type an address or call instead."
+          ],
+          [
+            "Feedback",
+            "If something is hard to use, tell us through the contact page and we will help and fix it."
+          ]
+        ]
+      }
+    }
+  },
+  "consent": {
+    "title": "Your privacy choices",
+    "body": "We use necessary cookies to run this site. With your consent we also use analytics and advertising cookies. You can change this any time.",
+    "necessary": "Necessary",
+    "necessaryHint": "Always on: your area, language, security checks.",
+    "analytics": "Analytics",
+    "analyticsHint": "Helps us improve the site.",
+    "ads": "Advertising",
+    "adsHint": "Measures our ads and shows relevant ads elsewhere.",
+    "gpc": "Your browser sent a Global Privacy Control signal, so advertising stays off.",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all",
+    "save": "Save choices",
+    "manage": "Choose",
+    "policy": "Cookie policy",
+    "saved": "Your choices are saved."
+  },
+  "demo": {
+    "badge": "Demo data",
+    "signInTitle": "Sign in as demo",
+    "signInBody": "Staging and previews only. Uses fictional accounts and data.",
+    "roles": {
+      "provider_owner": "Provider owner",
+      "provider_manager": "Provider dispatcher",
+      "provider_operator": "Technician",
+      "admin_super": "Owner",
+      "admin_ops": "Operations manager",
+      "admin_dispatcher": "Dispatcher",
+      "admin_success": "Provider success",
+      "admin_finance": "Finance",
+      "admin_marketing": "Marketing",
+      "admin_viewer": "Viewer"
+    }
+  },
+  "getHelp": {
+    "progress": "Step {n} of {total}",
+    "back": "Back",
+    "next": "Continue",
+    "edit": "Change",
+    "location": {
+      "title": "Where are you?",
+      "useMine": "Use my location",
+      "locating": "Finding you…",
+      "denied": "We couldn't get your location. Type the address instead.",
+      "or": "Or type the address",
+      "address": "Street address or cross streets",
+      "city": "City",
+      "note": "Landmark, exit or mile marker (optional)",
+      "notePlaceholderHint": "For example: northbound past exit 160, white pickup on the shoulder",
+      "found": "Near {place}",
+      "approx": "We'll use the address you typed; the provider will confirm the exact spot.",
+      "saved": "Using your location near {place}. Tap “Use my location” again to update it.",
+      "savedNoPlace": "Using the location you shared. Tap “Use my location” again to update it.",
+      "suggestions": "Address suggestions",
+      "mapLabel": "Map of your location",
+      "why": "We send help to this spot. Allow location when your phone asks, or type the address below."
+    },
+    "problem": {
+      "title": "What happened?",
+      "flatTire": {
+        "q": "Do you have a usable spare?",
+        "yes": "Yes",
+        "no": "No",
+        "unsure": "Not sure"
+      },
+      "lockedOut": {
+        "q": "Where are the keys?",
+        "inside": "Locked inside",
+        "lost": "Lost or broken"
+      },
+      "outOfGas": {
+        "q": "Which fuel?",
+        "regular": "Regular gas",
+        "diesel": "Diesel"
+      },
+      "wontStart": {
+        "q": "What happens when you turn the key?",
+        "clicking": "Clicking",
+        "nothing": "Nothing at all",
+        "lights": "Lights work, engine won't turn"
+      }
+    },
+    "destination": {
+      "title": "Where should we tow it?",
+      "address": "Destination address or shop name",
+      "miles": "About how far?",
+      "ranges": {
+        "lt5": "Under 5 miles",
+        "5to10": "5 to 10 miles",
+        "10to20": "10 to 20 miles",
+        "20to40": "20 to 40 miles",
+        "gt40": "Over 40 miles"
+      },
+      "note": "Providers include the distance in their price."
+    },
+    "vehicle": {
+      "make": "Make",
+      "color": "Color",
+      "modelOptional": "Model (optional)",
+      "colors": {
+        "White": "White",
+        "Black": "Black",
+        "Silver": "Silver",
+        "Gray": "Gray",
+        "Blue": "Blue",
+        "Red": "Red",
+        "Green": "Green",
+        "Other": "Other"
+      },
+      "yearOptional": "Year (optional)",
+      "plateOptional": "Plate (optional)"
+    },
+    "safety": {
+      "unsafe": "If you're in danger or blocking traffic, call 911 first. Stay in your vehicle with your seatbelt on if you're on a highway.",
+      "call911": "Call 911",
+      "where": "Where are you right now?",
+      "spotSafe": "Off the road, in a safe place",
+      "spotHighway": "On a highway shoulder",
+      "spotUnsafe": "I don't feel safe"
+    },
+    "contact": {
+      "name": "Your name",
+      "phone": "Mobile number (for the provider's call)",
+      "consent": "By continuing you agree to the <terms>Driver Terms</terms> and <privacy>Privacy Policy</privacy>. We and the provider may call you about this request.",
+      "terms": "Driver Terms",
+      "privacy": "Privacy Policy",
+      "email": "Email (optional)",
+      "emailHint": "We email you the link to your request. No email? The link is on the next screen."
+    },
+    "errors": {
+      "required": "Choose an answer, then tap Continue.",
+      "location": "Tap Use my location, or type an address and choose your city.",
+      "outside": "We don't serve that area yet. Choose one of our cities below.",
+      "phone": "Enter a 10-digit US mobile number, like (210) 555-0123.",
+      "turnstile": "The security check didn't finish. Wait a moment, then tap Send my request again.",
+      "limit": "Too many requests from this connection. Call us instead, or try again in an hour.",
+      "generic": "Something went wrong on our side. Tap the button again, or call us.",
+      "service": "That service isn't offered here yet. Go back and choose another, or call us.",
+      "email": "Enter a valid email address, or leave it empty.",
+      "address": "Type a street address with a number (1200 Main St), cross streets (Main St and 5th St) or a highway and exit or mile marker.",
+      "name": "Type your name so the provider knows who to look for.",
+      "vehicle": "Type your vehicle's make (for example Toyota) and pick its color.",
+      "spot": "Choose where you are right now.",
+      "destination": "Type where to take the vehicle (an address or a shop name)."
+    },
+    "details": {
+      "title": "Who should the provider look for?",
+      "submit": "Send my request"
+    },
+    "q": {
+      "optional": "(optional)",
+      "required": "Choose an answer to continue.",
+      "safety": {
+        "label": "Are you in a safe place?",
+        "options": {
+          "safe": "Safe spot (parking lot, driveway)",
+          "shoulder": "Road shoulder",
+          "lane": "In a traffic lane"
+        }
+      },
+      "when": {
+        "label": "When do you need help?",
+        "options": {
+          "now": "Now",
+          "later": "Schedule for later"
+        }
+      },
+      "whenAt": {
+        "label": "Date and time"
+      },
+      "people": {
+        "label": "People with the vehicle"
+      },
+      "vehicleType": {
+        "label": "Vehicle type",
+        "options": {
+          "car": "Car",
+          "suv": "SUV",
+          "pickup": "Pickup",
+          "van": "Van",
+          "motorcycle": "Motorcycle",
+          "rv": "RV or heavy"
+        }
+      },
+      "rolls": {
+        "label": "Does it roll and steer?",
+        "options": {
+          "yes": "Yes",
+          "no": "No",
+          "unsure": "Not sure"
+        }
+      },
+      "awd": {
+        "label": "All-wheel or 4-wheel drive?",
+        "options": {
+          "yes": "Yes",
+          "no": "No",
+          "unsure": "Not sure"
+        }
+      },
+      "accident": {
+        "label": "Was there an accident?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "police": {
+        "label": "Have police been called?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "keys": {
+        "label": "Keys with you?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "parked": {
+        "label": "Where is it parked?",
+        "options": {
+          "street": "Street",
+          "lot": "Parking lot",
+          "garage": "Parking garage",
+          "offroad": "Ditch or off-road"
+        }
+      },
+      "heightLimit": {
+        "label": "Garage height limit"
+      },
+      "riders": {
+        "label": "Riders needing a lift (tow trucks have limited seats)"
+      },
+      "turnKey": {
+        "label": "What happens when you turn the key?",
+        "options": {
+          "clicking": "Clicking",
+          "nothing": "Nothing at all",
+          "cranks": "Cranks but won't start",
+          "unsure": "Not sure"
+        }
+      },
+      "electric": {
+        "label": "Electric or hybrid?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "battery": {
+        "label": "Want a new battery if needed? (quoted separately)",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "flats": {
+        "label": "How many flat tires?",
+        "options": {
+          "one": "1",
+          "twoPlus": "2 or more"
+        }
+      },
+      "whichTire": {
+        "label": "Which tire?",
+        "options": {
+          "fl": "Front left",
+          "fr": "Front right",
+          "rl": "Rear left",
+          "rr": "Rear right"
+        }
+      },
+      "spare": {
+        "label": "Do you have a spare?",
+        "options": {
+          "full": "Full-size",
+          "donut": "Small \"donut\"",
+          "none": "No spare",
+          "unsure": "Not sure"
+        }
+      },
+      "wheelLock": {
+        "label": "Wheel lock key available?",
+        "options": {
+          "yes": "Yes",
+          "no": "No",
+          "none": "No wheel locks"
+        }
+      },
+      "keysWhere": {
+        "label": "Where are the keys?",
+        "options": {
+          "inside": "Locked inside",
+          "lost": "Lost",
+          "broken": "Broken in the lock",
+          "trunk": "In the trunk"
+        }
+      },
+      "childInside": {
+        "label": "Is a child or pet inside?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      },
+      "keyType": {
+        "label": "Key type",
+        "options": {
+          "regular": "Regular key",
+          "fob": "Key fob",
+          "push": "Push-button start",
+          "unsure": "Not sure"
+        }
+      },
+      "fuel": {
+        "label": "Fuel type",
+        "options": {
+          "regular": "Regular",
+          "premium": "Premium",
+          "diesel": "Diesel",
+          "electric": "Electric (out of charge)"
+        }
+      },
+      "gallons": {
+        "label": "How much fuel?",
+        "options": {
+          "2": "2 gallons",
+          "3": "3 gallons",
+          "5": "5 gallons"
+        }
+      },
+      "stuckIn": {
+        "label": "Stuck in",
+        "options": {
+          "mud": "Mud",
+          "sand": "Sand",
+          "snow": "Snow or ice",
+          "ditch": "Ditch",
+          "other": "Other"
+        }
+      },
+      "distance": {
+        "label": "Distance from the road",
+        "options": {
+          "lt10": "Under 10 ft",
+          "10to50": "10 to 50 ft",
+          "gt50": "More than 50 ft"
+        }
+      },
+      "upright": {
+        "label": "Is the vehicle upright on its wheels?",
+        "options": {
+          "yes": "Yes",
+          "no": "No"
+        }
+      }
+    },
+    "banner": {
+      "call911": {
+        "button": "Call 911",
+        "safety-lane": "Call 911 now. Get out of the traffic lane only if it is safe, and stand away from the road. You can continue after calling.",
+        "childInside-yes": "Call 911 now: a child or pet inside a locked car can be in danger within minutes. We mark your request urgent; you can continue after calling."
+      },
+      "suggestTow": {
+        "flats-twoPlus": "With two or more flat tires, a tow is usually the fastest fix.",
+        "spare-none": "Without a spare, a tow (or tire delivery) is usually needed.",
+        "upright-no": "A vehicle on its side needs a tow with recovery."
+      },
+      "suggestWinch": {
+        "parked-offroad": "In a ditch or off-road? A winch-out may be what you need."
+      },
+      "evNoJump": {
+        "electric-yes": "Most electric cars can't be jump started: we'll send a tow or a mobile charger."
+      },
+      "evCharge": {
+        "fuel-electric": "Out of charge: we'll send a tow or a mobile charger."
+      },
+      "switchTow": "Switch to Tow",
+      "switchWinch": "Switch to winch-out"
+    },
+    "changeService": "Change service",
+    "typicalPrice": "{service} in {city} usually costs {min} to {max}.",
+    "typicalPriceTow": "Tows in {city} usually cost {min} to {max} plus mileage.",
+    "addDetails": "Add details (optional)",
+    "notes": "Notes for the provider",
+    "notesHint": "Anything that helps: gate code, exact spot, what happened.",
+    "photos": "Photos (up to 3: vehicle, damage, location)",
+    "photosHint": "Photos are private: only the provider and our team see them.",
+    "photosSaved": "{count, plural, one {# photo saved} other {# photos saved}}. Choosing new ones replaces them.",
+    "notices": {
+      "lockedOut": "The provider will ask for ID and proof the vehicle is yours (registration or insurance card).",
+      "fuel": "Fuel is paid separately at pump price."
+    },
+    "picker": {
+      "title": "What happened?"
+    }
+  },
+  "track": {
+    "title": "Your request {code}",
+    "demoNote": "Demo providers: quotes and movement on this page are simulated.",
+    "stages": {
+      "searching": "Finding providers near you",
+      "quoting": "Quotes are coming in",
+      "picked": "Provider confirmed",
+      "en_route": "On the way",
+      "on_site": "Provider arrived",
+      "completed": "Job completed",
+      "cancelled": "Request cancelled",
+      "expired": "No provider was available"
+    },
+    "searching": {
+      "body": "We sent your request to verified providers nearby. Quotes usually arrive within 3 minutes. Stay where you are and keep your phone on.",
+      "call": "Call us {phone}",
+      "timeLeft": "Time left for quotes",
+      "reach": "{count, plural, one {# verified provider serves} other {# verified providers serve}} {city}.",
+      "whileTitle": "While you wait",
+      "while": [
+        "Turn on your hazard lights.",
+        "On a highway, stay in your vehicle with your seatbelt on.",
+        "Keep your phone on: the provider may call you.",
+        "If you feel unsafe at any moment, call 911."
+      ]
+    },
+    "quotes": {
+      "count": "{count, plural, one {# quote} other {# quotes}}",
+      "sortFastest": "Fastest",
+      "sortCheapest": "Cheapest",
+      "sortLabel": "Sort quotes",
+      "newQuote": "New quote from {provider}: {price}, about {minutes} minutes",
+      "choose": "Choose",
+      "viewProfile": "View profile",
+      "waiting": "Waiting for more providers…",
+      "tapHint": "Tap a quote to see the full profile."
+    },
+    "confirm": {
+      "title": "Confirm {provider}",
+      "price": "Price",
+      "eta": "Arrives in about",
+      "minutes": "{minutes} min",
+      "included": "What's included",
+      "includedBody": "The service you asked for, done where your vehicle is.",
+      "extras": "Extra charges",
+      "extrasTow": "Towing beyond the miles in your request is charged per mile, as quoted.",
+      "extrasWait": "Waiting more than 15 minutes after arrival can be charged.",
+      "payDirect": "You pay the provider directly when the job is done.",
+      "methods": "Accepted: card, cash, Apple Pay, Google Pay",
+      "confirm": "Confirm and request",
+      "cancel": "Back to quotes"
+    },
+    "profile": {
+      "rating": "Rated {rating} from {count} reviews",
+      "newProvider": "New provider",
+      "trucks": "{count, plural, one {# truck} other {# trucks}}",
+      "based": "Based in {area}",
+      "verified": "Insurance verified",
+      "close": "Close profile",
+      "choose": "Choose this provider: {price}, {minutes} min",
+      "insured": "Insured",
+      "licensed": "Licensed",
+      "years": "{count, plural, one {# year in business} other {# years in business}}",
+      "response": "Typical response",
+      "seconds": "{s} s",
+      "etaAccuracy": "Arrives on time",
+      "services": "Services and prices",
+      "from": "from {price}",
+      "reviews": "Reviews",
+      "noReviews": "No reviews yet.",
+      "starReviews": "{stars}-star reviews",
+      "daysAgo": "{count, plural, one {# day ago} other {# days ago}}",
+      "stars": "{count, plural, one {# star} other {# stars}}",
+      "photos": "Recent jobs",
+      "photoKinds": {
+        "tow": "Tow",
+        "tire": "Tire change",
+        "jump": "Jump start",
+        "lockout": "Lockout"
+      },
+      "area": "Service area",
+      "areaMap": "Map of the service area, about {miles} miles around the provider's base",
+      "payments": "Payment methods",
+      "methods": {
+        "card": "Card",
+        "cash": "Cash",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "zelle": "Zelle"
+      },
+      "reviewSamples": [
+        "Showed up earlier than quoted and had me back on the road in minutes.",
+        "Friendly customer, clear price, no surprises at the end.",
+        "Called ahead to say where he was. Felt safe the whole time.",
+        "Careful with my car and explained everything before starting.",
+        "Late at night and still quick. Would use again.",
+        "The price matched the quote exactly. Easy to pay by card.",
+        "Truck was clean and the customer checked my tire pressure too.",
+        "A little slower than the ETA, but kept me updated."
+      ]
+    },
+    "tracking": {
+      "etaLabel": "Arrives in",
+      "minutes": "{minutes} min",
+      "arrived": "Your provider is here",
+      "call": "Call provider",
+      "text": "Text provider",
+      "masked": "Calls and texts go through a private number.",
+      "share": "Share tracking link",
+      "copied": "Link copied",
+      "steps": "Request progress",
+      "safety": "While you wait",
+      "safetyTips": [
+        "Stay in your vehicle with your seatbelt on if you're on a highway.",
+        "Keep your hazard lights on.",
+        "Check the provider's name and truck match before work starts."
+      ],
+      "map": "Map of the provider on the way to you"
+    },
+    "cancel": {
+      "open": "Cancel request",
+      "title": "Cancel this request?",
+      "reason": "Reason",
+      "reasons": {
+        "found_help": "I found help another way",
+        "too_slow": "It's taking too long",
+        "too_expensive": "The quotes are too expensive",
+        "fixed": "The problem is fixed",
+        "other": "Something else"
+      },
+      "confirm": "Cancel request",
+      "keep": "Keep my request",
+      "done": "Your request is cancelled."
+    },
+    "report": {
+      "open": "Report a problem",
+      "title": "Report a problem",
+      "note": "Anything to add? (optional)",
+      "pick": "What went wrong? Tap one to send.",
+      "reasons": {
+        "no_show": "The provider didn't arrive",
+        "price_changed": "The price changed",
+        "poor_service": "Poor service",
+        "safety": "I have a safety concern",
+        "other": "Something else"
+      },
+      "sent": "Thanks. Our team will contact you."
+    },
+    "review": {
+      "title": "How was your help?",
+      "stars": "{count, plural, one {# star} other {# stars}}",
+      "tags": {
+        "fast": "Fast",
+        "friendly": "Friendly",
+        "fair_price": "Fair price",
+        "professional": "Professional",
+        "clean": "Careful with my vehicle"
+      },
+      "comment": "Anything else? (optional)",
+      "send": "Send review",
+      "thanks": "Thanks for your review."
+    },
+    "receipt": {
+      "title": "Summary",
+      "service": "Service",
+      "provider": "Provider",
+      "price": "Quoted price",
+      "paid": "Paid directly to the provider",
+      "requested": "Requested",
+      "completed": "Completed"
+    },
+    "ended": {
+      "cancelledBody": "Need help again? Start a new request any time.",
+      "expiredBody": "We're sorry: no provider could take this request in time. Call us and we'll help you find someone.",
+      "again": "Start a new request"
+    },
+    "invalid": {
+      "title": "We couldn't find that request",
+      "body": "The link may be old or mistyped. If you need help now, start a new request or call us.",
+      "again": "Start a new request"
+    },
+    "steps": {
+      "searching": "Finding",
+      "quoting": "Quotes",
+      "picked": "Confirm",
+      "en_route": "On the way",
+      "on_site": "Arrived",
+      "completed": "Completed"
+    },
+    "demo": {
+      "title": "Demo controls",
+      "back": "Back",
+      "next": "Next",
+      "speed": "Demo speed",
+      "skipArrival": "Skip to arrival",
+      "skipNext": "Skip to next stage",
+      "goTo": "Go back to {stage}",
+      "speedValue": "{x}x"
+    },
+    "card": {
+      "insured": "Insured",
+      "licensed": "Licensed",
+      "rating": "Rated {rating} out of 5 from {count} reviews",
+      "noRatings": "New provider",
+      "fastest": "Fastest",
+      "bestPrice": "Best price",
+      "topRated": "Top rated",
+      "allIn": "All-in price",
+      "arrives": "Arrives in",
+      "eta": "{minutes} min",
+      "etaSr": "{minutes} minutes",
+      "open": "{provider}, {price}. View profile",
+      "reviews": "{count, plural, one {# review} other {# reviews}}",
+      "years": "{count, plural, one {# year in business} other {# years in business}}",
+      "trucks": "{count, plural, one {# truck} other {# trucks}}",
+      "distance": "{miles} mi away",
+      "selected": "Selected to compare"
+    },
+    "compare": {
+      "add": "Compare",
+      "open": "Compare {count} quotes",
+      "title": "Compare quotes",
+      "close": "Close",
+      "eta": "Arrives in",
+      "price": "All-in price",
+      "rating": "Rating",
+      "ratingValue": "{rating} ({count})",
+      "new": "New",
+      "years": "Years in business",
+      "trucks": "Trucks",
+      "distance": "Distance",
+      "minutes": "{minutes} min",
+      "miles": "{miles} mi",
+      "choose": "Choose"
+    },
+    "instant": {
+      "title": "How do you want to book?",
+      "compare": "Compare quotes",
+      "compareHint": "See every price and arrival time, then choose.",
+      "instant": "Book the fastest provider automatically",
+      "instantHint": "The first verified provider who accepts at or below your price is booked. You can switch until then.",
+      "max": "Most you'll pay",
+      "apply": "Use this price",
+      "on": "Instant book is on: we book the first provider at {price} or less.",
+      "booked": "Booked automatically at or below {price}.",
+      "fellBack": "No provider accepted at {price} or less in time. Compare the quotes that came in below.",
+      "manual": "No quotes came in. Our dispatchers are finding you a provider now; keep your phone on."
+    }
+  },
+  "lp": {
+    "metaTitle": "Roadside help in {city}",
+    "headlines": {
+      "fast": "{service} in {city}? Get quotes in minutes.",
+      "price": "{service} in {city}: see real prices before you choose.",
+      "local": "Local {city} providers, ready now.",
+      "stuck": "Stuck in {city}? Help is on the way."
+    },
+    "startTitle": "Start your request",
+    "useLocation": "Use my location",
+    "locating": "Finding you…",
+    "denied": "We couldn't get your location. Type the address instead.",
+    "address": "Your address or cross streets in {city}",
+    "continue": "Continue",
+    "trust": {
+      "label": "Why customers use us",
+      "insured": "Insured, verified providers",
+      "fast": "Quotes in about 3 minutes",
+      "noMembership": "No membership"
+    },
+    "priceLabel": "Typical {service} price in {city}",
+    "otherServices": "Need something else?",
+    "faq": {
+      "cost": {
+        "q": "How much does it cost?",
+        "a": "Providers quote a full price before you choose, and you pay them directly."
+      },
+      "fast": {
+        "q": "How fast can someone get here?",
+        "a": "Every quote shows the arrival time, so you can choose the fastest."
+      },
+      "membership": {
+        "q": "Do I need a membership?",
+        "a": "No. No membership, sign-up or subscription."
+      }
+    },
+    "preferCall": "Prefer to call?",
+    "bookNow": "Book help now"
+  },
+  "driverAccount": {
+    "title": "Your account",
+    "signIn": {
+      "title": "Sign in with your email",
+      "body": "We'll email you a code. No password.",
+      "send": "Email me a code",
+      "code": "6-digit code",
+      "demoCode": "Demo mode: your code is {code}.",
+      "verify": "Sign in",
+      "wrong": "That code isn't right.",
+      "email": "Email",
+      "badEmail": "Enter a valid email address."
+    },
+    "tabs": "Account sections",
+    "requests": "Requests",
+    "vehicles": "Vehicles",
+    "places": "Places",
+    "favorites": "Favorite providers",
+    "settings": "Settings",
+    "quick": {
+      "title": "Request again",
+      "body": "Uses your saved vehicle and number. You'll confirm your location.",
+      "start": "Start a request"
+    },
+    "history": {
+      "again": "Request again",
+      "none": "No requests yet.",
+      "daysAgo": "{days, plural, one {# day ago} other {# days ago}}"
+    },
+    "vehicle": {
+      "add": "Add a vehicle",
+      "default": "Default",
+      "makeDefault": "Make default",
+      "remove": "Remove"
+    },
+    "place": {
+      "add": "Add a place",
+      "remove": "Remove"
+    },
+    "favorite": {
+      "remove": "Remove from favorites",
+      "none": "No favorites yet. After a job, tap the heart on the provider."
+    },
+    "delete": {
+      "title": "Delete account",
+      "body": "This removes your saved vehicles, places and favorites. Past requests stay on record for the providers and our team as the law requires.",
+      "confirm": "Type DELETE to confirm",
+      "button": "Delete my account",
+      "done": "Your account is deleted."
+    },
+    "signOut": "Sign out",
+    "demoOnly": "Demo accounts with fictional data."
+  },
+  "providerProfile": {
+    "based": "Based in {area}",
+    "demoNote": "Demo provider: fictional company, prices and reviews for the staging walkthrough.",
+    "insured": "Insurance verified",
+    "licensed": "Tow license checked",
+    "eta": "Typical arrival {minutes} min",
+    "rating": "{rating} from {count} reviews",
+    "newProvider": "New provider",
+    "services": "Services and prices",
+    "from": "from {price}",
+    "area": "Service area: {miles} miles",
+    "areaMap": "Service area of {miles} miles around the provider's base",
+    "hours": "Hours",
+    "hours24": "Open 24 hours, every day",
+    "hoursDay": "Every day, 6 am to 10 pm",
+    "payments": "Payment methods",
+    "paymentList": "Card, cash, Apple Pay, Google Pay",
+    "photos": "Job photos",
+    "noPhotos": "No photos yet.",
+    "reviews": "Reviews",
+    "noReviews": "No reviews yet.",
+    "stars": "{count, plural, one {# star} other {# stars}}",
+    "demoReviews": [
+      {
+        "name": "Maria G.",
+        "stars": 5,
+        "text": "Arrived faster than quoted and changed the tire in 15 minutes."
+      },
+      {
+        "name": "James T.",
+        "stars": 5,
+        "text": "Clear price up front, friendly driver."
+      },
+      {
+        "name": "Priya S.",
+        "stars": 4,
+        "text": "Good tow, a little late because of traffic, but kept me updated."
+      }
+    ]
+  },
+  "portal": {
+    "nav": {
+      "label": "Portal",
+      "home": "Home",
+      "jobs": "Jobs",
+      "wallet": "Wallet",
+      "profile": "Profile",
+      "more": "More",
+      "services": "Services and prices",
+      "team": "Team",
+      "insights": "Insights",
+      "notifications": "Notifications",
+      "help": "Help",
+      "account": "Account and security",
+      "install": "Install the app",
+      "onboarding": "Setup",
+      "theme": "Day or night mode",
+      "signOut": "Sign out",
+      "myJobs": "My jobs"
+    },
+    "shell": {
+      "offline": "You're offline. New requests will appear when you're back online.",
+      "online": "Back online.",
+      "update": "A new version is ready.",
+      "reload": "Update now",
+      "company": "{company}"
+    },
+    "install": {
+      "title": "Install the app",
+      "body": "Get requests full screen with sound, and open the portal in one tap.",
+      "iphone": "iPhone (Safari)",
+      "iphoneSteps": ["Tap the Share button.", "Choose \"Add to Home Screen\".", "Tap Add."],
+      "android": "Android (Chrome)",
+      "androidSteps": ["Tap the menu (three dots).", "Choose \"Install app\".", "Tap Install."],
+      "installNow": "Install now"
+    },
+    "home": {
+      "title": "Today",
+      "online": "You're online",
+      "offline": "You're offline",
+      "onlineHint": "New requests nearby can reach you",
+      "offlineHint": "Go online to receive requests",
+      "swipeOff": "Swipe to go offline",
+      "truck": "Truck or operator",
+      "stats": {
+        "requests": "Requests nearby",
+        "quotes": "Quotes sent",
+        "won": "Jobs won",
+        "value": "Job value",
+        "fees": "Fees paid"
+      },
+      "wallet": "Wallet balance",
+      "low": "Low balance: top up so you don't miss jobs.",
+      "topUp": "Top up",
+      "blockers": "Before you can get jobs",
+      "empty": "Your wallet is empty.",
+      "expired": "Your insurance certificate expires in {days} days.",
+      "review": "Your company is in review.",
+      "fix": "Fix now",
+      "map": "Your service area and requests nearby",
+      "offers": "{count, plural, one {# request waiting for quotes} other {# requests waiting for quotes}}",
+      "seeOffer": "See the next request",
+      "demo": "Demo data: requests and stats are simulated; the wallet balance is real."
+    },
+    "onboarding": {
+      "title": "Join as a provider",
+      "subtitle": "About 10 minutes. Your progress is saved after each step.",
+      "progress": "Onboarding progress",
+      "back": "Back",
+      "next": "Save and continue",
+      "submit": "Submit for review",
+      "saved": "Progress is saved on this device after each step.",
+      "stepOf": "Step {n} of {total}",
+      "required": "Fill in the required fields.",
+      "outside": "Outside the market range",
+      "miles": "miles",
+      "range": "Market range {min} to {max}",
+      "steps": {
+        "account": "Your account",
+        "company": "Company",
+        "services": "Services and prices",
+        "area": "Service area",
+        "trucks": "Trucks and team",
+        "documents": "Documents",
+        "profile": "Public profile",
+        "wallet": "Wallet",
+        "agreements": "Agreements"
+      },
+      "fields": {
+        "name": "Your name",
+        "phone": "Mobile number",
+        "legalName": "Company legal name",
+        "dot": "USDOT number (if you have one)",
+        "years": "Years in business",
+        "radius": "How far you'll drive",
+        "trucks": "Trucks",
+        "operators": "Operators besides you",
+        "insurance": "Insurance certificate (photo or PDF)",
+        "insuranceExpiry": "Insurance expires on",
+        "license": "Towing license (photo or PDF)",
+        "licenseExpiry": "License expires on",
+        "description": "About your company",
+        "topUp": "First top-up",
+        "terms": "I agree to the provider terms.",
+        "fees": "I understand the fee is charged only when a customer picks me."
+      },
+      "nextTitle": "Thanks! Here's what happens next",
+      "next1": "We check your documents, usually within one business day.",
+      "next2": "We text you when you're approved.",
+      "next3": "Top up your wallet and go online to start receiving requests.",
+      "review": "Your company is in review.",
+      "edit": "Edit my answers",
+      "stripe": "Card payments open once billing is connected. Nothing is charged yet."
+    },
+    "offer": {
+      "title": "Incoming requests",
+      "subtitle": "Send a quote in one tap. The exact address shows once the customer picks you.",
+      "none": "No requests waiting right now. Stay online: new ones appear here.",
+      "stack": "Requests waiting",
+      "ev": "Electric",
+      "timeLeft": "Time to quote",
+      "distance": "Distance",
+      "drive": "Drive time",
+      "tow": "Tow distance",
+      "area": "Area",
+      "miles": "{miles} mi",
+      "minutes": "{minutes} min",
+      "flags": {
+        "highway": "On a highway",
+        "unsafe": "Customer not in a safe place",
+        "passengers": "{count, plural, one {# passenger} other {# passengers}}"
+      },
+      "mapLabel": "Approximate area of the request",
+      "addressHidden": "Exact address hidden until you're picked.",
+      "yourPrice": "Your price",
+      "send": "Send quote · {price} · {minutes} min",
+      "decline": "Decline",
+      "declineReason": "Reason for declining",
+      "reasons": {
+        "too_far": "Too far",
+        "busy": "Busy right now",
+        "no_equipment": "Not the right equipment",
+        "price": "Price range too low"
+      },
+      "waiting": "Quote sent: {price}, {minutes} min. Waiting for the customer to choose.",
+      "won": "You were picked!",
+      "wonBody": "Head out now: the job is in Jobs with the exact address.",
+      "lost": "The customer chose another provider this time.",
+      "close": "Close",
+      "arrival": "Arrival time",
+      "suggested": "From your price table: {price}. Fee if picked: {fee}.",
+      "outOfRange": "Enter a price from {min} to {max}.",
+      "instant": "Instant book: accept at {price} or less and the job is yours.",
+      "answers": "What the customer told us"
+    },
+    "jobs": {
+      "title": "Jobs",
+      "tabs": {
+        "active": "Active",
+        "won": "Won",
+        "lost": "Lost or missed",
+        "cancelled": "Cancelled",
+        "done": "Done"
+      },
+      "filter": "Service",
+      "all": "All services",
+      "none": "Nothing here yet.",
+      "more": "Show more",
+      "fee": "Fee {fee}",
+      "rated": "Rated {stars}",
+      "open": "Open job",
+      "mine": "My jobs",
+      "activeNow": "Your job now",
+      "openActive": "Open the job"
+    },
+    "job": {
+      "title": "Job {code}",
+      "timeline": "Timeline",
+      "price": "Price",
+      "fee": "Fee charged",
+      "driver": "Customer",
+      "vehicle": "Vehicle",
+      "operator": "Operator",
+      "review": "Review",
+      "noReview": "No review yet.",
+      "dispute": "Dispute the fee",
+      "disputeSent": "Dispute sent. Our team replies within one business day.",
+      "photos": "Photos",
+      "noPhotos": "No photos for this job.",
+      "stages": {
+        "searching": "Request sent",
+        "quoting": "Quote sent",
+        "picked": "Picked by the customer",
+        "en_route": "On the way",
+        "on_site": "Arrived",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "expired": "Expired"
+      },
+      "activeFlow": "Open the job flow"
+    },
+    "active": {
+      "title": "Job in progress",
+      "steps": {
+        "start": "Start driving",
+        "arrived": "I've arrived",
+        "working": "Start the work",
+        "completed": "Job completed"
+      },
+      "navigate": "Navigate with",
+      "maps": {
+        "google": "Google Maps",
+        "apple": "Apple Maps",
+        "waze": "Waze"
+      },
+      "call": "Call customer",
+      "text": "Text customer",
+      "masked": "Calls and texts use a private number.",
+      "photosBefore": "Before photos",
+      "photosAfter": "After photos",
+      "addPhoto": "Add photo",
+      "issue": "Report an issue",
+      "cancel": "Cancel job",
+      "cancelReason": "Reason",
+      "cancelReasons": {
+        "driver_no_show": "Customer not there",
+        "vehicle_not_found": "Can't find the vehicle",
+        "unsafe": "Unsafe location",
+        "equipment": "Equipment problem"
+      },
+      "assign": "Assign to",
+      "done": "Job completed. The customer can now rate you.",
+      "addressLine": "Address: {address}",
+      "photoAlt": "Photo {n}"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "balance": "Balance",
+      "noWallet": "No wallet yet",
+      "statement": "Download statement",
+      "topUp": "Top up",
+      "topUpTitle": "Add money to your wallet",
+      "custom": "Other amount",
+      "stripe": "Card payments open once billing is connected. Nothing is charged yet.",
+      "continue": "Continue to payment",
+      "close": "Close",
+      "auto": "Auto-recharge",
+      "autoHint": "Top up automatically so you never miss a job.",
+      "below": "When balance falls below",
+      "amount": "Add this amount",
+      "saved": "Saved on this device.",
+      "methods": "Payment methods",
+      "demoCard": "Demo card ending 0000 (demo)",
+      "noMethods": "No payment method yet.",
+      "transactions": "Transactions",
+      "noTxns": "No transactions yet.",
+      "kinds": {
+        "fee": "Job fee",
+        "top_up": "Top-up",
+        "credit": "Credit",
+        "plan": "Plan"
+      },
+      "forJob": "Job {code}",
+      "disputeHint": "To dispute a fee, open the job and choose Dispute the fee.",
+      "plans": "Plans",
+      "plan": {
+        "basic": "Basic",
+        "pro": "Pro",
+        "featured": "Featured"
+      },
+      "perMonth": "{price} a month",
+      "free": "Free",
+      "discount": "{pct}% off job fees",
+      "standardFee": "Standard job fees",
+      "priority": "Priority on new requests",
+      "featured": "Featured spot on city pages",
+      "current": "Your plan",
+      "soon": "Coming soon",
+      "ownersOnly": "Only owners and managers can see the wallet.",
+      "more": "Show earlier transactions",
+      "credit": {
+        "available": "Total available",
+        "paid": "Paid balance",
+        "paidHint": "Your top-ups. Never expires.",
+        "bonus": "Bonus credit",
+        "bonusHint": "Free credit from us. Pays job fees first.",
+        "expires": "{amount} expires on {date}",
+        "order": "Bonus credit pays job fees first (the soonest to expire first), then your paid balance. It is not cash and cannot be withdrawn.",
+        "demo": "Demo",
+        "welcome": "Welcome. We added {amount} bonus credit to your wallet. It pays your fees on your first jobs and expires on {date}.",
+        "ledger": "Wallet activity",
+        "noLines": "No wallet activity yet.",
+        "kinds": {
+          "topup": "Top-up",
+          "fee": "Job fee (paid balance)",
+          "fee_refund": "Fee refund",
+          "bonus_grant": "Bonus credit added",
+          "bonus_use": "Job fee (bonus credit)",
+          "bonus_expiry": "Bonus credit expired",
+          "bonus_reversal": "Bonus credit removed",
+          "bonus_refund": "Fee refunded as bonus credit"
+        }
+      }
+    },
+    "services": {
+      "title": "Services and prices",
+      "subtitle": "Set what you offer, where and when. Prices stay within the market's range.",
+      "none": "No services are open in your market yet.",
+      "range": "Market range {min} to {max}",
+      "prices": "Your prices",
+      "offer": "your price",
+      "preview": "Customer sees",
+      "fee": "fee if picked",
+      "outside": "Outside the market range",
+      "area": "Service area",
+      "radius": "Radius",
+      "miles": "miles",
+      "map": "Your service area",
+      "home": "Your base",
+      "hours": "Working hours",
+      "always": "Open 24 hours, 7 days",
+      "from": "From",
+      "to": "To",
+      "budget": "Daily request budget",
+      "budgetHint": "The most requests you want each day. You stop receiving new ones once it's reached.",
+      "save": "Save changes",
+      "saved": "Saved on this device. Saving to your account comes with the next update.",
+      "fix": "Fix the prices marked in red before saving."
+    },
+    "profile": {
+      "title": "Public profile",
+      "subtitle": "What customers see when they compare quotes.",
+      "photos": "Photos",
+      "addPhoto": "Add photos",
+      "photoAlt": "Company photo",
+      "description": "About your company",
+      "descriptionHint": "Two or three sentences: experience, equipment, what makes you reliable.",
+      "hours": "Hours shown to customers",
+      "payments": "Payment methods you accept",
+      "methods": {
+        "card": "Card",
+        "cash": "Cash",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "zelle": "Zelle"
+      },
+      "trucksShown": "Trucks shown",
+      "preview": "Live preview",
+      "profileCard": "Profile card",
+      "quoteCard": "Quote customers see",
+      "strength": "Profile strength",
+      "tips": "Tips",
+      "tipPhoto": "Add a photo of your truck",
+      "tipDescription": "Write at least 80 characters about your company",
+      "tipHours": "Show your hours",
+      "tipPayments": "Accept at least two payment methods",
+      "done": "Done",
+      "save": "Save profile",
+      "saved": "Saved on this device. Saving to your account comes with the next update.",
+      "documents": "Documents",
+      "documentsHint": "Insurance and licenses are checked by our team. Upload new ones from onboarding.",
+      "allIn": "all-in",
+      "insured": "Insured",
+      "licensed": "Licensed",
+      "newProvider": "New provider",
+      "rating": "{rating} out of 5 from {count} reviews",
+      "eta": "Price and arrival time appear here on each quote."
+    },
+    "team": {
+      "title": "Team",
+      "subtitle": "Your operators, their trucks and who takes which job.",
+      "map": "Team map",
+      "online": "Online",
+      "offline": "Offline",
+      "members": "Members",
+      "invite": "Invite by text",
+      "phone": "Mobile number",
+      "name": "Name",
+      "role": "Role",
+      "send": "Send invite",
+      "sent": "Invite sent to",
+      "roles": {
+        "owner": "Owner",
+        "manager": "Manager",
+        "operator": "Operator"
+      },
+      "jobs": "Active jobs",
+      "assign": "Assign to",
+      "noJobs": "No active jobs right now.",
+      "onlyMine": "You see only the jobs assigned to you.",
+      "assigned": "Assigned to"
+    },
+    "insights": {
+      "title": "Insights",
+      "subtitle": "The last 8 weeks.",
+      "quoteRate": "Quote rate",
+      "winRate": "Win rate",
+      "reply": "Average reply time",
+      "seconds": "{s} s",
+      "eta": "ETA accuracy",
+      "rating": "Rating",
+      "noRating": "No reviews yet",
+      "cancellations": "Cancellations",
+      "roi": "Return on fees by week",
+      "roiSummary": "You won {value} in jobs and paid {fees} in fees: {ratio}× back.",
+      "value": "Job value won",
+      "fees": "Fees paid",
+      "week": "Week of",
+      "demo": "Demo data: insights are simulated."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "How new requests reach you, even when the app is closed.",
+      "channels": "Alert channels",
+      "push": "Push notifications",
+      "pushHint": "Instant alerts on this phone.",
+      "sms": "Text messages",
+      "smsHint": "A text for every new request.",
+      "voice": "Voice call backup",
+      "voiceHint": "We call you if a request isn't opened within 30 seconds.",
+      "sound": "Alert sound",
+      "sounds": {
+        "siren": "Siren",
+        "chime": "Chime",
+        "horn": "Horn"
+      },
+      "test": "Send a test alert",
+      "testSent": "Test alert played on this device.",
+      "quiet": "Quiet hours",
+      "quietHint": "No alerts during these hours. You stay offline.",
+      "from": "From",
+      "to": "To",
+      "save": "Save settings",
+      "saved": "Saved on this device. Saving to your account comes with the next update."
+    },
+    "help": {
+      "title": "Help center",
+      "chat": "Chat with dispatch",
+      "search": "Search help",
+      "go": "Search",
+      "none": "No articles match. Try other words or chat with dispatch.",
+      "chatTitle": "Chat with dispatch",
+      "chatSubtitle": "We're here around the clock.",
+      "job": "About a job",
+      "noJob": "Not about a job",
+      "message": "Message",
+      "send": "Send",
+      "you": "You",
+      "dispatch": "Dispatch",
+      "reply": "Thanks, we're on it. Dispatch replies here (simulated in demo mode).",
+      "empty": "No messages yet.",
+      "articles": {
+        "quotes": {
+          "title": "How quotes work",
+          "body": "When a customer near you asks for help, you get an offer. Send your price and arrival time; the customer picks one provider."
+        },
+        "fees": {
+          "title": "Our fee",
+          "body": "You pay a fee only when a customer picks you. It's shown before you send a quote."
+        },
+        "wallet": {
+          "title": "Wallet and top-ups",
+          "body": "Fees come from your wallet balance. Turn on auto-recharge so you never miss a job."
+        },
+        "online": {
+          "title": "Going online",
+          "body": "Turn on Go Online on Home. You receive requests inside your service area while online."
+        },
+        "photos": {
+          "title": "Before and after photos",
+          "body": "Add photos in the job flow. They protect you if a customer reports damage."
+        },
+        "disputes": {
+          "title": "Disputing a fee",
+          "body": "Open the job and choose Dispute the fee. Our team replies within one business day."
+        },
+        "team": {
+          "title": "Adding operators",
+          "body": "Invite operators from Team. Operators see only the jobs assigned to them."
+        },
+        "documents": {
+          "title": "Insurance and licenses",
+          "body": "Keep your documents current. An expired document pauses new requests."
+        }
+      }
+    },
+    "states": {
+      "loading": "Loading…",
+      "errorTitle": "This page didn't load",
+      "errorBody": "Something went wrong on our side. Your jobs and wallet are safe. Try again, or call provider support if it keeps happening.",
+      "retry": "Try again"
+    },
+    "flag": {
+      "open": "Flag this request",
+      "title": "Flag this request",
+      "note": "Note for our team (optional)",
+      "pick": "Tap a reason to send.",
+      "reasons": {
+        "fake": "Fake or prank",
+        "wrong_location": "Wrong location",
+        "unreachable": "Customer unreachable",
+        "unsafe": "Unsafe",
+        "other": "Something else"
+      },
+      "sent": "Flag sent. Our team will review it.",
+      "failed": "We could not send the flag. Try again.",
+      "cancel": "Cancel"
+    }
+  },
+  "voice": {
+    "greeting": "Thanks for calling {brand}. We're connecting you to a dispatcher now.",
+    "safety": "If you are in danger, hang up and call 9 1 1.",
+    "recordingNotice": "This call may be recorded for quality and safety.",
+    "voicemail": "All our dispatchers are busy. Please leave your name, where you are, and what happened after the tone. We will call you right back.",
+    "goodbye": "Thank you. We'll call you back shortly.",
+    "callerName": "Phone caller",
+    "autoText": "Thanks for calling {brand}. Share your exact location here: {link}",
+    "missedAlert": "Missed call from {caller}. Call them back from the admin inbox.",
+    "voicemailAlert": "New voicemail from {caller}. Listen in the admin inbox."
+  },
+  "texts": {
+    "stopNotice": "Reply STOP to opt out.",
+    "help": "{brand}: roadside help dispatch. For support email {support}. Reply STOP to opt out. Msg & data rates may apply.",
+    "assigned": "Hi {first_name}, {provider} is on the way. Quoted price {price}, about {eta} min. Track here: {link}",
+    "locationLink": "Please share your exact location here so we can send help: {link}"
+  },
+  "locationLink": {
+    "title": "Share your location",
+    "intro": "Tap the button so we know exactly where you are. Only the dispatcher handling your request sees it.",
+    "share": "Share my location",
+    "finding": "Finding you…",
+    "found": "Found you at {lat}, {lng}. Check the pin, then send.",
+    "denied": "We couldn't get your location. Type the address or cross streets instead.",
+    "unsupported": "This phone can't share its location here. Type the address instead.",
+    "mapLabel": "Map with your location pin",
+    "drag": "Drag the pin if it's not exactly where you are.",
+    "address": "Address, cross streets or exit",
+    "addressHint": "Not needed if you shared your location.",
+    "note": "Landmark (optional)",
+    "notePlaceholder": "For example: northbound shoulder after the exit, white pickup",
+    "photo": "Photo of your vehicle (optional)",
+    "send": "Send my location",
+    "safety": "If you are in danger or in traffic, call 911 first.",
+    "doneTitle": "Thanks, we have your location",
+    "doneBody": "The dispatcher can see it now. Stay safe and keep your phone on; we'll call you.",
+    "expiredTitle": "This link has expired",
+    "expiredBody": "Location links work for 2 hours. Call us and we'll give you a new one.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Please try again, or call us.",
+    "errors": {
+      "location": "Share your location or type an address.",
+      "address": "Type a street address with a number, cross streets, or a highway and exit.",
+      "photo": "That photo couldn't be added (use a JPEG, PNG or HEIC under 8 MB).",
+      "limit": "Too many tries. Wait a few minutes.",
+      "generic": "Something went wrong. Please try again.",
+      "code": "That code didn't work. Check it with the dispatcher."
+    },
+    "codeTitle": "Enter your location code",
+    "codeIntro": "Type the 6-digit code the dispatcher read to you.",
+    "code": "6-digit code",
+    "codeSubmit": "Continue"
+  },
+  "tours": {
+    "labels": {
+      "back": "Back",
+      "next": "Next",
+      "done": "Done",
+      "skip": "Skip tour",
+      "hide": "Don't show again",
+      "step": "Step {n} of {total}",
+      "take": "Take the tour",
+      "page": "Tour of this page"
+    },
+    "admin": {
+      "owner": [
+        {
+          "title": "Today",
+          "body": "Start here: what needs a person now, the most urgent items and today's numbers."
+        },
+        {
+          "title": "Team and roles",
+          "body": "Invite people and give each one a role; the menu shows each role only what it needs."
+        },
+        {
+          "title": "Markets",
+          "body": "Launch and pause cities, set their phone numbers and service areas."
+        },
+        {
+          "title": "Finance",
+          "body": "Fees earned, provider wallets and refunds, by market."
+        },
+        {
+          "title": "Search anything",
+          "body": "Press ⌘K (Ctrl K) to jump to a page, a request code, a phone or a provider."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "This button restarts the tour any time."
+        }
+      ],
+      "dispatcher": [
+        {
+          "title": "Inbox",
+          "body": "Everything a person must act on now: new requests, missed calls and texts."
+        },
+        {
+          "title": "Claim a request",
+          "body": "Open an item and tap Claim so nobody else works it; it frees up after 10 minutes without action."
+        },
+        {
+          "title": "Dispatch board",
+          "body": "Live map and lanes for one market at a time. Amber at 3 minutes without a quote, red at 10."
+        },
+        {
+          "title": "Assign a provider",
+          "body": "Open a card (or press A) to assign a provider by hand when nobody has quoted."
+        },
+        {
+          "title": "Calls",
+          "body": "The call log; call a customer back from here or press C on a board card."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "This button restarts the tour any time."
+        }
+      ],
+      "staff": [
+        {
+          "title": "Today",
+          "body": "Start here: what is happening in your markets today."
+        },
+        {
+          "title": "Search anything",
+          "body": "Press ⌘K (Ctrl K) to jump to a page, a request or a provider."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "This button restarts the tour any time."
+        }
+      ],
+      "page": {
+        "today": [
+          {
+            "title": "Right now",
+            "body": "Needs action, unanswered calls, requests with no quote and providers available."
+          },
+          {
+            "title": "Most urgent",
+            "body": "The ten items that need a person first, each with one action."
+          },
+          {
+            "title": "Today by market",
+            "body": "Requests, fill rate, time to assign and completed jobs since midnight."
+          },
+          {
+            "title": "Alerts",
+            "body": "Stale requests and markets with nobody available."
+          }
+        ],
+        "dispatch": [
+          {
+            "title": "One market at a time",
+            "body": "Choose the market; the map and lanes follow."
+          },
+          {
+            "title": "Real, Demo or Both",
+            "body": "Real is the default everywhere. Demo cards carry a Demo tag."
+          },
+          {
+            "title": "Map",
+            "body": "Pins sit at the real spots; close pins merge into one numbered marker."
+          },
+          {
+            "title": "Lanes",
+            "body": "New to On site, plus Needs closing after 2 hours. J and K move, Enter opens."
+          }
+        ],
+        "inbox": [
+          {
+            "title": "The inbox",
+            "body": "Urgent first, then the longest wait. Claim an item to work it."
+          },
+          {
+            "title": "Log a call",
+            "body": "Taking a request by phone? Start here."
+          }
+        ]
+      }
+    },
+    "provider": {
+      "owner": [
+        {
+          "title": "Go online",
+          "body": "Turn this on to receive requests near you; turn it off when you can't take jobs."
+        },
+        {
+          "title": "Incoming requests",
+          "body": "New requests ring here with a 3-minute countdown."
+        },
+        {
+          "title": "Send a quote",
+          "body": "Your price from your price table is filled in: pick the arrival time and send."
+        },
+        {
+          "title": "Job status",
+          "body": "Open a job to mark On the way, On site and Done; the customer sees each step."
+        },
+        {
+          "title": "Wallet",
+          "body": "Fees come out of your prepaid wallet only when a customer picks you."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "Find it in More any time."
+        }
+      ],
+      "manager": [
+        {
+          "title": "Go online",
+          "body": "Turn this on to receive requests near you."
+        },
+        {
+          "title": "Incoming requests",
+          "body": "New requests ring here with a 3-minute countdown."
+        },
+        {
+          "title": "Send a quote",
+          "body": "Your price is filled in: pick the arrival time and send."
+        },
+        {
+          "title": "Job status",
+          "body": "Open a job to update its status; the customer sees each step."
+        },
+        {
+          "title": "Take the tour again",
+          "body": "Find it in More any time."
+        }
+      ],
+      "operator": [
+        {
+          "title": "My jobs",
+          "body": "Your active job is at the top. Tap it to open the map and the customer's details."
+        },
+        {
+          "title": "Update the status",
+          "body": "On the job, tap On the way, On site and Done; the customer sees each step."
+        },
+        {
+          "title": "Your account",
+          "body": "Sign out and security settings live here."
+        }
+      ]
+    },
+    "web": {
+      "see": "See how it works",
+      "title": "How it works, in 30 seconds",
+      "lead": "A demo with made-up data. You can skip it at any time.",
+      "pause": "Pause",
+      "play": "Play",
+      "skip": "Skip demo",
+      "progress": "Demo progress",
+      "slide": "Part {n} of {total}",
+      "slides": [
+        {
+          "title": "Tell us what happened",
+          "body": "Tap your problem: tow, flat tire, locked out, out of gas or won't start."
+        },
+        {
+          "title": "Share where you are",
+          "body": "One tap shares your location. No account, no app."
+        },
+        {
+          "title": "Quotes arrive in minutes",
+          "body": "Verified providers near you send their price and arrival time."
+        },
+        {
+          "title": "Pick the one you want",
+          "body": "Choose by price, arrival time or rating. You pay the provider directly."
+        },
+        {
+          "title": "Track the truck",
+          "body": "Watch it come to you and call the provider from the same page."
+        }
+      ],
+      "eta": "{minutes} min away",
+      "picked": "Picked"
+    }
+  },
+  "serviceTags": {
+    "inLane": "In a traffic lane",
+    "shoulder": "On the shoulder",
+    "scheduled": "Scheduled",
+    "motorcycle": "Motorcycle",
+    "heavy": "RV or heavy",
+    "noRoll": "Doesn't roll",
+    "flatbed": "Flatbed needed",
+    "accident": "Accident",
+    "police": "Police called",
+    "noKeys": "No keys",
+    "garage": "Parking garage",
+    "offroad": "Off-road",
+    "cranks": "Cranks",
+    "ev": "Electric or hybrid",
+    "battery": "Wants a battery",
+    "twoFlats": "2+ flats",
+    "noSpare": "No spare",
+    "donut": "Donut spare",
+    "noLockKey": "No wheel lock key",
+    "keysLost": "Keys lost",
+    "keyBroken": "Key broken in lock",
+    "childInside": "Child inside: urgent",
+    "diesel": "Diesel",
+    "premium": "Premium",
+    "evCharge": "Out of charge",
+    "farFromRoad": "50+ ft from road",
+    "notUpright": "Not upright"
   }
 }

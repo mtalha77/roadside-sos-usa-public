@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/daily-summary",
+      "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/cron/conversions",
+      "schedule": "30 13 * * *"
+    },
+    {
+      "path": "/api/cron/credits",
+      "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/cron/ads/spend-full",
+      "schedule": "15 9 * * *"
+    }
+  ]
+}

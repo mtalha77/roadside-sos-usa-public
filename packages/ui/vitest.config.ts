@@ -1,11 +1,6 @@
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vitest/config";
+import { reactConfig } from "@rsos/testing/vitest/react";
+import { mergeConfig } from "vitest/config";
 
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: "jsdom",
-    setupFiles: ["./test/setup.ts"],
-    include: ["test/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
-  },
+export default mergeConfig(reactConfig, {
+  test: { setupFiles: ["./test/setup-dom.ts"], testTimeout: 15_000 },
 });

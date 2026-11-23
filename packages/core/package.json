@@ -4,19 +4,29 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./security": "./src/security/index.ts",
+    "./demo": "./src/demo/index.ts",
+    "./adapters": "./src/adapters/index.ts",
+    "./economics": "./src/economics.ts",
+    "./analytics-sources": "./src/analytics-sources.ts",
+    "./booking-metrics": "./src/booking-metrics.ts",
+    "./wallet": "./src/wallet.ts",
+    "./service-questions": "./src/service-questions.ts",
+    "./ads": "./src/adapters/ads/index.ts"
   },
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --coverage"
   },
   "dependencies": {
+    "@rsos/config": "workspace:*",
     "zod": "4.6.7"
   },
   "devDependencies": {
-    "@rsos/config": "workspace:*",
     "@types/node": "26.6.6",
+    "@vitest/coverage-v8": "5.1.0",
     "eslint": "10.14.0",
     "typescript": "6.0.3",
     "vitest": "5.1.0"

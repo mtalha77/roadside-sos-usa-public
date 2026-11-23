@@ -7,29 +7,22 @@ import tseslint from "typescript-eslint";
  * Blocks hardcoded brand names and domains outside packages/config/src/brand.ts.
  * Import `brand` from "@rsos/config/brand" instead.
  */
-const BRAND_PATTERN = "/fixallcontractors|roadside\\s*sos/i";
-export const noHardcodedBrand = {
-  rules: {
-    "no-restricted-syntax": [
-      "error",
-      {
-        selector: `Literal[value=${BRAND_PATTERN}]`,
-        message:
-          "Do not hardcode the brand name or domain. Import `brand` from @rsos/config/brand.",
-      },
-      {
-        selector: `TemplateElement[value.raw=${BRAND_PATTERN}]`,
-        message:
-          "Do not hardcode the brand name or domain. Import `brand` from @rsos/config/brand.",
-      },
-      {
-        selector: `JSXText[value=${BRAND_PATTERN}]`,
-        message:
-          "Do not hardcode the brand name or domain. Import `brand` from @rsos/config/brand.",
-      },
-    ],
+const BRAND_PATTERN = "/fixallcontractors|roadrescuesos|road\\s*rescue\\s*sos|roadside\\s*sos/i";
+export const brandSelectors = [
+  {
+    selector: `Literal[value=${BRAND_PATTERN}]`,
+    message: "Do not hardcode the brand name or domain. Import `brand` from @rsos/config/brand.",
   },
-};
+  {
+    selector: `TemplateElement[value.raw=${BRAND_PATTERN}]`,
+    message: "Do not hardcode the brand name or domain. Import `brand` from @rsos/config/brand.",
+  },
+  {
+    selector: `JSXText[value=${BRAND_PATTERN}]`,
+    message: "Do not hardcode the brand name or domain. Import `brand` from @rsos/config/brand.",
+  },
+];
+export const noHardcodedBrand = { rules: { "no-restricted-syntax": ["error", ...brandSelectors] } };
 
 export const baseConfig = [
   {

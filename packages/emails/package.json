@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@react-email/components": "1.0.12",
-    "@rsos/config": "workspace:*"
+    "@rsos/config": "workspace:*",
+    "@rsos/i18n": "workspace:*"
   },
   "peerDependencies": {
     "react": "19.3.1",

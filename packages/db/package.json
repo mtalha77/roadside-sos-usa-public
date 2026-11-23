@@ -6,13 +6,21 @@
   "exports": {
     ".": "./src/index.ts",
     "./server": "./src/server.ts",
-    "./admin": "./src/admin.ts"
+    "./admin": "./src/admin.ts",
+    "./claims": "./src/claims.ts",
+    "./session": "./src/session.ts",
+    "./cookies": "./src/cookies.ts",
+    "./public": "./src/public.ts",
+    "./key-check": "./src/key-check.ts",
+    "./health": "./src/health.ts",
+    "./usage": "./src/usage.ts",
+    "./tours": "./src/tours.ts"
   },
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "gen:types": "supabase gen types typescript --local > src/database.types.ts"
+    "test": "vitest run --coverage",
+    "gen:types": "supabase gen types --remote --lang typescript --schema public > src/database.types.ts"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",
@@ -22,7 +30,9 @@
   },
   "devDependencies": {
     "@rsos/config": "workspace:*",
+    "@rsos/testing": "workspace:*",
     "@types/node": "26.6.6",
+    "@vitest/coverage-v8": "5.1.0",
     "eslint": "10.14.0",
     "typescript": "6.0.3",
     "vitest": "5.1.0"

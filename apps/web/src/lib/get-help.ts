@@ -1,0 +1,160 @@
+import { z } from "zod";
+
+/** Cookie holding the draft token (HttpOnly; the draft itself is in the database). */
+export const DRAFT_COOKIE = "rsos_draft";
+
+/** Three screens (RSOS-101): what happened, where (and where to tow), who and which vehicle. */
+export const STEPS = ["problem", "location", "details"] as const;
+export type Step = (typeof STEPS)[number];
+
+/** Services that need a destination (tow, winch out). */
+export const NEEDS_DESTINATION = new Set(["tow", "winch-out"]);
+
+export const MILE_RANGES = { lt5: 4, "5to10": 8, "10to20": 15, "20to40": 30, gt40: 50 } as const;
+export const VEHICLE_TYPES = ["car", "suv", "pickup", "van", "motorcycle", "rv"] as const;
+export const VEHICLE_MAKES = [
+  "Acura",
+  "Audi",
+  "BMW",
+  "Buick",
+  "Cadillac",
+  "Chevrolet",
+  "Chrysler",
+  "Dodge",
+  "Ford",
+  "GMC",
+  "Honda",
+  "Hyundai",
+  "Infiniti",
+  "Jeep",
+  "Kia",
+  "Lexus",
+  "Lincoln",
+  "Mazda",
+  "Mercedes-Benz",
+  "Mitsubishi",
+  "Nissan",
+  "Ram",
+  "Rivian",
+  "Subaru",
+  "Tesla",
+  "Toyota",
+  "Volkswagen",
+  "Volvo",
+] as const;
+export const COLORS = [
+  "White",
+  "Black",
+  "Silver",
+  "Gray",
+  "Blue",
+  "Red",
+  "Green",
+  "Other",
+] as const;
+export const FOLLOW_UPS: Record<string, { key: string; options: string[] }> = {
+  "flat-tire": { key: "flatTire", options: ["yes", "no", "unsure"] },
+  "locked-out": { key: "lockedOut", options: ["inside", "lost"] },
+  "out-of-gas": { key: "outOfGas", options: ["regular", "diesel"] },
+  "wont-start": { key: "wontStart", options: ["clicking", "nothing", "lights"] },
+};
+
+export const DraftSchema = z
+  .object({
+    market: z.string(),
+    lat: z.number(),
+    lng: z.number(),
+    approx: z.boolean(),
+    address: z.string(),
+    note: z.string(),
+    service: z.string(),
+    followUp: z.string(),
+    destAddress: z.string(),
+    destMiles: z.enum(Object.keys(MILE_RANGES) as [keyof typeof MILE_RANGES]),
+    vehicleType: z.enum(VEHICLE_TYPES),
+    make: z.string(),
+    model: z.string(),
+    color: z.string(),
+    year: z.number().nullable(),
+    ev: z.boolean(),
+    safe: z.boolean(),
+    highway: z.boolean(),
+    passengers: z.number(),
+    name: z.string(),
+    phone: z.string(),
+    /** Optional: the driver's email, for links and updates (no SMS in batch 4). */
+    email: z.string(),
+    /** A code went to the email; the last step checks it. */
+    codeSent: z.boolean(),
+    /** Demo hosts only: the dummy code's hash, and the code shown on screen. */
+    codeHash: z.string(),
+    codeAttempts: z.number(),
+    demoCode: z.string(),
+    attribution: z.record(z.string(), z.string()),
+    /** Quick repeat request from the driver account: safety becomes one tap. */
+    quick: z.boolean(),
+    /** RSOS-116: the service's answers (packages/core/src/service-questions.ts). */
+    answers: z.record(z.string(), z.string()),
+    /** Notes for the provider (screen 1, optional). */
+    notes: z.string(),
+    /** Private photo paths in job-photos (draft/<token>/n.ext), up to 3. */
+    photos: z.array(z.string()).max(3),
+    plate: z.string(),
+  })
+  .partial();
+export type Draft = z.infer<typeof DraftSchema>;
+
+/** First step the draft has not finished: the flow resumes there after a reload. */
+export function currentStep(d: Draft): Step {
+  if (!d.service) return "problem";
+  if (d.lat === undefined || !d.market) return d.answers ? "location" : "problem";
+  // RSOS-116: screen 1's questions (an ad landing page asks the address first, then these).
+  if (!d.answers) return "problem";
+  if (NEEDS_DESTINATION.has(d.service) && !d.destAddress) return "location";
+  return "details";
+}
+
+/** A step may be shown only when every earlier step is done. */
+export function allowedStep(d: Draft, wanted: string | undefined): Step {
+  const now = currentStep(d);
+  const w = STEPS.find((s) => s === wanted);
+  return w && STEPS.indexOf(w) <= STEPS.indexOf(now) ? w : now;
+}
+
+export function previousStep(_d: Draft, step: Step): Step | null {
+  const i = STEPS.indexOf(step);
+  return i > 0 ? STEPS[i - 1]! : null;
+}
+
+export const toE164 = (raw: unknown) => {
+  const digits = String(raw ?? "")
+    .replace(/\D/g, "")
+    .replace(/^1(?=\d{10}$)/, "");
+  return /^[2-9]\d{2}[2-9]\d{6}$/.test(digits) ? `+1${digits}` : null;
+};
+
+const ATTRIBUTION_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "gclid",
+  "gbraid",
+  "wbraid",
+  "fbclid",
+  "msclkid",
+];
+/** Ad and campaign parameters from the landing URL, kept with the draft. */
+export function attributionFrom(
+  params: URLSearchParams | Record<string, string | undefined>,
+): Record<string, string> {
+  const get = (k: string) =>
+    (params instanceof URLSearchParams ? params.get(k) : params[k]) ?? undefined;
+  const out: Record<string, string> = {};
+  for (const k of ATTRIBUTION_KEYS) {
+    const v = get(k);
+    if (v) out[k] = v.slice(0, 200);
+  }
+  return out;
+}

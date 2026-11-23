@@ -1,0 +1,73 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 5,
+      "settings": {
+        "formFactor": "mobile",
+        "chromeFlags": "--no-sandbox --headless=new",
+        "onlyCategories": ["performance", "accessibility"],
+        "extraHeaders": "{\"x-vercel-skip-toolbar\":\"1\"}"
+      }
+    },
+    "assert": {
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": ".*",
+          "assertions": {
+            "largest-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 2000,
+                "aggregationMethod": "median"
+              }
+            ],
+            "cumulative-layout-shift": [
+              "error",
+              {
+                "maxNumericValue": 0.05,
+                "aggregationMethod": "median"
+              }
+            ],
+            "total-blocking-time": [
+              "error",
+              {
+                "maxNumericValue": 300,
+                "aggregationMethod": "median"
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 153600,
+                "aggregationMethod": "median"
+              }
+            ],
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 0.9,
+                "aggregationMethod": "median"
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/(lp/|get-help)",
+          "assertions": {
+            "largest-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 1200,
+                "aggregationMethod": "median"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "./lighthouse-report"
+    }
+  }
+}

@@ -7,6 +7,8 @@ const config: StorybookConfig = {
   framework: { name: "@storybook/react-vite", options: {} },
   async viteFinal(viteConfig) {
     viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()];
+    // Storybook's own manager/preview bundles are large by design; our app budgets live in Lighthouse CI.
+    viteConfig.build = { ...viteConfig.build, chunkSizeWarningLimit: 2000 };
     return viteConfig;
   },
 };

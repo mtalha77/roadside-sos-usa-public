@@ -11,23 +11,45 @@
     "./tailwind/theme.css": "./tailwind/theme.css",
     "./tsconfig/base.json": "./tsconfig/base.json",
     "./tsconfig/nextjs.json": "./tsconfig/nextjs.json",
-    "./tsconfig/library.json": "./tsconfig/library.json"
+    "./tsconfig/library.json": "./tsconfig/library.json",
+    "./site": "./src/site.ts",
+    "./logo": "./src/logo.ts",
+    "./metadata": "./src/metadata.ts",
+    "./brand-guard": "./src/brand-guard.ts",
+    "./security": "./src/security.ts",
+    "./tokens": "./src/tokens.ts",
+    "./color": "./src/color.ts",
+    "./theme-colors": "./src/theme-colors.ts",
+    "./legal": "./src/legal.ts",
+    "./demo": "./src/demo.ts",
+    "./features": "./src/features.ts",
+    "./demo-fixtures": "./src/demo-fixtures.ts",
+    "./adapters": "./src/adapters.ts",
+    "./permissions": "./src/permissions.ts",
+    "./phones": "./src/phones.ts"
   },
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "tokens:build": "node scripts/build-tokens.ts",
+    "tokens:check": "node scripts/check-contrast.ts && node scripts/build-tokens.ts --check"
   },
   "dependencies": {
     "@eslint/js": "10.0.1",
     "eslint-config-next": "16.4.6",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.14.0",
-    "typescript-eslint": "8.72.2"
+    "typescript-eslint": "8.72.2",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
     "eslint": "10.14.0",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "typescript": "6.0.3",
     "vitest": "5.1.0"
   }

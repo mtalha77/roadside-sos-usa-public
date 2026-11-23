@@ -1,0 +1,16 @@
+id,session_id,event,step,last_field,market_id,source,device,landing_sec,request_id,occurred_at
+6,66e462f1f9aa44418627e1ae33c93928,step,problem,,,website,desktop,,,2026-11-19 21:51:15.368273+00
+7,66e462f1f9aa44418627e1ae33c93928,step,location,,,website,desktop,,,2026-11-19 21:51:16.91665+00
+8,66e462f1f9aa44418627e1ae33c93928,step,details,,8fb729ce-c210-40a0-a57f-dc06d4e07cb2,website,desktop,,,2026-11-19 21:51:18.404465+00
+9,66e462f1f9aa44418627e1ae33c93928,submitted,details,,8fb729ce-c210-40a0-a57f-dc06d4e07cb2,website,desktop,7,cd7d2972-9b28-482a-af29-c79e33e1bdae,2026-11-19 21:51:20.977695+00
+10,785fa6ed136d45c4ad825903a66303bd,step,location,,,website,mobile,,,2026-11-19 21:52:10.19509+00
+11,785fa6ed136d45c4ad825903a66303bd,step,details,,8fb729ce-c210-40a0-a57f-dc06d4e07cb2,website,mobile,,,2026-11-19 21:52:12.021382+00
+12,785fa6ed136d45c4ad825903a66303bd,left,location,address,,website,desktop,,,2026-11-19 21:52:12.603825+00
+13,13674600b9004d0180f35ca20ff41feb,step,location,,,website,mobile,,,2026-11-19 21:52:14.210634+00
+14,13674600b9004d0180f35ca20ff41feb,step,details,,8fb729ce-c210-40a0-a57f-dc06d4e07cb2,website,mobile,,,2026-11-19 21:52:15.836382+00
+15,aea2d13be2244dc9b02422c9956f5f83,step,location,,,website,mobile,,,2026-11-19 21:52:17.714457+00
+16,aea2d13be2244dc9b02422c9956f5f83,step,details,,8fb729ce-c210-40a0-a57f-dc06d4e07cb2,website,mobile,,,2026-11-19 21:52:19.32405+00
+17,9e1e40b1b9e3415aa3de86d3aa9a2eb3,step,location,,,website,mobile,,,2026-11-19 21:52:21.470863+00
+18,9e1e40b1b9e3415aa3de86d3aa9a2eb3,step,details,,8fb729ce-c210-40a0-a57f-dc06d4e07cb2,website,mobile,,,2026-11-19 21:52:22.87118+00
+19,8aeb63a978d948d0898c9c7e509f6f9c,step,location,,,website,mobile,,,2026-11-19 21:52:25.219031+00
+20,8aeb63a978d948d0898c9c7e509f6f9c,step,details,,8fb729ce-c210-40a0-a57f-dc06d4e07cb2,website,mobile,,,2026-11-19 21:52:27.132967+00

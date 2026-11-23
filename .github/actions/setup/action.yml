@@ -15,3 +15,13 @@ runs:
     - name: Install dependencies
       shell: bash
       run: pnpm install --frozen-lockfile
+
+    # Turborepo task cache: lint, typecheck, test and build are skipped for packages whose inputs
+    # did not change since the last run of this job.
+    - name: Restore Turborepo cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: .turbo/cache
+        key: turbo-${{ runner.os }}-${{ github.job }}-${{ github.sha }}
+        restore-keys: |
+          turbo-${{ runner.os }}-${{ github.job }}-

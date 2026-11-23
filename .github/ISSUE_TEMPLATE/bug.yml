@@ -48,6 +48,11 @@ body:
     id: severity
     attributes:
       label: Severity
-      options: [Blocker (drivers or providers cannot use it), Major, Minor, Cosmetic]
+      description: Add the matching label (critical, high, medium, low) when triaging.
+      options:
+        - "critical: drivers or providers cannot use it, or data is at risk"
+        - "high: a major feature is broken"
+        - "medium: degraded, a workaround exists"
+        - "low: cosmetic or minor"
     validations:
       required: true

@@ -1,16 +1,14 @@
 # supabase/
 
-| Path          | What goes here                                                                                                                                            |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `config.toml` | Local Supabase stack settings (created by `supabase init`).                                                                                               |
-| `migrations/` | SQL migrations, one per change, named by `supabase migration new <name>`. Every table gets Row Level Security enabled and policies in the same migration. |
-| `seed.sql`    | Test data loaded by `supabase db reset`.                                                                                                                  |
-| `functions/`  | Edge Functions (Deno). One folder per function.                                                                                                           |
+Cloud only: there is no local database. CI applies migrations to the cloud projects
+(`rsos-dev` on pull requests, `rsos-staging` on merge to `staging`, `rsos-prod` on merge to `main`).
 
-Local stack (needs Docker Desktop running):
+| Path          | What goes here                                                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `config.toml` | CLI configuration. Not pushed to the cloud projects.                                                                           |
+| `migrations/` | SQL migrations, one per change, created by `pnpm exec supabase migration new <name>`. Tables enable RLS in the same migration. |
+| `tests/`      | pgTAP tests (`*.test.sql`), run by CI with `supabase test db --remote` after each migration run.                               |
+| `seed.sql`    | Test data. Not applied to cloud projects automatically.                                                                        |
+| `functions/`  | Edge Functions (Deno). One folder per function.                                                                                |
 
-```bash
-pnpm exec supabase start
-pnpm exec supabase db reset
-pnpm --filter @rsos/db gen:types
-```
+Never change the schema in the Supabase dashboard. See CLAUDE.md, rule 4a.
