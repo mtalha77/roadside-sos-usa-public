@@ -1,0 +1,33 @@
+name: Release train
+
+# Weekly release train (owner, 2026-11-23): work lands on staging all week; every Monday this opens
+# the staging -> main release pull request (unless one is open or there is nothing new). Release QA
+# then runs on it, and the release is merged only after the Release QA checklist passes
+# (docs/release-train.md). Merging is never automatic.
+on:
+  schedule:
+    - cron: "0 14 * * 1" # Mondays 14:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-release:
+    name: release-train
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Open this week's release pull request
+        run: |
+          open=$(gh pr list --repo "$GITHUB_REPOSITORY" --base main --head staging --state open --json number --jq '.[0].number // empty')
+          if [ -n "$open" ]; then echo "Release pull request #$open is already open."; exit 0; fi
+          ahead=$(gh api "repos/$GITHUB_REPOSITORY/compare/main...staging" --jq '.ahead_by')
+          if [ "$ahead" = "0" ]; then echo "Nothing new on staging this week."; exit 0; fi
+          week=$(date -u +%G-W%V)
+          gh pr create --repo "$GITHUB_REPOSITORY" --base main --head staging \
+            --title "Release $week" \
+            --body "Weekly release train ($week): $ahead commits from staging. Merge only after Release QA passes and the checklist in docs/release-train.md is complete; then tag the release and watch production for 15 minutes."

@@ -22,6 +22,7 @@
     "./theme-colors": "./src/theme-colors.ts",
     "./legal": "./src/legal.ts",
     "./demo": "./src/demo.ts",
+    "./features": "./src/features.ts",
     "./demo-fixtures": "./src/demo-fixtures.ts",
     "./adapters": "./src/adapters.ts",
     "./permissions": "./src/permissions.ts",

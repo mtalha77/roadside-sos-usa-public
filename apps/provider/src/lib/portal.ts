@@ -1,7 +1,8 @@
 import "server-only";
 import { isDemoMode } from "@rsos/config/demo";
 import { demoMarkets } from "@rsos/config/demo-fixtures";
-import { demoPortal } from "@rsos/core/demo";
+import { featureOn } from "@rsos/config/features";
+import { demoPortal, type DemoPortal } from "@rsos/core/demo";
 import { createPublicSupabase } from "@rsos/db/public";
 import { z } from "zod";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -73,14 +74,36 @@ export async function getPortalData(ctx: PortalContext, now: number) {
       .filter((p) => p.platform_fee_cents !== null)
       .map((p) => [p.service_slug, p.platform_fee_cents!]),
   );
+  const data = demoPortal(now, {
+    marketSlug: ctx.marketSlug,
+    providerSlug: ctx.providerSlug,
+    ranges,
+    fees,
+  });
+  // Soft launch: the marketplace screens run on the demo scenario until the quote engine exists,
+  // so with the flag off (production) they show empty states, never fictional requests.
+  return { pricing, data: featureOn("providerMarketplace") ? data : emptyPortal(data) };
+}
+
+/** The portal with no offers, jobs, payments, team activity or counts. */
+function emptyPortal(data: DemoPortal): DemoPortal {
   return {
-    pricing,
-    data: demoPortal(now, {
-      marketSlug: ctx.marketSlug,
-      providerSlug: ctx.providerSlug,
-      ranges,
-      fees,
-    }),
+    ...data,
+    offers: [],
+    activeJobs: [],
+    history: [],
+    txns: [],
+    team: [],
+    weeks: data.weeks.map((w) => ({
+      ...w,
+      quotes: 0,
+      wins: 0,
+      jobValueCents: 0,
+      feesCents: 0,
+      replySec: 0,
+      etaAccuracy: 0,
+    })),
+    today: { requests: 0, quotesSent: 0, jobsWon: 0, jobValueCents: 0, feesCents: 0 },
   };
 }
 
