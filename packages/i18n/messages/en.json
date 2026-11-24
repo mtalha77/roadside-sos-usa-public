@@ -323,7 +323,11 @@
       "responseRate": "Response rate",
       "medianQuote": "Median quote time",
       "bookingRate": "Booking rate",
-      "seconds": "{s} s"
+      "seconds": "{s} s",
+      "pagination": "Pages",
+      "pageOf": "Showing {from}–{to} of {total}",
+      "prevPage": "Previous page",
+      "nextPage": "Next page"
     },
     "recruitment": {
       "title": "Recruitment",
