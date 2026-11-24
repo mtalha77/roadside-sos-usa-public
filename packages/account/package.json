@@ -23,9 +23,9 @@
     "@rsos/emails": "workspace:*",
     "@rsos/i18n": "workspace:*",
     "@rsos/ui": "workspace:*",
-    "@supabase/supabase-js": "2.119.0",
+    "@supabase/supabase-js": "2.119.2",
     "next": "16.4.6",
-    "next-intl": "4.14.10",
+    "next-intl": "4.15.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "server-only": "0.0.1",
@@ -36,8 +36,8 @@
     "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "eslint": "10.14.0",
+    "eslint": "10.15.0",
     "typescript": "6.0.3",
-    "vitest": "5.1.0"
+    "vitest": "5.1.1"
   }
 }
