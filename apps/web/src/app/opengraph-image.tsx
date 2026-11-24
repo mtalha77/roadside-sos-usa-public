@@ -8,5 +8,5 @@ export const alt = brand.name;
 
 export default async function Image() {
   const t = await getTranslations("home");
-  return ogImage(t("headline"), brand.tagline);
+  return ogImage(t("hero.headline"), brand.tagline);
 }
