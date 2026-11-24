@@ -324,7 +324,11 @@
       "responseRate": "Tasa de respuesta",
       "medianQuote": "Tiempo mediano de cotización",
       "bookingRate": "Tasa de reserva",
-      "seconds": "{s} s"
+      "seconds": "{s} s",
+      "pagination": "Páginas",
+      "pageOf": "Mostrando {from}–{to} de {total}",
+      "prevPage": "Página anterior",
+      "nextPage": "Página siguiente"
     },
     "recruitment": {
       "title": "Reclutamiento",

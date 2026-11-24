@@ -4,7 +4,7 @@ Guidance for Claude Code and every human working in this repository. Read it bef
 
 ## Product
 
-**Road Rescue SOS** (renamed from the working name "Roadside SOS USA" on 2026-11-23; main domain `roadrescuesos.com`; the old test domain `fixallcontractors.com` stays served and allowed for sign-in during the move, see `docs/runbooks/domain-move.md`) is a US roadside assistance marketplace.
+**Road Rescue SOS** (renamed from the working name "Roadside SOS USA" on 2026-11-23; main domain `roadrescuesos.com`; every URL on the old test domain `fixallcontractors.com` answers with a permanent 301 to the same path on the main domain until at least 2027-11-24, see `docs/runbooks/domain.md`) is a US roadside assistance marketplace.
 
 - A stranded driver shares their location and problem.
 - Within **3 minutes** they get quotes with **price and ETA** from nearby **verified providers**, and pick one.

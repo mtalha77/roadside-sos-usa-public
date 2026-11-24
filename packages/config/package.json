@@ -27,7 +27,8 @@
     "./adapters": "./src/adapters.ts",
     "./permissions": "./src/permissions.ts",
     "./phones": "./src/phones.ts",
-    "./rate-limits": "./src/rate-limits.ts"
+    "./rate-limits": "./src/rate-limits.ts",
+    "./legacy-redirect": "./src/legacy-redirect.ts"
   },
   "scripts": {
     "lint": "eslint .",
