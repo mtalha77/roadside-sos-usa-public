@@ -397,7 +397,8 @@
         "on_duty": "Phone schedule covers 24/7",
         "landing_pages": "City and landing pages live",
         "tracking": "Conversion tracking verified (a conversion in the last 30 days)",
-        "booking_test": "Booking flow tested end to end (a test booking assigned, then cancelled as \"test\")"
+        "booking_test": "Booking flow tested end to end (a test booking assigned, then cancelled as \"test\")",
+        "sentry": "Sentry live in all three apps (required before any paid ads)"
       },
       "done": "(done)",
       "todo": "(to do)",
@@ -759,8 +760,9 @@
           "maps": "Google Maps (off)",
           "email": "Email (Resend)",
           "turnstile": "Bot protection (Turnstile)",
-          "rateLimit": "Rate limits (Upstash)",
-          "analytics": "Ad tracking (GTM)"
+          "rateLimit": "Rate limits (Postgres, or Upstash when set)",
+          "analytics": "Ad tracking (GTM)",
+          "sentry": "Error tracking (Sentry)"
         },
         "state": {
           "real": "Real",
@@ -1957,7 +1959,14 @@
         "lastOk": "Last success",
         "failures": "Failures in a row",
         "none": "No sync has run yet."
-      }
+      },
+      "sentryTitle": "Sentry: required before any paid ads",
+      "sentryLive": "Sentry is live in all three apps. Platforms can be switched on.",
+      "sentryNotLive": "Sentry is not live yet ({detail}). No platform can be switched on until error tracking works in the website, the provider portal and admin.",
+      "sentryBlocked": "Needs Sentry live first",
+      "sentry": "Not switched on: Sentry must be live in all three apps before any paid ads.",
+      "sentryOn": "Live",
+      "sentryOff": "Not live"
     },
     "testTraffic": {
       "title": "Test traffic",
@@ -2144,7 +2153,8 @@
       "code": "That code didn't work. Check it and try again.",
       "notConfigured": "Sign-in isn't available in this environment yet.",
       "generic": "Something went wrong. Try again.",
-      "expired": "Your session ended. Sign in again."
+      "expired": "Your session ended. Sign in again.",
+      "limit": "Too many attempts. Please wait a few minutes and try again."
     },
     "admin": {
       "title": "Admin sign-in",

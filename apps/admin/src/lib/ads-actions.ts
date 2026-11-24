@@ -40,6 +40,9 @@ export async function setConnectionAction(form: FormData) {
   const { error } = await (
     await rpc()
   )("set_ad_connection", { p_platform: p.data.platform, p_enabled: p.data.enabled === "on" });
+  // The database refuses to switch a platform on until Sentry is live (owner decision, release 1).
+  if (error?.message.startsWith("sentry not live"))
+    redirect(`/marketing/connections?error=sentry#${p.data.platform}`);
   done(error, "switch", p.data.platform);
 }
 

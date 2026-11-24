@@ -42,7 +42,11 @@ export async function submitContactAction(_: ContactState, form: FormData): Prom
     market: form.get("market") ?? "",
   });
   if (!parsed.success) return { error: "required" };
-  const guard = await guardForm(form, "contact", 5);
+  const guard = await guardForm(form, "contact", {
+    email: parsed.data.email,
+    phone: parsed.data.phone ? toE164(parsed.data.phone) : null,
+    markets: [parsed.data.market],
+  });
   if (guard !== "ok") return { error: guard };
   const supabase = createPublicSupabase();
   if (!supabase) return { error: "generic" };

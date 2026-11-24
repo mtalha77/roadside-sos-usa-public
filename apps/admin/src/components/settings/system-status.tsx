@@ -1,45 +1,15 @@
 import { syncHealth } from "@rsos/core/ads";
 import "server-only";
 import { ADAPTER_KEYS, type AdapterName } from "@rsos/config/adapters";
-import { appUrl } from "@rsos/config/site";
-import { type Health, getHealth } from "@rsos/db/health";
 import { Badge } from "@rsos/ui/badge";
 import { inputClass } from "@rsos/ui/input";
 import { getAdminContext } from "@/lib/admin";
+import { APPS, allHealth } from "@/lib/app-health";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { updateThresholdAction } from "@/lib/system-actions";
 import { getTranslations } from "next-intl/server";
-import { z } from "zod";
 
 const card = "rounded-2xl border bg-card p-4 sm:p-5";
-const APPS = ["web", "provider", "admin"] as const;
-const State = z.enum(["real", "fake", "missing"]);
-const HealthSchema = z.object({
-  ok: z.boolean(),
-  app: z.enum(APPS),
-  environment: z.enum(["production", "staging", "preview", "development"]),
-  commit: z.string().nullable(),
-  demoMode: z.boolean(),
-  database: z.enum(["ok", "error", "not-configured"]),
-  serviceKey: z.enum(["match", "mismatch", "unverifiable", "missing", "not-used"]),
-  adapters: z.record(z.string(), State),
-  demoSignIn: z.enum(["ok", "unavailable"]).optional(),
-});
-
-/** Another app's /api/health, parsed; null when it cannot be reached (for example a protected preview). */
-async function remoteHealth(app: "web" | "provider"): Promise<Health | null> {
-  try {
-    const res = await fetch(new URL("/api/health", appUrl(app)), {
-      cache: "no-store",
-      signal: AbortSignal.timeout(4000),
-    });
-    const parsed = HealthSchema.safeParse(await res.json());
-    return parsed.success ? (parsed.data as Health) : null;
-  } catch {
-    return null;
-  }
-}
-
 const tone = (good: boolean, warn = false) => (good ? "success" : warn ? "warning" : "critical");
 
 /**
@@ -47,13 +17,7 @@ const tone = (good: boolean, warn = false) => (good ? "success" : warn ? "warnin
  * third-party adapters (real, fake or missing). Values are never shown, only states.
  */
 export async function SystemStatus() {
-  const [t, admin, web, provider] = await Promise.all([
-    getTranslations("admin.settings.system"),
-    getHealth("admin"),
-    remoteHealth("web"),
-    remoteHealth("provider"),
-  ]);
-  const all: Record<(typeof APPS)[number], Health | null> = { web, provider, admin };
+  const [t, all] = await Promise.all([getTranslations("admin.settings.system"), allHealth()]);
   const supabase = await getServerSupabase();
   const [ctx, { data: usage }, { data: thresholds }] = await Promise.all([
     getAdminContext(),

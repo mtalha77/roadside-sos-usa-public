@@ -4,9 +4,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 // demo sign-in probe.
 const probe = vi.fn();
 const listUsers = vi.fn();
+const limitHit = vi.fn();
 vi.mock("../src/public", () => ({
   createPublicSupabase: () =>
-    process.env.NEXT_PUBLIC_SUPABASE_URL ? { rpc: () => probe() } : null,
+    process.env.NEXT_PUBLIC_SUPABASE_URL
+      ? { rpc: (fn: string) => (fn === "rate_limit_hit" ? limitHit() : probe()) }
+      : null,
 }));
 vi.mock("../src/admin", () => ({
   createAdminSupabase: () => ({ auth: { admin: { listUsers } } }),
@@ -19,6 +22,8 @@ const saved = { ...process.env };
 
 beforeEach(() => {
   probe.mockResolvedValue({ error: null });
+  limitHit.mockResolvedValue({ data: 1, error: null });
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = "publishable";
   listUsers.mockResolvedValue({ error: null });
   process.env.NEXT_PUBLIC_SUPABASE_URL = `https://${ref}.supabase.co`;
   process.env.NEXT_PUBLIC_SITE_ENV = "staging";
@@ -28,6 +33,40 @@ beforeEach(() => {
 });
 afterEach(() => {
   process.env = { ...saved };
+});
+
+describe("getHealth rate limiting", () => {
+  it("reports the Postgres limiter as real once its probe counts a hit", async () => {
+    const { getHealth } = await import("../src/health");
+    process.env.NEXT_PUBLIC_SITE_ENV = "production";
+    process.env.NEXT_PUBLIC_DEMO_MODE = "false";
+    const h = await getHealth("web");
+    expect(h.rateLimitBackend).toBe("postgres");
+    expect(h.adapters.rateLimit).toBe("real");
+  });
+
+  it("reports missing in production when the Postgres probe fails", async () => {
+    const { getHealth } = await import("../src/health");
+    process.env.NEXT_PUBLIC_SITE_ENV = "production";
+    process.env.NEXT_PUBLIC_DEMO_MODE = "false";
+    limitHit.mockResolvedValue({ data: null, error: new Error("down") });
+    const h = await getHealth("web");
+    expect(h.rateLimitBackend).toBe("memory");
+    expect(h.adapters.rateLimit).toBe("missing");
+    process.env.NEXT_PUBLIC_SITE_ENV = "staging";
+    expect((await getHealth("web")).adapters.rateLimit).toBe("fake");
+  });
+
+  it("reports Upstash when its keys are set, without probing Postgres", async () => {
+    const { getHealth } = await import("../src/health");
+    process.env.UPSTASH_REDIS_REST_URL = "https://upstash.example";
+    process.env.UPSTASH_REDIS_REST_TOKEN = "token";
+    limitHit.mockClear();
+    const h = await getHealth("web");
+    expect(h.rateLimitBackend).toBe("upstash");
+    expect(h.adapters.rateLimit).toBe("real");
+    expect(limitHit).not.toHaveBeenCalled();
+  });
 });
 
 describe("getHealth", () => {

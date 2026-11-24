@@ -1,4 +1,3 @@
-import { isDemoMode } from "@rsos/config/demo";
 import {
   effectsOf,
   QUESTIONS_VERSION,
@@ -7,8 +6,9 @@ import {
 } from "@rsos/core/service-questions";
 import { legalDocuments } from "@rsos/config/legal";
 import { isPlausibleAddress, SOURCE_COOKIE } from "@rsos/core/adapters";
-import { checkRateLimits, rateLimitKeys, verifyTurnstile } from "@rsos/core/security";
+import { verifyTurnstile } from "@rsos/core/security";
 import { createPublicSupabase } from "@rsos/db/public";
+import { enforceRateLimit } from "@rsos/db/rate-limit";
 import { after, type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import {
@@ -22,7 +22,7 @@ import {
   currentStep,
   toE164,
 } from "@/lib/get-help";
-import { maps, rateLimitStore } from "@/lib/adapters";
+import { maps } from "@/lib/adapters";
 import { ATTRIBUTION_COOKIE, decodeAttribution } from "@/lib/attribution";
 import { isTestHeader } from "@/lib/test-traffic";
 import { deviceOf, FLOW_COOKIE, readFlow, recordFunnel } from "@/lib/funnel";
@@ -42,7 +42,6 @@ const db = (test = false) => {
  * Production limit (RSOS-021b): 5 requests per IP per hour. Demo-mode previews and staging allow
  * more because test suites submit from one IP.
  */
-const LIMITS = isDemoMode() ? { requestIp: 100 } : { requestIp: 5 };
 const Email = z.email().max(254);
 
 /**
@@ -316,23 +315,18 @@ export async function POST(request: NextRequest) {
         });
       }
       if (!draft.answers?.safety) return fail("details", "spot", "&missing=safety");
-      // 2. Turnstile and the per-IP limit.
+      // 2. Turnstile, then the limits per IP, phone and market.
       const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
       const token = form.get("cf-turnstile-response");
       if (!(await verifyTurnstile(typeof token === "string" ? token : null, { remoteIp: ip })).ok)
         return fail("details", "turnstile");
       if (
         !(
-          await checkRateLimits(
-            [
-              {
-                key: `request:${rateLimitKeys.ip(ip)}`,
-                limit: LIMITS.requestIp,
-                windowSeconds: 3600,
-              },
-            ],
-            rateLimitStore(),
-          )
+          await enforceRateLimit("request", {
+            ip,
+            phone: draft.phone,
+            markets: [draft.market],
+          })
         ).allowed
       )
         return fail("details", "limit");

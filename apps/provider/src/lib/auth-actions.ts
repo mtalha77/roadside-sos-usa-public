@@ -2,14 +2,16 @@
 
 import { MOCK_CODE } from "@rsos/core";
 import { getSiteUrl } from "@rsos/config/site";
+import { callerIpFrom, enforceRateLimit } from "@rsos/db/rate-limit";
 import { supabaseConfigured } from "@rsos/db/session";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { phoneVerifier } from "@/lib/phone";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 export type AuthFormState = {
-  error?: "invalid" | "required" | "code" | "notConfigured" | "generic";
+  error?: "invalid" | "required" | "code" | "notConfigured" | "generic" | "limit";
   linkSent?: boolean;
   codeSent?: string;
   mock?: string;
@@ -37,6 +39,10 @@ export async function magicLinkAction(_: AuthFormState, form: FormData): Promise
   const parsed = Email.safeParse(form.get("email"));
   if (!parsed.success) return { error: "required" };
   if (!supabaseConfigured()) return { error: "notConfigured" };
+  const ip = callerIpFrom(await headers());
+  // Over the limit: the same answer as a sent link (no account probing), but nothing is sent.
+  if (!(await enforceRateLimit("providerEmailLink", { ip, email: parsed.data })).allowed)
+    return { linkSent: true };
   // Same response whether or not the account exists (no account probing).
   await (
     await getServerSupabase()
@@ -56,6 +62,9 @@ export async function sendPhoneCodeAction(
 ): Promise<AuthFormState> {
   const parsed = Phone.safeParse(form.get("phone"));
   if (!parsed.success) return { error: "required" };
+  const ip = callerIpFrom(await headers());
+  if (!(await enforceRateLimit("providerPhoneCode", { ip, phone: parsed.data })).allowed)
+    return { error: "limit" };
   const supabase = await getServerSupabase();
   const verifier = phoneVerifier(supabase);
   if (verifier.kind === "unavailable") return { unavailable: true };
