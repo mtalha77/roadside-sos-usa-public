@@ -22,7 +22,8 @@ does not need the Places API.
 
 ## Browser key: allowed referrers
 
-Add each pattern (replace `example.com` with the domain in `packages/config/src/brand.ts`):
+Add `https://roadrescuesos.com/*` and `https://*.roadrescuesos.com/*` (every production and staging
+host), plus the patterns below (`example.com` stands for the domain in `packages/config/src/brand.ts`):
 
 - Production: `https://example.com/*`, `https://www.example.com/*`, `https://pro.example.com/*`,
   `https://admin.example.com/*`

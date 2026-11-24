@@ -13,6 +13,8 @@ import { demoDocuments, listProviders } from "@/lib/providers";
 
 export const dynamic = "force-dynamic";
 const TABS = ["table", "map", "review"] as const;
+/** Rows per page of the table (the list grows with every market). */
+const PAGE_SIZE = 50;
 
 async function load(q: string) {
   const [ctx, now] = await Promise.all([getAdminContext(), demoNow()]);
@@ -42,6 +44,16 @@ export default async function ProvidersPage({
     load(sp.q ?? ""),
   ]);
   const rows = status ? all.filter((r) => r.status === status) : all;
+  const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const pageNum = Math.min(pages, Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1));
+  const pageRows = rows.slice((pageNum - 1) * PAGE_SIZE, pageNum * PAGE_SIZE);
+  const pageHref = (n: number) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(sp)) if (v && k !== "page") q.set(k, v);
+    if (n > 1) q.set("page", String(n));
+    const qs = q.toString();
+    return qs ? `/providers?${qs}` : "/providers";
+  };
   const markets = Object.fromEntries(ctx.markets.map((m) => [m.slug, m.name]));
   const queue = all.filter((r) => r.demo && r.status === "onboarding");
   const date = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
@@ -180,7 +192,7 @@ export default async function ProvidersPage({
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {rows.map((r) => (
+                  {pageRows.map((r) => (
                     <tr key={r.id} className="hover:bg-accent">
                       <th scope="row" className="px-4 py-2 text-left font-semibold">
                         <Link
@@ -213,6 +225,33 @@ export default async function ProvidersPage({
               </table>
             </div>
           )}
+          {tab === "table" && pages > 1 ? (
+            <nav aria-label={t("pagination")} className="flex flex-wrap items-center gap-3 text-sm">
+              <span className="text-muted-foreground" aria-live="polite">
+                {t("pageOf", {
+                  from: (pageNum - 1) * PAGE_SIZE + 1,
+                  to: Math.min(pageNum * PAGE_SIZE, rows.length),
+                  total: rows.length,
+                })}
+              </span>
+              {pageNum > 1 ? (
+                <Link
+                  href={pageHref(pageNum - 1)}
+                  className="inline-flex min-h-12 items-center underline underline-offset-4"
+                >
+                  {t("prevPage")}
+                </Link>
+              ) : null}
+              {pageNum < pages ? (
+                <Link
+                  href={pageHref(pageNum + 1)}
+                  className="inline-flex min-h-12 items-center underline underline-offset-4"
+                >
+                  {t("nextPage")}
+                </Link>
+              ) : null}
+            </nav>
+          ) : null}
         </>
       )}
     </main>

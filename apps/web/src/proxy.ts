@@ -1,3 +1,4 @@
+import { legacyRedirect } from "@rsos/config/legacy-redirect";
 import { buildCsp, createNonce } from "@rsos/config/security";
 import { SOURCE_COOKIE, SOURCE_COOKIE_MAX_AGE, sourceForVisit } from "@rsos/core/adapters";
 import { ATTRIBUTION_COOKIE, encodeAttribution, firstTouch } from "./lib/attribution";
@@ -46,6 +47,14 @@ async function countVisit(market: string | null, source: string) {
  * its own scripts; components read it from `x-nonce`.
  */
 export async function proxy(request: NextRequest) {
+  // RSOS-118: the old domain (any subdomain, any path) answers with a permanent redirect.
+  const legacy = legacyRedirect(
+    new URL(
+      request.nextUrl.pathname + request.nextUrl.search,
+      `https://${request.headers.get("host") ?? request.nextUrl.host}`,
+    ),
+  );
+  if (legacy) return NextResponse.redirect(legacy, 301);
   const isPage = !request.nextUrl.pathname.startsWith("/api/");
   if (isPage) {
     const target = resolveRedirect(new URL(request.url), await redirectRules(), {

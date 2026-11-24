@@ -1,3 +1,4 @@
+import { legacyRedirect } from "@rsos/config/legacy-redirect";
 import { buildCsp, createNonce } from "@rsos/config/security";
 import { canOpenPath } from "@rsos/config/permissions";
 import { type AccessDecision, adminAccess, withSessionState } from "@rsos/db/claims";
@@ -34,6 +35,14 @@ const REDIRECT: Record<Exclude<AccessDecision, "ok">, string> = {
  * route protection for the admin dashboard.
  */
 export async function proxy(request: NextRequest) {
+  // RSOS-118: the old domain (any subdomain, any path) answers with a permanent redirect.
+  const legacy = legacyRedirect(
+    new URL(
+      request.nextUrl.pathname + request.nextUrl.search,
+      `https://${request.headers.get("host") ?? request.nextUrl.host}`,
+    ),
+  );
+  if (legacy) return NextResponse.redirect(legacy, 301);
   const nonce = createNonce();
   const csp = buildCsp({ nonce, dev: process.env.NODE_ENV === "development" });
   const requestHeaders = new Headers(request.headers);
