@@ -55,6 +55,18 @@ export default async function PlansPage({
   const change = sp.preview === "1" ? parsePriceChange(sp) : null;
   const preview = change && canEdit ? await previewPriceChange(change) : null;
   const today = new Date().toISOString().slice(0, 10);
+  // Long lists are paged (subscribers) or capped (the preview) so the page stays usable.
+  const PAGE = 50;
+  const pages = Math.max(1, Math.ceil(data.subscribers.length / PAGE));
+  const pageNum = Math.min(pages, Math.max(1, Number.parseInt(sp.sub ?? "1", 10) || 1));
+  const subscribers = data.subscribers.slice((pageNum - 1) * PAGE, pageNum * PAGE);
+  const subHref = (n: number) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(sp)) if (v && k !== "sub") q.set(k, v);
+    if (n > 1) q.set("sub", String(n));
+    const qs = q.toString();
+    return `/plans${qs ? `?${qs}` : ""}#subscribers`;
+  };
 
   return (
     <main id="main" className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6">
@@ -414,7 +426,7 @@ export default async function PlansPage({
                         </tr>
                       </thead>
                       <tbody className="divide-y">
-                        {preview.rows.map((r) => (
+                        {preview.rows.slice(0, PAGE).map((r) => (
                           <tr key={r.subscription_id}>
                             <th scope="row" className={`${td} text-left font-medium`}>
                               {r.provider_name}
@@ -429,6 +441,11 @@ export default async function PlansPage({
                       </tbody>
                     </table>
                   </div>
+                ) : null}
+                {preview.rows.length > PAGE ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t("prices.more", { count: preview.rows.length - PAGE })}
+                  </p>
                 ) : null}
                 {!change.grandfather && preview.rows.length ? (
                   <div className="rounded-xl border bg-muted p-3 text-sm">
@@ -655,7 +672,7 @@ export default async function PlansPage({
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {data.subscribers.map((s) => (
+                {subscribers.map((s) => (
                   <tr key={s.subscription_id}>
                     <th scope="row" className={`${td} text-left font-medium`}>
                       <Link
@@ -704,6 +721,36 @@ export default async function PlansPage({
             </table>
           </div>
         )}
+        {pages > 1 ? (
+          <nav
+            aria-label={t("subscribers.pages")}
+            className="mt-3 flex flex-wrap items-center gap-3 text-sm"
+          >
+            <span className="text-muted-foreground" aria-live="polite">
+              {t("subscribers.pageOf", {
+                from: (pageNum - 1) * PAGE + 1,
+                to: Math.min(pageNum * PAGE, data.subscribers.length),
+                total: data.subscribers.length,
+              })}
+            </span>
+            {pageNum > 1 ? (
+              <Link
+                href={subHref(pageNum - 1)}
+                className="inline-flex min-h-touch items-center underline underline-offset-4"
+              >
+                {t("subscribers.prev")}
+              </Link>
+            ) : null}
+            {pageNum < pages ? (
+              <Link
+                href={subHref(pageNum + 1)}
+                className="inline-flex min-h-touch items-center underline underline-offset-4"
+              >
+                {t("subscribers.next")}
+              </Link>
+            ) : null}
+          </nav>
+        ) : null}
       </section>
     </main>
   );

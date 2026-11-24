@@ -2104,7 +2104,8 @@
         "appliesFrom": "From",
         "emailTitle": "Notice email",
         "emailBody": "Each affected provider's owners get an email at least {days} days before their new price starts, with the old and new price and the date.",
-        "confirm": "Confirm the new price"
+        "confirm": "Confirm the new price",
+        "more": "And {count, plural, one {# more subscriber} other {# more subscribers}}."
       },
       "featured": {
         "title": "Featured placement per market",
@@ -2143,7 +2144,11 @@
         "ends": "Ends {date}",
         "downgrade": "Moves to Basic on {date}",
         "nextPrice": "{price} from {date}",
-        "cancel": "Cancel at period end"
+        "cancel": "Cancel at period end",
+        "pages": "Subscriber pages",
+        "pageOf": "Showing {from}–{to} of {total}",
+        "prev": "Previous page",
+        "next": "Next page"
       }
     }
   },

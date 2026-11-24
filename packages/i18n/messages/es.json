@@ -2104,7 +2104,8 @@
         "appliesFrom": "Desde",
         "emailTitle": "Correo de aviso",
         "emailBody": "Los dueños de cada proveedor afectado reciben un correo al menos {days} días antes de que empiece su nuevo precio, con el precio anterior, el nuevo y la fecha.",
-        "confirm": "Confirmar el nuevo precio"
+        "confirm": "Confirmar el nuevo precio",
+        "more": "Y {count, plural, one {# suscriptor más} other {# suscriptores más}}."
       },
       "featured": {
         "title": "Ubicación Destacada por mercado",
@@ -2143,7 +2144,11 @@
         "ends": "Termina el {date}",
         "downgrade": "Pasa a Básico el {date}",
         "nextPrice": "{price} desde el {date}",
-        "cancel": "Cancelar al final del periodo"
+        "cancel": "Cancelar al final del periodo",
+        "pages": "Páginas de suscriptores",
+        "pageOf": "Mostrando {from}–{to} de {total}",
+        "prev": "Página anterior",
+        "next": "Página siguiente"
       }
     }
   },
