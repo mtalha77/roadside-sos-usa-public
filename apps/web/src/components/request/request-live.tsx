@@ -1,5 +1,6 @@
 "use client";
 
+import { type FeaturedRules, withFeaturedOnTop } from "@rsos/core/plans";
 import { demoMaskedNumber } from "@rsos/config/demo-fixtures";
 import {
   type BookingMode,
@@ -70,6 +71,7 @@ const REAL_TO_STAGE: Record<RealStatus, DemoStage> = {
 };
 const STEP_ORDER: readonly DemoStage[] = DRIVER_STAGES;
 type Tag = "fastest" | "best-price" | "top-rated";
+const DEFAULT_FEATURED_RULES: FeaturedRules = { priceRulePct: 15, etaRuleMinutes: 10 };
 
 /** Fastest, best price and top rated, each on a different quote. */
 function tagQuotes(quotes: DemoQuote[]): Map<string, Tag> {
@@ -99,6 +101,8 @@ export type RequestLiveProps = {
   reach?: { count: number; city: string } | null;
   /** The market's typical price for this service: Instant book's starting ceiling (RSOS-109). */
   typicalCents?: number | null;
+  /** Featured placement rules for the market (RSOS-114). */
+  featuredRules?: FeaturedRules;
 };
 
 const storageKey = (token: string) => `rsos_pick_${token}`;
@@ -140,6 +144,7 @@ function RequestLiveView({
   supportPhone,
   reach,
   typicalCents,
+  featuredRules,
 }: RequestLiveProps) {
   const t = useTranslations("track");
   const f = useFormatter();
@@ -219,11 +224,12 @@ function RequestLiveView({
         : (realStage ?? "searching"));
   const active = !["completed", "cancelled", "expired"].includes(stage);
   const quotes = useMemo(() => {
-    const list = [...(sim?.quotes ?? [])];
-    return list.sort((a, b) =>
+    const list = [...(sim?.quotes ?? [])].sort((a, b) =>
       sort === "fastest" ? a.etaMinutes - b.etaMinutes : a.priceCents - b.priceCents,
     );
-  }, [sim, sort]);
+    // At most one Featured quote on top, and only within the price and arrival rules (RSOS-114).
+    return withFeaturedOnTop(list, featuredRules ?? DEFAULT_FEATURED_RULES).quotes;
+  }, [sim, sort, featuredRules]);
   const tags = useMemo(() => tagQuotes(sim?.quotes ?? []), [sim]);
   const milesTo = (q: DemoQuote) =>
     simulation ? Math.round(milesBetween(q.provider.home, simulation.location) * 10) / 10 : 0;
@@ -395,6 +401,8 @@ function RequestLiveView({
     trucks: (c) => t("card.trucks", { count: c }),
     distance: (m) => t("card.distance", { miles: m }),
     selected: t("card.selected"),
+    featured: t("card.featured"),
+    featuredInfo: t("card.featuredInfo"),
   };
   const licensed = (q: DemoQuote) => q.provider.marketSlug !== "las-vegas";
   const toggleCompare = (id: string) =>
@@ -568,6 +576,7 @@ function RequestLiveView({
                     priceCents: q.priceCents,
                     etaMinutes: q.etaMinutes,
                     tag: tags.get(q.id) ?? null,
+                    featured: q.featured ?? false,
                     distanceMiles: milesTo(q),
                   }}
                   action={

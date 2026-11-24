@@ -3373,6 +3373,13 @@ export type Database = {
         }
         Returns: undefined
       }
+      featured_rules: {
+        Args: { p_market_slug: string }
+        Returns: {
+          eta_rule_minutes: number
+          price_rule_pct: number
+        }[]
+      }
       featured_providers: {
         Args: { p_market_slug: string }
         Returns: {
@@ -3604,6 +3611,15 @@ export type Database = {
           source: string
           spend_cents: number
           visits: number
+        }[]
+      }
+      my_markets: {
+        Args: never
+        Returns: {
+          market_id: string
+          name: string
+          provider_id: string
+          slug: string
         }[]
       }
       my_provider_status: {

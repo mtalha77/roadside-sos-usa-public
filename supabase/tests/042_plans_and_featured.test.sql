@@ -4,7 +4,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = extensions, public;
-select plan(32);
+select plan(36);
 
 create function pg_temp.as_user(claims jsonb) returns void language sql as $$
   select set_config('request.jwt.claims', claims::text, true), set_config('role', 'authenticated', true);
@@ -139,12 +139,22 @@ select ok((select bool_and(grandfathered and price_cents = 2000 and next_price_c
              and provider_id in ('00000000-0000-4000-8000-0000000114b1', '00000000-0000-4000-8000-0000000114b2')),
   'grandfathered subscribers keep paying the old price');
 
+-- Members see their own company's markets only.
+select pg_temp.as_owner('00000000-0000-4000-8000-0000000114b1');
+select is((select count(*)::int from public.my_markets()), 1, 'a member sees their company''s market');
+select ok((select bool_and(provider_id = '00000000-0000-4000-8000-0000000114b1') from public.my_markets()),
+  'and no other company''s');
+reset role;
+
 -- Visitors read the public catalog only.
 set local role anon;
 select is((select price_cents from public.public_plan_catalog('houston') where plan = 'basic'), 2500,
   'the public catalog shows the current price');
 select throws_ok($$ select public.start_plan('00000000-0000-4000-8000-0000000114b1', 'pro') $$, '42501', null,
   'visitors cannot start plans');
+select ok(exists (select 1 from public.featured_providers('houston') where name = 'Plan Test B'),
+  'the city page lists Featured providers');
+select is((select price_rule_pct from public.featured_rules('houston')), 15, 'the placement rules are public');
 reset role;
 
 select * from finish();

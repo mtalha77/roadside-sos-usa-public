@@ -8,6 +8,7 @@ import { ThemeToggle } from "@rsos/ui/theme-toggle";
 import {
   Activity,
   BarChart3,
+  BadgeCheck,
   Calculator,
   ChevronDown,
   ChevronsLeft,
@@ -49,6 +50,7 @@ const ICONS = {
   recruitment: UserPlus,
   markets: MapIcon,
   pricing: DollarSign,
+  plans: BadgeCheck,
   economics: Calculator,
   finance: Wallet,
   credits: Gift,

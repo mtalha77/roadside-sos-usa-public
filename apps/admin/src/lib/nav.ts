@@ -31,6 +31,7 @@ export const SECTIONS = [
   { href: "/reviews", key: "reviews", section: "reviews", group: "network", shortcut: "g v" },
   { href: "/markets", key: "markets", section: "markets", group: "business", shortcut: "g m" },
   { href: "/pricing", key: "pricing", section: "pricing", group: "business", shortcut: "g $" },
+  { href: "/plans", key: "plans", section: "plans", group: "business", shortcut: "g b" },
   {
     href: "/economics",
     key: "economics",
