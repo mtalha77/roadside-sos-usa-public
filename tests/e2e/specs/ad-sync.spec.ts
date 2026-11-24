@@ -13,6 +13,8 @@ const admin = appUrls.admin;
 
 test.describe("ad sync", () => {
   test.skip(!admin, "No admin URL");
+  // Demo sign-in retries for up to 50 seconds on a slow cold start; leave room for it.
+  test.describe.configure({ timeout: 90_000 });
 
   test("Connections without keys: Not connected, and Test connection says so", async ({ page }) => {
     await signInAsDemo(page, admin!, "Marketing");

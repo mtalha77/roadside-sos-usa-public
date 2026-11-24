@@ -48,7 +48,7 @@ test.describe("plans and Featured", () => {
       .locator("#plans li")
       .filter({ has: page.getByRole("heading", { name: "Pro" }) });
     await expect(proCard.getByText("Your plan")).toBeVisible();
-    const fees = page.getByRole("region", { name: "Fee per job you win" });
+    const fees = page.getByRole("table", { name: "Fee per job you win" });
     await expect(fees).toBeVisible();
     // Every Pro fee is 15% below the Basic fee in the same row.
     const rows = await fees.locator("tbody tr").all();
@@ -74,9 +74,9 @@ test.describe("plans and Featured", () => {
     await page.goto(new URL("/plans", base).toString());
     await expect(page.getByRole("heading", { name: "Plans & pricing", level: 1 })).toBeVisible();
     await expectNoA11yViolations(page);
-    await page.getByLabel("Plan", { exact: true }).first().selectOption("pro");
+    await page.locator("#prices select[name=plan]").selectOption("pro");
     await page.getByLabel("New monthly price (USD)").fill("149");
-    await page.getByLabel("Existing subscribers").selectOption("grandfather");
+    await page.locator("#prices select[name=existing]").selectOption("grandfather");
     await page.getByRole("button", { name: "Preview who is affected" }).click();
     await expect(page.getByRole("heading", { name: "Preview" })).toBeVisible();
     await expect(page.getByText(/New subscribers pay \$149/)).toBeVisible();
