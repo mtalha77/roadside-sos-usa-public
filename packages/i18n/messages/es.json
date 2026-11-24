@@ -2136,6 +2136,12 @@
       "unusualCost": "{market}: costo por trabajo completado mayor a {max}",
       "unusualSync": "Sincronización con fallas: {job}",
       "nothingUnusual": "Nada fuera de lo normal."
+    },
+    "planPriceNotice": {
+      "subject": "El precio de tu plan {plan} de {brand} va a cambiar",
+      "intro": "Hola {company}:",
+      "body": "Tu plan {plan} pasa de {oldPrice} a {newPrice} al mes el {date}, tu primera fecha de cobro después de este aviso. Hasta entonces no cambia nada.",
+      "note": "Puedes cambiar o cancelar tu plan cuando quieras en el portal de proveedores, en Plan y facturación; la cancelación se aplica al final del mes pagado."
     }
   },
   "auth": {

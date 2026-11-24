@@ -46,7 +46,7 @@ insert into public.provider_subscriptions (provider_id, plan, market_id, price_c
   ('00000000-0000-4000-8000-0000000114b2', 'basic', current_setting('test.market')::uuid, 2000),
   ('00000000-0000-4000-8000-0000000114b3', 'basic', current_setting('test.market')::uuid, 2000);
 insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone)
-values ('00000000-0000-4000-8000-0000000114c1', 'R-PLN1', current_setting('test.market')::uuid, 0, 'phone_intake', 'phone',
+values ('00000000-0000-4000-8000-0000000114c1', 'R-PZQ7X', current_setting('test.market')::uuid, 0, 'phone_intake', 'phone',
         'Caller', '+12105550163');
 update public.requests set service_id = current_setting('test.tow')::uuid,
   pickup_point = extensions.st_point(-95.40, 29.75)::extensions.geography, pickup_address = 'Test address'

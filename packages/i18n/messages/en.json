@@ -2136,6 +2136,12 @@
       "unusualCost": "{market}: cost per completed job above {max}",
       "unusualSync": "Sync failing: {job}",
       "nothingUnusual": "Nothing unusual."
+    },
+    "planPriceNotice": {
+      "subject": "Your {brand} {plan} plan price is changing",
+      "intro": "Hello {company},",
+      "body": "Your {plan} plan changes from {oldPrice} to {newPrice} a month on {date}, your first billing date after this notice. Nothing changes before then.",
+      "note": "You can change or cancel your plan anytime in the provider portal under Plan & billing; a cancellation takes effect at the end of the paid month."
     }
   },
   "auth": {
