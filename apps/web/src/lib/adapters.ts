@@ -1,11 +1,11 @@
 import "server-only";
 import { chooseMaps, type MapsAdapter } from "@rsos/core/adapters";
-import { getRateLimitStore } from "@rsos/core/security";
-import { postgresRateLimitStore, recordUsage, type UsageVendor } from "@rsos/db/usage";
+import { sharedRateLimitStore } from "@rsos/db/rate-limit";
+import { recordUsage, type UsageVendor } from "@rsos/db/usage";
 import { chooseEmailSender, sendUsageAlert } from "@rsos/emails";
 
 /** Rate limits: Upstash when configured, else the shared Postgres counter, else memory. */
-export const rateLimitStore = () => getRateLimitStore(process.env, postgresRateLimitStore());
+export const rateLimitStore = sharedRateLimitStore;
 
 /** Counts a paid call and emails the owner once a day when the group passes its threshold. */
 export async function countUsage(vendor: UsageVendor, units = 1) {

@@ -1497,6 +1497,27 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_checks: {
+        Row: {
+          checked_at: string
+          detail: string | null
+          key: string
+          ok: boolean
+        }
+        Insert: {
+          checked_at?: string
+          detail?: string | null
+          key: string
+          ok: boolean
+        }
+        Update: {
+          checked_at?: string
+          detail?: string | null
+          key?: string
+          ok?: boolean
+        }
+        Relationships: []
+      }
       policy_versions: {
         Row: {
           created_at: string
@@ -3293,6 +3314,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      platform_check_ok: { Args: { p_key: string }; Returns: boolean }
       rate_limit_hit: {
         Args: { p_key: string; p_window_seconds: number }
         Returns: number

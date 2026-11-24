@@ -1,9 +1,8 @@
 "use server";
 
 import { isDemoMode } from "@rsos/config/demo";
-import { checkRateLimits, getRateLimitStore, rateLimitKeys } from "@rsos/core/security";
 import { createAdminSupabase } from "@rsos/db/admin";
-import { postgresRateLimitStore } from "@rsos/db/usage";
+import { callerIpFrom, enforceRateLimit } from "@rsos/db/rate-limit";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -21,19 +20,11 @@ const Email = z.email().max(254);
 const isDemoEmail = (email: string) => /^demo-[a-z-]+@example\.com$/.test(email);
 
 /**
- * 3 codes per address per 10 minutes, 10 per IP per hour (Upstash, else Postgres, else memory).
- * Demo-mode hosts (previews, staging) allow more because test suites share one IP.
+ * Per IP and per address (numbers in `@rsos/config/rate-limits`; Upstash, else the shared Postgres
+ * counter). Demo-mode hosts (previews, staging) allow more because test suites share one IP.
  */
 async function limited(email: string) {
-  const [perIp, perEmail] = isDemoMode() ? [200, 100] : [10, 3];
-  const ip = ((await headers()).get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
-  const r = await checkRateLimits(
-    [
-      { key: `signin:${rateLimitKeys.ip(ip)}`, limit: perIp, windowSeconds: 3600 },
-      { key: `signin:email:${email}`, limit: perEmail, windowSeconds: 600 },
-    ],
-    getRateLimitStore(process.env, postgresRateLimitStore()),
-  );
+  const r = await enforceRateLimit("signInEmail", { ip: callerIpFrom(await headers()), email });
   return !r.allowed;
 }
 

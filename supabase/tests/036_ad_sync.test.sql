@@ -4,7 +4,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = extensions, public;
-select plan(11);
+select plan(13);
 
 create function pg_temp.as_staff(r text) returns void language sql as $$
   select set_config('request.jwt.claims', jsonb_build_object('sub', '00000000-0000-4000-8000-0000000107a1',
@@ -21,6 +21,13 @@ select throws_ok($$ select public.set_ad_connection('meta', true) $$, '42501', n
 select is((select count(*)::int from public.ad_connections), 0, 'dispatchers do not see connections');
 reset role;
 
+-- Release 1: no platform can be switched on until Sentry is live in all three apps.
+delete from public.platform_checks where key = 'sentry';
+select pg_temp.as_staff('marketing');
+select throws_ok($$ select public.set_ad_connection('meta', true) $$, '22023', null, 'no ads before Sentry is live');
+select lives_ok($$ select public.set_ad_connection('meta', false) $$, 'switching off is always allowed');
+reset role;
+insert into public.platform_checks (key, ok, checked_at) values ('sentry', true, now());
 select pg_temp.as_staff('marketing');
 select lives_ok($$ select public.set_ad_connection('meta', true) $$, 'marketing switches a platform on');
 select lives_ok($$ select public.set_market_ad_code(current_setting('test.market')::uuid, 'tq') $$, 'marketing sets a market code');

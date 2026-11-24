@@ -1,5 +1,5 @@
-import { checkRateLimits, rateLimitKeys } from "@rsos/core/security";
 import { createPublicSupabase } from "@rsos/db/public";
+import { callerIpFrom, enforceRateLimit } from "@rsos/db/rate-limit";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { safeReturn } from "@/lib/return-path";
@@ -12,7 +12,7 @@ const Form = z.object({
   region: z.string().max(10),
 });
 
-/** "Not in your area yet": saves the visitor to `waitlist` (rate limited per IP), then goes back. */
+/** "Not in your area yet": saves the visitor to `waitlist` (rate limited per IP and email), then goes back. */
 export async function POST(request: NextRequest) {
   const form = await request.formData();
   const back = new URL(safeReturn(form.get("return")), request.url);
@@ -35,10 +35,10 @@ export async function POST(request: NextRequest) {
     region: form.get("region") ?? "",
   });
   if (!parsed.success) return done(parsed.error.issues[0]?.path[0] === "zip" ? "zip" : "email");
-  const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0]!.trim();
-  const limit = await checkRateLimits([
-    { key: `waitlist:${rateLimitKeys.ip(ip)}`, limit: 5, windowSeconds: 3600 },
-  ]);
+  const limit = await enforceRateLimit("waitlist", {
+    ip: callerIpFrom(request.headers),
+    email: parsed.data.email,
+  });
   if (!limit.allowed) return done("limit");
   const supabase = createPublicSupabase();
   if (!supabase) return done("generic");

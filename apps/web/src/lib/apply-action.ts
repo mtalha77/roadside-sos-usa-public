@@ -67,7 +67,11 @@ export async function submitApplicationAction(_: ApplyState, form: FormData): Pr
       error: "required",
       fields: [...new Set(parsed.error.issues.map((i) => String(i.path[0])))],
     };
-  const guard = await guardForm(form, "apply", 3);
+  const guard = await guardForm(form, "apply", {
+    email: parsed.data.email,
+    phone: parsed.data.phone,
+    markets: parsed.data.market_slugs,
+  });
   if (guard !== "ok") return { error: guard };
   const supabase = createPublicSupabase();
   if (!supabase) return { error: "generic" };

@@ -1,3 +1,5 @@
+import { limitsFor, type RateLimitedEndpoint, type RateLimitScope } from "@rsos/config/rate-limits";
+
 /**
  * Fixed-window rate limiting per key (IP address, phone number, ...).
  * Uses Upstash Redis over REST when UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are
@@ -114,4 +116,42 @@ export function rateLimitResponse(result: RateLimitResult): Response | null {
 export const rateLimitKeys = {
   ip: (ip: string) => `ip:${ip}`,
   phone: (e164: string) => `phone:${e164}`,
+  email: (email: string) => `email:${email.trim().toLowerCase()}`,
+  market: (slug: string) => `market:${slug}`,
 };
+
+/** Who is calling: the IP, the email or phone typed in, and the market(s) it is for. */
+export type RateLimitSubject = {
+  ip: string;
+  email?: string | null;
+  phone?: string | null;
+  markets?: readonly (string | null | undefined)[];
+};
+
+/**
+ * The rules for one endpoint from the limits in `@rsos/config/rate-limits`: per IP, per contact
+ * (every email and phone given) and per market (every market given). Scopes the endpoint does not
+ * limit, or the subject does not have, are skipped.
+ */
+export function rulesFor(
+  endpoint: RateLimitedEndpoint,
+  subject: RateLimitSubject,
+  demo: boolean,
+): RateLimitRule[] {
+  const limits = limitsFor(endpoint, demo);
+  const keys: Record<RateLimitScope, string[]> = {
+    ip: [rateLimitKeys.ip(subject.ip || "unknown")],
+    contact: [
+      ...(subject.email ? [rateLimitKeys.email(subject.email)] : []),
+      ...(subject.phone ? [rateLimitKeys.phone(subject.phone)] : []),
+    ],
+    market: [...new Set((subject.markets ?? []).filter((m): m is string => !!m))].map(
+      rateLimitKeys.market,
+    ),
+  };
+  return (Object.keys(keys) as RateLimitScope[]).flatMap((scope) => {
+    const w = limits[scope];
+    if (!w) return [];
+    return keys[scope].map((k) => ({ key: `${endpoint}:${k}`, ...w }));
+  });
+}

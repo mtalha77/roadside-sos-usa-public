@@ -4,8 +4,10 @@ import {
   createMemoryStore,
   rateLimitKeys,
   rateLimitResponse,
+  rulesFor,
   verifyTurnstile,
 } from "../src/security";
+import { RATE_LIMITS } from "@rsos/config/rate-limits";
 
 function mockFetch(body: unknown, status = 200) {
   return vi.fn(
@@ -147,5 +149,57 @@ describe("Upstash store", () => {
       ok: false,
       reason: "unavailable",
     });
+  });
+});
+
+describe("rulesFor (limits per IP, contact and market)", () => {
+  it("builds one rule per IP, email, phone and market, with the configured numbers", () => {
+    const rules = rulesFor(
+      "request",
+      { ip: "1.2.3.4", phone: "+15555550100", markets: ["test-a", "test-a", null] },
+      false,
+    );
+    expect(rules).toEqual([
+      { key: "request:ip:1.2.3.4", ...RATE_LIMITS.request.ip },
+      { key: "request:phone:+15555550100", ...RATE_LIMITS.request.contact },
+      { key: "request:market:test-a", ...RATE_LIMITS.request.market },
+    ]);
+  });
+
+  it("normalises emails and skips scopes the endpoint does not limit", () => {
+    const rules = rulesFor("waitlist", { ip: "", email: " A@Example.com ", markets: ["m"] }, false);
+    expect(rules.map((r) => r.key)).toEqual([
+      "waitlist:ip:unknown",
+      "waitlist:email:a@example.com",
+    ]);
+  });
+
+  it("blocks the same phone from a new IP once its contact limit is used up", async () => {
+    const store = createMemoryStore();
+    const phone = "+15555550101";
+    const limit = RATE_LIMITS.request.contact.limit;
+    for (let i = 0; i < limit; i++)
+      expect(
+        (await checkRateLimits(rulesFor("request", { ip: `10.0.0.${i}`, phone }, false), store))
+          .allowed,
+      ).toBe(true);
+    const r = await checkRateLimits(rulesFor("request", { ip: "10.0.1.1", phone }, false), store);
+    expect(r).toMatchObject({ allowed: false, key: `request:phone:${phone}` });
+  });
+
+  it("caps a whole market when callers rotate IPs and phones", async () => {
+    const store = createMemoryStore();
+    const limit = RATE_LIMITS.request.market.limit;
+    const call = (i: number) =>
+      checkRateLimits(
+        rulesFor(
+          "request",
+          { ip: `ip-${i}`, phone: `+1555555${String(i).padStart(4, "0")}`, markets: ["m1"] },
+          false,
+        ),
+        store,
+      );
+    for (let i = 0; i < limit; i++) expect((await call(i)).allowed).toBe(true);
+    expect(await call(limit)).toMatchObject({ allowed: false, key: "request:market:m1" });
   });
 });
