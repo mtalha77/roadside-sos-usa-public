@@ -44,6 +44,7 @@ insert into auth.users (id, email, aud, role) values
 select set_config('test.ms', (select ms.id::text from public.current_market_services ms where ms.enabled
                               order by ms.platform_fee_cents desc limit 1), true);
 select set_config('test.market', (select market_id::text from public.current_market_services where id = current_setting('test.ms')::uuid), true);
+select set_config('test.slug', (select slug from public.markets where id = current_setting('test.market')::uuid), true);
 select set_config('test.fee', (select platform_fee_cents::text from public.current_market_services where id = current_setting('test.ms')::uuid), true);
 delete from public.booking_fee_settings where market_id = current_setting('test.market')::uuid;
 
@@ -64,7 +65,7 @@ where ms.id = current_setting('test.ms')::uuid;
 
 -- 1. Booking fee off (default): pick without paying; the fee is reserved, not charged yet.
 set local role anon;
-select is((select enabled from public.public_booking_fee((select slug from public.markets where id = current_setting('test.market')::uuid))),
+select is((select enabled from public.public_booking_fee(current_setting('test.slug'))),
   false, 'the booking fee is off by default');
 select lives_ok($$ select public.book_request_by_token(pg_temp.tok(1), '00000000-0000-4000-8000-0000000117b1', 12000, 20, 'dev-1') $$,
   'the customer picks with no payment step');
@@ -82,13 +83,14 @@ select pg_temp.as_owner('00000000-0000-4000-8000-0000000117b2');
 select throws_ok($$ select public.provider_job_step(pg_temp.booking(1), 'on_my_way') $$, '42501', null,
   'another provider cannot move the job');
 reset role;
+select set_config('test.code1', (select code from public.booking_codes where booking_id = pg_temp.booking(1)), true);
 select pg_temp.as_owner('00000000-0000-4000-8000-0000000117b1');
 select is(public.provider_job_step(pg_temp.booking(1), 'on_my_way'), 'en_route', 'On my way');
 select throws_ok($$ select public.provider_job_step(pg_temp.booking(1), 'arrived', 29.50, -98.49) $$, '22023', null,
   'Arrived only within about 200 m');
 select is(public.provider_job_step(pg_temp.booking(1), 'done', null, null, '99999'), 'wrong_code', 'a wrong code is refused');
 select is(public.provider_job_step(pg_temp.booking(1), 'done', null, null,
-          (select code from public.booking_codes where booking_id = pg_temp.booking(1))), 'done', 'the right code finishes the job');
+          current_setting('test.code1')), 'done', 'the right code finishes the job');
 reset role;
 select is(pg_temp.hold(1), 'charged', 'the code charges the reserved fee');
 select ok(exists (select 1 from public.booking_flags where booking_id = pg_temp.booking(1) and kind = 'done_without_arrival'),
