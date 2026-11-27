@@ -12,6 +12,8 @@ import { demoNow } from "@/lib/demo-clock";
 import { getModels } from "@/lib/economics";
 import { BookingAnalytics } from "@/components/analytics/booking-analytics";
 import { getMetricData, getServiceNames } from "@/lib/booking-metrics";
+import { BookingFeeTable } from "@/components/booking/booking-fee-table";
+import { getBookingFeeReport } from "@/lib/booking-report";
 
 export const dynamic = "force-dynamic";
 
@@ -340,6 +342,8 @@ export default async function AnalyticsPage({
         </section>
       </div>
 
+      {/* RSOS-117: "Picked" and "Paid booking fee" per market, to compare test markets. */}
+      <BookingFeeTable rows={await getBookingFeeReport(30)} markets={ctx.markets} money={false} />
       <section className={card} aria-labelledby="e-h">
         <h2 id="e-h" className="mb-3 flex items-center gap-2 font-semibold">
           {t("economics")} {tag}

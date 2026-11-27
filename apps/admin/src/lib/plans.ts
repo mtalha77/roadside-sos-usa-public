@@ -159,3 +159,26 @@ export function parsePriceChange(v: Record<string, unknown>) {
     noticeDays: p.data.notice,
   };
 }
+
+const BookingFeeRow = z.object({
+  enabled: z.boolean(),
+  amount_cents: z.number().int(),
+  free_cancel_seconds: z.number().int(),
+});
+
+/** The customer booking fee in one market (RSOS-117; off by default). */
+export async function getBookingFeeAdmin(marketId: string) {
+  const supabase = await getServerSupabase();
+  const { data } = await (
+    supabase.rpc.bind(supabase) as unknown as (
+      f: string,
+      a: object,
+    ) => PromiseLike<{ data: unknown }>
+  )("booking_fee_for", { p_market_id: marketId });
+  const row = Array.isArray(data) ? BookingFeeRow.safeParse(data[0]).data : undefined;
+  return {
+    enabled: row?.enabled ?? false,
+    amountCents: row?.amount_cents ?? 500,
+    freeCancelSeconds: row?.free_cancel_seconds ?? 120,
+  };
+}

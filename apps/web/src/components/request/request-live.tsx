@@ -1,5 +1,6 @@
 "use client";
 
+import { type BookingFee, BOOKING_FEE_OFF, demoCompletionCode } from "@rsos/core/booking";
 import { type FeaturedRules, withFeaturedOnTop } from "@rsos/core/plans";
 import { demoMaskedNumber } from "@rsos/config/demo-fixtures";
 import {
@@ -34,6 +35,7 @@ import { ProviderProfilePanel } from "./provider-profile";
 import { DemoBar, StageStepper } from "./stage-stepper";
 import { useDemoClock } from "./use-demo-clock";
 import { MapView } from "@/components/site/map-view";
+import type { RealBooking } from "@/lib/request-status";
 
 type RealStatus =
   | "draft"
@@ -103,6 +105,10 @@ export type RequestLiveProps = {
   typicalCents?: number | null;
   /** Featured placement rules for the market (RSOS-114). */
   featuredRules?: FeaturedRules;
+  /** The customer booking fee in the market (RSOS-117; off by default: no fee text at all). */
+  bookingFee?: BookingFee;
+  /** The real booking (provider, completion code, backup, answer), when there is one. */
+  booking?: RealBooking | null;
 };
 
 const storageKey = (token: string) => `rsos_pick_${token}`;
@@ -145,6 +151,8 @@ function RequestLiveView({
   reach,
   typicalCents,
   featuredRules,
+  bookingFee = BOOKING_FEE_OFF,
+  booking: initialBooking = null,
 }: RequestLiveProps) {
   const t = useTranslations("track");
   const f = useFormatter();
@@ -170,6 +178,12 @@ function RequestLiveView({
   const [rating, setRating] = useState(0);
   const [reviewed, setReviewed] = useState(false);
   const [announcement, setAnnouncement] = useState("");
+  const [realBooking, setRealBooking] = useState(initialBooking);
+  const [answer, setAnswer] = useState<"fixed" | "not_fixed" | null>(
+    initialBooking?.customer_answer ?? null,
+  );
+  const [disputing, setDisputing] = useState(false);
+  const [demoLate, setDemoLate] = useState(false);
   const seen = useRef(0);
 
   useEffect(() => {
@@ -201,7 +215,10 @@ function RequestLiveView({
     if (realStatus === null) return;
     const poll = setInterval(async () => {
       const res = await fetch(`/api/r/${token}`, { cache: "no-store" }).catch(() => null);
-      if (res?.ok) setStatus(((await res.json()) as { status: RealStatus }).status);
+      if (!res?.ok) return;
+      const body = (await res.json()) as { status: RealStatus; booking?: RealBooking | null };
+      setStatus(body.status);
+      if (body.booking !== undefined) setRealBooking(body.booking);
     }, 4000);
     return () => clearInterval(poll);
   }, [realStatus, token]);
@@ -234,6 +251,11 @@ function RequestLiveView({
   const milesTo = (q: DemoQuote) =>
     simulation ? Math.round(milesBetween(q.provider.home, simulation.location) * 10) / 10 : 0;
   const money = (cents: number) => f.number(cents / 100, { style: "currency", currency: "USD" });
+  // RSOS-117: the booking fee shows only where it is on; the code only to the customer.
+  const feeOn = bookingFee.enabled;
+  const feeText = money(bookingFee.amountCents);
+  const freeMinutes = Math.round(bookingFee.freeCancelSeconds / 60);
+  const completionCode = realBooking?.code ?? (simulation ? demoCompletionCode(token) : null);
 
   // Announce each new quote once (polite), not every tick.
   useEffect(() => {
@@ -250,6 +272,16 @@ function RequestLiveView({
       ),
     );
   });
+
+  const etaNow = sim?.etaMinutes ?? sim?.picked?.etaMinutes ?? null;
+  useEffect(() => {
+    if (!(stage === "picked" || stage === "en_route") || etaNow === null) return;
+    const before = document.title;
+    document.title = t("tracking.tabTitle", { minutes: etaNow });
+    return () => {
+      document.title = before;
+    };
+  }, [stage, etaNow, t]);
 
   const savePick = (p: DemoPick | null) => {
     setPick(p);
@@ -409,6 +441,31 @@ function RequestLiveView({
     setCompare((c) => (c.includes(id) ? c.filter((x) => x !== id) : [...c, id].slice(-3)));
 
   const picked = sim?.picked ?? null;
+  const canBackup = realBooking ? realBooking.can_request_backup : isDemo && demoLate;
+  const backup = () => {
+    if (realStatus !== null)
+      void fetch(`/api/r/${token}`, {
+        method: "POST",
+        body: JSON.stringify({ action: "backup" }),
+      }).catch(() => null);
+    setDemoLate(false);
+    setNotice(feeOn ? t("backup.sentFee", { fee: feeText }) : t("backup.sent"));
+    if (isDemo) savePick(null);
+  };
+  const sendAnswer = async (fixed: boolean, note?: string) => {
+    if (realStatus !== null)
+      await fetch(`/api/r/${token}`, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "answer",
+          fixed,
+          rating: rating || null,
+          note: note?.trim() || undefined,
+        }),
+      }).catch(() => null);
+    setAnswer(fixed ? "fixed" : "not_fixed");
+    setDisputing(false);
+  };
   const showStepper = stageIndex >= 0 && (active || stage === "completed");
   const card = "rounded-2xl border bg-card p-5";
   const choice = (
@@ -553,6 +610,11 @@ function RequestLiveView({
             </div>
           </div>
           {pick ? null : choice}
+          {feeOn ? (
+            <p className="rounded-xl border bg-muted/40 p-3 text-sm">
+              {t("fee.quoteNote", { fee: feeText })}
+            </p>
+          ) : null}
           <p className="text-sm text-muted-foreground">{t("quotes.tapHint")}</p>
           <ul className="flex flex-col gap-4">
             {quotes.map((q) => (
@@ -696,6 +758,39 @@ function RequestLiveView({
             <p className="text-sm text-muted-foreground">{t("tracking.masked")}</p>
             {skipNext}
           </div>
+          {completionCode ? (
+            <section className={`${card} flex flex-col items-center gap-2 text-center`}>
+              <h2 className="font-semibold">{t("code.title")}</h2>
+              <p
+                className="font-mono text-5xl font-bold tracking-[0.3em] tabular-nums"
+                data-testid="completion-code"
+              >
+                {completionCode}
+              </p>
+              <p className="text-sm text-muted-foreground">{t("code.body")}</p>
+            </section>
+          ) : null}
+          {canBackup && stage !== "on_site" ? (
+            <section className={`${card} flex flex-col gap-3`} aria-labelledby="late-h">
+              <h2 id="late-h" className="font-semibold">
+                {t("backup.title")}
+              </h2>
+              <p className="text-sm">{feeOn ? t("backup.bodyFee") : t("backup.body")}</p>
+              <Button type="button" className="self-start" onClick={backup}>
+                {t("backup.button")}
+              </Button>
+            </section>
+          ) : isDemo && stage !== "on_site" ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="self-start"
+              onClick={() => setDemoLate(true)}
+            >
+              {t("demo.late")}
+            </Button>
+          ) : null}
           <section className={card} aria-labelledby="safety-h">
             <h2 id="safety-h" className="mb-2 font-semibold">
               {t("tracking.safety")}
@@ -711,6 +806,44 @@ function RequestLiveView({
 
       {stage === "completed" ? (
         <section className="flex flex-col gap-4">
+          {answer === null && (realBooking ? realBooking.needs_answer : true) ? (
+            <div className={`${card} flex flex-col gap-3`}>
+              <h2 className="text-xl font-semibold">{t("answer.title")}</h2>
+              {disputing ? (
+                <form
+                  className="flex flex-col gap-3"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void sendAnswer(false, String(new FormData(e.currentTarget).get("note") ?? ""));
+                  }}
+                >
+                  <label className="flex flex-col gap-2 font-medium">
+                    {t("answer.what")}
+                    <textarea
+                      name="note"
+                      rows={3}
+                      maxLength={1000}
+                      className="rounded-lg border border-input bg-surface p-3"
+                    />
+                  </label>
+                  <Button type="submit" className="self-start">
+                    {t("answer.send")}
+                  </Button>
+                </form>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" onClick={() => void sendAnswer(true)}>
+                    {t("answer.yes")}
+                  </Button>
+                  <Button type="button" variant="outline" onClick={() => setDisputing(true)}>
+                    {t("answer.no")}
+                  </Button>
+                </div>
+              )}
+            </div>
+          ) : answer === "not_fixed" ? (
+            <Alert tone="info" title={t("answer.disputeSent")} />
+          ) : null}
           <div className={card}>
             <h2 className="mb-3 text-xl font-semibold">{t("review.title")}</h2>
             {reviewed ? (
@@ -828,6 +961,13 @@ function RequestLiveView({
               <li>{t("confirm.extrasWait")}</li>
             </ul>
             <p className="mt-3 font-medium">{t("confirm.payDirect")}</p>
+            {feeOn ? (
+              <div className="mt-3 rounded-xl border bg-muted/40 p-3 text-sm">
+                <p>{t("fee.quoteNote", { fee: feeText })}</p>
+                <p className="font-medium">{t("fee.freeCancel", { minutes: freeMinutes })}</p>
+                <p className="text-muted-foreground">{t("fee.payWith")}</p>
+              </div>
+            ) : null}
             <p className="text-sm text-muted-foreground">
               {t("confirm.methods", {
                 methods: f.list(
@@ -838,7 +978,7 @@ function RequestLiveView({
             </p>
             <div className="mt-4 flex flex-col gap-2">
               <Button type="button" onClick={() => choose(confirming)}>
-                {t("confirm.confirm")}
+                {feeOn ? t("fee.confirm", { fee: feeText }) : t("confirm.confirm")}
               </Button>
               <Button type="button" variant="ghost" onClick={() => setConfirming(null)}>
                 {t("confirm.cancel")}
@@ -872,6 +1012,19 @@ function RequestLiveView({
                 void cancel(String(new FormData(e.currentTarget).get("reason") ?? "other"));
               }}
             >
+              {feeOn && (pick || realBooking?.booking_fee_status === "paid") ? (
+                <p className="text-sm">
+                  {(
+                    realBooking
+                      ? now <= Date.parse(realBooking.free_cancel_until)
+                      : pick !== null &&
+                        (isDemo ? clock.elapsed : (now - createdAt) / 1000) - pick.atSec <=
+                          bookingFee.freeCancelSeconds
+                  )
+                    ? t("fee.cancelFree", { fee: feeText })
+                    : t("fee.cancelKept", { fee: feeText, minutes: freeMinutes })}
+                </p>
+              ) : null}
               <fieldset className="flex flex-col gap-2">
                 <legend className="mb-1 font-medium">{t("cancel.reason")}</legend>
                 {(["found_help", "too_slow", "too_expensive", "fixed", "other"] as const).map(

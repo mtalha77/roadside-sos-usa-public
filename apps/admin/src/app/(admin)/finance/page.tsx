@@ -6,6 +6,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { getAdminContext } from "@/lib/admin";
 import { demoNow } from "@/lib/demo-clock";
+import { BookingFeeTable } from "@/components/booking/booking-fee-table";
+import { getBookingFeeReport } from "@/lib/booking-report";
 import { getOutstandingCredit } from "@/lib/credits";
 import { demoLedger, demoRevenue } from "@/lib/finance";
 
@@ -16,13 +18,21 @@ const KINDS = ["all", "fee", "top_up", "credit", "plan"] as const;
 const card = "rounded-2xl border bg-card p-4 sm:p-5";
 
 async function load() {
-  const [ctx, now, credit] = await Promise.all([
+  const [ctx, now, credit, bookingFees] = await Promise.all([
     getAdminContext(),
     demoNow(),
     getOutstandingCredit(),
+    getBookingFeeReport(30),
   ]);
   const ledger = ctx.demo ? demoLedger(now, ctx.selected) : [];
-  return { ctx, now, ledger, credit, revenue: demoRevenue(now, ctx.selected, ledger) };
+  return {
+    ctx,
+    now,
+    ledger,
+    credit,
+    bookingFees,
+    revenue: demoRevenue(now, ctx.selected, ledger),
+  };
 }
 
 /**
@@ -37,7 +47,7 @@ export default async function FinancePage({
   const sp = await searchParams;
   const tab = TABS.find((x) => x === sp.tab) ?? "ledger";
   const kind = KINDS.find((x) => x === sp.kind) ?? "all";
-  const [t, ts, tc, locale, { ctx, ledger, revenue, credit }] = await Promise.all([
+  const [t, ts, tc, locale, { ctx, ledger, revenue, credit, bookingFees }] = await Promise.all([
     getTranslations("admin.finance"),
     getTranslations("site.services"),
     getTranslations("admin.credits.finance"),
@@ -87,6 +97,8 @@ export default async function FinancePage({
         <StatCard label={t("kinds.credit")} value={money(sum("credit"))} />
         <StatCard label={t("kinds.plan")} value={money(sum("plan"))} />
       </div>
+      {/* RSOS-117: customer booking fees, its own revenue line (off by default everywhere). */}
+      <BookingFeeTable rows={bookingFees} markets={ctx.markets} money />
       {/* RSOS-115: bonus credit granted and not yet used or expired is a liability. Real rows. */}
       <section className={card} aria-labelledby="credit-h">
         <h2 id="credit-h" className="mb-1 font-semibold">

@@ -472,6 +472,410 @@ export type Database = {
         }
         Relationships: []
       }
+      booking_codes: {
+        Row: {
+          booking_id: string
+          code: string
+          locked_at: string | null
+          tries: number
+        }
+        Insert: {
+          booking_id: string
+          code: string
+          locked_at?: string | null
+          tries?: number
+        }
+        Update: {
+          booking_id?: string
+          code?: string
+          locked_at?: string | null
+          tries?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_codes_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_events: {
+        Row: {
+          actor: string
+          booking_id: string
+          created_at: string
+          data: Json
+          id: number
+          kind: string
+          lat: number | null
+          lng: number | null
+        }
+        Insert: {
+          actor: string
+          booking_id: string
+          created_at?: string
+          data?: Json
+          id?: never
+          kind: string
+          lat?: number | null
+          lng?: number | null
+        }
+        Update: {
+          actor?: string
+          booking_id?: string
+          created_at?: string
+          data?: Json
+          id?: never
+          kind?: string
+          lat?: number | null
+          lng?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_events_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_fee_settings: {
+        Row: {
+          amount_cents: number
+          enabled: boolean
+          free_cancel_seconds: number
+          market_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          amount_cents?: number
+          enabled?: boolean
+          free_cancel_seconds?: number
+          market_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          enabled?: boolean
+          free_cancel_seconds?: number
+          market_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_fee_settings_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: true
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_flags: {
+        Row: {
+          booking_id: string
+          cleared_at: string | null
+          cleared_by: string | null
+          created_at: string
+          id: string
+          kind: string
+          market_id: string
+          note: string | null
+          provider_id: string
+          status: string
+        }
+        Insert: {
+          booking_id: string
+          cleared_at?: string | null
+          cleared_by?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          market_id: string
+          note?: string | null
+          provider_id: string
+          status?: string
+        }
+        Update: {
+          booking_id?: string
+          cleared_at?: string | null
+          cleared_by?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          market_id?: string
+          note?: string | null
+          provider_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_flags_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_flags_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_flags_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_payments: {
+        Row: {
+          adapter: string
+          amount_cents: number
+          booking_id: string
+          created_at: string
+          id: number
+          is_test: boolean
+          kind: string
+          market_id: string
+          reason: string
+        }
+        Insert: {
+          adapter?: string
+          amount_cents: number
+          booking_id: string
+          created_at?: string
+          id?: never
+          is_test?: boolean
+          kind: string
+          market_id: string
+          reason: string
+        }
+        Update: {
+          adapter?: string
+          amount_cents?: number
+          booking_id?: string
+          created_at?: string
+          id?: never
+          is_test?: boolean
+          kind?: string
+          market_id?: string
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_payments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_payments_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_rules: {
+        Row: {
+          arrival_radius_m: number
+          backup_after_minutes: number
+          block_after_no_shows: number
+          charge_after_minutes: number
+          code_max_tries: number
+          fee_after_no_shows: number
+          id: boolean
+          late_refund_minutes: number
+          no_show_release_limit: number
+          no_show_wait_minutes: number
+          reliability_days: number
+          short_job_minutes: number
+          spot_check_pct: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          arrival_radius_m?: number
+          backup_after_minutes?: number
+          block_after_no_shows?: number
+          charge_after_minutes?: number
+          code_max_tries?: number
+          fee_after_no_shows?: number
+          id?: boolean
+          late_refund_minutes?: number
+          no_show_release_limit?: number
+          no_show_wait_minutes?: number
+          reliability_days?: number
+          short_job_minutes?: number
+          spot_check_pct?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          arrival_radius_m?: number
+          backup_after_minutes?: number
+          block_after_no_shows?: number
+          charge_after_minutes?: number
+          code_max_tries?: number
+          fee_after_no_shows?: number
+          id?: boolean
+          late_refund_minutes?: number
+          no_show_release_limit?: number
+          no_show_wait_minutes?: number
+          reliability_days?: number
+          short_job_minutes?: number
+          spot_check_pct?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          arrived_at: string | null
+          arrived_lat: number | null
+          arrived_lng: number | null
+          backup_requested_at: string | null
+          booking_fee_cents: number
+          booking_fee_status: string
+          cancelled_at: string | null
+          cancelled_by: string | null
+          created_at: string
+          customer_answer: string | null
+          customer_answered_at: string | null
+          customer_device: string | null
+          customer_key: string | null
+          dispute_note: string | null
+          done_at: string | null
+          done_by: string | null
+          en_route_at: string | null
+          free_cancel_until: string
+          id: string
+          is_test: boolean
+          market_id: string
+          no_show_decided_at: string | null
+          not_available_photos: number | null
+          picked_at: string
+          price_cents: number
+          promised_at: string
+          provider_device: string | null
+          provider_id: string
+          provider_report: string | null
+          provider_report_at: string | null
+          rating: number | null
+          request_id: string
+          source: string
+          status: string
+        }
+        Insert: {
+          arrived_at?: string | null
+          arrived_lat?: number | null
+          arrived_lng?: number | null
+          backup_requested_at?: string | null
+          booking_fee_cents?: number
+          booking_fee_status?: string
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          created_at?: string
+          customer_answer?: string | null
+          customer_answered_at?: string | null
+          customer_device?: string | null
+          customer_key?: string | null
+          dispute_note?: string | null
+          done_at?: string | null
+          done_by?: string | null
+          en_route_at?: string | null
+          free_cancel_until: string
+          id?: string
+          is_test?: boolean
+          market_id: string
+          no_show_decided_at?: string | null
+          not_available_photos?: number | null
+          picked_at?: string
+          price_cents: number
+          promised_at: string
+          provider_device?: string | null
+          provider_id: string
+          provider_report?: string | null
+          provider_report_at?: string | null
+          rating?: number | null
+          request_id: string
+          source: string
+          status?: string
+        }
+        Update: {
+          arrived_at?: string | null
+          arrived_lat?: number | null
+          arrived_lng?: number | null
+          backup_requested_at?: string | null
+          booking_fee_cents?: number
+          booking_fee_status?: string
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          created_at?: string
+          customer_answer?: string | null
+          customer_answered_at?: string | null
+          customer_device?: string | null
+          customer_key?: string | null
+          dispute_note?: string | null
+          done_at?: string | null
+          done_by?: string | null
+          en_route_at?: string | null
+          free_cancel_until?: string
+          id?: string
+          is_test?: boolean
+          market_id?: string
+          no_show_decided_at?: string | null
+          not_available_photos?: number | null
+          picked_at?: string
+          price_cents?: number
+          promised_at?: string
+          provider_device?: string | null
+          provider_id?: string
+          provider_report?: string | null
+          provider_report_at?: string | null
+          rating?: number | null
+          request_id?: string
+          source?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calls: {
         Row: {
           answered_at: string | null
@@ -895,6 +1299,51 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_reliability: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          customer_key: string | null
+          device_key: string | null
+          id: number
+          kind: string
+          market_id: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          customer_key?: string | null
+          device_key?: string | null
+          id?: never
+          kind: string
+          market_id: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          customer_key?: string | null
+          device_key?: string | null
+          id?: never
+          kind?: string
+          market_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_reliability_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_reliability_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       demo_accounts: {
         Row: {
           created_at: string
@@ -1169,6 +1618,74 @@ export type Database = {
             columns: ["market_id"]
             isOneToOne: true
             referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fee_holds: {
+        Row: {
+          amount_cents: number
+          booking_id: string | null
+          created_at: string
+          id: string
+          market_id: string
+          provider_id: string
+          reason: string | null
+          request_id: string
+          settled_at: string | null
+          status: string
+        }
+        Insert: {
+          amount_cents: number
+          booking_id?: string | null
+          created_at?: string
+          id?: string
+          market_id: string
+          provider_id: string
+          reason?: string | null
+          request_id: string
+          settled_at?: string | null
+          status?: string
+        }
+        Update: {
+          amount_cents?: number
+          booking_id?: string | null
+          created_at?: string
+          id?: string
+          market_id?: string
+          provider_id?: string
+          reason?: string | null
+          request_id?: string
+          settled_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fee_holds_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fee_holds_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fee_holds_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fee_holds_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
             referencedColumns: ["id"]
           },
         ]
@@ -2892,6 +3409,54 @@ export type Database = {
         }
         Relationships: []
       }
+      spot_checks: {
+        Row: {
+          booking_id: string
+          checked_at: string | null
+          checked_by: string | null
+          created_at: string
+          market_id: string
+          note: string | null
+          status: string
+          week: string
+        }
+        Insert: {
+          booking_id: string
+          checked_at?: string | null
+          checked_by?: string | null
+          created_at?: string
+          market_id: string
+          note?: string | null
+          status?: string
+          week: string
+        }
+        Update: {
+          booking_id?: string
+          checked_at?: string | null
+          checked_by?: string | null
+          created_at?: string
+          market_id?: string
+          note?: string | null
+          status?: string
+          week?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spot_checks_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "spot_checks_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       staff_members: {
         Row: {
           created_at: string
@@ -3328,6 +3893,104 @@ export type Database = {
         Args: { p_intro: string; p_slug: string }
         Returns: undefined
       }
+      answer_booking: {
+        Args: {
+          p_fixed: boolean
+          p_note?: string
+          p_rating?: number
+          p_token: string
+        }
+        Returns: boolean
+      }
+      book_request_by_token: {
+        Args: {
+          p_device?: string
+          p_eta_minutes: number
+          p_pay?: boolean
+          p_price_cents: number
+          p_provider_id: string
+          p_token: string
+        }
+        Returns: string
+      }
+      booking_event: {
+        Args: {
+          p_actor: string
+          p_booking: string
+          p_data?: Json
+          p_kind: string
+          p_lat: number
+          p_lng: number
+        }
+        Returns: undefined
+      }
+      booking_fee_for: {
+        Args: { p_market_id: string }
+        Returns: {
+          amount_cents: number
+          enabled: boolean
+          free_cancel_seconds: number
+        }[]
+      }
+      booking_fee_refund: {
+        Args: { p_booking: string; p_reason: string }
+        Returns: boolean
+      }
+      booking_fee_report: {
+        Args: { p_from: string; p_to: string }
+        Returns: {
+          charged_cents: number
+          market_id: string
+          paid: number
+          picked: number
+          refunded: number
+          refunded_cents: number
+        }[]
+      }
+      booking_for_token: {
+        Args: { p_token: string }
+        Returns: {
+          booking_fee_cents: number
+          booking_fee_status: string
+          booking_id: string
+          can_request_backup: boolean
+          code: string
+          customer_answer: string
+          free_cancel_until: string
+          needs_answer: boolean
+          price_cents: number
+          promised_at: string
+          provider_name: string
+          rating: number
+          status: string
+        }[]
+      }
+      booking_rule: {
+        Args: never
+        Returns: {
+          arrival_radius_m: number
+          backup_after_minutes: number
+          block_after_no_shows: number
+          charge_after_minutes: number
+          code_max_tries: number
+          fee_after_no_shows: number
+          id: boolean
+          late_refund_minutes: number
+          no_show_release_limit: number
+          no_show_wait_minutes: number
+          reliability_days: number
+          short_job_minutes: number
+          spot_check_pct: number
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "booking_rules"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       campaign_requests: {
         Args: { p_from: string; p_to: string }
         Returns: {
@@ -3353,6 +4016,22 @@ export type Database = {
         Args: { p_force?: boolean; p_request_id: string }
         Returns: boolean
       }
+      clear_booking_flag: {
+        Args: { p_flag_id: string; p_note: string; p_release?: boolean }
+        Returns: undefined
+      }
+      create_booking: {
+        Args: {
+          p_device: string
+          p_eta_minutes: number
+          p_pay: boolean
+          p_price_cents: number
+          p_provider_id: string
+          p_request_id: string
+          p_source: string
+        }
+        Returns: string
+      }
       create_request: {
         Args: { p: Json }
         Returns: {
@@ -3362,6 +4041,15 @@ export type Database = {
         }[]
       }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      customer_cancel_booking: {
+        Args: { p_request_id: string }
+        Returns: string
+      }
+      customer_key_for: { Args: { p_phone: string }; Returns: string }
+      customer_standing: {
+        Args: { p_customer_key: string; p_device_key: string }
+        Returns: string
+      }
       dispatch_step: {
         Args: {
           p_eta_minutes?: number
@@ -3472,7 +4160,33 @@ export type Database = {
           what_to_expect: string[]
         }[]
       }
+      held_fees: { Args: { p_provider_id: string }; Returns: number }
       issue_email_code: { Args: never; Returns: string }
+      job_check_flags: {
+        Args: { p_provider_id?: string }
+        Returns: {
+          booking_id: string
+          created_at: string
+          id: string
+          kind: string
+          market_id: string
+          note: string
+          provider_id: string
+          provider_name: string
+          short_code: string
+        }[]
+      }
+      job_spot_checks: {
+        Args: never
+        Returns: {
+          booking_id: string
+          done_at: string
+          market_id: string
+          provider_name: string
+          short_code: string
+          week: string
+        }[]
+      }
       join_featured: {
         Args: {
           p_market_id: string
@@ -3683,6 +4397,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      pick_spot_checks: { Args: { p_now?: string }; Returns: number }
       plan_price: {
         Args: { p_at?: string; p_market_id: string; p_plan: string }
         Returns: number
@@ -3713,7 +4428,27 @@ export type Database = {
         Args: { p_provider_id: string }
         Returns: number
       }
+      provider_job_step: {
+        Args: {
+          p_booking_id: string
+          p_code?: string
+          p_device?: string
+          p_lat?: number
+          p_lng?: number
+          p_photos?: number
+          p_step: string
+        }
+        Returns: string
+      }
       provider_plan: { Args: { p_provider_id: string }; Returns: string }
+      public_booking_fee: {
+        Args: { p_market_slug: string }
+        Returns: {
+          amount_cents: number
+          enabled: boolean
+          free_cancel_seconds: number
+        }[]
+      }
       public_plan_catalog: {
         Args: { p_market_slug?: string }
         Returns: {
@@ -3732,6 +4467,10 @@ export type Database = {
           sort_order: number
           technician_limit: number
         }[]
+      }
+      raise_booking_flag: {
+        Args: { p_booking: string; p_kind: string; p_note?: string }
+        Returns: undefined
       }
       rate_limit_hit: {
         Args: { p_key: string; p_window_seconds: number }
@@ -3778,6 +4517,7 @@ export type Database = {
         Returns: undefined
       }
       request_account_closure: { Args: { p_reason: string }; Returns: string }
+      request_backup: { Args: { p_token: string }; Returns: boolean }
       request_point: {
         Args: { p_request_id: string }
         Returns: {
@@ -3785,7 +4525,28 @@ export type Database = {
           lng: number
         }[]
       }
+      reserve_job_fee: {
+        Args: {
+          p_amount_cents: number
+          p_booking: string
+          p_provider_id: string
+          p_request_id: string
+        }
+        Returns: undefined
+      }
+      resolve_spot_check: {
+        Args: { p_booking_id: string; p_note?: string; p_ok: boolean }
+        Returns: undefined
+      }
+      return_held_fee: {
+        Args: {
+          p_hold: Database["public"]["Tables"]["fee_holds"]["Row"]
+          p_reason: string
+        }
+        Returns: undefined
+      }
       revoke_my_session: { Args: { p_session_id: string }; Returns: boolean }
+      run_booking_timers: { Args: { p_now?: string }; Returns: number }
       run_plan_renewals: { Args: { p_now?: string }; Returns: number }
       save_request_draft: {
         Args: { p_patch: Json; p_token: string }
@@ -3797,6 +4558,26 @@ export type Database = {
           active: boolean
           second_step_passed: boolean
         }[]
+      }
+      set_booking_fee: {
+        Args: {
+          p_amount_cents: number
+          p_enabled: boolean
+          p_free_cancel_seconds: number
+          p_market_id: string
+        }
+        Returns: undefined
+      }
+      set_booking_rules: {
+        Args: {
+          p_backup_after: number
+          p_charge_after: number
+          p_late_refund: number
+          p_no_show_limit: number
+          p_radius: number
+          p_spot_pct: number
+        }
+        Returns: undefined
       }
       set_featured_settings: {
         Args: {
@@ -3861,9 +4642,27 @@ export type Database = {
           subscription_id: string
         }[]
       }
+      set_request_stage: {
+        Args: {
+          p_actor: Database["public"]["Enums"]["actor_type"]
+          p_data: Json
+          p_request_id: string
+          p_status: Database["public"]["Enums"]["request_status"]
+        }
+        Returns: undefined
+      }
       set_second_step_method: {
         Args: { p_method: Database["public"]["Enums"]["second_step_method"] }
         Returns: undefined
+      }
+      settle_fee_hold: {
+        Args: {
+          p_action: string
+          p_provider_id: string
+          p_reason: string
+          p_request_id: string
+        }
+        Returns: string
       }
       sha256_hex: { Args: { p: string }; Returns: string }
       sms_delivery_report: {
@@ -3883,6 +4682,10 @@ export type Database = {
       }
       staff_can_access_market: {
         Args: { p_market_id: string }
+        Returns: boolean
+      }
+      staff_refund_booking_fee: {
+        Args: { p_booking_id: string; p_reason: string }
         Returns: boolean
       }
       start_plan: {

@@ -45,6 +45,12 @@ export default async function InboxPage({
           >
             {t("logCall")}
           </Link>
+          <Link
+            href="/inbox/checks"
+            className="inline-flex min-h-12 items-center justify-center rounded-lg border px-4 text-sm font-medium hover:bg-accent"
+          >
+            {t("checks")}
+          </Link>
           <PageTourButton tour="admin.page.inbox" label={tt("page")} />
         </div>
         <div data-tour="inbox-list" className="min-w-0">

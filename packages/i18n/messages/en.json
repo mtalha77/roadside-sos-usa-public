@@ -1242,7 +1242,8 @@
       },
       "logCall": "Log a call",
       "sourceWebsite": "Website",
-      "sourceCall": "Call"
+      "sourceCall": "Call",
+      "checks": "Job checks"
     },
     "textingLimited": "Texting limited: carrier registration pending. Texts to customers are held until it's approved.",
     "marketing": {
@@ -1430,7 +1431,8 @@
         "adCostPerAccepted": "Ad cost per accepted",
         "breakEvenAccepted": "Break-even accepted",
         "promotionCredits": "Promotion credits used",
-        "netFeeRevenue": "Net fee revenue"
+        "netFeeRevenue": "Net fee revenue",
+        "bookingFees": "Customer booking fees, net of card fees"
       },
       "emptyTitle": "No model yet",
       "empty": "No market in view has an economics model.",
@@ -1465,7 +1467,9 @@
         },
         "signupBonus": "Signup bonus per provider",
         "newProviders": "New providers",
-        "perMonth": "per month"
+        "perMonth": "per month",
+        "bookingFee": "Customer booking fee (empty when off)",
+        "bookingFeeShare": "Bookings that pay it"
       },
       "sharedStateOn": ": on",
       "sharedStateOff": ": off"
@@ -2047,7 +2051,8 @@
         "featured": "Featured settings saved.",
         "offer": "Offer saved.",
         "assigned": "Plan started.",
-        "cancelled": "The plan ends at the end of the paid month."
+        "cancelled": "The plan ends at the end of the paid month.",
+        "bookingFee": "Booking fee saved."
       },
       "errors": {
         "forbidden": "You can't change this. The owner and the Operations manager do.",
@@ -2150,6 +2155,79 @@
         "pageOf": "Showing {from}–{to} of {total}",
         "prev": "Previous page",
         "next": "Next page"
+      },
+      "bookingFee": {
+        "title": "Customer booking fee",
+        "note": "A small fee the customer pays us when they pick a provider (fake billing until Stripe). Off in every market by default. While it's off, customers see no fee text and no payment step.",
+        "enabled": "Charge the booking fee in {market}",
+        "amount": "Amount (USD)",
+        "freeMinutes": "Free cancel window (minutes)",
+        "statusOn": "On: customers pay {fee} when they pick. Refunds are automatic when the provider cancels, is 30 minutes late, or no backup is found.",
+        "statusOff": "Off: customers pay nothing to us.",
+        "ownerOnly": "Only the Owner can turn it on."
+      }
+    },
+    "checks": {
+      "back": "Back to Inbox",
+      "title": "Job checks",
+      "lead": "Warning signs the system noticed on jobs, and this week's spot checks. Most need only a look; clear each one when you've checked it.",
+      "done": "Saved.",
+      "error": "That didn't go through. You may not have permission.",
+      "flags": {
+        "title": "Warning signs ({count})",
+        "none": "Nothing to check.",
+        "note": "Note (optional)",
+        "clear": "Checked, clear",
+        "release": "Release the fee",
+        "charge": "Charge the fee"
+      },
+      "spot": {
+        "title": "Confirm with customer ({count})",
+        "lead": "5% of last week's finished jobs. Call or message the customer and ask whether the job was done.",
+        "none": "No spot checks waiting.",
+        "row": "{code} · {provider} · finished {when}",
+        "confirmed": "Customer confirmed",
+        "problem": "There was a problem"
+      },
+      "kinds": {
+        "done_without_arrival": "Done without arriving",
+        "short_job": "Very short job",
+        "high_cancel_rate": "Cancels often",
+        "high_no_show_rate": "Many no-shows reported",
+        "same_device": "Same phone on both sides",
+        "many_not_available": "Many \"customer not available\"",
+        "code_locked": "Code locked",
+        "cancel_then_fixed": "Said cancelled, customer says fixed",
+        "customer_dispute": "Customer says not fixed",
+        "no_show_review": "No-show over the monthly limit"
+      },
+      "help": {
+        "done_without_arrival": "The provider finished the job without the phone ever being at the customer.",
+        "short_job": "Less than 5 minutes between arriving and finishing.",
+        "high_cancel_rate": "The provider cancelled 3 or more of their last 10 jobs.",
+        "high_no_show_rate": "The provider reported 3 or more customer no-shows in 30 days.",
+        "same_device": "The customer and the provider used the same phone. Possible fake job.",
+        "many_not_available": "3 or more jobs finished with photos instead of the code in 30 days.",
+        "code_locked": "5 wrong codes were entered. Call the customer and the provider.",
+        "cancel_then_fixed": "The provider said the customer cancelled, then the customer said the job was done. The fee was charged.",
+        "customer_dispute": "The customer tapped No after the job. Read the note and call them.",
+        "no_show_review": "The provider has used the 3 free no-show releases this month. Decide whether to release or charge the fee."
+      },
+      "providerTitle": "Warning signs on jobs ({count})",
+      "open": "Open Job checks"
+    },
+    "bookingFees": {
+      "titleFinance": "Customer booking fees (last 30 days)",
+      "titleFunnel": "Picked and paid booking fee (last 30 days)",
+      "note": "Bookings customers made themselves, per city. The booking fee is off by default; turn it on per city in Plans & pricing to compare.",
+      "none": "No customer bookings yet.",
+      "cols": {
+        "market": "City",
+        "picked": "Picked",
+        "paid": "Paid booking fee",
+        "refunded": "Refunded",
+        "net": "Net booking fees",
+        "rate": "Paid share"
       }
     }
   },
@@ -3735,11 +3813,13 @@
       "steps": "Request progress",
       "safety": "While you wait",
       "safetyTips": [
-        "Stay in your vehicle with your seatbelt on if you're on a highway.",
         "Keep your hazard lights on.",
+        "Stay in your vehicle with your seatbelt on if you're on a highway.",
+        "Have your ID ready for a lockout: the provider must check it.",
         "Check the provider's name and truck match before work starts."
       ],
-      "map": "Map of the provider on the way to you"
+      "map": "Map of the provider on the way to you",
+      "tabTitle": "{minutes} min · Help is on the way"
     },
     "cancel": {
       "open": "Cancel request",
@@ -3819,7 +3899,8 @@
       "skipArrival": "Skip to arrival",
       "skipNext": "Skip to next stage",
       "goTo": "Go back to {stage}",
-      "speedValue": "{x}x"
+      "speedValue": "{x}x",
+      "late": "Demo: make the provider late"
     },
     "card": {
       "insured": "Insured",
@@ -3871,6 +3952,34 @@
       "booked": "Booked automatically at or below {price}.",
       "fellBack": "No provider accepted at {price} or less in time. Compare the quotes that came in below.",
       "manual": "No quotes came in. Our dispatchers are finding you a provider now; keep your phone on."
+    },
+    "fee": {
+      "quoteNote": "Booking fee {fee}, paid to us. You pay the provider directly for the job.",
+      "freeCancel": "Free cancel for {minutes, plural, one {# minute} other {# minutes}}.",
+      "payWith": "Pay with Apple Pay, Google Pay or a card. No account needed.",
+      "confirm": "Confirm booking, {fee}",
+      "cancelFree": "You're inside the free cancel window: your {fee} booking fee comes back.",
+      "cancelKept": "The {fee} booking fee is not refunded after the first {minutes, plural, one {# minute} other {# minutes}}."
+    },
+    "code": {
+      "title": "Your completion code",
+      "body": "Give this code to the provider when the job is done."
+    },
+    "backup": {
+      "title": "Your provider is running late",
+      "body": "We can send your request to other providers right away, with priority.",
+      "bodyFee": "We can send your request to other providers right away, with priority. If nobody else can come, your booking fee is refunded.",
+      "button": "Find me another provider",
+      "sent": "We're finding you another provider.",
+      "sentFee": "We're finding you another provider. If nobody can come, your {fee} booking fee is refunded."
+    },
+    "answer": {
+      "title": "Was the problem fixed?",
+      "yes": "Yes, fixed",
+      "no": "No",
+      "what": "What went wrong?",
+      "send": "Send",
+      "disputeSent": "Thanks. Our team will look into it and contact you."
     }
   },
   "lp": {
@@ -4210,10 +4319,10 @@
     "active": {
       "title": "Job in progress",
       "steps": {
-        "start": "Start driving",
-        "arrived": "I've arrived",
-        "working": "Start the work",
-        "completed": "Job completed"
+        "accepted": "Accepted",
+        "on_my_way": "On my way",
+        "arrived": "Arrived",
+        "done": "Done"
       },
       "navigate": "Navigate with",
       "maps": {
@@ -4239,7 +4348,24 @@
       "assign": "Assign to",
       "done": "Job completed. The customer can now rate you.",
       "addressLine": "Address: {address}",
-      "photoAlt": "Photo {n}"
+      "photoAlt": "Photo {n}",
+      "tooFar": "You're not at the customer yet. Arrived works within about 200 m.",
+      "error": "That didn't go through. Try again.",
+      "gpsAuto": "Arrived is set by itself when you get close. Your location is shared only during this job.",
+      "gpsNear": "You're at the customer.",
+      "gpsDenied": "Turn on location for this site so Arrived can be set.",
+      "demoArrive": "Demo: I'm at the customer",
+      "codeLabel": "Customer's 4-digit code",
+      "demoCode": "Demo: the customer's code is {code}.",
+      "codeWrong": "That code isn't right. Ask the customer to read it again.",
+      "codeLocked": "Too many wrong codes. The code is locked and our team has been told. Use Customer not available or call support.",
+      "notThere": "Customer not available",
+      "notThereTitle": "Customer not available",
+      "notThereBody": "Take 2 photos with the camera (for example the vehicle at the shop), then finish.",
+      "notThereDone": "Finish with photos",
+      "needPhotos": "Take 2 photos first.",
+      "backToCode": "Enter the code instead",
+      "cancelled": "Job cancelled. The fee for this job is not charged."
     },
     "wallet": {
       "title": "Wallet",

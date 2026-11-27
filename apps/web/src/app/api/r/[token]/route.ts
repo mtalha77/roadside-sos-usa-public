@@ -1,16 +1,24 @@
 import { createPublicSupabase } from "@rsos/db/public";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { cancelRealRequest, getRealRequest, setBookingMode } from "@/lib/request-status";
+import {
+  answerRealBooking,
+  cancelRealRequest,
+  getRealBooking,
+  getRealRequest,
+  requestBackup,
+  setBookingMode,
+} from "@/lib/request-status";
 import { isTestHeader } from "@/lib/test-traffic";
 
 type Params = { params: Promise<{ token: string }> };
 
-/** Live status of a real request (the status page polls this every few seconds). */
+/** Live status of a real request and its booking (the status page polls this every few seconds). */
 export async function GET(_: NextRequest, { params }: Params) {
-  const req = await getRealRequest((await params).token);
+  const token = (await params).token;
+  const [req, booking] = await Promise.all([getRealRequest(token), getRealBooking(token)]);
   return req
-    ? NextResponse.json(req, { headers: { "Cache-Control": "no-store" } })
+    ? NextResponse.json({ ...req, booking }, { headers: { "Cache-Control": "no-store" } })
     : NextResponse.json({ error: "not found" }, { status: 404 });
 }
 
@@ -24,6 +32,13 @@ const Action = z.discriminatedUnion("action", [
     mode: z.enum(["compare", "instant"]),
     maxCents: z.number().int().min(500).max(1_000_000),
   }),
+  z.object({
+    action: z.literal("answer"),
+    fixed: z.boolean(),
+    rating: z.number().int().min(1).max(5).nullable(),
+    note: z.string().trim().max(1000).optional(),
+  }),
+  z.object({ action: z.literal("backup") }),
   z.object({
     action: z.literal("report"),
     // Owner decision 3: one tap plus a reason, an optional note.
@@ -45,6 +60,16 @@ export async function POST(request: NextRequest, { params }: Params) {
     return NextResponse.json({
       ok: await setBookingMode(token, parsed.data.mode, parsed.data.maxCents),
     });
+  if (parsed.data.action === "answer")
+    return NextResponse.json({
+      ok: await answerRealBooking(
+        token,
+        parsed.data.fixed,
+        parsed.data.rating,
+        parsed.data.note ?? null,
+      ),
+    });
+  if (parsed.data.action === "backup") return NextResponse.json({ ok: await requestBackup(token) });
   // The flag goes to the admin Inbox (safety is urgent) and onto the request and both profiles.
   const supabase = createPublicSupabase({ test: isTestHeader(request.headers) });
   if (!supabase) return NextResponse.json({ ok: false }, { status: 503 });
