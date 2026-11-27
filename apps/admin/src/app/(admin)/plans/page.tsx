@@ -60,6 +60,27 @@ export default async function PlansPage({
   const pages = Math.max(1, Math.ceil(data.subscribers.length / PAGE));
   const pageNum = Math.min(pages, Math.max(1, Number.parseInt(sp.sub ?? "1", 10) || 1));
   const subscribers = data.subscribers.slice((pageNum - 1) * PAGE, pageNum * PAGE);
+  // Featured settings and first-month offers are edited one market at a time (?m=<market id>).
+  const focus = data.markets.find((m) => m.id === sp.m) ?? data.markets[0] ?? null;
+  const featured = data.featured.filter((f) => f.market.id === focus?.id);
+  const marketPicker = (anchor: string) =>
+    data.markets.length > 1 ? (
+      <form method="get" action={`/plans#${anchor}`} className="flex flex-wrap items-end gap-3">
+        <label className={label}>
+          {t("market")}
+          <select name="m" defaultValue={focus?.id} className={inputClass}>
+            {data.markets.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <Button type="submit" variant="outline">
+          {t("showMarket")}
+        </Button>
+      </form>
+    ) : null;
   const subHref = (n: number) => {
     const q = new URLSearchParams();
     for (const [k, v] of Object.entries(sp)) if (v && k !== "sub") q.set(k, v);
@@ -474,8 +495,9 @@ export default async function PlansPage({
           {t("featured.title")}
         </h2>
         <p className="text-sm text-muted-foreground">{t("featured.note")}</p>
+        {marketPicker("featured")}
         <ul className="grid gap-3 lg:grid-cols-3">
-          {data.featured.map((f) => (
+          {featured.map((f) => (
             <li key={f.market.id} className={card}>
               <form action={saveFeaturedAction} className="flex flex-col gap-3">
                 <input type="hidden" name="market" value={f.market.id} />
@@ -545,8 +567,9 @@ export default async function PlansPage({
           {t("offers.title")}
         </h2>
         <p className="mb-3 text-sm text-muted-foreground">{t("offers.note")}</p>
+        <div className="mb-3">{marketPicker("offers")}</div>
         <ul className="flex flex-col gap-3">
-          {data.markets.flatMap((m) =>
+          {(focus ? [focus] : []).flatMap((m) =>
             (["basic", "pro"] as const).map((plan) => {
               const o = data.offers.find((x) => x.market_id === m.id && x.plan === plan);
               return (

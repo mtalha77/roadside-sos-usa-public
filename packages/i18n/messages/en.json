@@ -2038,6 +2038,7 @@
       "viewOnly": "You can view plans. The owner and the Operations manager change them.",
       "save": "Save",
       "market": "Market",
+      "showMarket": "Show market",
       "provider": "Provider",
       "allMarkets": "All markets (default)",
       "done": {

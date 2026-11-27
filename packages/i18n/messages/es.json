@@ -2038,6 +2038,7 @@
       "viewOnly": "Puedes ver los planes. El dueño y el gerente de operaciones los cambian.",
       "save": "Guardar",
       "market": "Mercado",
+      "showMarket": "Ver mercado",
       "provider": "Proveedor",
       "allMarkets": "Todos los mercados (predeterminado)",
       "done": {
