@@ -125,9 +125,9 @@ describe("warning signs and spot checks", () => {
     expect(completionFlags({ ...base, arrivedAt: null })).toEqual(["done_without_arrival"]);
     expect(completionFlags({ ...base, doneAt: t0 + 4 * MIN })).toEqual(["short_job"]);
     expect(completionFlags({ ...base, providerDevice: "a" })).toEqual(["same_device"]);
-    expect(
-      completionFlags({ ...base, viaNotAvailable: true, notAvailableLast30Days: 3 }),
-    ).toEqual(["many_not_available"]);
+    expect(completionFlags({ ...base, viaNotAvailable: true, notAvailableLast30Days: 3 })).toEqual([
+      "many_not_available",
+    ]);
   });
   it("spot checks 5% of finished jobs, at least one", () => {
     expect(spotCheckCount(0, 5)).toBe(0);
