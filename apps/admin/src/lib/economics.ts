@@ -16,6 +16,8 @@ export type MarketModel = {
   name: string;
   inputs: Partial<Record<Scenario, EconomicsInputs>>;
   updatedAt: Partial<Record<Scenario, string>>;
+  /** Real monthly plan and Featured revenue (USD) when the market has subscribers (RSOS-114). */
+  realSubscriptions: number | null;
 };
 
 /** The economics model rows for the markets in view (RLS: analytics roles read, owners edit). */
@@ -23,15 +25,24 @@ export async function getModels(ctx: AdminContext): Promise<MarketModel[]> {
   const markets = ctx.markets.filter((m) => ctx.selected.includes(m.slug));
   if (!markets.length) return [];
   const supabase = await getServerSupabase();
-  const { data } = await supabase
-    .from("economics_models")
-    .select("market_id, scenario, inputs, updated_at")
-    .in(
-      "market_id",
-      markets.map((m) => m.id),
-    );
+  const ids = markets.map((m) => m.id);
+  const [{ data }, { data: subs }] = await Promise.all([
+    supabase
+      .from("economics_models")
+      .select("market_id, scenario, inputs, updated_at")
+      .in("market_id", ids),
+    supabase
+      .from("provider_subscriptions")
+      .select("market_id, price_cents")
+      .eq("status", "active")
+      .in("market_id", ids),
+  ]);
   return markets.map((m) => {
     const rows = (data ?? []).filter((r) => r.market_id === m.id);
+    const mrrCents = (subs ?? [])
+      .filter((x) => x.market_id === m.id)
+      .reduce((a, x) => a + x.price_cents, 0);
+    const realSubscriptions = mrrCents > 0 ? mrrCents / 100 : null;
     const inputs: MarketModel["inputs"] = {};
     const updatedAt: MarketModel["updatedAt"] = {};
     for (const r of rows) {
@@ -42,7 +53,7 @@ export async function getModels(ctx: AdminContext): Promise<MarketModel[]> {
         updatedAt[scenario] = r.updated_at;
       }
     }
-    return { id: m.id, slug: m.slug, name: m.name, inputs, updatedAt };
+    return { id: m.id, slug: m.slug, name: m.name, inputs, updatedAt, realSubscriptions };
   });
 }
 
@@ -64,7 +75,14 @@ export function modelTable(models: MarketModel[], sharedFixed: boolean): ModelTa
     const pool = Math.max(0, ...withModel.map((m) => m.inputs[scenario]!.fixedCosts));
     const each = withModel.length ? pool / withModel.length : 0;
     const results = withModel.map((m) => {
-      const result = computeEconomics(m.inputs[scenario]!, sharedFixed ? each : undefined);
+      // Subscription revenue comes from real subscribers when there are any, else the model input.
+      const inputs = m.inputs[scenario]!;
+      const result = computeEconomics(
+        m.realSubscriptions === null
+          ? inputs
+          : { ...inputs, subscriptionsNet: m.realSubscriptions },
+        sharedFixed ? each : undefined,
+      );
       rows.push({ market: m, scenario, result });
       return result;
     });

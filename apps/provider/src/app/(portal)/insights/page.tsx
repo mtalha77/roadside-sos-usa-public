@@ -2,14 +2,16 @@ import { formatCurrency, type Locale } from "@rsos/i18n";
 import { StatCard } from "@rsos/ui/stat-card";
 import { getLocale, getTranslations } from "next-intl/server";
 import { card, PageHead, pageMain } from "@/components/shell/page-head";
+import Link from "next/link";
+import { getPlanPage } from "@/lib/plan";
 import { getPortalContext, getPortalData } from "@/lib/portal";
 
 export const dynamic = "force-dynamic";
 
 async function load() {
   const ctx = await getPortalContext();
-  const { data } = await getPortalData(ctx, Date.now());
-  return { ctx, data };
+  const [{ data }, plan] = await Promise.all([getPortalData(ctx, Date.now()), getPlanPage(ctx)]);
+  return { ctx, data, plan };
 }
 
 const pct = (n: number) => `${Math.round(n * 100)}%`;
@@ -19,7 +21,7 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
  * cancellations, and return on fees by week. Charts are plain SVG (no client JavaScript).
  */
 export default async function InsightsPage() {
-  const [t, locale, { ctx, data }] = await Promise.all([
+  const [t, locale, { ctx, data, plan }] = await Promise.all([
     getTranslations("portal.insights"),
     getLocale(),
     load(),
@@ -45,6 +47,14 @@ export default async function InsightsPage() {
   return (
     <main id="main" className={pageMain}>
       <PageHead title={t("title")} subtitle={t("subtitle")} />
+      {ctx.canSeeMoney && plan.base?.plan !== "pro" && (plan.month.proWouldSave ?? 0) > 0 ? (
+        <p className="text-sm">
+          {t("proHint", { amount: money(plan.month.proWouldSave!) })}{" "}
+          <Link href="/plan" className="font-medium underline underline-offset-4">
+            {t("proHintLink")}
+          </Link>
+        </p>
+      ) : null}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
         <StatCard label={t("quoteRate")} value={pct(quotes / Math.max(1, offered))} />
         <StatCard label={t("winRate")} value={pct(wins / Math.max(1, quotes))} />

@@ -44,7 +44,8 @@
       "economics": "Modelo económico",
       "status": "Estado del sistema",
       "credits": "Créditos de billetera",
-      "services": "Servicios"
+      "services": "Servicios",
+      "plans": "Planes y precios"
     },
     "shell": {
       "nav": "Administración",
@@ -323,7 +324,11 @@
       "responseRate": "Tasa de respuesta",
       "medianQuote": "Tiempo mediano de cotización",
       "bookingRate": "Tasa de reserva",
-      "seconds": "{s} s"
+      "seconds": "{s} s",
+      "pagination": "Páginas",
+      "pageOf": "Mostrando {from}–{to} de {total}",
+      "prevPage": "Página anterior",
+      "nextPage": "Página siguiente"
     },
     "recruitment": {
       "title": "Reclutamiento",
@@ -2025,6 +2030,127 @@
       "resolutionLabel": "¿Qué hiciste? (opcional)",
       "resolve": "Resolver",
       "inbox": "{count, plural, one {# marca} other {# marcas}}"
+    },
+    "plans": {
+      "title": "Planes y precios",
+      "lead": "Planes para proveedores (Básico, Pro) y ubicación Destacada: qué incluye cada uno, cuánto cuesta por mercado y quién lo tiene. Las tarifas por servicio están en",
+      "feesLink": "Precios → Tarifas por trabajo.",
+      "viewOnly": "Puedes ver los planes. El dueño y el gerente de operaciones los cambian.",
+      "save": "Guardar",
+      "market": "Mercado",
+      "showMarket": "Ver mercado",
+      "provider": "Proveedor",
+      "allMarkets": "Todos los mercados (predeterminado)",
+      "done": {
+        "catalog": "Plan guardado.",
+        "price": "Nuevo precio fijado. Se envió el aviso a los suscriptores afectados.",
+        "featured": "Ajustes de Destacado guardados.",
+        "offer": "Oferta guardada.",
+        "assigned": "Plan iniciado.",
+        "cancelled": "El plan termina al final del mes pagado."
+      },
+      "errors": {
+        "forbidden": "No puedes cambiar esto. Lo hacen el dueño y el gerente de operaciones.",
+        "minimum": "Básico cuesta al menos 20 USD al mes: no hay plan gratuito.",
+        "invalid": "Revisa el formulario: falta algo o está fuera de rango."
+      },
+      "summary": {
+        "title": "Resumen",
+        "mrr": "Ingreso recurrente mensual",
+        "basic": "En Básico",
+        "pro": "En Pro",
+        "featured": "Espacios Destacados vendidos",
+        "upgrades": "Básico → Pro (30 días)",
+        "churn": "Planes terminados (30 días)",
+        "note": "Las selecciones de cotizaciones Destacadas y su tasa de elección aparecerán aquí cuando el motor de cotizaciones (lote 5) envíe ofertas reales. La facturación es simulada hasta conectar Stripe (lote 6)."
+      },
+      "catalog": {
+        "title": "Catálogo de planes",
+        "priceNow": "Precio predeterminado hoy: {price} al mes",
+        "shown": "Visible",
+        "hidden": "Oculto",
+        "name": "Nombre",
+        "discount": "Descuento en tarifa por trabajo (%)",
+        "firstLook": "Primera vista (segundos antes que los demás)",
+        "techLimit": "Límite de técnicos",
+        "unlimited": "Ilimitado",
+        "insights": "Estadísticas",
+        "insightsBasic": "Básicas",
+        "insightsFull": "Completas",
+        "autoTopup": "Recarga automática permitida",
+        "active": "Visible para proveedores",
+        "order": "Orden",
+        "bulletsEn": "Lo que ven los proveedores (inglés, uno por línea)",
+        "bulletsEs": "Lo que ven los proveedores (español, uno por línea)"
+      },
+      "prices": {
+        "title": "Precios por mercado",
+        "note": "Un mercado sin precio propio usa el predeterminado. Los nuevos suscriptores pagan el nuevo precio desde su fecha de inicio; los actuales cambian en su primera fecha de cobro después del aviso, o mantienen su precio.",
+        "scheduled": "Cambios programados",
+        "scheduledRow": "{plan} en {market}: {price} desde el {date}",
+        "grandfathered": "mantiene el precio anterior",
+        "changeTitle": "Cambiar un precio",
+        "plan": "Plan",
+        "newPrice": "Nuevo precio mensual (USD)",
+        "from": "Empieza el",
+        "existing": "Suscriptores actuales",
+        "existingNext": "Pasan al nuevo precio en su siguiente fecha de cobro después del aviso",
+        "existingKeep": "Mantienen su precio actual",
+        "notice": "Aviso (días)",
+        "preview": "Ver a quién afecta",
+        "previewTitle": "Vista previa",
+        "previewLead": "{count, plural, =0 {No afecta a ningún suscriptor actual.} one {Afecta a # suscriptor actual.} other {Afecta a # suscriptores actuales.}} Los nuevos suscriptores pagan {price} desde el {date}.",
+        "pays": "Paga ahora",
+        "willPay": "Pagará",
+        "appliesFrom": "Desde",
+        "emailTitle": "Correo de aviso",
+        "emailBody": "Los dueños de cada proveedor afectado reciben un correo al menos {days} días antes de que empiece su nuevo precio, con el precio anterior, el nuevo y la fecha.",
+        "confirm": "Confirmar el nuevo precio",
+        "more": "Y {count, plural, one {# suscriptor más} other {# suscriptores más}}."
+      },
+      "featured": {
+        "title": "Ubicación Destacada por mercado",
+        "note": "Los espacios limitados mantienen la lista justa. Una cotización Destacada va arriba solo si cumple las reglas de precio y llegada; si no, queda en su lugar normal, siempre con la etiqueta.",
+        "fill": "{taken} de {slots} espacios",
+        "waitlist": "{count, plural, one {# proveedor en lista de espera} other {# proveedores en lista de espera}}",
+        "slots": "Espacios",
+        "pct": "Regla de precio: dentro del % del más barato",
+        "eta": "Regla de llegada: dentro de los minutos del más rápido",
+        "service": "Vender espacios por servicio"
+      },
+      "offers": {
+        "title": "Ofertas del primer mes",
+        "note": "Opcional, para reclutar al inicio: el primer mes de un plan a menor precio en un mercado hasta la fecha final. Desactivado por defecto.",
+        "row": "{market} · {plan}",
+        "price": "Primer mes (USD)",
+        "ends": "La oferta termina",
+        "active": "Activa"
+      },
+      "assign": {
+        "title": "Iniciar un plan para un proveedor",
+        "note": "Sin plan no hay solicitudes. Mientras el pago de proveedores está desactivado, inicia aquí un plan para un proveedor aprobado (facturación simulada).",
+        "button": "Iniciar plan",
+        "none": "Todos los proveedores activos de estos mercados tienen plan."
+      },
+      "subscribers": {
+        "title": "Suscriptores",
+        "none": "Aún no hay suscriptores en estos mercados.",
+        "plan": "Plan",
+        "since": "Desde",
+        "paid": "Precio pagado",
+        "status": "Estado",
+        "actions": "Acciones",
+        "active": "Activo",
+        "waitlist": "Lista de espera",
+        "ends": "Termina el {date}",
+        "downgrade": "Pasa a Básico el {date}",
+        "nextPrice": "{price} desde el {date}",
+        "cancel": "Cancelar al final del periodo",
+        "pages": "Páginas de suscriptores",
+        "pageOf": "Mostrando {from}–{to} de {total}",
+        "prev": "Página anterior",
+        "next": "Página siguiente"
+      }
     }
   },
   "emails": {
@@ -2136,6 +2262,12 @@
       "unusualCost": "{market}: costo por trabajo completado mayor a {max}",
       "unusualSync": "Sincronización con fallas: {job}",
       "nothingUnusual": "Nada fuera de lo normal."
+    },
+    "planPriceNotice": {
+      "subject": "El precio de tu plan {plan} de {brand} va a cambiar",
+      "intro": "Hola {company}:",
+      "body": "Tu plan {plan} pasa de {oldPrice} a {newPrice} al mes el {date}, tu primera fecha de cobro después de este aviso. Hasta entonces no cambia nada.",
+      "note": "Puedes cambiar o cancelar tu plan cuando quieras en el portal de proveedores, en Plan y facturación; la cancelación se aplica al final del mes pagado."
     }
   },
   "auth": {
@@ -2440,7 +2572,10 @@
       "faqTitle": "Preguntas sobre {city}",
       "nearbyTitle": "Otras ciudades donde estamos",
       "serviceIn": "{service} en {city}",
-      "heroHeadline": "¿Varado en el camino en {city}? La ayuda va en camino."
+      "heroHeadline": "¿Varado en el camino en {city}? La ayuda va en camino.",
+      "featuredTitle": "Proveedores destacados en {city}",
+      "featured": "Destacado",
+      "featuredInfo": "Estos proveedores pagan para aparecer primero. Cada cotización muestra su precio y tiempo de llegada reales."
     },
     "cityService": {
       "title": "{service} en {city}"
@@ -2782,14 +2917,42 @@
       "none": "Todavía no hay tarifas para esta ciudad."
     },
     "plans": {
-      "title": "Planes opcionales",
-      "pro": "Pro",
-      "proBody": "{discount} de descuento en cada tarifa, más herramientas para talleres con mucho trabajo.",
-      "featured": "Destacado",
-      "featuredBody": "Aparece primero en las cotizaciones y en las páginas de la ciudad, por ciudad.",
-      "price": "{range} al mes",
-      "priceIn": "{range} al mes en {city}",
-      "note": "Los planes son opcionales. Los precios exactos por ciudad se confirman antes del lanzamiento."
+      "title": "Planes",
+      "lead": "Todo proveedor tiene un plan: Básico para empezar, Pro cuando ganas más trabajos y Destacado para resaltar en una ciudad. Mensual, cancela cuando quieras.",
+      "cities": "Precios por ciudad",
+      "perMonth": "{price} al mes",
+      "perMarket": "{price} al mes por ciudad",
+      "who": {
+        "basic": "Proveedores nuevos o de medio tiempo.",
+        "pro": "Proveedores con 10 o más trabajos al mes.",
+        "featured": "Proveedores que quieren más visibilidad en una ciudad."
+      },
+      "feesFull": "Nuestra tarifa fija por trabajo ganado.",
+      "feesOff": "Las mismas tarifas con {pct}% de descuento.",
+      "feesSame": "Tus tarifas no cambian.",
+      "breakEven": "Pro se paga solo con unos {jobs} trabajos al mes (cuesta {gap} más que Básico).",
+      "proFees": "Ejemplo: una tarifa de {full} es {example} en Pro.",
+      "cta": "Empieza con Básico, {price} al mes",
+      "ctaOffer": "Empieza con Básico, primer mes {price}",
+      "faqTitle": "Preguntas sobre los planes",
+      "faq": {
+        "charged": {
+          "q": "¿Cuándo se me cobra?",
+          "a": "El plan, cada mes desde el día en que empiezas. La tarifa por trabajo, solo cuando el cliente te elige, desde tu billetera prepagada y antes de recibir su número."
+        },
+        "cancel": {
+          "q": "¿Y si el cliente cancela?",
+          "a": "Si el trabajo se cancela antes de empezar, la tarifa vuelve a tu billetera como crédito."
+        },
+        "featured": {
+          "q": "¿Qué significa Destacado para los clientes?",
+          "a": "Tu cotización aparece arriba con la etiqueta “Destacado” solo cuando está cerca del precio más bajo y de la llegada más rápida. Los clientes siempre ven tu cotización real y una nota de que pagas por aparecer primero."
+        },
+        "anytime": {
+          "q": "¿Puedo cancelar cuando quiera?",
+          "a": "Sí. Bajar de plan o cancelar se aplica al final del mes pagado. Las mejoras empiezan de inmediato y solo pagas la diferencia."
+        }
+      }
     },
     "requirements": {
       "title": "Requisitos",
@@ -3675,7 +3838,9 @@
       "years": "{count, plural, one {# año en el negocio} other {# años en el negocio}}",
       "trucks": "{count, plural, one {# grúa} other {# grúas}}",
       "distance": "a {miles} mi",
-      "selected": "Seleccionado para comparar"
+      "selected": "Seleccionado para comparar",
+      "featured": "Destacado",
+      "featuredInfo": "Este proveedor paga para aparecer primero. Los precios y tiempos de llegada son su cotización real."
     },
     "compare": {
       "add": "Comparar",
@@ -3858,7 +4023,8 @@
       "onboarding": "Configuración",
       "theme": "Modo día o noche",
       "signOut": "Cerrar sesión",
-      "myJobs": "Mis trabajos"
+      "myJobs": "Mis trabajos",
+      "plan": "Plan y facturación"
     },
     "shell": {
       "offline": "Estás sin conexión. Las solicitudes nuevas aparecerán cuando vuelvas a conectarte.",
@@ -4142,7 +4308,9 @@
           "bonus_reversal": "Crédito quitado",
           "bonus_refund": "Tarifa reembolsada como crédito"
         }
-      }
+      },
+      "plansMoved": "Los planes, Pro y Destacado están en su propia página, con los precios de tu mercado.",
+      "plansLink": "Abrir Plan y facturación"
     },
     "services": {
       "title": "Servicios y precios",
@@ -4248,7 +4416,9 @@
       "value": "Valor de trabajos ganados",
       "fees": "Cargos pagados",
       "week": "Semana del",
-      "demo": "Datos de demostración: las estadísticas son simuladas."
+      "demo": "Datos de demostración: las estadísticas son simuladas.",
+      "proHint": "Pro te habría ahorrado {amount} el mes pasado.",
+      "proHintLink": "Ver planes"
     },
     "notifications": {
       "title": "Notificaciones",
@@ -4347,6 +4517,66 @@
       "sent": "Marca enviada. Nuestro equipo la revisará.",
       "failed": "No pudimos enviar la marca. Inténtalo de nuevo.",
       "cancel": "Cancelar"
+    },
+    "plan": {
+      "title": "Plan y facturación",
+      "subtitle": "Precios para {market}",
+      "perMonth": "{price} al mes",
+      "checkoutSoon": "Elegir y cambiar planes aquí estará disponible pronto. Mientras tanto, nuestro equipo inicia tu plan: contacta a soporte.",
+      "done": {
+        "basic": "Estás en Básico.",
+        "pro": "Estás en Pro. El descuento se aplica a tu próximo trabajo.",
+        "cancelled": "Tu plan termina al final del mes pagado.",
+        "featured": "Eres Destacado en este mercado.",
+        "waitlist": "Estás en la lista de espera de Destacado. Lo iniciaremos cuando se libere un espacio."
+      },
+      "errors": {
+        "closed": "Los cambios de plan abrirán pronto. Contacta a soporte para cambiar tu plan.",
+        "forbidden": "Solo el dueño o un despachador puede cambiar el plan.",
+        "invalid": "No funcionó. Inténtalo de nuevo o contacta a soporte."
+      },
+      "current": {
+        "title": "Tu plan",
+        "none": "Sin plan",
+        "noPlanBody": "Necesitas un plan (Básico como mínimo) para recibir solicitudes. Puedes terminar primero el registro y la verificación.",
+        "renews": "Se renueva el {date}.",
+        "ends": "Termina el {date}; no se te volverá a cobrar.",
+        "downgrade": "Pasa a {plan} el {date}, al final del mes pagado.",
+        "nextPrice": "Nuevo precio {price} al mes desde el {date} (te enviamos el aviso por correo).",
+        "cancel": "Cancelar plan"
+      },
+      "month": {
+        "title": "Últimos 30 días",
+        "jobs": "Trabajos ganados",
+        "fees": "Tarifas pagadas",
+        "saved": "Ahorrado con Pro",
+        "breakEven": "Pro se paga solo con unos {jobs} trabajos al mes (según tus propios servicios).",
+        "wouldSave": "Ganaste {jobs} trabajos el mes pasado: Pro te habría ahorrado unos {amount} después del precio más alto del plan.",
+        "notYet": "Ganaste {jobs} trabajos el mes pasado: Básico sigue siendo mejor para ti."
+      },
+      "plans": {
+        "title": "Planes",
+        "yours": "Tu plan",
+        "offer": "Primer mes {price} (la oferta termina el {date})",
+        "start": "Empezar {plan}",
+        "upgrade": "Pasar a Pro ahora",
+        "switch": "Cambiar a {plan}",
+        "rules": "Las mejoras empiezan ya y solo pagas la diferencia del resto del mes. Bajar de plan o cancelar se aplica al final del mes pagado. No hay plan gratuito: todo proveedor está al menos en Básico."
+      },
+      "featured": {
+        "line": "{price} al mes · quedan {left} de {slots} espacios",
+        "active": "Destacado",
+        "waiting": "En lista de espera",
+        "join": "Ser Destacado",
+        "waitlist": "Unirme a la lista de espera",
+        "needPlan": "Destacado necesita un plan Básico o Pro.",
+        "disclosure": "Los clientes ven \"Destacado\" junto a tu cotización con esta nota: \"Este proveedor paga para aparecer primero. Los precios y tiempos de llegada son su cotización real.\" Tu cotización va arriba solo cuando está cerca de la más barata y la más rápida."
+      },
+      "fees": {
+        "title": "Tarifa por trabajo ganado",
+        "service": "Servicio",
+        "when": "Pagas la tarifa solo cuando el cliente te elige, desde tu billetera. Si el trabajo se cancela antes de empezar, vuelve como crédito."
+      }
     }
   },
   "voice": {

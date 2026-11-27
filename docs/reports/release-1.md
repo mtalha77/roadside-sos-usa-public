@@ -1,7 +1,40 @@
-# Release 1: Road Rescue SOS soft launch (v0.1.0)
+# Release 1: Road Rescue SOS soft launch (v0.1.0, v0.1.1)
 
 **Released 2026-11-23** by merging #212 (`staging` → `main`, merge commit `72e5f3e`) at 19:56 UTC,
 with the owner's approval to launch with the exceptions below. Tag: `v0.1.0`.
+
+## v0.1.1 (2026-11-24): rate limiting, Sentry gate
+
+**Released 2026-11-24** by merging #218 (`staging` → `main`, merge commit `94ec563`) at 15:49 UTC.
+This was an urgent fix outside the weekly train, because the owner did not waive rate limiting.
+Tag: `v0.1.1`.
+
+| #   | Check                              | Result              | Evidence                                                                                                                                                                                |
+| --- | ---------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | CI green on `staging`              | PASS                | Every required check on `d5c1139` (#217), including `db` (pgTAP 040, 041) and e2e; `release-qa` green on #218.                                                                          |
+| 2   | Staging smoke                      | PASS                | Staging smoke green on `d5c1139`; staging web reports rate limiting `real` on `postgres`.                                                                                               |
+| 3   | Security                           | PASS                | Supabase advisors: no ERROR on staging or production. **Rate limiting now active** (Postgres) on every public endpoint that creates a request, sends email or texts, or accepts a form. |
+| 4   | Demo mode impossible in production | PASS                | All three apps report `demoMode: false`.                                                                                                                                                |
+| 5   | Production database                | PASS                | `db-deploy` applied `20261123000000_rate_limit_sweep` and `20261123010000_sentry_gate` to `rsos-prod`; database tests PASS; auth settings re-applied.                                   |
+| 6   | Production keys                    | Accepted exceptions | Twilio and Sentry as accepted above; Turnstile on provider and admin still to add.                                                                                                      |
+| 7   | Monitoring                         | PASS with exception | Uptime workflow green. Sentry off (accepted for the soft launch; paid ads blocked until it is live: all ad platforms are off in production and cannot be switched on).                  |
+| 8   | Rollback plan                      | Ready               | v0.1.0 production deployments: web `dpl_D6mWenpz1HwQcAB7iM8ewAU2SkYA`, provider `dpl_2oRyXPtoQjTz19oQaQADAQNqFkfB`, admin `dpl_G9ZFGuM33nJgcUL4d5Ahjp8o2bA7`. Migrations are additive.  |
+
+After the deploy:
+
+- roadrescuesos.com, `pro.` and `admin.` all report commit `94ec563` in `production`, with the
+  database ok, rate limiting `real` (backend `postgres`) and Sentry `missing` (accepted).
+- Each health check counts a probe hit in `rsos-prod`, and the nightly sweep is scheduled.
+- No console errors on the home page, Get Help and both sign-in pages.
+- 15-minute watch (15:50 to 16:06 UTC): 245 requests to the main pages and health endpoints, all
+  2xx or 3xx. The new deployments logged info entries only.
+- One error came from the outgoing v0.1.0 deployment at 15:49:01, on `/opengraph-image`:
+  `MISSING_MESSAGE: home.headline`. It is an older bug in both builds: the home page's social share
+  image showed the raw key. Fixed with this report (`home.hero.headline`); it ships in the next
+  release.
+
+New production deployments: web `dpl_D1fzWLu3NKa83Xfq5Gw3o7e2eU8n`, provider
+`dpl_4JnEoz3FKee1xE1KiLEXRLcFMx2y`, admin `dpl_G6nNNd2sVb1uXq3jd6zCiJeR6w8P`.
 
 ## Release QA (RSOS-036), 2026-11-23
 

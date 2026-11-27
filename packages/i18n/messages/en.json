@@ -44,7 +44,8 @@
       "economics": "Economics model",
       "status": "System status",
       "credits": "Wallet credits",
-      "services": "Services"
+      "services": "Services",
+      "plans": "Plans & pricing"
     },
     "shell": {
       "nav": "Admin",
@@ -323,7 +324,11 @@
       "responseRate": "Response rate",
       "medianQuote": "Median quote time",
       "bookingRate": "Booking rate",
-      "seconds": "{s} s"
+      "seconds": "{s} s",
+      "pagination": "Pages",
+      "pageOf": "Showing {from}–{to} of {total}",
+      "prevPage": "Previous page",
+      "nextPage": "Next page"
     },
     "recruitment": {
       "title": "Recruitment",
@@ -2025,6 +2030,127 @@
       "resolutionLabel": "What did you do? (optional)",
       "resolve": "Resolve",
       "inbox": "{count, plural, one {# flag} other {# flags}}"
+    },
+    "plans": {
+      "title": "Plans & pricing",
+      "lead": "Provider plans (Basic, Pro) and Featured placement: what each includes, what it costs per market, and who is on it. Job fees per service are in",
+      "feesLink": "Pricing → Fees per job.",
+      "viewOnly": "You can view plans. The owner and the Operations manager change them.",
+      "save": "Save",
+      "market": "Market",
+      "showMarket": "Show market",
+      "provider": "Provider",
+      "allMarkets": "All markets (default)",
+      "done": {
+        "catalog": "Plan saved.",
+        "price": "New price set. Affected subscribers were emailed the notice.",
+        "featured": "Featured settings saved.",
+        "offer": "Offer saved.",
+        "assigned": "Plan started.",
+        "cancelled": "The plan ends at the end of the paid month."
+      },
+      "errors": {
+        "forbidden": "You can't change this. The owner and the Operations manager do.",
+        "minimum": "Basic costs at least 20 USD a month: there is no free plan.",
+        "invalid": "Check the form: something is missing or out of range."
+      },
+      "summary": {
+        "title": "At a glance",
+        "mrr": "Monthly recurring revenue",
+        "basic": "On Basic",
+        "pro": "On Pro",
+        "featured": "Featured slots sold",
+        "upgrades": "Basic → Pro (30 days)",
+        "churn": "Plans ended (30 days)",
+        "note": "Featured picks and the customer pick rate of Featured quotes appear here once the quote engine (batch 5) sends real offers. Billing is simulated until Stripe is connected (batch 6)."
+      },
+      "catalog": {
+        "title": "Plan catalog",
+        "priceNow": "Default price today: {price} a month",
+        "shown": "Shown",
+        "hidden": "Hidden",
+        "name": "Name",
+        "discount": "Job fee discount (%)",
+        "firstLook": "First look (seconds before others)",
+        "techLimit": "Technician limit",
+        "unlimited": "Unlimited",
+        "insights": "Insights",
+        "insightsBasic": "Basic",
+        "insightsFull": "Full",
+        "autoTopup": "Auto top-up allowed",
+        "active": "Shown to providers",
+        "order": "Display order",
+        "bulletsEn": "What providers see (English, one per line)",
+        "bulletsEs": "What providers see (Spanish, one per line)"
+      },
+      "prices": {
+        "title": "Prices per market",
+        "note": "A market without its own price uses the default. New subscribers pay a new price from its start date; existing subscribers move on their first billing date after the notice, or keep their price.",
+        "scheduled": "Scheduled changes",
+        "scheduledRow": "{plan} in {market}: {price} from {date}",
+        "grandfathered": "kept old price",
+        "changeTitle": "Change a price",
+        "plan": "Plan",
+        "newPrice": "New monthly price (USD)",
+        "from": "Starts on",
+        "existing": "Existing subscribers",
+        "existingNext": "Move to the new price at their next billing date after the notice",
+        "existingKeep": "Keep their current price (grandfather)",
+        "notice": "Notice (days)",
+        "preview": "Preview who is affected",
+        "previewTitle": "Preview",
+        "previewLead": "{count, plural, =0 {No current subscriber is affected.} one {# current subscriber is affected.} other {# current subscribers are affected.}} New subscribers pay {price} from {date}.",
+        "pays": "Pays now",
+        "willPay": "Will pay",
+        "appliesFrom": "From",
+        "emailTitle": "Notice email",
+        "emailBody": "Each affected provider's owners get an email at least {days} days before their new price starts, with the old and new price and the date.",
+        "confirm": "Confirm the new price",
+        "more": "And {count, plural, one {# more subscriber} other {# more subscribers}}."
+      },
+      "featured": {
+        "title": "Featured placement per market",
+        "note": "Limited slots keep the list fair. A Featured quote goes to the top only when it is within the price and arrival rules; otherwise it stays in its normal place, always labelled.",
+        "fill": "{taken} of {slots} slots",
+        "waitlist": "{count, plural, one {# provider on the waitlist} other {# providers on the waitlist}}",
+        "slots": "Slots",
+        "pct": "Price rule: within % of the cheapest",
+        "eta": "Arrival rule: within minutes of the fastest",
+        "service": "Sell slots per service"
+      },
+      "offers": {
+        "title": "First-month offers",
+        "note": "Optional, for early recruitment: the first month of a plan at a lower price in one market until the end date. Off by default.",
+        "row": "{market} · {plan}",
+        "price": "First month (USD)",
+        "ends": "Offer ends",
+        "active": "On"
+      },
+      "assign": {
+        "title": "Start a plan for a provider",
+        "note": "No plan, no requests. While provider checkout is off, start a plan here for an approved provider (billing is simulated).",
+        "button": "Start plan",
+        "none": "Every active provider in these markets has a plan."
+      },
+      "subscribers": {
+        "title": "Subscribers",
+        "none": "No subscribers in these markets yet.",
+        "plan": "Plan",
+        "since": "Since",
+        "paid": "Price paid",
+        "status": "Status",
+        "actions": "Actions",
+        "active": "Active",
+        "waitlist": "Waitlist",
+        "ends": "Ends {date}",
+        "downgrade": "Moves to Basic on {date}",
+        "nextPrice": "{price} from {date}",
+        "cancel": "Cancel at period end",
+        "pages": "Subscriber pages",
+        "pageOf": "Showing {from}–{to} of {total}",
+        "prev": "Previous page",
+        "next": "Next page"
+      }
     }
   },
   "emails": {
@@ -2136,6 +2262,12 @@
       "unusualCost": "{market}: cost per completed job above {max}",
       "unusualSync": "Sync failing: {job}",
       "nothingUnusual": "Nothing unusual."
+    },
+    "planPriceNotice": {
+      "subject": "Your {brand} {plan} plan price is changing",
+      "intro": "Hello {company},",
+      "body": "Your {plan} plan changes from {oldPrice} to {newPrice} a month on {date}, your first billing date after this notice. Nothing changes before then.",
+      "note": "You can change or cancel your plan anytime in the provider portal under Plan & billing; a cancellation takes effect at the end of the paid month."
     }
   },
   "auth": {
@@ -2440,7 +2572,10 @@
       "faqTitle": "{city} questions",
       "nearbyTitle": "Other cities we serve",
       "serviceIn": "{service} in {city}",
-      "heroHeadline": "Stuck on the road in {city}? Help is on the way."
+      "heroHeadline": "Stuck on the road in {city}? Help is on the way.",
+      "featuredTitle": "Featured providers in {city}",
+      "featured": "Featured",
+      "featuredInfo": "These providers pay to be shown first. Every quote you get shows its real price and arrival time."
     },
     "cityService": {
       "title": "{service} in {city}"
@@ -2785,14 +2920,42 @@
       "none": "Fees are not set for this city yet."
     },
     "plans": {
-      "title": "Optional plans",
-      "pro": "Pro",
-      "proBody": "{discount} off every fee, plus tools for busy shops.",
-      "featured": "Featured",
-      "featuredBody": "Placement at the top of quotes and city pages, per city.",
-      "price": "{range} a month",
-      "priceIn": "{range} a month in {city}",
-      "note": "Plans are optional. Exact prices per city are confirmed before launch."
+      "title": "Plans",
+      "lead": "Every provider is on a plan: Basic to start, Pro when you win more jobs, and Featured to stand out in one city. Monthly, cancel anytime.",
+      "cities": "Prices by city",
+      "perMonth": "{price} a month",
+      "perMarket": "{price} a month per city",
+      "who": {
+        "basic": "New or part-time providers.",
+        "pro": "Busy providers who win 10 or more jobs a month.",
+        "featured": "Providers who want more visibility in one city."
+      },
+      "feesFull": "Our flat fee per job you win.",
+      "feesOff": "The same fees, {pct}% off.",
+      "feesSame": "No change to your fees.",
+      "breakEven": "Pro pays for itself at about {jobs} jobs a month (it costs {gap} more than Basic).",
+      "proFees": "Example: a {full} fee is {example} on Pro.",
+      "cta": "Start with Basic, {price} a month",
+      "ctaOffer": "Start with Basic, first month {price}",
+      "faqTitle": "Questions about plans",
+      "faq": {
+        "charged": {
+          "q": "When am I charged?",
+          "a": "The plan monthly, from the day you start. The fee per job only when the customer picks you, from your prepaid wallet, before you get their number."
+        },
+        "cancel": {
+          "q": "What if the customer cancels?",
+          "a": "If the job is cancelled before you start, the fee comes back to your wallet as credit."
+        },
+        "featured": {
+          "q": "What does Featured mean for customers?",
+          "a": "Your quote shows at the top with a “Featured” label only when it is close to the cheapest price and the fastest arrival. Customers always see your real quote and a note that you pay to be shown first."
+        },
+        "anytime": {
+          "q": "Can I cancel anytime?",
+          "a": "Yes. Switching down or cancelling takes effect at the end of the paid month. Upgrades start right away and you pay only the difference."
+        }
+      }
     },
     "requirements": {
       "title": "Requirements",
@@ -3675,7 +3838,9 @@
       "years": "{count, plural, one {# year in business} other {# years in business}}",
       "trucks": "{count, plural, one {# truck} other {# trucks}}",
       "distance": "{miles} mi away",
-      "selected": "Selected to compare"
+      "selected": "Selected to compare",
+      "featured": "Featured",
+      "featuredInfo": "This provider pays to be shown first. Prices and arrival times are their real quote."
     },
     "compare": {
       "add": "Compare",
@@ -3858,7 +4023,8 @@
       "onboarding": "Setup",
       "theme": "Day or night mode",
       "signOut": "Sign out",
-      "myJobs": "My jobs"
+      "myJobs": "My jobs",
+      "plan": "Plan & billing"
     },
     "shell": {
       "offline": "You're offline. New requests will appear when you're back online.",
@@ -4142,7 +4308,9 @@
           "bonus_reversal": "Bonus credit removed",
           "bonus_refund": "Fee refunded as bonus credit"
         }
-      }
+      },
+      "plansMoved": "Plans, Pro and Featured are on their own page, with prices for your market.",
+      "plansLink": "Open Plan & billing"
     },
     "services": {
       "title": "Services and prices",
@@ -4248,7 +4416,9 @@
       "value": "Job value won",
       "fees": "Fees paid",
       "week": "Week of",
-      "demo": "Demo data: insights are simulated."
+      "demo": "Demo data: insights are simulated.",
+      "proHint": "Pro would have saved you {amount} last month.",
+      "proHintLink": "See plans"
     },
     "notifications": {
       "title": "Notifications",
@@ -4347,6 +4517,66 @@
       "sent": "Flag sent. Our team will review it.",
       "failed": "We could not send the flag. Try again.",
       "cancel": "Cancel"
+    },
+    "plan": {
+      "title": "Plan & billing",
+      "subtitle": "Prices for {market}",
+      "perMonth": "{price} a month",
+      "checkoutSoon": "Choosing and changing plans here opens soon. Until then our team starts your plan for you: contact support.",
+      "done": {
+        "basic": "You're on Basic.",
+        "pro": "You're on Pro. The discount applies to your next job.",
+        "cancelled": "Your plan ends at the end of the paid month.",
+        "featured": "You're Featured in this market.",
+        "waitlist": "You're on the Featured waitlist. We'll start it when a slot frees up."
+      },
+      "errors": {
+        "closed": "Plan changes open soon. Contact support to change your plan.",
+        "forbidden": "Only the owner or a dispatcher can change the plan.",
+        "invalid": "That didn't work. Try again or contact support."
+      },
+      "current": {
+        "title": "Your plan",
+        "none": "No plan",
+        "noPlanBody": "You need a plan (Basic at minimum) to receive requests. You can finish onboarding and verification first.",
+        "renews": "Renews on {date}.",
+        "ends": "Ends on {date}; you won't be charged again.",
+        "downgrade": "Moves to {plan} on {date}, at the end of the paid month.",
+        "nextPrice": "New price {price} a month from {date} (we emailed you the notice).",
+        "cancel": "Cancel plan"
+      },
+      "month": {
+        "title": "Last 30 days",
+        "jobs": "Jobs won",
+        "fees": "Job fees paid",
+        "saved": "Saved with Pro",
+        "breakEven": "Pro pays for itself at about {jobs} jobs a month (from your own service mix).",
+        "wouldSave": "You won {jobs} jobs last month: Pro would have saved you about {amount} after the higher plan price.",
+        "notYet": "You won {jobs} jobs last month: Basic is still the better deal for you."
+      },
+      "plans": {
+        "title": "Plans",
+        "yours": "Your plan",
+        "offer": "First month {price} (offer ends {date})",
+        "start": "Start {plan}",
+        "upgrade": "Upgrade to Pro now",
+        "switch": "Switch to {plan}",
+        "rules": "Upgrades start now and you pay only the difference for the rest of the month. Switching down or cancelling takes effect at the end of the paid month. No free plan: every provider is on Basic at minimum."
+      },
+      "featured": {
+        "line": "{price} a month · {left} of {slots} slots left",
+        "active": "Featured",
+        "waiting": "On the waitlist",
+        "join": "Get Featured",
+        "waitlist": "Join waitlist",
+        "needPlan": "Featured needs a Basic or Pro plan.",
+        "disclosure": "Customers see \"Featured\" next to your quote with this note: \"This provider pays to be shown first. Prices and arrival times are their real quote.\" Your quote goes to the top only when it is close to the cheapest and fastest."
+      },
+      "fees": {
+        "title": "Fee per job you win",
+        "service": "Service",
+        "when": "You pay the fee only when the customer picks you, from your wallet. If the job is cancelled before you start, it comes back as wallet credit."
+      }
     }
   },
   "voice": {

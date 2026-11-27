@@ -15,12 +15,13 @@ import { SitePage } from "@/components/site/site-page";
 import { cityLabel, marketPath, nearestMarkets } from "@/lib/market";
 import { orderTiles } from "@/lib/tiles";
 import {
+  getBookingSpeed,
+  getFeaturedProviders,
   getMarketByPath,
   getMarketPage,
   getMarkets,
   getMarketServices,
   getMarketStats,
-  getBookingSpeed,
 } from "@/lib/site-data";
 
 export const dynamic = "force-dynamic";
@@ -59,7 +60,10 @@ export default async function CityPage({ params }: Params) {
   const data = await load(params);
   if (!data) notFound();
   const { market, page, services, stats, markets, bookMinutes } = data;
-  const t = await getTranslations("site");
+  const [t, featured] = await Promise.all([
+    getTranslations("site"),
+    getFeaturedProviders(market.slug),
+  ]);
   const vars = { city: market.name, state: market.state_code };
   const path = marketPath(market);
   const enabled = services.filter((s) => s.enabled);
@@ -93,6 +97,27 @@ export default async function CityPage({ params }: Params) {
           </section>
         ) : null}
         <PriceList services={services} city={market.name} hrefFor={(s) => `${path}/${s}`} />
+        {featured.length ? (
+          <section aria-labelledby="city-featured" className="flex flex-col gap-3">
+            <h2 id="city-featured" className="text-2xl font-semibold">
+              {t("city.featuredTitle", vars)}
+            </h2>
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map((f) => (
+                <li
+                  key={f.provider_id}
+                  className="flex items-center justify-between gap-3 rounded-2xl border bg-card p-4"
+                >
+                  <span className="font-medium">{f.name}</span>
+                  <span className="rounded-full bg-warning-subtle px-2.5 py-0.5 text-sm font-semibold text-warning-strong">
+                    {t("city.featured")}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-muted-foreground">{t("city.featuredInfo")}</p>
+          </section>
+        ) : null}
         {page ? (
           <div className="grid gap-10 md:grid-cols-2">
             <section aria-labelledby="city-areas">

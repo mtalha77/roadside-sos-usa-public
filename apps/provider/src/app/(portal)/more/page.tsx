@@ -17,6 +17,7 @@ export default async function MorePage() {
   ]);
   const items = (
     [
+      ["/plan", t("plan")],
       ["/services", t("services")],
       ["/team", t("team")],
       ["/insights", t("insights")],

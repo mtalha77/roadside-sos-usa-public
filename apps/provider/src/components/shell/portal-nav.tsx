@@ -2,6 +2,7 @@
 
 import { ProviderLogo, type ProviderLogoData } from "@rsos/ui/provider-logo";
 import {
+  BadgeCheck,
   Bell,
   Briefcase,
   Home,
@@ -28,6 +29,7 @@ export type NavLabels = Record<
   | "home"
   | "jobs"
   | "wallet"
+  | "plan"
   | "profile"
   | "more"
   | "services"
@@ -108,6 +110,7 @@ export function PortalNav({
   ].filter((t) => allowed(t.href));
   const side = [
     ...tabs.filter((t) => t.href !== "/more"),
+    { href: "/plan", label: labels.plan, icon: BadgeCheck },
     { href: "/services", label: labels.services, icon: Tag },
     { href: "/team", label: labels.team, icon: Users },
     { href: "/insights", label: labels.insights, icon: LineChart },
