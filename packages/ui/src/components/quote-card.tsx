@@ -13,6 +13,8 @@ export type Quote = {
   priceCents: number;
   etaMinutes: number;
   tag?: "fastest" | "best-price" | "top-rated" | null;
+  /** The provider pays for Featured placement (RSOS-114): always labelled, with the disclosure. */
+  featured?: boolean;
   /** Distance from the driver, in miles. */
   distanceMiles?: number | null;
 };
@@ -31,6 +33,8 @@ export type QuoteCardLabels = ProviderBadgeLabels & {
   trucks: (count: number) => string;
   distance: (miles: number) => string;
   selected: string;
+  featured: string;
+  featuredInfo: string;
 };
 
 export type QuoteCardProps = {
@@ -59,6 +63,9 @@ const defaults: QuoteCardLabels = {
   trucks: (c) => `${c} trucks`,
   distance: (m) => `${m.toFixed(1)} mi away`,
   selected: "Selected",
+  featured: "Featured",
+  featuredInfo:
+    "This provider pays to be shown first. Prices and arrival times are their real quote.",
 };
 
 /**
@@ -179,6 +186,14 @@ export function QuoteCard({
               </li>
             ))}
           </ul>
+        ) : null}
+        {quote.featured ? (
+          <p className="flex flex-col gap-1 text-sm">
+            <span className="self-start rounded-full bg-warning-subtle px-2.5 py-0.5 font-semibold text-warning-strong">
+              {labels.featured}
+            </span>
+            <span className="text-muted-foreground">{labels.featuredInfo}</span>
+          </p>
         ) : null}
         {tag || quote.distanceMiles ? (
           <div className="flex items-center justify-between gap-3 text-sm">

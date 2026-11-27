@@ -1,10 +1,10 @@
-import { demoPlans, topUpPresets } from "@rsos/config/demo-fixtures";
+import { topUpPresets } from "@rsos/config/demo-fixtures";
 import { formatCurrency, type Locale } from "@rsos/i18n";
 import { Alert } from "@rsos/ui/alert";
 import { Badge } from "@rsos/ui/badge";
 import { Button } from "@rsos/ui/button";
 import { EmptyState } from "@rsos/ui/empty-state";
-import { Check, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { WalletActions } from "@/components/wallet/wallet-actions";
@@ -215,45 +215,17 @@ export default async function WalletPage({
         ) : null}
         <p className="text-sm text-muted-foreground">{t("disputeHint")}</p>
       </section>
-      <section aria-labelledby="plans-h" className="flex flex-col gap-3">
+      <section aria-labelledby="plans-h" className={card}>
         <h2 id="plans-h" className="text-lg font-semibold">
           {t("plans")}
         </h2>
-        <div className="grid gap-3 md:grid-cols-3">
-          {demoPlans.map((p) => (
-            <div key={p.id} className={card}>
-              <h3 className="text-lg font-semibold">{t(`plan.${p.id}`)}</h3>
-              <p className="text-2xl font-semibold tabular-nums">
-                {p.monthlyCents ? t("perMonth", { price: money(p.monthlyCents) }) : t("free")}
-              </p>
-              <ul className="mt-3 flex flex-col gap-2 text-sm">
-                <li className="flex gap-2">
-                  <Check aria-hidden="true" className="size-4 shrink-0 text-success" />
-                  {p.feeDiscountPct ? t("discount", { pct: p.feeDiscountPct }) : t("standardFee")}
-                </li>
-                {p.priority ? (
-                  <li className="flex gap-2">
-                    <Check aria-hidden="true" className="size-4 shrink-0 text-success" />
-                    {t("priority")}
-                  </li>
-                ) : null}
-                {p.featured ? (
-                  <li className="flex gap-2">
-                    <Check aria-hidden="true" className="size-4 shrink-0 text-success" />
-                    {t("featured")}
-                  </li>
-                ) : null}
-              </ul>
-              {p.id === "basic" ? (
-                <p className="mt-3 text-sm font-medium">{t("current")}</p>
-              ) : (
-                <Button variant="outline" className="mt-3 w-full" disabled>
-                  {t("soon")}
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
+        <p className="mb-3 text-sm text-muted-foreground">{t("plansMoved")}</p>
+        <Link
+          href="/plan"
+          className="inline-flex min-h-touch items-center font-medium underline underline-offset-4"
+        >
+          {t("plansLink")}
+        </Link>
       </section>
     </main>
   );

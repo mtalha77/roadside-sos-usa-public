@@ -14,6 +14,9 @@ describe("feature flags", () => {
         NEXT_PUBLIC_FEATURES: "other, providerMarketplace",
       }),
     ).toBe(true);
-    expect(featuresOff({ NEXT_PUBLIC_SITE_ENV: "production" })).toEqual(["providerMarketplace"]);
+    expect(featuresOff({ NEXT_PUBLIC_SITE_ENV: "production" })).toEqual([
+      "planCheckout",
+      "providerMarketplace",
+    ]);
   });
 });

@@ -1135,6 +1135,44 @@ export type Database = {
         }
         Relationships: []
       }
+      featured_settings: {
+        Row: {
+          eta_rule_minutes: number
+          market_id: string
+          price_rule_pct: number
+          service_slots: boolean
+          slots: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          eta_rule_minutes?: number
+          market_id: string
+          price_rule_pct?: number
+          service_slots?: boolean
+          slots?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          eta_rule_minutes?: number
+          market_id?: string
+          price_rule_pct?: number
+          service_slots?: boolean
+          slots?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "featured_settings_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: true
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       funnel_events: {
         Row: {
           is_test: boolean
@@ -1497,6 +1535,144 @@ export type Database = {
         }
         Relationships: []
       }
+      plan_catalog: {
+        Row: {
+          active: boolean
+          auto_topup: boolean
+          bullets: Json
+          fee_discount_bps: number
+          first_look_seconds: number
+          insights_level: string
+          name: string
+          plan: string
+          sort_order: number
+          technician_limit: number | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          active?: boolean
+          auto_topup?: boolean
+          bullets?: Json
+          fee_discount_bps?: number
+          first_look_seconds?: number
+          insights_level?: string
+          name: string
+          plan: string
+          sort_order?: number
+          technician_limit?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          active?: boolean
+          auto_topup?: boolean
+          bullets?: Json
+          fee_discount_bps?: number
+          first_look_seconds?: number
+          insights_level?: string
+          name?: string
+          plan?: string
+          sort_order?: number
+          technician_limit?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      plan_offers: {
+        Row: {
+          active: boolean
+          ends_at: string
+          first_month_cents: number
+          market_id: string
+          plan: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          ends_at: string
+          first_month_cents: number
+          market_id: string
+          plan: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          ends_at?: string
+          first_month_cents?: number
+          market_id?: string
+          plan?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_offers_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plan_offers_plan_fkey"
+            columns: ["plan"]
+            isOneToOne: false
+            referencedRelation: "plan_catalog"
+            referencedColumns: ["plan"]
+          },
+        ]
+      }
+      plan_prices: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          effective_from: string
+          grandfather: boolean
+          id: number
+          market_id: string | null
+          notice_days: number
+          plan: string
+          price_cents: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          effective_from: string
+          grandfather?: boolean
+          id?: never
+          market_id?: string | null
+          notice_days?: number
+          plan: string
+          price_cents: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string
+          grandfather?: boolean
+          id?: never
+          market_id?: string | null
+          notice_days?: number
+          plan?: string
+          price_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_prices_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plan_prices_plan_fkey"
+            columns: ["plan"]
+            isOneToOne: false
+            referencedRelation: "plan_catalog"
+            referencedColumns: ["plan"]
+          },
+        ]
+      }
       platform_checks: {
         Row: {
           checked_at: string
@@ -1769,6 +1945,105 @@ export type Database = {
           },
           {
             foreignKeyName: "provider_service_prices_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          created_at: string
+          current_period_end: string
+          current_period_start: string
+          ended_at: string | null
+          grandfathered: boolean
+          id: string
+          market_id: string
+          next_plan: string | null
+          next_price_cents: number | null
+          next_price_from: string | null
+          plan: string
+          price_cents: number
+          provider_id: string
+          service_id: string | null
+          started_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          grandfathered?: boolean
+          id?: string
+          market_id: string
+          next_plan?: string | null
+          next_price_cents?: number | null
+          next_price_from?: string | null
+          plan: string
+          price_cents: number
+          provider_id: string
+          service_id?: string | null
+          started_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          grandfathered?: boolean
+          id?: string
+          market_id?: string
+          next_plan?: string | null
+          next_price_cents?: number | null
+          next_price_from?: string | null
+          plan?: string
+          price_cents?: number
+          provider_id?: string
+          service_id?: string | null
+          started_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_subscriptions_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_subscriptions_next_plan_fkey"
+            columns: ["next_plan"]
+            isOneToOne: false
+            referencedRelation: "plan_catalog"
+            referencedColumns: ["plan"]
+          },
+          {
+            foreignKeyName: "provider_subscriptions_plan_fkey"
+            columns: ["plan"]
+            isOneToOne: false
+            referencedRelation: "plan_catalog"
+            referencedColumns: ["plan"]
+          },
+          {
+            foreignKeyName: "provider_subscriptions_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_subscriptions_service_id_fkey"
             columns: ["service_id"]
             isOneToOne: false
             referencedRelation: "services"
@@ -2650,6 +2925,57 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_charges: {
+        Row: {
+          adapter: string
+          amount_cents: number
+          created_at: string
+          id: number
+          kind: string
+          period_end: string
+          period_start: string
+          provider_id: string
+          subscription_id: string
+        }
+        Insert: {
+          adapter?: string
+          amount_cents: number
+          created_at?: string
+          id?: never
+          kind: string
+          period_end: string
+          period_start: string
+          provider_id: string
+          subscription_id: string
+        }
+        Update: {
+          adapter?: string
+          amount_cents?: number
+          created_at?: string
+          id?: never
+          kind?: string
+          period_end?: string
+          period_start?: string
+          provider_id?: string
+          subscription_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_charges_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscription_charges_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "provider_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sync_runs: {
         Row: {
           details: Json
@@ -3017,6 +3343,8 @@ export type Database = {
           status: Database["public"]["Enums"]["request_status"]
         }[]
       }
+      can_manage_plan: { Args: { p_provider_id: string }; Returns: boolean }
+      cancel_plan: { Args: { p_subscription_id: string }; Returns: undefined }
       cancel_request_by_token: {
         Args: { p_reason: string; p_token: string }
         Returns: boolean
@@ -3044,6 +3372,20 @@ export type Database = {
           p_status: Database["public"]["Enums"]["request_status"]
         }
         Returns: undefined
+      }
+      featured_rules: {
+        Args: { p_market_slug: string }
+        Returns: {
+          eta_rule_minutes: number
+          price_rule_pct: number
+        }[]
+      }
+      featured_providers: {
+        Args: { p_market_slug: string }
+        Returns: {
+          name: string
+          provider_id: string
+        }[]
       }
       find_recent_request: { Args: { p_phone: string }; Returns: string }
       forget_trusted_device: { Args: { p_id: string }; Returns: undefined }
@@ -3131,6 +3473,14 @@ export type Database = {
         }[]
       }
       issue_email_code: { Args: never; Returns: string }
+      join_featured: {
+        Args: {
+          p_market_id: string
+          p_provider_id: string
+          p_service_id?: string
+        }
+        Returns: string
+      }
       join_waitlist: { Args: { p: Json }; Returns: undefined }
       jwt_provider_role: {
         Args: { p_provider_id: string }
@@ -3263,6 +3613,15 @@ export type Database = {
           visits: number
         }[]
       }
+      my_markets: {
+        Args: never
+        Returns: {
+          market_id: string
+          name: string
+          provider_id: string
+          slug: string
+        }[]
+      }
       my_provider_status: {
         Args: never
         Returns: {
@@ -3302,9 +3661,19 @@ export type Database = {
           in_radius: boolean
           last_response_sec: number
           name: string
+          offer_delay_sec: number
+          plan: string
           price_cents: number
           provider_id: string
         }[]
+      }
+      offer_delay_seconds: {
+        Args: {
+          p_any_pro_in_range: boolean
+          p_instant_above_limit?: boolean
+          p_provider_id: string
+        }
+        Returns: number
       }
       on_duty_dispatchers: {
         Args: { p_at?: string }
@@ -3314,7 +3683,56 @@ export type Database = {
           user_id: string
         }[]
       }
+      plan_price: {
+        Args: { p_at?: string; p_market_id: string; p_plan: string }
+        Returns: number
+      }
+      plan_subscribers: {
+        Args: never
+        Returns: {
+          cancel_at_period_end: boolean
+          current_period_end: string
+          grandfathered: boolean
+          market_id: string
+          market_name: string
+          next_plan: string
+          next_price_cents: number
+          next_price_from: string
+          plan: string
+          price_cents: number
+          provider_id: string
+          provider_name: string
+          service_id: string
+          started_at: string
+          status: string
+          subscription_id: string
+        }[]
+      }
       platform_check_ok: { Args: { p_key: string }; Returns: boolean }
+      provider_fee_discount_bps: {
+        Args: { p_provider_id: string }
+        Returns: number
+      }
+      provider_plan: { Args: { p_provider_id: string }; Returns: string }
+      public_plan_catalog: {
+        Args: { p_market_slug?: string }
+        Returns: {
+          auto_topup: boolean
+          bullets: Json
+          featured_slots: number
+          featured_taken: number
+          fee_discount_bps: number
+          first_look_seconds: number
+          insights_level: string
+          name: string
+          offer_cents: number
+          offer_ends_at: string
+          plan: string
+          price_cents: number
+          sort_order: number
+          technician_limit: number
+        }[]
+      }
       rate_limit_hit: {
         Args: { p_key: string; p_window_seconds: number }
         Returns: number
@@ -3368,6 +3786,7 @@ export type Database = {
         }[]
       }
       revoke_my_session: { Args: { p_session_id: string }; Returns: boolean }
+      run_plan_renewals: { Args: { p_now?: string }; Returns: number }
       save_request_draft: {
         Args: { p_patch: Json; p_token: string }
         Returns: string
@@ -3379,6 +3798,16 @@ export type Database = {
           second_step_passed: boolean
         }[]
       }
+      set_featured_settings: {
+        Args: {
+          p_eta_rule_minutes: number
+          p_market_id: string
+          p_price_rule_pct: number
+          p_service_slots: boolean
+          p_slots: number
+        }
+        Returns: undefined
+      }
       set_market_status: {
         Args: {
           p_market_id: string
@@ -3386,6 +3815,51 @@ export type Database = {
           p_status: Database["public"]["Enums"]["market_status"]
         }
         Returns: undefined
+      }
+      set_plan_catalog: {
+        Args: {
+          p_active: boolean
+          p_auto_topup: boolean
+          p_bullets: Json
+          p_fee_discount_bps: number
+          p_first_look_seconds: number
+          p_insights_level: string
+          p_name: string
+          p_plan: string
+          p_sort_order: number
+          p_technician_limit: number
+        }
+        Returns: undefined
+      }
+      set_plan_offer: {
+        Args: {
+          p_active: boolean
+          p_ends_at: string
+          p_first_month_cents: number
+          p_market_id: string
+          p_plan: string
+        }
+        Returns: undefined
+      }
+      set_plan_price: {
+        Args: {
+          p_dry_run?: boolean
+          p_effective_from: string
+          p_grandfather: boolean
+          p_market_id: string
+          p_notice_days?: number
+          p_plan: string
+          p_price_cents: number
+        }
+        Returns: {
+          applies_from: string
+          current_cents: number
+          grandfathered: boolean
+          new_cents: number
+          provider_id: string
+          provider_name: string
+          subscription_id: string
+        }[]
       }
       set_second_step_method: {
         Args: { p_method: Database["public"]["Enums"]["second_step_method"] }
@@ -3410,6 +3884,10 @@ export type Database = {
       staff_can_access_market: {
         Args: { p_market_id: string }
         Returns: boolean
+      }
+      start_plan: {
+        Args: { p_market_id?: string; p_plan: string; p_provider_id: string }
+        Returns: string
       }
       submit_contact_message: { Args: { p: Json }; Returns: string }
       submit_location: {

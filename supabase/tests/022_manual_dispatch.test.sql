@@ -25,6 +25,10 @@ values ('00000000-0000-4000-8000-0000000004b1', 'Test Tow Partner', 'active', ar
         '+12105550140', extensions.st_point(-95.37, 29.76)::extensions.geography, 25);
 insert into public.provider_service_prices (provider_id, market_id, service_id, price_cents) values
   ('00000000-0000-4000-8000-0000000004b1', (select id from public.markets where slug = 'houston'), (select id from public.services where slug = 'tow'), 12500);
+-- RSOS-114: only providers on a plan receive requests.
+insert into public.provider_subscriptions (provider_id, plan, market_id, price_cents)
+values ('00000000-0000-4000-8000-0000000004b1', 'basic', (select id from public.markets where slug = 'houston'), 2000)
+on conflict do nothing;
 insert into public.requests (id, short_code, market_id, platform_fee_cents, status, channel, driver_name, driver_phone)
 values ('00000000-0000-4000-8000-0000000004c1', 'R-DSP2', (select id from public.markets where slug = 'houston'), 0, 'phone_intake', 'phone', 'Caller', '+12105550141');
 

@@ -175,17 +175,53 @@ export const getMarketServiceNote = unstable_cache(
   { revalidate: REVALIDATE, tags: [SITE_TAG] },
 );
 
-export const MarketPlanSchema = z.object({
-  market_slug: z.string(),
-  plan: z.enum(["pro", "featured"]),
-  price_min_cents: z.number(),
-  price_max_cents: z.number(),
+/** RSOS-114: the provider plan catalog for one city (prices from the admin catalog). */
+export const PlanSchema = z.object({
+  plan: z.enum(["basic", "pro", "featured"]),
+  name: z.string(),
+  price_cents: z.number().nullable(),
   fee_discount_bps: z.number(),
+  first_look_seconds: z.number(),
+  technician_limit: z.number().nullable(),
+  insights_level: z.enum(["basic", "full"]),
+  auto_topup: z.boolean(),
+  bullets: z.object({ en: z.array(z.string()), es: z.array(z.string()) }),
+  sort_order: z.number(),
+  offer_cents: z.number().nullable(),
+  offer_ends_at: z.string().nullable(),
+  featured_slots: z.number().nullable(),
+  featured_taken: z.number().nullable(),
 });
-export type MarketPlan = z.infer<typeof MarketPlanSchema>;
+export type Plan = z.infer<typeof PlanSchema>;
 
-export const getMarketPlans = unstable_cache(
-  async (): Promise<MarketPlan[]> => rpc(MarketPlanSchema, "list_market_plans"),
-  ["list_market_plans"],
+export const getPlanCatalog = unstable_cache(
+  async (marketSlug: string | null): Promise<Plan[]> =>
+    rpc(PlanSchema, "public_plan_catalog", { p_market_slug: marketSlug }),
+  ["public_plan_catalog"],
+  { revalidate: REVALIDATE, tags: [SITE_TAG] },
+);
+
+const FeaturedRulesSchema = z.object({ price_rule_pct: z.number(), eta_rule_minutes: z.number() });
+
+/** The market's Featured placement rules (RSOS-114); defaults 15% and 10 minutes. */
+export const getFeaturedRules = unstable_cache(
+  async (marketSlug: string) => {
+    const [row] = await rpc(FeaturedRulesSchema, "featured_rules", { p_market_slug: marketSlug });
+    return {
+      priceRulePct: row?.price_rule_pct ?? 15,
+      etaRuleMinutes: row?.eta_rule_minutes ?? 10,
+    };
+  },
+  ["featured_rules"],
+  { revalidate: REVALIDATE, tags: [SITE_TAG] },
+);
+
+const FeaturedProviderSchema = z.object({ provider_id: z.string(), name: z.string() });
+
+/** Featured providers in a city (RSOS-114), shown first on the city page with the label. */
+export const getFeaturedProviders = unstable_cache(
+  async (marketSlug: string) =>
+    rpc(FeaturedProviderSchema, "featured_providers", { p_market_slug: marketSlug }),
+  ["featured_providers"],
   { revalidate: REVALIDATE, tags: [SITE_TAG] },
 );

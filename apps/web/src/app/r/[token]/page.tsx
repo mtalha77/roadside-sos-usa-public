@@ -19,7 +19,7 @@ import { RequestLive } from "@/components/request/request-live";
 import { formatPhone } from "@/lib/market";
 import { getRealRequest } from "@/lib/request-status";
 import { pageMetadata } from "@/lib/seo";
-import { getMarkets, getMarketServices, getMarketStats } from "@/lib/site-data";
+import { getFeaturedRules, getMarkets, getMarketServices, getMarketStats } from "@/lib/site-data";
 import { phonesEnabled } from "@/lib/phones";
 
 export const dynamic = "force-dynamic";
@@ -89,9 +89,13 @@ export default async function RequestPage({ params }: Params) {
   const market = markets.find((m) => m.slug === marketSlug) ?? null;
   // "Call us" only when phones are enabled (RSOS-100); the provider count only from real data.
   const phone = phonesEnabled() ? (market?.phone ?? null) : null;
-  const [stats, prices] = marketSlug
-    ? await Promise.all([getMarketStats(marketSlug), getMarketServices(marketSlug)])
-    : [null, []];
+  const [stats, prices, featuredRules] = marketSlug
+    ? await Promise.all([
+        getMarketStats(marketSlug),
+        getMarketServices(marketSlug),
+        getFeaturedRules(marketSlug),
+      ])
+    : [null, [], undefined];
   // Instant book starts at the market's typical price for this service (RSOS-109).
   const priceRow = prices.find(
     (p) => p.service_slug === (real?.service_slug ?? simulation?.serviceSlug),
@@ -145,6 +149,7 @@ export default async function RequestPage({ params }: Params) {
             simulation={simulation}
             supportPhone={phone ? formatPhone(phone) : null}
             typicalCents={typicalCents}
+            featuredRules={featuredRules}
             reach={
               market && stats?.provider_count
                 ? { count: stats.provider_count, city: market.name }

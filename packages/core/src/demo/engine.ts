@@ -60,6 +60,8 @@ export type DemoQuote = {
   priceCents: number;
   etaMinutes: number;
   arrivesAtSec: number;
+  /** Demo: the second provider asked pays for Featured placement (RSOS-114). */
+  featured?: boolean;
 };
 export type DemoStage =
   | "searching"
@@ -147,6 +149,7 @@ export function makeDemoRequest(
       priceCents: round5(range.min + r() * (range.max - range.min)),
       etaMinutes: Math.max(8, Math.round(miles(p.home, at) * 2.2 + 6 + r() * 10)),
       arrivesAtSec: Math.round(20 + i * 35 + r() * 25),
+      featured: i === 1,
     }));
   const roll = r();
   const destArea = pick(r, m.areas);

@@ -14,6 +14,7 @@ const NAV_KEYS = [
   "home",
   "jobs",
   "wallet",
+  "plan",
   "profile",
   "more",
   "services",

@@ -13,7 +13,8 @@
     "./booking-metrics": "./src/booking-metrics.ts",
     "./wallet": "./src/wallet.ts",
     "./service-questions": "./src/service-questions.ts",
-    "./ads": "./src/adapters/ads/index.ts"
+    "./ads": "./src/adapters/ads/index.ts",
+    "./plans": "./src/plans.ts"
   },
   "scripts": {
     "lint": "eslint .",

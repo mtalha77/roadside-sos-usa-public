@@ -5,6 +5,8 @@
  * code change. Demo mode is separate and can never be on in production (see demo.ts).
  */
 export const FEATURES = {
+  planCheckout:
+    "Providers start, change and cancel plans and Featured themselves (fake billing until Stripe, batch 6)",
   /**
    * The provider marketplace screens: incoming offers, jobs, insights, team activity and the
    * portal home's counts. They run on the demo scenario until the quote engine (batch 5) exists,
