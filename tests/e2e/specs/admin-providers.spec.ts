@@ -29,7 +29,7 @@ test.describe("admin providers", () => {
     await page.goto(url("/providers"));
     await page.getByRole("rowheader").getByRole("link").first().click();
     await expect(page.getByRole("heading", { name: "Actions" })).toBeVisible();
-    await page.getByRole("button", { name: "Pause" }).click();
+    await page.getByRole("button", { name: "Pause", exact: true }).click();
     await expect(page.getByRole("log", { name: "Actions" })).toContainText("Pause");
     await expectNoA11yViolations(page);
   });
