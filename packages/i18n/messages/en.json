@@ -3735,11 +3735,13 @@
       "steps": "Request progress",
       "safety": "While you wait",
       "safetyTips": [
-        "Stay in your vehicle with your seatbelt on if you're on a highway.",
         "Keep your hazard lights on.",
+        "Stay in your vehicle with your seatbelt on if you're on a highway.",
+        "Have your ID ready for a lockout: the provider must check it.",
         "Check the provider's name and truck match before work starts."
       ],
-      "map": "Map of the provider on the way to you"
+      "map": "Map of the provider on the way to you",
+      "tabTitle": "{minutes} min · Help is on the way"
     },
     "cancel": {
       "open": "Cancel request",
@@ -3819,7 +3821,8 @@
       "skipArrival": "Skip to arrival",
       "skipNext": "Skip to next stage",
       "goTo": "Go back to {stage}",
-      "speedValue": "{x}x"
+      "speedValue": "{x}x",
+      "late": "Demo: make the provider late"
     },
     "card": {
       "insured": "Insured",
@@ -3871,6 +3874,34 @@
       "booked": "Booked automatically at or below {price}.",
       "fellBack": "No provider accepted at {price} or less in time. Compare the quotes that came in below.",
       "manual": "No quotes came in. Our dispatchers are finding you a provider now; keep your phone on."
+    },
+    "fee": {
+      "quoteNote": "Booking fee {fee}, paid to us. You pay the provider directly for the job.",
+      "freeCancel": "Free cancel for {minutes, plural, one {# minute} other {# minutes}}.",
+      "payWith": "Pay with Apple Pay, Google Pay or a card. No account needed.",
+      "confirm": "Confirm booking, {fee}",
+      "cancelFree": "You're inside the free cancel window: your {fee} booking fee comes back.",
+      "cancelKept": "The {fee} booking fee is not refunded after the first {minutes, plural, one {# minute} other {# minutes}}."
+    },
+    "code": {
+      "title": "Your completion code",
+      "body": "Give this code to the provider when the job is done."
+    },
+    "backup": {
+      "title": "Your provider is running late",
+      "body": "We can send your request to other providers right away, with priority.",
+      "bodyFee": "We can send your request to other providers right away, with priority. If nobody else can come, your booking fee is refunded.",
+      "button": "Find me another provider",
+      "sent": "We're finding you another provider.",
+      "sentFee": "We're finding you another provider. If nobody can come, your {fee} booking fee is refunded."
+    },
+    "answer": {
+      "title": "Was the problem fixed?",
+      "yes": "Yes, fixed",
+      "no": "No",
+      "what": "What went wrong?",
+      "send": "Send",
+      "disputeSent": "Thanks. Our team will look into it and contact you."
     }
   },
   "lp": {

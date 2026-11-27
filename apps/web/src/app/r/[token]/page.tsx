@@ -17,14 +17,21 @@ import { serviceName } from "@/components/site/service-label";
 import { SitePage } from "@/components/site/site-page";
 import { RequestLive } from "@/components/request/request-live";
 import { formatPhone } from "@/lib/market";
-import { getRealRequest } from "@/lib/request-status";
+import { getRealBooking, getRealRequest } from "@/lib/request-status";
 import { pageMetadata } from "@/lib/seo";
-import { getFeaturedRules, getMarkets, getMarketServices, getMarketStats } from "@/lib/site-data";
+import {
+  getBookingFee,
+  getFeaturedRules,
+  getMarkets,
+  getMarketServices,
+  getMarketStats,
+} from "@/lib/site-data";
 import { phonesEnabled } from "@/lib/phones";
 
 export const dynamic = "force-dynamic";
 
 type Params = { params: Promise<{ token: string }> };
+type PageProps = Params & { searchParams: Promise<Record<string, string | undefined>> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = await getTranslations("site.placeholder");
@@ -75,27 +82,30 @@ async function loadSimulation(
  * request also gets simulated providers (clearly labelled) so the whole journey can be seen, and
  * demo tokens play the demo scenario.
  */
-export default async function RequestPage({ params }: Params) {
+export default async function RequestPage({ params, searchParams }: PageProps) {
   const { token } = await params;
-  const [t, ts, messages, markets, real] = await Promise.all([
+  const sp = await searchParams;
+  const [t, ts, messages, markets, real, booking] = await Promise.all([
     getTranslations("track"),
     getTranslations("site"),
     getMessages(),
     getMarkets(),
     getRealRequest(token),
+    getRealBooking(token),
   ]);
   const simulation = await loadSimulation(token, real);
   const marketSlug = real?.market_slug ?? simulation?.marketSlug;
   const market = markets.find((m) => m.slug === marketSlug) ?? null;
   // "Call us" only when phones are enabled (RSOS-100); the provider count only from real data.
   const phone = phonesEnabled() ? (market?.phone ?? null) : null;
-  const [stats, prices, featuredRules] = marketSlug
+  const [stats, prices, featuredRules, bookingFee] = marketSlug
     ? await Promise.all([
         getMarketStats(marketSlug),
         getMarketServices(marketSlug),
         getFeaturedRules(marketSlug),
+        getBookingFee(marketSlug),
       ])
-    : [null, [], undefined];
+    : [null, [], undefined, undefined];
   // Instant book starts at the market's typical price for this service (RSOS-109).
   const priceRow = prices.find(
     (p) => p.service_slug === (real?.service_slug ?? simulation?.serviceSlug),
@@ -150,6 +160,11 @@ export default async function RequestPage({ params }: Params) {
             supportPhone={phone ? formatPhone(phone) : null}
             typicalCents={typicalCents}
             featuredRules={featuredRules}
+            bookingFee={
+              // Demo requests can preview the booking fee (off everywhere by default): ?fee=on.
+              !real && sp.fee === "on" && bookingFee ? { ...bookingFee, enabled: true } : bookingFee
+            }
+            booking={booking}
             reach={
               market && stats?.provider_count
                 ? { count: stats.provider_count, city: market.name }

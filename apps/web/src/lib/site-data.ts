@@ -216,6 +216,26 @@ export const getFeaturedRules = unstable_cache(
   { revalidate: REVALIDATE, tags: [SITE_TAG] },
 );
 
+const BookingFeeSchema = z.object({
+  enabled: z.boolean(),
+  amount_cents: z.number().int(),
+  free_cancel_seconds: z.number().int(),
+});
+
+/** The customer booking fee in a market (RSOS-117): off everywhere unless the Owner turns it on. */
+export const getBookingFee = unstable_cache(
+  async (marketSlug: string) => {
+    const [row] = await rpc(BookingFeeSchema, "public_booking_fee", { p_market_slug: marketSlug });
+    return {
+      enabled: row?.enabled ?? false,
+      amountCents: row?.amount_cents ?? 500,
+      freeCancelSeconds: row?.free_cancel_seconds ?? 120,
+    };
+  },
+  ["booking_fee"],
+  { revalidate: REVALIDATE, tags: [SITE_TAG] },
+);
+
 const FeaturedProviderSchema = z.object({ provider_id: z.string(), name: z.string() });
 
 /** Featured providers in a city (RSOS-114), shown first on the city page with the label. */

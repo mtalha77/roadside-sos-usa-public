@@ -14,7 +14,8 @@
     "./wallet": "./src/wallet.ts",
     "./service-questions": "./src/service-questions.ts",
     "./ads": "./src/adapters/ads/index.ts",
-    "./plans": "./src/plans.ts"
+    "./plans": "./src/plans.ts",
+    "./booking": "./src/booking.ts"
   },
   "scripts": {
     "lint": "eslint .",

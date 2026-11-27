@@ -3735,11 +3735,13 @@
       "steps": "Avance de la solicitud",
       "safety": "Mientras esperas",
       "safetyTips": [
-        "Quédate en el vehículo con el cinturón puesto si estás en una autopista.",
-        "Mantén encendidas las luces intermitentes.",
-        "Verifica que el nombre del proveedor y la grúa coincidan antes de empezar."
+        "Deja encendidas las luces de emergencia.",
+        "Si estás en una autopista, quédate en tu vehículo con el cinturón puesto.",
+        "Ten tu identificación lista si te quedaste fuera del auto: el proveedor debe revisarla.",
+        "Verifica que el nombre y la grúa del proveedor coincidan antes de empezar."
       ],
-      "map": "Mapa del proveedor en camino hacia ti"
+      "map": "Mapa del proveedor en camino hacia ti",
+      "tabTitle": "{minutes} min · La ayuda va en camino"
     },
     "cancel": {
       "open": "Cancelar solicitud",
@@ -3819,7 +3821,8 @@
       "skipArrival": "Saltar a la llegada",
       "skipNext": "Saltar a la siguiente etapa",
       "goTo": "Volver a {stage}",
-      "speedValue": "{x}x"
+      "speedValue": "{x}x",
+      "late": "Demo: hacer que el proveedor se retrase"
     },
     "card": {
       "insured": "Asegurado",
@@ -3871,6 +3874,34 @@
       "booked": "Reservado automáticamente a {price} o menos.",
       "fellBack": "Ningún proveedor aceptó a {price} o menos a tiempo. Compara abajo las cotizaciones que llegaron.",
       "manual": "No llegaron cotizaciones. Nuestros despachadores te están buscando un proveedor; mantén tu teléfono encendido."
+    },
+    "fee": {
+      "quoteNote": "Cargo de reserva de {fee}, pagado a nosotros. Al proveedor le pagas directamente por el trabajo.",
+      "freeCancel": "Cancelación gratis durante {minutes, plural, one {# minuto} other {# minutos}}.",
+      "payWith": "Paga con Apple Pay, Google Pay o tarjeta. No necesitas cuenta.",
+      "confirm": "Confirmar reserva, {fee}",
+      "cancelFree": "Estás dentro del tiempo de cancelación gratis: te devolvemos el cargo de reserva de {fee}.",
+      "cancelKept": "El cargo de reserva de {fee} no se devuelve después de {minutes, plural, one {# minuto} other {# minutos}}."
+    },
+    "code": {
+      "title": "Tu código para terminar",
+      "body": "Dale este código al proveedor cuando termine el trabajo."
+    },
+    "backup": {
+      "title": "Tu proveedor viene con retraso",
+      "body": "Podemos enviar tu solicitud a otros proveedores ahora mismo, con prioridad.",
+      "bodyFee": "Podemos enviar tu solicitud a otros proveedores ahora mismo, con prioridad. Si nadie más puede ir, te devolvemos el cargo de reserva.",
+      "button": "Buscarme otro proveedor",
+      "sent": "Estamos buscándote otro proveedor.",
+      "sentFee": "Estamos buscándote otro proveedor. Si nadie puede ir, te devolvemos el cargo de reserva de {fee}."
+    },
+    "answer": {
+      "title": "¿Se resolvió el problema?",
+      "yes": "Sí, resuelto",
+      "no": "No",
+      "what": "¿Qué salió mal?",
+      "send": "Enviar",
+      "disputeSent": "Gracias. Nuestro equipo lo revisará y te contactará."
     }
   },
   "lp": {

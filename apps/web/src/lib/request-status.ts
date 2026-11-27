@@ -72,3 +72,55 @@ export async function setBookingMode(
   });
   return data === true;
 }
+
+export const RealBookingSchema = z.object({
+  booking_id: z.string(),
+  provider_name: z.string(),
+  price_cents: z.number().int(),
+  promised_at: z.string(),
+  status: z.enum(["booked", "en_route", "on_site", "done", "cancelled", "replaced"]),
+  code: z.string().nullable(),
+  booking_fee_cents: z.number().int(),
+  booking_fee_status: z.enum(["none", "paid", "refunded", "kept"]),
+  free_cancel_until: z.string(),
+  can_request_backup: z.boolean(),
+  needs_answer: z.boolean(),
+  customer_answer: z.enum(["fixed", "not_fixed"]).nullable(),
+  rating: z.number().int().nullable(),
+});
+export type RealBooking = z.infer<typeof RealBookingSchema>;
+
+/** The booking behind a real request (RSOS-117): provider, code, booking fee, backup, answer. */
+export async function getRealBooking(token: string): Promise<RealBooking | null> {
+  const supabase = createPublicSupabase();
+  if (!supabase || token.length < 24) return null;
+  const { data } = await (supabase.rpc as unknown as Rpc)("booking_for_token", { p_token: token });
+  const row = Array.isArray(data) ? data[0] : null;
+  return row ? (RealBookingSchema.safeParse(row).data ?? null) : null;
+}
+
+/** "Yes, fixed" or "No" (once), with an optional rating and, for "No", what went wrong. */
+export async function answerRealBooking(
+  token: string,
+  fixed: boolean,
+  rating: number | null,
+  note: string | null,
+): Promise<boolean> {
+  const supabase = createPublicSupabase();
+  if (!supabase) return false;
+  const { data } = await (supabase.rpc as unknown as Rpc)("answer_booking", {
+    p_token: token,
+    p_fixed: fixed,
+    p_rating: rating,
+    p_note: note,
+  });
+  return data === true;
+}
+
+/** "Find me another provider" (15 minutes past the promised arrival). */
+export async function requestBackup(token: string): Promise<boolean> {
+  const supabase = createPublicSupabase();
+  if (!supabase) return false;
+  const { data } = await (supabase.rpc as unknown as Rpc)("request_backup", { p_token: token });
+  return data === true;
+}
