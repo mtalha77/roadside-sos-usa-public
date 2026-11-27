@@ -10,11 +10,18 @@ import {
   assignPlanAction,
   cancelSubscriptionAction,
   saveCatalogAction,
+  saveBookingFeeAction,
   saveFeaturedAction,
   saveOfferAction,
   setPriceAction,
 } from "@/lib/plan-actions";
-import { getPlans, parsePriceChange, PLAN_KEYS, previewPriceChange } from "@/lib/plans";
+import {
+  getBookingFeeAdmin,
+  getPlans,
+  parsePriceChange,
+  PLAN_KEYS,
+  previewPriceChange,
+} from "@/lib/plans";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +70,8 @@ export default async function PlansPage({
   // Featured settings and first-month offers are edited one market at a time (?m=<market id>).
   const focus = data.markets.find((m) => m.id === sp.m) ?? data.markets[0] ?? null;
   const featured = data.featured.filter((f) => f.market.id === focus?.id);
+  const bookingFee = focus ? await getBookingFeeAdmin(focus.id) : null;
+  const isOwner = ctx.role === "super_admin";
   const marketPicker = (anchor: string) =>
     data.markets.length > 1 ? (
       <form method="get" action={`/plans#${anchor}`} className="flex flex-wrap items-end gap-3">
@@ -626,6 +635,67 @@ export default async function PlansPage({
           )}
         </ul>
       </section>
+
+      {focus && bookingFee ? (
+        <section id="booking-fee" aria-labelledby="bf-h" className={card}>
+          <h2 id="bf-h" className="mb-1 font-semibold">
+            {t("bookingFee.title")}
+          </h2>
+          <p className="mb-3 text-sm text-muted-foreground">{t("bookingFee.note")}</p>
+          <div className="mb-3">{marketPicker("booking-fee")}</div>
+          <form
+            action={saveBookingFeeAction}
+            className="grid items-end gap-3 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            <input type="hidden" name="market" value={focus.id} />
+            <fieldset disabled={!canEdit} className="contents">
+              <label className={check}>
+                <input
+                  name="enabled"
+                  type="checkbox"
+                  defaultChecked={bookingFee.enabled}
+                  disabled={!isOwner && !bookingFee.enabled}
+                />
+                {t("bookingFee.enabled", { market: focus.name })}
+              </label>
+              <label className={label}>
+                {t("bookingFee.amount")}
+                <input
+                  name="amount"
+                  type="number"
+                  min={0}
+                  max={50}
+                  step={0.01}
+                  defaultValue={bookingFee.amountCents / 100}
+                  className={inputClass}
+                />
+              </label>
+              <label className={label}>
+                {t("bookingFee.freeMinutes")}
+                <input
+                  name="freeMinutes"
+                  type="number"
+                  min={0}
+                  max={30}
+                  defaultValue={Math.round(bookingFee.freeCancelSeconds / 60)}
+                  className={inputClass}
+                />
+              </label>
+              {canEdit ? (
+                <Button type="submit" variant="outline">
+                  {t("save")}
+                </Button>
+              ) : null}
+            </fieldset>
+          </form>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {bookingFee.enabled
+              ? t("bookingFee.statusOn", { fee: money(bookingFee.amountCents) })
+              : t("bookingFee.statusOff")}
+            {!isOwner ? ` ${t("bookingFee.ownerOnly")}` : ""}
+          </p>
+        </section>
+      ) : null}
 
       {canEdit ? (
         <section id="assign" aria-labelledby="as-h" className={card}>

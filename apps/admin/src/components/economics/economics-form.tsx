@@ -75,6 +75,15 @@ export function EconomicsForm({
           labels.perMonth!,
           false,
         )}
+        {/* RSOS-117: optional; empty while the customer booking fee is off. */}
+        {field(
+          "bookingFee",
+          labels.bookingFee!,
+          String(inputs?.bookingFee ?? ""),
+          labels.usd!,
+          false,
+        )}
+        {field("bookingFeeShare", labels.bookingFeeShare!, p(inputs?.bookingFeeShare), "%", false)}
       </div>
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-sm font-semibold">{labels.mixAndFees}</legend>

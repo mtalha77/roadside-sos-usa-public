@@ -1124,3 +1124,35 @@ language sql stable security definer set search_path = '' as $$
 $$;
 revoke all on function public.held_fees(uuid) from public, anon;
 grant execute on function public.held_fees(uuid) to authenticated;
+
+-- Inbox > Job checks: open flags (optionally for one provider) and open spot checks, with names.
+create function public.job_check_flags(p_provider_id uuid default null)
+returns table (id uuid, kind text, note text, created_at timestamptz, booking_id uuid, provider_id uuid,
+               provider_name text, market_id uuid, short_code text)
+language sql stable security invoker set search_path = '' as $$
+  select f.id, f.kind, f.note, f.created_at, f.booking_id, f.provider_id, p.name, f.market_id, r.short_code
+    from public.booking_flags f
+    join public.providers p on p.id = f.provider_id
+    join public.bookings b on b.id = f.booking_id
+    join public.requests r on r.id = b.request_id
+   where f.status = 'open' and (p_provider_id is null or f.provider_id = p_provider_id)
+   order by f.created_at desc
+   limit 200
+$$;
+revoke all on function public.job_check_flags(uuid) from public, anon;
+grant execute on function public.job_check_flags(uuid) to authenticated;
+
+create function public.job_spot_checks()
+returns table (booking_id uuid, week date, market_id uuid, short_code text, provider_name text, done_at timestamptz)
+language sql stable security invoker set search_path = '' as $$
+  select s.booking_id, s.week, s.market_id, r.short_code, p.name, b.done_at
+    from public.spot_checks s
+    join public.bookings b on b.id = s.booking_id
+    join public.providers p on p.id = b.provider_id
+    join public.requests r on r.id = b.request_id
+   where s.status = 'open'
+   order by s.week desc, b.done_at desc
+   limit 200
+$$;
+revoke all on function public.job_spot_checks() from public, anon;
+grant execute on function public.job_spot_checks() to authenticated;

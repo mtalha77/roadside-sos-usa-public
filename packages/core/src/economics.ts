@@ -40,6 +40,12 @@ export const EconomicsInputs = z.object({
    */
   signupBonus: usd.optional(),
   newProvidersPerMonth: z.number().min(0).max(10_000).optional(),
+  /**
+   * RSOS-117: the customer booking fee (USD per booking, 0 or empty when off) and the share of
+   * accepted requests that pay it. Counted net of card fees (the payment fee share).
+   */
+  bookingFee: usd.optional(),
+  bookingFeeShare: share.optional(),
 });
 export type EconomicsInputs = z.infer<typeof EconomicsInputs>;
 
@@ -56,6 +62,8 @@ export type EconomicsResult = {
   netFeeRevenue: number;
   paymentFees: number;
   subscriptions: number;
+  /** Customer booking fees, net of card fees (RSOS-117; 0 while the fee is off). */
+  bookingFees: number;
   contribution: number;
   fixedCosts: number;
   profit: number;
@@ -90,13 +98,16 @@ export function computeEconomics(i: EconomicsInputs, fixedCosts = i.fixedCosts):
   const feeRevenue = accepted * fee;
   const paymentFees = feeRevenue * i.paymentFeeShare;
   const promotionCredits = (i.signupBonus ?? 0) * (i.newProvidersPerMonth ?? 0);
-  const contribution = feeRevenue + i.subscriptionsNet - adSpend - paymentFees - promotionCredits;
+  const bookingPer = (i.bookingFee ?? 0) * (i.bookingFeeShare ?? 1) * (1 - i.paymentFeeShare);
+  const bookingFees = accepted * bookingPer;
+  const contribution =
+    feeRevenue + i.subscriptionsNet + bookingFees - adSpend - paymentFees - promotionCredits;
   const profit = contribution - fixedCosts;
   // Each accepted request nets the fee minus payment fees; the ad cost per accepted request is
   // the same at any volume for a fixed CPC and rates, so break-even is the volume where the net
   // fee covers ad spend at that cost, plus fixed costs, minus subscriptions.
   const adPer = accepted > 0 ? adSpend / accepted : null;
-  const netPer = fee * (1 - i.paymentFeeShare) - (adPer ?? 0);
+  const netPer = fee * (1 - i.paymentFeeShare) + bookingPer - (adPer ?? 0);
   const breakEvenAccepted =
     netPer > 0 ? Math.max(0, (fixedCosts - i.subscriptionsNet + promotionCredits) / netPer) : null;
   return {
@@ -110,6 +121,7 @@ export function computeEconomics(i: EconomicsInputs, fixedCosts = i.fixedCosts):
     netFeeRevenue: feeRevenue - promotionCredits,
     paymentFees,
     subscriptions: i.subscriptionsNet,
+    bookingFees,
     contribution,
     fixedCosts,
     profit,
@@ -134,6 +146,7 @@ export function sumEconomics(rows: EconomicsResult[]): EconomicsResult {
     netFeeRevenue: add("netFeeRevenue"),
     paymentFees: add("paymentFees"),
     subscriptions: add("subscriptions"),
+    bookingFees: add("bookingFees"),
     contribution: add("contribution"),
     fixedCosts: add("fixedCosts"),
     profit: add("profit"),

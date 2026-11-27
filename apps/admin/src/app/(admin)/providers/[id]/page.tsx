@@ -14,6 +14,7 @@ import { FlagList } from "@/components/flags/flag-list";
 import { ProviderActions } from "@/components/providers/provider-actions";
 import { getAdminContext } from "@/lib/admin";
 import { getProfileFlags } from "@/lib/flags";
+import { getJobChecks } from "@/lib/job-checks";
 import { demoNow } from "@/lib/demo-clock";
 import { setProviderStatusAction } from "@/lib/provider-status-actions";
 import { demoDocuments, demoProviderFromId } from "@/lib/providers";
@@ -31,7 +32,7 @@ async function load(id: string) {
   }
   if (!/^[0-9a-f-]{36}$/.test(id)) return null;
   const supabase = await getServerSupabase();
-  const [{ data }, { data: ledger }, { data: flags }, customerFlags] = await Promise.all([
+  const [{ data }, { data: ledger }, { data: flags }, customerFlags, checks] = await Promise.all([
     supabase.from("providers").select("id, name, status, status_reason").eq("id", id).maybeSingle(),
     // RSOS-115: the provider's wallet timeline (money staff only, by RLS).
     supabase
@@ -43,6 +44,11 @@ async function load(id: string) {
     supabase.from("provider_review_flags").select("id").eq("provider_id", id).eq("status", "open"),
     // Flags (owner decision 3): what customers reported about this provider.
     getProfileFlags({ providerId: id }),
+    // RSOS-117: warning signs on this provider's jobs.
+    getJobChecks(
+      ctx.markets.map((m) => m.id),
+      id,
+    ),
   ]);
   return data
     ? {
@@ -54,6 +60,7 @@ async function load(id: string) {
         ledger: ledger ?? [],
         flagged: (flags ?? []).length > 0,
         flags: customerFlags,
+        jobFlags: checks.flags,
       }
     : null;
 }
@@ -71,10 +78,11 @@ export default async function ProviderDetailPage({
 }) {
   const { id } = await params;
   const sp = await searchParams;
-  const [t, tw, tf, locale, data] = await Promise.all([
+  const [t, tw, tf, tc, locale, data] = await Promise.all([
     getTranslations("admin.providers"),
     getTranslations("admin.credits.timeline"),
     getTranslations("admin.flags"),
+    getTranslations("admin.checks"),
     getLocale(),
     load(decodeURIComponent(id)),
   ]);
@@ -181,6 +189,26 @@ export default async function ProviderDetailPage({
           )}
         </section>
         {actions}
+        <section className={card} aria-labelledby="jc-h">
+          <h2 id="jc-h" className="mb-2 font-semibold">
+            {tc("providerTitle", { count: data.jobFlags.length })}
+          </h2>
+          {data.jobFlags.length === 0 ? (
+            <p className="text-sm">{tc("flags.none")}</p>
+          ) : (
+            <ul className="flex flex-col gap-1 text-sm">
+              {data.jobFlags.map((f) => (
+                <li key={f.id}>{tc(`kinds.${f.kind}` as never)}</li>
+              ))}
+            </ul>
+          )}
+          <Link
+            href="/inbox/checks"
+            className="mt-2 inline-block text-sm underline underline-offset-4"
+          >
+            {tc("open")}
+          </Link>
+        </section>
         <FlagList
           flags={data.flags}
           back={`/providers/${data.real.id}`}

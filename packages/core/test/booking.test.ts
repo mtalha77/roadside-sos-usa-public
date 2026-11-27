@@ -136,3 +136,25 @@ describe("warning signs and spot checks", () => {
     expect(spotCheckCount(101, 5)).toBe(6);
   });
 });
+
+describe("economics: customer booking fees", () => {
+  it("adds booking fees net of card fees only when set", async () => {
+    const { computeEconomics } = await import("../src/economics");
+    const base = {
+      monthlyBudget: 4000,
+      costPerClick: 4,
+      clickToRequest: 0.25,
+      acceptance: 0.7,
+      serviceMix: { tow: 1 },
+      feeByService: { tow: 42.5 },
+      paymentFeeShare: 0.03,
+      subscriptionsNet: 0,
+      fixedCosts: 0,
+    };
+    const off = computeEconomics(base);
+    expect(off.bookingFees).toBe(0);
+    const on = computeEconomics({ ...base, bookingFee: 5, bookingFeeShare: 1 });
+    expect(on.bookingFees).toBeCloseTo(off.accepted * 5 * 0.97, 6);
+    expect(on.profit - off.profit).toBeCloseTo(on.bookingFees, 6);
+  });
+});

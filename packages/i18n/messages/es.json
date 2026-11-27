@@ -1242,7 +1242,8 @@
       },
       "logCall": "Registrar una llamada",
       "sourceWebsite": "Sitio web",
-      "sourceCall": "Llamada"
+      "sourceCall": "Llamada",
+      "checks": "Revisión de trabajos"
     },
     "textingLimited": "Textos limitados: registro con operadores pendiente. Los textos a clientes quedan retenidos hasta su aprobación.",
     "marketing": {
@@ -1430,7 +1431,8 @@
         "adCostPerAccepted": "Anuncios por aceptada",
         "breakEvenAccepted": "Aceptadas para equilibrio",
         "promotionCredits": "Créditos de promoción usados",
-        "netFeeRevenue": "Ingreso neto por tarifas"
+        "netFeeRevenue": "Ingreso neto por tarifas",
+        "bookingFees": "Cargos de reserva de clientes, sin comisiones de tarjeta"
       },
       "emptyTitle": "Aún no hay modelo",
       "empty": "Ningún mercado mostrado tiene modelo económico.",
@@ -1465,7 +1467,9 @@
         },
         "signupBonus": "Bono de registro por proveedor",
         "newProviders": "Proveedores nuevos",
-        "perMonth": "al mes"
+        "perMonth": "al mes",
+        "bookingFee": "Cargo de reserva al cliente (vacío si está apagado)",
+        "bookingFeeShare": "Reservas que lo pagan"
       },
       "sharedStateOn": ": activado",
       "sharedStateOff": ": desactivado"
@@ -2047,7 +2051,8 @@
         "featured": "Ajustes de Destacado guardados.",
         "offer": "Oferta guardada.",
         "assigned": "Plan iniciado.",
-        "cancelled": "El plan termina al final del mes pagado."
+        "cancelled": "El plan termina al final del mes pagado.",
+        "bookingFee": "Cargo de reserva guardado."
       },
       "errors": {
         "forbidden": "No puedes cambiar esto. Lo hacen el dueño y el gerente de operaciones.",
@@ -2150,6 +2155,79 @@
         "pageOf": "Mostrando {from}–{to} de {total}",
         "prev": "Página anterior",
         "next": "Página siguiente"
+      },
+      "bookingFee": {
+        "title": "Cargo de reserva al cliente",
+        "note": "Un cargo pequeño que el cliente nos paga al elegir un proveedor (cobro simulado hasta Stripe). Apagado en todos los mercados por defecto. Mientras está apagado, los clientes no ven ningún texto de cargo ni paso de pago.",
+        "enabled": "Cobrar el cargo de reserva en {market}",
+        "amount": "Monto (USD)",
+        "freeMinutes": "Tiempo de cancelación gratis (minutos)",
+        "statusOn": "Encendido: los clientes pagan {fee} al elegir. Los reembolsos son automáticos si el proveedor cancela, llega 30 minutos tarde o no se encuentra otro.",
+        "statusOff": "Apagado: los clientes no nos pagan nada.",
+        "ownerOnly": "Solo el Dueño puede encenderlo."
+      }
+    },
+    "checks": {
+      "back": "Volver a la Bandeja",
+      "title": "Revisión de trabajos",
+      "lead": "Señales de alerta que el sistema detectó en trabajos, y las verificaciones al azar de esta semana. La mayoría solo necesita un vistazo; marca cada una cuando la revises.",
+      "done": "Guardado.",
+      "error": "No se pudo completar. Puede que no tengas permiso.",
+      "flags": {
+        "title": "Señales de alerta ({count})",
+        "none": "Nada que revisar.",
+        "note": "Nota (opcional)",
+        "clear": "Revisado, quitar",
+        "release": "Liberar la tarifa",
+        "charge": "Cobrar la tarifa"
+      },
+      "spot": {
+        "title": "Confirmar con el cliente ({count})",
+        "lead": "El 5% de los trabajos terminados la semana pasada. Llama o escribe al cliente y pregúntale si se hizo el trabajo.",
+        "none": "No hay verificaciones pendientes.",
+        "row": "{code} · {provider} · terminado {when}",
+        "confirmed": "El cliente confirmó",
+        "problem": "Hubo un problema"
+      },
+      "kinds": {
+        "done_without_arrival": "Terminado sin llegar",
+        "short_job": "Trabajo muy corto",
+        "high_cancel_rate": "Cancela seguido",
+        "high_no_show_rate": "Muchas ausencias reportadas",
+        "same_device": "Mismo teléfono en ambos lados",
+        "many_not_available": "Muchos \"cliente no disponible\"",
+        "code_locked": "Código bloqueado",
+        "cancel_then_fixed": "Dijo cancelado, el cliente dice resuelto",
+        "customer_dispute": "El cliente dice que no se resolvió",
+        "no_show_review": "Ausencia sobre el límite mensual"
+      },
+      "help": {
+        "done_without_arrival": "El proveedor terminó el trabajo sin que el teléfono estuviera con el cliente.",
+        "short_job": "Menos de 5 minutos entre llegar y terminar.",
+        "high_cancel_rate": "El proveedor canceló 3 o más de sus últimos 10 trabajos.",
+        "high_no_show_rate": "El proveedor reportó 3 o más ausencias de clientes en 30 días.",
+        "same_device": "El cliente y el proveedor usaron el mismo teléfono. Posible trabajo falso.",
+        "many_not_available": "3 o más trabajos terminados con fotos en vez del código en 30 días.",
+        "code_locked": "Se ingresaron 5 códigos incorrectos. Llama al cliente y al proveedor.",
+        "cancel_then_fixed": "El proveedor dijo que el cliente canceló y luego el cliente dijo que se hizo el trabajo. Se cobró la tarifa.",
+        "customer_dispute": "El cliente tocó No después del trabajo. Lee la nota y llámalo.",
+        "no_show_review": "El proveedor ya usó las 3 liberaciones por ausencia de este mes. Decide si liberar o cobrar la tarifa."
+      },
+      "providerTitle": "Señales de alerta en trabajos ({count})",
+      "open": "Abrir Revisión de trabajos"
+    },
+    "bookingFees": {
+      "titleFinance": "Cargos de reserva de clientes (últimos 30 días)",
+      "titleFunnel": "Eligieron y pagaron el cargo de reserva (últimos 30 días)",
+      "note": "Reservas hechas por los propios clientes, por ciudad. El cargo de reserva está apagado por defecto; enciéndelo por ciudad en Planes y precios para comparar.",
+      "none": "Todavía no hay reservas de clientes.",
+      "cols": {
+        "market": "Ciudad",
+        "picked": "Eligieron",
+        "paid": "Pagaron el cargo",
+        "refunded": "Reembolsados",
+        "net": "Cargos netos",
+        "rate": "Porcentaje que pagó"
       }
     }
   },
@@ -4241,10 +4319,10 @@
     "active": {
       "title": "Trabajo en curso",
       "steps": {
-        "start": "Empezar a manejar",
-        "arrived": "Ya llegué",
-        "working": "Empezar el trabajo",
-        "completed": "Trabajo terminado"
+        "accepted": "Aceptado",
+        "on_my_way": "Voy en camino",
+        "arrived": "Llegué",
+        "done": "Terminado"
       },
       "navigate": "Navegar con",
       "maps": {
@@ -4270,7 +4348,24 @@
       "assign": "Asignar a",
       "done": "Trabajo terminado. El cliente ya puede calificarte.",
       "addressLine": "Dirección: {address}",
-      "photoAlt": "Foto {n}"
+      "photoAlt": "Foto {n}",
+      "tooFar": "Todavía no estás con el cliente. Llegué funciona a unos 200 m.",
+      "error": "No se pudo completar. Inténtalo de nuevo.",
+      "gpsAuto": "Llegué se marca solo cuando estés cerca. Tu ubicación se comparte solo durante este trabajo.",
+      "gpsNear": "Estás con el cliente.",
+      "gpsDenied": "Activa la ubicación para este sitio para poder marcar Llegué.",
+      "demoArrive": "Demo: estoy con el cliente",
+      "codeLabel": "Código de 4 dígitos del cliente",
+      "demoCode": "Demo: el código del cliente es {code}.",
+      "codeWrong": "Ese código no es correcto. Pídele al cliente que lo lea de nuevo.",
+      "codeLocked": "Demasiados códigos incorrectos. El código está bloqueado y avisamos a nuestro equipo. Usa Cliente no disponible o llama a soporte.",
+      "notThere": "Cliente no disponible",
+      "notThereTitle": "Cliente no disponible",
+      "notThereBody": "Toma 2 fotos con la cámara (por ejemplo, el vehículo en el taller) y termina.",
+      "notThereDone": "Terminar con fotos",
+      "needPhotos": "Primero toma 2 fotos.",
+      "backToCode": "Ingresar el código",
+      "cancelled": "Trabajo cancelado. No se cobra la tarifa de este trabajo."
     },
     "wallet": {
       "title": "Billetera",

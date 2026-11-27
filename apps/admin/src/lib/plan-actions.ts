@@ -245,3 +245,34 @@ export async function cancelSubscriptionAction(form: FormData) {
   const { error } = await (await rpc())("cancel_plan", { p_subscription_id: id.data });
   outcome(error, "cancelled", "subscribers");
 }
+
+/**
+ * Customer booking fee per market (RSOS-117): on or off, amount, free cancel window. Off by
+ * default; only the Owner can turn it on (the database refuses anyone else).
+ */
+export async function saveBookingFeeAction(form: FormData) {
+  await editor();
+  const p = z
+    .object({
+      market: z.uuid(),
+      enabled: z.boolean(),
+      amount: usd(50),
+      freeMinutes: z.coerce.number().int().min(0).max(30),
+    })
+    .safeParse({
+      market: form.get("market"),
+      enabled: form.get("enabled") === "on",
+      amount: form.get("amount"),
+      freeMinutes: form.get("freeMinutes"),
+    });
+  if (!p.success) redirect("/plans?error=invalid#booking-fee");
+  const { error } = await (
+    await rpc()
+  )("set_booking_fee", {
+    p_market_id: p.data.market,
+    p_enabled: p.data.enabled,
+    p_amount_cents: p.data.amount,
+    p_free_cancel_seconds: p.data.freeMinutes * 60,
+  });
+  outcome(error, "bookingFee", "booking-fee");
+}
