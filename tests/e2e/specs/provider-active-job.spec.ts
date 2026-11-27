@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import { signInAsDemo } from "../support/demo";
 import {
   appUrls,
@@ -12,7 +13,7 @@ const base = appUrls.provider;
 const url = (p: string) => new URL(p, base).toString();
 
 /** The demo job's code, read from the demo hint on the page. */
-async function demoCode(page: import("@playwright/test").Page): Promise<string> {
+async function demoCode(page: Page): Promise<string> {
   const hint = await page.getByText(/Demo: the customer's code is \d{4}/).innerText();
   return hint.match(/\d{4}/)![0];
 }
