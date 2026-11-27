@@ -12,13 +12,13 @@
     "test:storybook": "playwright test -c playwright.storybook.config.ts"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.14.0",
+    "@axe-core/playwright": "4.14.1",
     "@lhci/cli": "0.16.1",
-    "@playwright/test": "1.65.0",
+    "@playwright/test": "1.65.1",
     "@rsos/config": "workspace:*",
     "@rsos/core": "workspace:*",
-    "@types/node": "26.6.6",
-    "eslint": "10.14.0",
+    "@types/node": "26.6.7",
+    "eslint": "10.15.0",
     "typescript": "6.0.3"
   }
 }
